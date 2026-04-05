@@ -49,7 +49,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       "sameAs": [
         "https://www.linkedin.com/in/israel-amrani/",
         "https://www.instagram.com/rpg_digital/",
-        "https://www.facebook.com/rpgdigital"
+        "https://www.facebook.com/rpgdigital",
+        "https://www.tiktok.com/@rpg_digital",
+        "https://www.youtube.com/@rpgdigital"
       ],
       "serviceType": ["פרסום ממומן", "Google Ads", "Meta Ads", "LinkedIn Ads", "TikTok Ads"]
     }
@@ -936,9 +938,29 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
 
         .pas-step-icon {
-            font-size: 30px;
+            width: 56px;
+            height: 56px;
             margin-bottom: 18px;
-            display: block;
+            background: rgba(78, 205, 196, 0.1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s ease;
+        }
+
+        .pas-step:hover .pas-step-icon {
+            background: rgba(78, 205, 196, 0.2);
+        }
+
+        .pas-step-icon svg {
+            width: 28px;
+            height: 28px;
+            fill: none;
+            stroke: var(--teal);
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
         .pas-step-label {
@@ -3019,7 +3041,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
             <div class="pas-steps-grid">
                 <div class="pas-step pas-problem reveal">
-                    <span class="pas-step-icon">🔍</span>
+                    <div class="pas-step-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="15.65" y2="15.65"/><line x1="9" y1="11" x2="13" y2="11"/></svg></div>
                     <div class="pas-step-label">שלב 01</div>
                     <div class="pas-step-header">
                         <h3>הבעיה</h3>
@@ -3032,7 +3054,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 </div>
 
                 <div class="pas-step pas-agitation reveal">
-                    <span class="pas-step-icon">📉</span>
+                    <div class="pas-step-icon"><svg viewBox="0 0 24 24"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg></div>
                     <div class="pas-step-label">שלב 02</div>
                     <div class="pas-step-header">
                         <h3>מה קורה כשממשיכים ככה?</h3>
@@ -3046,7 +3068,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 </div>
 
                 <div class="pas-step pas-solution reveal">
-                    <span class="pas-step-icon">🚀</span>
+                    <div class="pas-step-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
                     <div class="pas-step-label">שלב 03</div>
                     <div class="pas-step-header">
                         <h3>הפתרון</h3>
