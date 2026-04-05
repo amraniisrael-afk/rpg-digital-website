@@ -566,7 +566,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         .shape-2 {
             width: 250px;
             height: 250px;
-            background: var(--teal);
+            background: #a855f7;
             bottom: -60px;
             right: -80px;
             animation: shapeFloat2 10s ease-in-out infinite;
@@ -903,6 +903,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             position: relative;
             overflow: hidden;
         }
+        .pas-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 10% 50%, rgba(168,85,247,0.05) 0%, transparent 50%),
+                radial-gradient(circle at 90% 20%, rgba(236,72,153,0.04) 0%, transparent 45%);
+            pointer-events: none;
+        }
 
         .pas-container {
             max-width: 1060px;
@@ -1167,6 +1176,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             stroke-linecap: round;
             stroke-linejoin: round;
         }
+        /* צבעי אייקון שונים לכל כרטיס */
+        .value-grid .value-card:nth-child(1) .value-card-icon { background: rgba(78,205,196,0.1); }
+        .value-grid .value-card:nth-child(1) .value-card-icon svg { stroke: var(--teal); }
+        .value-grid .value-card:nth-child(2) .value-card-icon { background: rgba(168,85,247,0.1); }
+        .value-grid .value-card:nth-child(2) .value-card-icon svg { stroke: #a855f7; }
+        .value-grid .value-card:nth-child(3) .value-card-icon { background: rgba(249,115,22,0.1); }
+        .value-grid .value-card:nth-child(3) .value-card-icon svg { stroke: #f97316; }
+        .value-grid .value-card:nth-child(4) .value-card-icon { background: rgba(236,72,153,0.1); }
+        .value-grid .value-card:nth-child(4) .value-card-icon svg { stroke: #ec4899; }
+        .value-grid .value-card:nth-child(5) .value-card-icon { background: rgba(34,197,94,0.1); }
+        .value-grid .value-card:nth-child(5) .value-card-icon svg { stroke: #22c55e; }
+        .value-grid .value-card:nth-child(6) .value-card-icon { background: rgba(251,191,36,0.1); }
+        .value-grid .value-card:nth-child(6) .value-card-icon svg { stroke: #fbbf24; }
 
         .value-card h4 {
             font-size: 19px;
@@ -1320,9 +1342,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(78, 205, 196, 0.08), transparent 70%);
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(168,85,247,0.07) 0%, rgba(78,205,196,0.05) 40%, transparent 70%);
             pointer-events: none;
         }
 
@@ -3307,6 +3329,624 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
         </div>
     </section>
+
+    <!-- ========== UGC PIVOT BRIDGE ========== -->
+    <div class="ugc-pivot reveal">
+        <div class="ugc-pivot-line"></div>
+        <div class="ugc-pivot-inner">
+<p class="ugc-pivot-text">דאטה אומר לנו <em>מה</em> עובד.<br>קריאטיב של יוצרים גורם לזה <em>לעבוד</em>.</p>
+        </div>
+        <div class="ugc-pivot-line"></div>
+    </div>
+
+    <style>
+    .ugc-pivot {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        max-width: 680px;
+        margin: 0 auto;
+        padding: 40px 24px 48px;
+    }
+    .ugc-pivot-line {
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(168,85,247,0.35), transparent);
+    }
+    .ugc-pivot-inner {
+        text-align: center;
+        flex-shrink: 0;
+    }
+    .ugc-pivot-label {
+        display: block;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        color: rgba(245,240,232,0.35);
+        margin-bottom: 10px;
+        text-transform: uppercase;
+    }
+    .ugc-pivot-text {
+        font-size: clamp(1rem, 2.5vw, 1.2rem);
+        font-weight: 500;
+        color: rgba(245,240,232,0.75);
+        line-height: 1.7;
+        margin: 0;
+    }
+    .ugc-pivot-text em {
+        font-style: normal;
+        font-weight: 800;
+        background: linear-gradient(90deg, #a855f7, #ec4899);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    </style>
+
+    <!-- ========== UGC / CONTENT CREATORS ========== -->
+    <section class="ugc-section">
+        <div class="ugc-bg-pattern"></div>
+        <div class="ugc-container">
+
+            <div class="ugc-header reveal">
+                <div class="section-tag ugc-tag">יוצרי תוכן &amp; UGC</div>
+                <h2 class="section-title">מודעות שנראות <span class="ugc-highlight">כמו תוכן אמיתי</span><br>ממירות כמו מכונה</h2>
+                <p class="section-subtitle">תפסיקו לפרסם, תתחילו להשפיע: מודעות UGC שמייצרות אמון ומכפילות מכירות.</p>
+            </div>
+
+            <div class="ugc-stats-bar reveal">
+                <div class="ugc-stat">
+                    <div class="ugc-stat-value"><span class="ugc-stat-num" data-target="4">0</span><span class="ugc-stat-unit">X</span></div>
+                    <span class="ugc-stat-label">CTR גבוה יותר ממודעות מסורתיות</span>
+                </div>
+                <div class="ugc-stat-sep"></div>
+                <div class="ugc-stat">
+                    <div class="ugc-stat-value"><span class="ugc-stat-num" data-target="68">0</span><span class="ugc-stat-unit">%</span></div>
+                    <span class="ugc-stat-label">מהצרכנים סומכים על תוכן יוצרים</span>
+                </div>
+                <div class="ugc-stat-sep"></div>
+                <div class="ugc-stat">
+                    <div class="ugc-stat-value"><span class="ugc-stat-num" data-target="50">0</span><span class="ugc-stat-unit">%</span></div>
+                    <span class="ugc-stat-label">הפחתת עלות לליד בממוצע</span>
+                </div>
+            </div>
+
+            <div class="ugc-main">
+
+                <div class="ugc-phone-wrap reveal">
+                    <div class="ugc-phone">
+                        <div class="ugc-phone-notch"></div>
+                        <div class="ugc-phone-screen">
+                            <div class="ugc-feed-bar">
+                                <span class="ugc-feed-dot active"></span>
+                                <span class="ugc-feed-dot"></span>
+                                <span class="ugc-feed-dot"></span>
+                            </div>
+                            <div class="ugc-feed-item">
+                                <div class="ugc-feed-header">
+                                    <div class="ugc-avatar">
+                                        <svg viewBox="0 0 24 24" fill="var(--teal)"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                                    </div>
+                                    <div class="ugc-feed-meta">
+                                        <span class="ugc-username">@maya_lifestyle ✓</span>
+                                        <span class="ugc-sponsored">ממומן</span>
+                                    </div>
+                                </div>
+                                <div class="ugc-feed-video">
+                                    <img src="UGC.jpg" alt="יוצרת תוכן" class="ugc-real-img">
+                                    <div class="ugc-video-overlay">
+<div class="ugc-video-caption">"השתמשתי בזה 3 שבועות<br>והתוצאות הדהימו אותי..."</div>
+                                        <div class="ugc-view-count">👁 24.8K</div>
+                                    </div>
+                                </div>
+                                <div class="ugc-feed-actions">
+                                    <span class="ugc-action">❤️ 2.4K</span>
+                                    <span class="ugc-action">💬 186</span>
+                                    <span class="ugc-action ugc-share">↗ שתף</span>
+                                </div>
+                                <div class="ugc-link-btn">לחצו לפרטים נוספים →</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ugc-phone-glow"></div>
+                    <div class="ugc-badge ugc-badge-1">🔥 CTR ×4</div>
+                    <div class="ugc-badge ugc-badge-2">✅ אותנטי</div>
+                    <div class="ugc-badge ugc-badge-3">📈 ממיר</div>
+                </div>
+
+                <div class="ugc-steps">
+                    <div class="ugc-steps-title">איך זה עובד אצלנו</div>
+                    <div class="ugc-step reveal" style="transition-delay:0.1s">
+                        <div class="ugc-step-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        </div>
+                        <div class="ugc-step-body">
+                            <h4>בריף ממוקד ביצועים</h4>
+                            <p>לא "עשה משהו יצירתי". כותבים בריף עם הוק, מסר ו-CTA שנבדקו מול הדאטה.</p>
+                        </div>
+                    </div>
+                    <div class="ugc-step-connector"></div>
+                    <div class="ugc-step reveal" style="transition-delay:0.2s">
+                        <div class="ugc-step-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </div>
+                        <div class="ugc-step-body">
+                            <h4>בחירת יוצר מהרשת שלנו</h4>
+                            <p>רשת יוצרים מאומתת — מותאמת לנישה, לקהל ולפלטפורמה שלכם.</p>
+                        </div>
+                    </div>
+                    <div class="ugc-step-connector"></div>
+                    <div class="ugc-step reveal" style="transition-delay:0.3s">
+                        <div class="ugc-step-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        </div>
+                        <div class="ugc-step-body">
+                            <h4>הפקה + QC מלא</h4>
+                            <p>התוכן עובר Quality Control לפני שמגיע אליכם. בלי הפתעות, בלי חזרות אין-סופיות.</p>
+                        </div>
+                    </div>
+                    <div class="ugc-step-connector"></div>
+                    <div class="ugc-step reveal" style="transition-delay:0.4s">
+                        <div class="ugc-step-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                        </div>
+                        <div class="ugc-step-body">
+                            <h4>השקה, מדידה ואופטימיזציה</h4>
+                            <p>ה-UGC נכנס לקמפיין, נמדד בזמן אמת. הדאטה מחליט מה ממשיך לרוץ.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="ugc-cta-wrap reveal">
+                <p class="ugc-cta-text">רוצים לראות איך UGC יכול לעבוד לעסק שלכם?</p>
+                <a href="#lead-form" class="btn ugc-btn">בואו נדבר על קריאטיב →</a>
+            </div>
+
+        </div>
+    </section>
+
+    <style>
+    /* ===== UGC SECTION ===== */
+    .ugc-section {
+        position: relative;
+        background: linear-gradient(180deg, var(--black) 0%, #16202e 50%, var(--black) 100%);
+        padding: 80px 0 90px;
+        overflow: hidden;
+    }
+    .ugc-bg-pattern {
+        position: absolute;
+        inset: 0;
+        background-image:
+            radial-gradient(circle at 15% 25%, rgba(168,85,247,0.07) 0%, transparent 45%),
+            radial-gradient(circle at 85% 65%, rgba(236,72,153,0.06) 0%, transparent 45%),
+            radial-gradient(circle at 50% 90%, rgba(78,205,196,0.05) 0%, transparent 40%);
+        pointer-events: none;
+    }
+    .ugc-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 24px;
+        position: relative;
+    }
+    .ugc-tag {
+        background: rgba(78,205,196,0.15) !important;
+        border: 1px solid rgba(78,205,196,0.3) !important;
+        color: var(--teal) !important;
+    }
+    .ugc-highlight {
+        background: linear-gradient(90deg, #a855f7, #ec4899, var(--teal));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+    }
+    .ugc-highlight::after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        right: 0;
+        left: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #a855f7, #ec4899, var(--teal));
+        border-radius: 2px;
+    }
+
+    /* Stats bar */
+    .ugc-stats-bar {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, rgba(78,205,196,0.08), rgba(78,205,196,0.03));
+        border: 1px solid rgba(78,205,196,0.2);
+        border-radius: 20px;
+        padding: 28px 16px;
+        margin: 48px 0 64px;
+    }
+    .ugc-stat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+    }
+    .ugc-stat-value {
+        display: flex;
+        flex-direction: row;
+        align-items: baseline;
+        gap: 2px;
+        line-height: 1;
+    }
+    .ugc-stat-num {
+        font-size: clamp(2rem, 4vw, 3.2rem);
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+        color: var(--teal);
+    }
+    .ugc-stat:nth-child(1) .ugc-stat-num,
+    .ugc-stat:nth-child(1) .ugc-stat-unit { color: var(--teal); }
+    .ugc-stat:nth-child(3) .ugc-stat-num,
+    .ugc-stat:nth-child(3) .ugc-stat-unit { color: #f97316; }
+    .ugc-stat:nth-child(5) .ugc-stat-num,
+    .ugc-stat:nth-child(5) .ugc-stat-unit { color: #a855f7; }
+    .ugc-stat-unit {
+        font-size: clamp(1.1rem, 2vw, 1.5rem);
+        font-weight: 700;
+    }
+    .ugc-stat-label {
+        font-size: 0.75rem;
+        color: rgba(245,240,232,0.6);
+        text-align: center;
+        margin-top: 8px;
+        max-width: 130px;
+        line-height: 1.4;
+    }
+    .ugc-stat-sep {
+        width: 1px;
+        height: 56px;
+        background: rgba(78,205,196,0.2);
+        flex-shrink: 0;
+        margin: 0 8px;
+    }
+
+    /* Main layout */
+    .ugc-main {
+        display: grid;
+        grid-template-columns: 1fr 1.4fr;
+        gap: 64px;
+        align-items: center;
+        direction: rtl;
+    }
+
+    /* Phone mockup */
+    .ugc-phone-wrap {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .ugc-phone {
+        width: 230px;
+        background: #0d1a26;
+        border-radius: 36px;
+        border: 2px solid transparent;
+        background-clip: padding-box;
+        box-shadow: 0 0 0 2px rgba(168,85,247,0.4), 0 0 60px rgba(168,85,247,0.12), 0 24px 80px rgba(0,0,0,0.6);
+        overflow: hidden;
+        position: relative;
+        z-index: 2;
+        animation: ugcFloat 4s ease-in-out infinite;
+    }
+    @keyframes ugcFloat {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+    .ugc-phone-notch {
+        width: 80px;
+        height: 14px;
+        background: #0d1a26;
+        border-radius: 0 0 12px 12px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 3;
+        border: 2px solid rgba(78,205,196,0.2);
+        border-top: none;
+    }
+    .ugc-phone-screen {
+        padding: 8px 12px 16px;
+        background: #111e2c;
+    }
+    .ugc-feed-bar {
+        display: flex;
+        gap: 5px;
+        justify-content: center;
+        padding: 6px 0 10px;
+    }
+    .ugc-feed-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.2);
+    }
+    .ugc-feed-dot.active {
+        background: var(--teal);
+        box-shadow: 0 0 6px var(--teal);
+    }
+    .ugc-feed-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+    }
+    .ugc-avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--teal), #2196F3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .ugc-avatar svg {
+        width: 20px;
+        height: 20px;
+    }
+    .ugc-feed-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+    .ugc-username {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--cream);
+    }
+    .ugc-sponsored {
+        font-size: 0.62rem;
+        color: rgba(245,240,232,0.5);
+    }
+    .ugc-feed-video {
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 10px;
+        height: 148px;
+        position: relative;
+    }
+    .ugc-real-img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top center;
+    }
+    .ugc-video-overlay {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 12px;
+        background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
+    }
+    .ugc-video-caption {
+        font-size: 0.65rem;
+        color: rgba(245,240,232,0.85);
+        text-align: center;
+        line-height: 1.5;
+    }
+    .ugc-view-count {
+        position: absolute;
+        bottom: 8px;
+        left: 8px;
+        font-size: 0.6rem;
+        color: rgba(245,240,232,0.6);
+    }
+    .ugc-feed-actions {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 8px;
+    }
+    .ugc-action {
+        font-size: 0.65rem;
+        color: rgba(245,240,232,0.7);
+    }
+    .ugc-share {
+        margin-right: auto;
+        color: var(--teal);
+    }
+    .ugc-link-btn {
+        background: var(--teal);
+        color: var(--black);
+        font-size: 0.62rem;
+        font-weight: 700;
+        text-align: center;
+        padding: 7px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    .ugc-phone-glow {
+        position: absolute;
+        width: 260px;
+        height: 260px;
+        background: radial-gradient(circle, rgba(78,205,196,0.18) 0%, transparent 70%);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 1;
+    }
+    .ugc-badge {
+        position: absolute;
+        background: rgba(22,40,60,0.92);
+        border: 1px solid rgba(78,205,196,0.4);
+        border-radius: 50px;
+        padding: 6px 14px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--cream);
+        white-space: nowrap;
+        z-index: 5;
+        backdrop-filter: blur(8px);
+        animation: ugcBadgePop 3s ease-in-out infinite;
+    }
+    .ugc-badge-1 { top: 10px; left: -10px; animation-delay: 0s; border-color: rgba(249,115,22,0.5); color: #fdba74; }
+    .ugc-badge-2 { top: 50%; right: -18px; transform: translateY(-50%); animation-delay: 1s; border-color: rgba(168,85,247,0.5); color: #d8b4fe; }
+    .ugc-badge-3 { bottom: 10px; left: -10px; animation-delay: 2s; border-color: rgba(236,72,153,0.5); color: #f9a8d4; }
+    @keyframes ugcBadgePop {
+        0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        50% { transform: scale(1.05); box-shadow: 0 6px 25px rgba(78,205,196,0.25); }
+    }
+    .ugc-badge-2 {
+        animation: ugcBadgePop2 3s ease-in-out infinite;
+        animation-delay: 1s;
+    }
+    @keyframes ugcBadgePop2 {
+        0%, 100% { transform: translateY(-50%) scale(1); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        50% { transform: translateY(-50%) scale(1.05); box-shadow: 0 6px 25px rgba(78,205,196,0.25); }
+    }
+
+    /* Steps */
+    .ugc-steps {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+    .ugc-steps-title {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--teal);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 28px;
+        opacity: 0.85;
+    }
+    .ugc-step {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+    }
+    .ugc-step-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: rgba(78,205,196,0.1);
+        border: 1px solid rgba(78,205,196,0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: background 0.3s, border-color 0.3s;
+    }
+    .ugc-step-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+    .ugc-step:hover .ugc-step-icon {
+        background: rgba(78,205,196,0.2);
+        border-color: rgba(78,205,196,0.5);
+    }
+    .ugc-step-body h4 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--cream);
+        margin: 0 0 4px;
+    }
+    .ugc-step-body p {
+        font-size: 0.85rem;
+        color: rgba(245,240,232,0.65);
+        margin: 0;
+        line-height: 1.5;
+    }
+    .ugc-step-connector {
+        width: 1px;
+        height: 24px;
+        background: linear-gradient(to bottom, rgba(78,205,196,0.3), rgba(78,205,196,0.1));
+        margin: 6px 0 6px 21px;
+    }
+
+    /* CTA */
+    .ugc-cta-wrap {
+        text-align: center;
+        margin-top: 64px;
+        padding: 36px;
+        background: linear-gradient(135deg, rgba(78,205,196,0.07), rgba(78,205,196,0.03));
+        border: 1px solid rgba(78,205,196,0.18);
+        border-radius: 20px;
+    }
+    .ugc-cta-text {
+        font-size: 1.15rem;
+        color: rgba(245,240,232,0.85);
+        margin: 0 0 20px;
+    }
+    .ugc-btn {
+        background: linear-gradient(90deg, #a855f7, #ec4899);
+        color: white;
+        font-weight: 800;
+        font-size: 1rem;
+        padding: 14px 36px;
+        border-radius: 50px;
+        text-decoration: none;
+        display: inline-block;
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 8px 32px rgba(168,85,247,0.4);
+    }
+    .ugc-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 40px rgba(236,72,153,0.5);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .ugc-main {
+            grid-template-columns: 1fr;
+            gap: 48px;
+        }
+        .ugc-phone-wrap {
+            order: -1;
+        }
+        .ugc-stat-label {
+            font-size: 0.68rem;
+            max-width: 90px;
+        }
+        .ugc-badge-2 { right: -10px; }
+    }
+    </style>
+
+    <script>
+    /* UGC counter animation */
+    (function() {
+        function animateCounters() {
+            document.querySelectorAll('.ugc-stat-num').forEach(function(el) {
+                var target = parseInt(el.getAttribute('data-target'));
+                var start = 0;
+                var duration = 1800;
+                var startTime = null;
+                function step(timestamp) {
+                    if (!startTime) startTime = timestamp;
+                    var progress = Math.min((timestamp - startTime) / duration, 1);
+                    var eased = 1 - Math.pow(1 - progress, 3);
+                    el.textContent = Math.round(start + (target - start) * eased);
+                    if (progress < 1) requestAnimationFrame(step);
+                }
+                requestAnimationFrame(step);
+            });
+        }
+        var ugcObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    ugcObserver.disconnect();
+                }
+            });
+        }, { threshold: 0.3 });
+        var statsBar = document.querySelector('.ugc-stats-bar');
+        if (statsBar) ugcObserver.observe(statsBar);
+    })();
+    </script>
 
     <!-- ========== ANIMATED GROWTH CHART ========== -->
     <section class="chart-section">
