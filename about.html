@@ -210,18 +210,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             transform: translateY(-3px);
         }
         .team-avatar {
-            width: 90px;
-            height: 90px;
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
             margin: 0 auto 18px;
-            font-size: 36px;
-            font-weight: 800;
-            color: var(--black);
-            border: 3px solid rgba(78, 205, 196, 0.3);
+            border: 3px solid rgba(78, 205, 196, 0.4);
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(78, 205, 196, 0.15);
+        }
+        .team-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
         .team-name {
             font-size: 22px;
@@ -430,7 +431,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="team-grid">
 
             <div class="team-card">
-                <div class="team-avatar">י</div>
+                <div class="team-avatar"><img src="israel.png" alt="ישראל עמרני — בעלים ומייסד RPG Digital" loading="lazy"></div>
                 <div class="team-name">ישראל עמרני</div>
                 <div class="team-role">בעלים ומייסד</div>
                 <p class="team-bio">
@@ -445,7 +446,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
 
             <div class="team-card">
-                <div class="team-avatar">ג</div>
+                <div class="team-avatar"><img src="GILLY.jpeg" alt="גילי ריינהולד — מנהלת משרד RPG Digital" loading="lazy"></div>
                 <div class="team-name">גילי ריינהולד</div>
                 <div class="team-role">מנהלת משרד</div>
                 <p class="team-bio">
@@ -550,5 +551,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             });
         }
     </script>
+    <script src="a11y-widget.js"></script>
 </body>
 </html>
