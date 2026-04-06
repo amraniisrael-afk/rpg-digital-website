@@ -3043,7 +3043,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <!-- ========== STICKY TOP BAR ========== -->
     <nav class="top-bar" id="topBar">
-        <img src="logo.png" alt="RPG Digital" class="logo">
+        <a href="index.html"><img src="logo.png" alt="RPG Digital" class="logo"></a>
         <div class="nav-actions">
             <a href="#lead-form" class="cta-button">
                 בואו נדבר
@@ -4923,10 +4923,41 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 consent: 'אישר'
             };
 
-            fetch('https://script.google.com/macros/s/AKfycbzn04fzYK_VWD6217-l-CRaeyVsgNGfnsfzMwCNgwFnJQSMerq-PBGGzl4QaRbkSaeJ/exec', {
+            var sheetsPromise = fetch('https://script.google.com/macros/s/AKfycbzn04fzYK_VWD6217-l-CRaeyVsgNGfnsfzMwCNgwFnJQSMerq-PBGGzl4QaRbkSaeJ/exec', {
                 method: 'POST',
                 body: JSON.stringify(data)
-            })
+            });
+
+            var klaviyoPromise = fetch('https://a.klaviyo.com/client/subscriptions/?company_id=UXdTZZ', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                    'revision': '2023-12-15'
+                },
+                body: JSON.stringify({
+                    data: {
+                        type: 'subscription',
+                        attributes: {
+                            profile: {
+                                data: {
+                                    type: 'profile',
+                                    attributes: {
+                                        email: email,
+                                        first_name: name
+                                    }
+                                }
+                            }
+                        },
+                        relationships: {
+                            list: {
+                                data: { type: 'list', id: 'VLFXq8' }
+                            }
+                        }
+                    }
+                })
+            });
+
+            Promise.all([sheetsPromise, klaviyoPromise])
             .then(function() {
                 btn.textContent = '✓ נרשמת בהצלחה!';
                 btn.style.background = '#2ecc71';
