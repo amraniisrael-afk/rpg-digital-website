@@ -4870,6 +4870,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 consentTimestamp: new Date().toLocaleString('he-IL')
             };
 
+            // DataLayer: form submitted
+            window.dataLayer = window.dataLayer || [];
+            dataLayer.push({
+                event: 'form_submit',
+                form_id: 'leadForm',
+                business_name: data.business,
+                budget: data.budget,
+                page_path: window.location.pathname
+            });
+
             fetch('https://script.google.com/macros/s/AKfycbzn04fzYK_VWD6217-l-CRaeyVsgNGfnsfzMwCNgwFnJQSMerq-PBGGzl4QaRbkSaeJ/exec', {
                 method: 'POST',
                 body: JSON.stringify(data)
@@ -4878,6 +4888,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 btn.innerHTML = '✓ הפרטים נשלחו בהצלחה!';
                 btn.style.background = '#2ecc71';
                 e.target.reset();
+                // DataLayer: lead generated successfully
+                dataLayer.push({
+                    event: 'generate_lead',
+                    form_id: 'leadForm',
+                    business_name: data.business,
+                    budget: data.budget,
+                    page_path: window.location.pathname
+                });
                 setTimeout(() => {
                     btn.innerHTML = originalText;
                     btn.style.background = '';
@@ -4887,6 +4905,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             .catch(() => {
                 btn.innerHTML = '✗ שגיאה, נסו שוב';
                 btn.style.background = '#ff6b6b';
+                // DataLayer: form error
+                dataLayer.push({
+                    event: 'form_error',
+                    form_id: 'leadForm',
+                    page_path: window.location.pathname
+                });
                 setTimeout(() => {
                     btn.innerHTML = originalText;
                     btn.style.background = '';
@@ -4968,6 +4992,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 document.getElementById('nl-name').value = '';
                 document.getElementById('nl-type').value = '';
                 document.getElementById('nl-consent').checked = false;
+                // DataLayer: newsletter signup success
+                dataLayer.push({
+                    event: 'newsletter_signup',
+                    user_type: userType || 'לא צוין',
+                    page_path: window.location.pathname
+                });
                 setTimeout(function() {
                     btn.textContent = 'הצטרפו!';
                     btn.style.background = '';
@@ -5475,5 +5505,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         // TODO: הוסף כאן את קוד Google Analytics / Meta Pixel / Google Ads לפי prefs.analytics ו-prefs.marketing
     }
     </script>
+    <script src="datalayer.js"></script>
 </body>
 </html>

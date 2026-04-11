@@ -578,6 +578,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 btn.textContent = '✓ נרשמת בהצלחה!'; btn.style.background = '#2ecc71';
                 document.getElementById('nl-email').value = ''; document.getElementById('nl-name').value = '';
                 document.getElementById('nl-type').value = ''; document.getElementById('nl-consent').checked = false;
+                // DataLayer: newsletter signup success
+                window.dataLayer = window.dataLayer || [];
+                dataLayer.push({
+                    event: 'newsletter_signup',
+                    user_type: userType || 'לא צוין',
+                    page_path: window.location.pathname
+                });
                 setTimeout(function() { btn.textContent = 'הצטרפו!'; btn.style.background = ''; btn.disabled = false; }, 3000);
             })
             .catch(function() {
@@ -588,11 +595,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         function handleSubmit(e) {
             e.preventDefault();
+            // DataLayer: form submitted
+            window.dataLayer = window.dataLayer || [];
+            dataLayer.push({
+                event: 'form_submit',
+                form_id: 'contactForm',
+                page_path: window.location.pathname
+            });
             document.getElementById('contactForm').style.display = 'none';
             document.getElementById('successMsg').style.display = 'block';
+            // DataLayer: lead generated
+            dataLayer.push({
+                event: 'generate_lead',
+                form_id: 'contactForm',
+                page_path: window.location.pathname
+            });
         }
     </script>
     <script src="a11y-widget.js"></script>
+    <script src="datalayer.js"></script>
 
 </body>
 </html>
