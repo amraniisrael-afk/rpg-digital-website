@@ -162,11 +162,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             --teal: #4ECDC4;
             --teal-dark: #3db8b0;
             --teal-glow: rgba(78, 205, 196, 0.3);
-            --cream: #F5F0E8;
-            --cream-dark: #e8e0d4;
+            --cream: #ffffff;
+            --cream-dark: #e0e0e0;
             --white: #ffffff;
-            --gray: #888888;
-            --gray-light: #b0b0b0;
+            --gray: #d8d8d8;
+            --gray-light: #ffffff;
         }
 
         html {
@@ -243,8 +243,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
 
         @keyframes borderGlow {
-            0%, 100% { box-shadow: 0 0 20px var(--teal-glow); }
-            50% { box-shadow: 0 0 40px var(--teal-glow), 0 0 60px rgba(78, 205, 196, 0.15); }
+            0%, 100% { box-shadow: none; }
+            50% { box-shadow: none; }
         }
 
         .reveal {
@@ -281,6 +281,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
 
         /* ========== STICKY TOP BAR ========== */
+        /* desktop order: CTA(right) | nav-links(center) | logo(left) */
+        .nav-actions { order: 1; }
+        .nav-links   { order: 2; }
+        .nav-logo    { order: 3; }
+        .hamburger   { order: 4; display: none; }
+
+        /* offset for fixed nav on anchor scroll */
+        #hero, #results, #testimonials, #solution, #who, #quiz, #faq, #lead-form {
+            scroll-margin-top: 130px;
+        }
+
         .top-bar {
             position: fixed;
             top: 0;
@@ -487,7 +498,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         .cta-button:hover {
             background: var(--teal-dark);
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px var(--teal-glow);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
         .cta-button-outline {
@@ -511,7 +522,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             background: var(--teal);
             color: var(--black);
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px var(--teal-glow);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
         /* ========== HERO SECTION ========== */
@@ -836,8 +847,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             }
             50% {
                 transform: translateY(-6px);
-                box-shadow: 0 12px 30px rgba(78, 205, 196, 0.15);
-                border-color: rgba(78, 205, 196, 0.3);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+                border-color: rgba(78, 205, 196, 0.2);
             }
         }
 
@@ -845,7 +856,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             background: rgba(78, 205, 196, 0.12);
             border-color: var(--teal);
             transform: translateY(-8px) scale(1.05);
-            box-shadow: 0 15px 35px rgba(78, 205, 196, 0.2);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
             animation-play-state: paused;
         }
 
@@ -1046,7 +1057,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             border-radius: 12px;
             margin: 30px 0;
             position: relative;
-            animation: borderGlow 3s ease-in-out infinite;
         }
 
         .method-name .highlight {
@@ -1167,7 +1177,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         .value-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.35), 0 0 0 1px rgba(78,205,196,0.2);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.35);
         }
 
         /* hero card — card 1 */
@@ -1431,7 +1441,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             padding-top: 50px;
             text-align: center;
             position: relative;
-            animation: borderGlow 4s ease-in-out infinite;
             overflow: visible;
         }
 
@@ -1490,13 +1499,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         .offer-cta {
             padding: 18px 50px;
             font-size: 19px;
-            box-shadow: 0 0 0 0 var(--teal-glow);
-            animation: borderGlow 2s ease-in-out infinite;
-        }
-
-        @keyframes borderGlow {
-            0%, 100% { box-shadow: 0 4px 20px rgba(78, 205, 196, 0.3); }
-            50% { box-shadow: 0 4px 40px rgba(78, 205, 196, 0.7); }
         }
 
         /* ========== RISK REVERSAL ========== */
@@ -1721,7 +1723,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         .form-input:focus {
             border-color: var(--teal);
-            box-shadow: 0 0 20px rgba(78, 205, 196, 0.1);
+            box-shadow: none;
         }
 
         .form-input::placeholder {
@@ -2125,7 +2127,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
-            color: #ccc;
+            color: #ffffff;
             font-family: 'Heebo', sans-serif;
             font-size: 12px;
             font-weight: 500;
@@ -2158,7 +2160,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         .a11y-slider-label {
             font-size: 13px;
-            color: #ccc;
+            color: #ffffff;
             flex-shrink: 0;
             width: 90px;
         }
@@ -2219,7 +2221,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         .a11y-footer a {
             font-size: 12px;
-            color: #888;
+            color: #d8d8d8;
             text-decoration: none;
         }
 
@@ -2402,6 +2404,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             .top-bar.scrolled .logo {
                 height: 70px;
             }
+
+            /* mobile order: hamburger(right) | CTA(center) | logo(left) */
+            .hamburger   { order: 1; }
+            .nav-actions { order: 2; }
+            .nav-logo    { order: 3; }
 
             .cta-button {
                 padding: 8px 18px;
@@ -2999,7 +3006,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             font-size: 2rem;
             font-weight: 900;
             color: #1a2736;
-            box-shadow: 0 0 40px rgba(78, 205, 196, 0.5), 0 8px 32px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
             flex-shrink: 0;
         }
 
@@ -3017,7 +3024,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         .brand-tagline {
             font-size: clamp(1.1rem, 3vw, 1.5rem);
             font-weight: 400;
-            color: rgba(245, 240, 232, 0.7);
+            color: rgba(255, 255, 255, 0.85);
             margin-bottom: 40px;
             line-height: 1.5;
         }
@@ -3046,6 +3053,281 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             }
         }
     </style>
+    <style>
+        /* ========== QUIZ SECTION ========== */
+        .quiz-section {
+            padding: 100px 20px;
+            background: var(--dark-2);
+        }
+
+        .quiz-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .quiz-wrapper {
+            background: linear-gradient(145deg, #1e3045 0%, var(--dark) 60%, #1a2e42 100%);
+            border: 1px solid rgba(78, 205, 196, 0.25);
+            border-radius: 20px;
+            padding: 48px 40px;
+            margin-top: 48px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .quiz-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--teal), transparent);
+        }
+
+        .quiz-wrapper::after {
+            content: '';
+            position: absolute;
+            top: -80px;
+            left: -80px;
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, rgba(78, 205, 196, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .quiz-progress {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .quiz-progress-bar {
+            flex: 1;
+            height: 6px;
+            background: rgba(78, 205, 196, 0.12);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .quiz-progress-fill {
+            height: 100%;
+            background: var(--teal);
+            border-radius: 10px;
+            transition: width 0.4s ease;
+            width: 20%;
+        }
+
+        .quiz-progress-text {
+            font-size: 13px;
+            color: var(--gray);
+            white-space: nowrap;
+        }
+
+        .quiz-question {
+            display: none;
+        }
+
+        .quiz-question.active {
+            display: block;
+            animation: fadeInUp 0.35s ease forwards;
+        }
+
+        .quiz-question h3 {
+            font-size: clamp(18px, 2.5vw, 24px);
+            font-weight: 700;
+            margin-bottom: 28px;
+            line-height: 1.4;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .quiz-option {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(78, 205, 196, 0.2);
+            border-right: 3px solid rgba(78, 205, 196, 0.2);
+            border-radius: 12px;
+            padding: 18px 20px;
+            color: var(--white);
+            font-size: 15px;
+            font-family: inherit;
+            cursor: pointer;
+            text-align: center;
+            direction: rtl;
+            transition: all 0.2s ease;
+            line-height: 1.4;
+            min-height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quiz-option:hover {
+            background: rgba(78, 205, 196, 0.08);
+            border-color: var(--teal);
+            border-right-color: var(--teal);
+            transform: translateX(-3px);
+        }
+
+        .quiz-option.selected {
+            background: rgba(78, 205, 196, 0.12);
+            border-color: var(--teal);
+            border-right: 4px solid var(--teal);
+            color: var(--teal);
+            font-weight: 600;
+        }
+
+        .quiz-result {
+            text-align: center;
+            animation: fadeInUp 0.4s ease forwards;
+        }
+
+        .quiz-result h3 {
+            font-size: clamp(20px, 3vw, 26px);
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .quiz-result-desc {
+            color: var(--gray-light);
+            font-size: 15px;
+            margin-bottom: 28px;
+            line-height: 1.6;
+        }
+
+        .quiz-score-locked {
+            margin-bottom: 20px;
+        }
+
+        .quiz-score-locked p {
+            font-size: 14px;
+            color: var(--teal);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .score-reveal {
+            display: none;
+            text-align: center;
+            margin-bottom: 28px;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .score-circle-wrap {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 14px;
+        }
+
+        .score-circle-wrap svg {
+            transform: rotate(-90deg);
+            width: 150px;
+            height: 150px;
+        }
+
+        .score-circle-bg {
+            fill: none;
+            stroke: rgba(255,255,255,0.06);
+            stroke-width: 10;
+        }
+
+        .score-circle-fill {
+            fill: none;
+            stroke: var(--teal);
+            stroke-width: 10;
+            stroke-linecap: round;
+            stroke-dasharray: 408;
+            stroke-dashoffset: 408;
+            transition: stroke-dashoffset 1.6s cubic-bezier(0.4,0,0.2,1), stroke 0.3s ease;
+        }
+
+        .score-circle-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .score-number {
+            font-size: 38px;
+            font-weight: 900;
+            color: var(--teal);
+            display: block;
+            line-height: 1;
+        }
+
+        .score-out-of {
+            font-size: 12px;
+            color: var(--gray);
+            margin-top: 2px;
+        }
+
+        .score-verdict {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--white);
+            margin-top: 4px;
+        }
+
+        .quiz-recommendations {
+            display: none;
+            text-align: right;
+            margin-bottom: 24px;
+            border-top: 1px solid rgba(78,205,196,0.15);
+            padding-top: 24px;
+        }
+
+        .quiz-recommendations h4 {
+            font-size: 14px;
+            color: var(--teal);
+            font-weight: 700;
+            margin-bottom: 14px;
+            text-align: center;
+        }
+
+        .quiz-rec-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: rgba(78,205,196,0.05);
+            border: 1px solid rgba(78,205,196,0.15);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: var(--gray-light);
+            line-height: 1.5;
+        }
+
+        .quiz-rec-item::before {
+            content: '💡';
+            flex-shrink: 0;
+        }
+
+        .quiz-lead-form {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            text-align: right;
+        }
+
+        @media (max-width: 600px) {
+            .quiz-wrapper {
+                padding: 32px 20px;
+            }
+            .quiz-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
@@ -3056,7 +3338,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <!-- ========== STICKY TOP BAR ========== -->
     <nav class="top-bar" id="topBar">
-        <a href="index.html"><img src="logo.png" alt="RPG Digital" class="logo"></a>
+        <button class="hamburger" id="hamburger" aria-label="פתח תפריט" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <a class="nav-logo" href="index.html"><img src="logo.png" alt="RPG Digital" class="logo"></a>
+        <ul class="nav-links">
+            <li><a class="nav-link" href="#hero">דף הבית</a></li>
+            <li><a class="nav-link" href="#results">תוצאות</a></li>
+            <li><a class="nav-link" href="#testimonials">המלצות</a></li>
+            <li><a class="nav-link" href="#solution">השיטה שלנו</a></li>
+            <li><a class="nav-link" href="#who">למי מתאים</a></li>
+            <li><a class="nav-link" href="#quiz">שאלון</a></li>
+            <li><a class="nav-link" href="#faq">שאלות נפוצות</a></li>
+        </ul>
         <div class="nav-actions">
             <a href="#lead-form" class="cta-button">
                 בואו נדבר
@@ -3064,6 +3360,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </a>
         </div>
     </nav>
+
+    <!-- ========== MOBILE MENU ========== -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a class="mobile-nav-link" href="#hero">דף הבית</a></li>
+            <li><a class="mobile-nav-link" href="#results">תוצאות</a></li>
+            <li><a class="mobile-nav-link" href="#testimonials">המלצות</a></li>
+            <li><a class="mobile-nav-link" href="#solution">השיטה שלנו</a></li>
+            <li><a class="mobile-nav-link" href="#who">למי מתאים</a></li>
+            <li><a class="mobile-nav-link" href="#quiz">שאלון</a></li>
+            <li><a class="mobile-nav-link" href="#faq">שאלות נפוצות</a></li>
+            <li><a class="mobile-nav-link mobile-cta" href="#lead-form">בואו נדבר ←</a></li>
+        </ul>
+    </div>
 
     <!-- ========== HERO (The Hook) ========== -->
     <section class="hero" id="hero">
@@ -3468,14 +3778,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         font-size: 0.72rem;
         font-weight: 600;
         letter-spacing: 0.12em;
-        color: rgba(245,240,232,0.35);
+        color: rgba(255,255,255,0.6);
         margin-bottom: 10px;
         text-transform: uppercase;
     }
     .ugc-pivot-text {
         font-size: clamp(1rem, 2.5vw, 1.2rem);
         font-weight: 500;
-        color: rgba(245,240,232,0.75);
+        color: rgba(255,255,255,0.9);
         line-height: 1.7;
         margin: 0;
     }
@@ -3702,7 +4012,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
     .ugc-stat-label {
         font-size: 0.75rem;
-        color: rgba(245,240,232,0.6);
+        color: rgba(255,255,255,0.8);
         text-align: center;
         margin-top: 8px;
         max-width: 130px;
@@ -3777,7 +4087,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
     .ugc-feed-dot.active {
         background: var(--teal);
-        box-shadow: 0 0 6px var(--teal);
+        box-shadow: none;
     }
     .ugc-feed-header {
         display: flex;
@@ -3811,7 +4121,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
     .ugc-sponsored {
         font-size: 0.62rem;
-        color: rgba(245,240,232,0.5);
+        color: rgba(255,255,255,0.75);
     }
     .ugc-feed-video {
         border-radius: 12px;
@@ -3851,7 +4161,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         bottom: 8px;
         left: 8px;
         font-size: 0.6rem;
-        color: rgba(245,240,232,0.6);
+        color: rgba(255,255,255,0.8);
     }
     .ugc-feed-actions {
         display: flex;
@@ -3860,7 +4170,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
     .ugc-action {
         font-size: 0.65rem;
-        color: rgba(245,240,232,0.7);
+        color: rgba(255,255,255,0.85);
     }
     .ugc-share {
         margin-right: auto;
@@ -4344,7 +4654,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </script>
 
     <!-- ========== WHO THIS IS FOR / NOT FOR ========== -->
-    <section class="who-section">
+    <section class="who-section" id="who">
         <div class="who-container">
             <div class="section-header reveal">
                 <div class="section-tag">בדקו התאמה</div>
@@ -4378,6 +4688,130 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         <li><span class="icon">✕</span> רוצים תוצאות "מחר" בלי תהליך מחקר</li>
                         <li><span class="icon">✕</span> מצפים ש"פרסום ממומן" יחליף אסטרטגיה עסקית</li>
                     </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== QUIZ SECTION ========== -->
+    <section class="quiz-section reveal" id="quiz">
+        <div class="quiz-container">
+            <div class="section-header reveal">
+                <div class="section-tag">אבחון חינמי</div>
+                <h2 class="section-title">בדוק את הפרסום שלך<br><span style="color: var(--teal);">ב-2 דקות</span></h2>
+                <p style="color: var(--gray-light); margin-top: 12px;">6 שאלות. תמונה מלאה.</p>
+            </div>
+
+            <div class="quiz-wrapper">
+                <div class="quiz-progress">
+                    <div class="quiz-progress-bar">
+                        <div class="quiz-progress-fill" id="quizProgressFill"></div>
+                    </div>
+                    <span class="quiz-progress-text" id="quizProgressText">שאלה 1 מתוך 6</span>
+                </div>
+
+                <div id="quizQuestions">
+                    <div class="quiz-question active" data-q="0">
+                        <h3>מה הכי מתאר את העסק שלכם?</h3>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-score="0">מוכרים מוצרים אונליין (איקומרס)</button>
+                            <button class="quiz-option" data-score="0">מחפשים לידים / לקוחות חדשים</button>
+                            <button class="quiz-option" data-score="0">מוכרים לעסקים אחרים (B2B)</button>
+                            <button class="quiz-option" data-score="0">עסק עם חנות / נוכחות פיזית</button>
+                        </div>
+                    </div>
+                    <div class="quiz-question" data-q="1">
+                        <h3>מה הביצועים הנוכחיים של הקמפיינים שלכם?</h3>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-score="5">לא מרוצים — עלויות גבוהות, תוצאות נמוכות</button>
+                            <button class="quiz-option" data-score="0">לא יודעים — אין מדידה ברורה</button>
+                            <button class="quiz-option" data-score="12">בסביבה הנכונה — מכסה עלויות אבל לא גדל</button>
+                            <button class="quiz-option" data-score="20">מרוצים — רוצים לצמוח ולהגדיל</button>
+                        </div>
+                    </div>
+                    <div class="quiz-question" data-q="2">
+                        <h3>האם אתם יודעים מאיפה כל ליד או מכירה מגיעים?</h3>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-score="25">כן — Pixel, GA ו-CRM מחוברים ועובדים</button>
+                            <button class="quiz-option" data-score="12">בערך — יש מדידה חלקית, לא מדויקת</button>
+                            <button class="quiz-option" data-score="5">לא ממש — יש כלים אבל לא עוקבים</button>
+                            <button class="quiz-option" data-score="0">בכלל לא — אין מעקב</button>
+                        </div>
+                    </div>
+                    <div class="quiz-question" data-q="3">
+                        <h3>לאן הגולש מגיע אחרי שהוא לוחץ על המודעה?</h3>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-score="15">עמוד נחיתה ייעודי — בנוי ומיוצל לקמפיין</button>
+                            <button class="quiz-option" data-score="10">דף מוצר או שירות ספציפי באתר</button>
+                            <button class="quiz-option" data-score="3">דף הבית — אותו עמוד לכל הקמפיינים</button>
+                            <button class="quiz-option" data-score="0">לא יודעים / לא בדקנו</button>
+                        </div>
+                    </div>
+                    <div class="quiz-question" data-q="4">
+                        <h3>כל כמה זמן אתם מחליפים קריאטיב?</h3>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-score="20">שבוע-שבועיים — מחליפים בקצב גבוה</button>
+                            <button class="quiz-option" data-score="12">חודש בערך</button>
+                            <button class="quiz-option" data-score="4">כמה חודשים — אותו קריאטיב לאורך זמן</button>
+                            <button class="quiz-option" data-score="0">לא מחליפים / לא עוקבים אחרי זה</button>
+                        </div>
+                    </div>
+                    <div class="quiz-question" data-q="5">
+                        <h3>כשמנסים להגדיל תקציב — מה קורה?</h3>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-score="8">התוצאות נפלו מיד</button>
+                            <button class="quiz-option" data-score="0">מפחדים לגעת בתקציב</button>
+                            <button class="quiz-option" data-score="12">עבד, אבל לאט ועם תנודות</button>
+                            <button class="quiz-option" data-score="20">כן, עובד מצוין — הגדלנו בהצלחה</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quiz-result" id="quizResult" style="display:none;">
+                    <h3 id="quizResultTitle"></h3>
+                    <p class="quiz-result-desc" id="quizResultText"></p>
+
+                    <div class="score-reveal" id="scoreReveal">
+                        <div class="score-circle-wrap">
+                            <svg viewBox="0 0 150 150">
+                                <circle class="score-circle-bg" cx="75" cy="75" r="65"/>
+                                <circle class="score-circle-fill" id="scoreCircleFill" cx="75" cy="75" r="65"/>
+                            </svg>
+                            <div class="score-circle-inner">
+                                <span class="score-number" id="scoreNumber">0</span>
+                                <span class="score-out-of" id="scoreOut">מתוך 100</span>
+                            </div>
+                        </div>
+                        <p class="score-verdict" id="scoreVerdict"></p>
+                    </div>
+
+                    <div class="quiz-recommendations" id="quizRecommendations">
+                        <h4>ההמלצות שלנו עבורכם</h4>
+                        <div id="recItem1" class="quiz-rec-item"></div>
+                        <div id="recItem2" class="quiz-rec-item"></div>
+                    </div>
+
+                    <div class="quiz-score-locked" id="scoreLockedMsg">
+                        <p>🔒 השאירו פרטים לגלות את ציון הפרסום וההמלצות שלכם</p>
+                    </div>
+
+                    <form class="quiz-lead-form" id="quizLeadForm" onsubmit="handleQuizSubmit(event)">
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                            <input type="text" class="form-input" id="quizName" placeholder="שם מלא *" required>
+                            <input type="text" class="form-input" id="quizBusiness" placeholder="שם העסק *" required>
+                        </div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                            <input type="tel" class="form-input" id="quizPhone" placeholder="טלפון *" required>
+                            <input type="email" class="form-input" id="quizEmail" placeholder="אימייל">
+                        </div>
+                        <label class="consent-label">
+                            <input type="checkbox" class="consent-checkbox" id="quizConsent" required>
+                            <span class="consent-text">אני מאשר/ת את <a href="privacy.html" target="_blank" class="consent-link">מדיניות הפרטיות</a></span>
+                        </label>
+                        <button type="submit" class="cta-button" style="width:100%; justify-content:center;">
+                            קבל אבחון חינם ←
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -4777,8 +5211,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         const navSections = [
             { id: 'hero', link: document.querySelector('.nav-link[href="#hero"]') },
             { id: 'results', link: document.querySelector('.nav-link[href="#results"]') },
-            { id: 'solution', link: document.querySelector('.nav-link[href="#solution"]') },
             { id: 'testimonials', link: document.querySelector('.nav-link[href="#testimonials"]') },
+            { id: 'solution', link: document.querySelector('.nav-link[href="#solution"]') },
+            { id: 'who', link: document.querySelector('.nav-link[href="#who"]') },
+            { id: 'quiz', link: document.querySelector('.nav-link[href="#quiz"]') },
             { id: 'faq', link: document.querySelector('.nav-link[href="#faq"]') },
         ];
 
@@ -5327,7 +5763,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             margin-bottom: 3px;
         }
         .cookie-category-info span {
-            color: #888;
+            color: #d8d8d8;
             font-size: 0.78rem;
             line-height: 1.5;
         }
@@ -5534,6 +5970,214 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 }, 350);
             }, 2500);
         })();
+    </script>
+    <script>
+        (function () {
+            var questions = document.querySelectorAll('.quiz-question');
+            var progressFill = document.getElementById('quizProgressFill');
+            var progressText = document.getElementById('quizProgressText');
+            var quizResult = document.getElementById('quizResult');
+            var total = questions.length;
+            var current = 0;
+            var score = 0;
+            var answers = [];
+
+            function showQuestion(index) {
+                questions.forEach(function (q) { q.classList.remove('active'); });
+                questions[index].classList.add('active');
+                progressFill.style.width = ((index + 1) / total * 100) + '%';
+                progressText.textContent = 'שאלה ' + (index + 1) + ' מתוך ' + total;
+            }
+
+            function showResult() {
+                document.getElementById('quizQuestions').style.display = 'none';
+                document.querySelector('.quiz-progress').style.display = 'none';
+                quizResult.style.display = 'block';
+                window._quizScore = score;
+
+                var title, text;
+                if (score <= 35) {
+                    title = 'יש פה פוטנציאל ענק שלא מנוצל';
+                    text = 'על סמך התשובות שלכם, יש כמה נקודות קריטיות שמונעות מהפרסום לעבוד כמו שצריך. השאירו פרטים לגלות את הציון המדויק ואיפה הכסף הולך לאיבוד.';
+                } else if (score <= 65) {
+                    title = 'אתם על הדרך הנכונה — אבל יש מה לשפר';
+                    text = 'יש לכם בסיס טוב, אבל כמה שינויים יכולים להכפיל את התוצאות. השאירו פרטים לגלות את הציון המלא ומה אפשר לעשות מיד.';
+                } else {
+                    title = 'הביצועים שלכם נשמעים חזקים';
+                    text = 'אתם מנהלים את הפרסום ברצינות. השאירו פרטים לגלות את הציון המדויק ולוודא שלא משאירים כסף על השולחן.';
+                }
+
+                document.getElementById('quizResultTitle').textContent = title;
+                document.getElementById('quizResultText').textContent = text;
+            }
+
+            document.querySelectorAll('.quiz-option').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var qEl = this.closest('.quiz-question');
+                    var allBtns = qEl.querySelectorAll('.quiz-option');
+                    allBtns.forEach(function (b) {
+                        b.classList.remove('selected');
+                        b.disabled = true;
+                    });
+                    this.classList.add('selected');
+                    score += parseInt(this.dataset.score, 10);
+                    var questionText = qEl.querySelector('h3').textContent;
+                    answers.push({ q: questionText, a: this.textContent.trim() });
+                    window._quizAnswers = answers;
+                    setTimeout(function () {
+                        current++;
+                        if (current < total) {
+                            showQuestion(current);
+                        } else {
+                            showResult();
+                        }
+                    }, 300);
+                });
+            });
+        })();
+
+        function handleQuizSubmit(e) {
+            e.preventDefault();
+            var btn = e.target.querySelector('button[type="submit"]');
+            btn.textContent = '⏳ שולח...';
+            btn.disabled = true;
+
+            var name = document.getElementById('quizName').value;
+            var business = document.getElementById('quizBusiness').value;
+            var phone = document.getElementById('quizPhone').value;
+            var email = document.getElementById('quizEmail').value;
+
+            var quizAnswers = window._quizAnswers || [];
+            var answersText = quizAnswers.map(function(item, i) {
+                return 'ש' + (i+1) + ': ' + item.q + ' | תשובה: ' + item.a;
+            }).join('\n');
+
+            var data = {
+                formType: 'quiz',
+                name: name,
+                business: business,
+                phone: phone,
+                email: email,
+                score: Math.min(window._quizScore || 0, 100) + '/100',
+                answers: answersText,
+                consent: 'אישר',
+                consentTimestamp: new Date().toLocaleString('he-IL')
+            };
+
+            window.dataLayer = window.dataLayer || [];
+            dataLayer.push({
+                event: 'form_submit',
+                form_id: 'quizForm',
+                business_name: business,
+                page_path: window.location.pathname
+            });
+
+            fetch('https://script.google.com/macros/s/AKfycbzn04fzYK_VWD6217-l-CRaeyVsgNGfnsfzMwCNgwFnJQSMerq-PBGGzl4QaRbkSaeJ/exec', {
+                method: 'POST',
+                body: JSON.stringify(data)
+            })
+            .then(function () {
+                dataLayer.push({
+                    event: 'generate_lead',
+                    form_id: 'quizForm',
+                    business_name: business,
+                    page_path: window.location.pathname
+                });
+
+                document.getElementById('quizLeadForm').innerHTML =
+                    '<p style="color: var(--teal); font-size: 16px; font-weight: 700; text-align: center;">תודה ' + name + '! נחזור אליכם בהקדם 🙌</p>';
+                document.getElementById('scoreLockedMsg').style.display = 'none';
+
+                var s = Math.min(window._quizScore || 0, 100);
+                var circumference = 408;
+                var pct = s / 100;
+
+                var color = s <= 35 ? '#ff6b6b' : s <= 60 ? '#f9ca24' : '#4ECDC4';
+                var verdict = s <= 35 ? 'יש הרבה מה לשפר 🔴' : s <= 60 ? 'פוטנציאל גדול לשיפור 🟡' : 'ביצועים מעל הממוצע 🟢';
+
+                var fill = document.getElementById('scoreCircleFill');
+                var numEl = document.getElementById('scoreNumber');
+                document.getElementById('scoreOut').textContent = 'מתוך 100';
+                fill.style.stroke = color;
+                numEl.style.color = color;
+                document.getElementById('scoreVerdict').textContent = verdict;
+                document.getElementById('scoreReveal').style.display = 'block';
+
+                // המלצות דינמיות לפי תשובות
+                var qa = window._quizAnswers || [];
+                var recs = [];
+
+                var performance = qa[1] ? qa[1].a : '';
+                var tracking   = qa[2] ? qa[2].a : '';
+                var landing    = qa[3] ? qa[3].a : '';
+                var creative   = qa[4] ? qa[4].a : '';
+                var scale      = qa[5] ? qa[5].a : '';
+
+                // ביצועים
+                if (performance === 'לא יודעים — אין מדידה ברורה')
+                    recs.push('בלי מדידה ברורה אי אפשר לדעת אם הפרסום עובד — הצעד הראשון שלנו עם כל לקוח הוא הקמת תשתית מדידה מלאה. בלי זה, שום החלטה לא מבוססת.');
+                if (performance === 'לא מרוצים — עלויות גבוהות, תוצאות נמוכות')
+                    recs.push('עלויות גבוהות עם תוצאות נמוכות מצביעות בדרך כלל על בעיה בקהלים, בקריאטיב, או בעמוד הנחיתה — לרוב לא בתקציב עצמו.');
+
+                // מעקב
+                if (tracking === 'בכלל לא — אין מעקב')
+                    recs.push('אתם מפרסמים בעיניים עצומות — כל שקל שיוצא הוא ניחוש. הקמת תשתית מדידה נכונה היא ההשקעה שמחזירה את עצמה מהר ביותר.');
+                if (tracking === 'לא ממש — יש כלים אבל לא עוקבים')
+                    recs.push('יש לכם כלים אבל לא משתמשים בהם — זה כמו לקנות GPS ולנסוע עם מפה ישנה. הנתונים כבר שם, צריך רק להפעיל אותם נכון.');
+                if (tracking === 'בערך — יש מדידה חלקית, לא מדויקת')
+                    recs.push('מדידה חלקית יוצרת תמונה מעוותת — לפעמים קמפיין שנראה מוצלח הוא דווקא הבעייתי. סגירת הפערים תחשוף איפה הכסף באמת הולך.');
+
+                // עמוד נחיתה
+                if (landing === 'דף הבית — אותו עמוד לכל הקמפיינים')
+                    recs.push('שליחת גולשים לדף הבית היא אחת הסיבות הנפוצות לביצועים נמוכים — כל קמפיין צריך עמוד ייעודי שממשיך את המסר של המודעה.');
+                if (landing === 'לא יודעים / לא בדקנו')
+                    recs.push('אם לא יודעים לאן הגולש מגיע — כנראה שהוא מגיע למקום הלא נכון. עמוד הנחיתה הוא המקום שבו ההמרה קורית או לא קורית.');
+
+                // קריאטיב
+                if (creative === 'כמה חודשים — אותו קריאטיב לאורך זמן')
+                    recs.push('קריאטיב שחי כמה חודשים כבר נשחק — הקהל ראה אותו, הביצועים יורדים והאלגוריתם מפסיק להעביר אותו. תחלופה שיטתית היא לא מותרות, היא הכרחית.');
+                if (creative === 'לא מחליפים / לא עוקבים אחרי זה')
+                    recs.push('קריאטיב קבוע = ביצועים יורדים. הפלטפורמות מתגמלות תוכן טרי — בניית מערך UGC ותחלופה שוטפת היא ההבדל בין קמפיין שחי לקמפיין שנשחק.');
+
+                // סקייל
+                if (scale === 'התוצאות נפלו מיד')
+                    recs.push('כשמגדילים תקציב והתוצאות נופלות — זה סימן שהאסטרטגיה לא בנויה לסקייל. צריך לבנות את המבנה הנכון לפני שמגדילים, לא אחרי.');
+                if (scale === 'מפחדים לגעת בתקציב')
+                    recs.push('הפחד להגדיל תקציב מונע צמיחה — עם הנתונים הנכונים אפשר להגדיל בביטחון ולדעת מראש מה יקרה. הבעיה היא חוסר נראות, לא התקציב.');
+
+                // בחר 2 ההמלצות הכי רלוונטיות
+                var finalRecs = recs.slice(0, 2);
+                if (finalRecs.length === 0) {
+                    finalRecs = [
+                        'המשיכו לעקוב אחרי הנתונים ולבצע אופטימיזציה שוטפת — זה ההבדל בין קמפיין שמסתדר לקמפיין שצומח.',
+                        'בדקו את ה-ROAS שלכם לפי קהלים וקריאטיבים — לרוב 20% מהקמפיינים מייצרים 80% מהתוצאות.'
+                    ];
+                } else if (finalRecs.length === 1) {
+                    finalRecs.push('בדקו את ה-ROAS שלכם לפי קהלים וקריאטיבים — לרוב 20% מהקמפיינים מייצרים 80% מהתוצאות.');
+                }
+
+                document.getElementById('recItem1').textContent = finalRecs[0];
+                document.getElementById('recItem2').textContent = finalRecs[1];
+                document.getElementById('quizRecommendations').style.display = 'block';
+
+                setTimeout(function () {
+                    fill.style.strokeDashoffset = circumference - (circumference * pct);
+                    var duration = 1600;
+                    var startTime = null;
+                    function animateNum(ts) {
+                        if (!startTime) startTime = ts;
+                        var progress = Math.min((ts - startTime) / duration, 1);
+                        numEl.textContent = Math.round(s * progress);
+                        if (progress < 1) requestAnimationFrame(animateNum);
+                    }
+                    requestAnimationFrame(animateNum);
+                }, 100);
+            })
+            .catch(function () {
+                btn.textContent = '✗ שגיאה, נסו שוב';
+                btn.disabled = false;
+            });
+        }
     </script>
 </body>
 </html>
