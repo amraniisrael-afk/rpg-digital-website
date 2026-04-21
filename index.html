@@ -2916,16 +2916,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             .a11y-panel {
                 width: calc(100vw - 20px);
                 right: 10px;
-                top: 216px;
-                bottom: auto;
+                top: auto;
+                bottom: 76px;
                 max-height: 70vh;
+                transform-origin: bottom left;
             }
 
             .a11y-float {
                 width: 44px;
                 height: 44px;
-                top: 160px;
-                right: 16px;
+                top: auto;
+                right: auto;
+                bottom: 20px;
+                left: 16px;
             }
 
             .a11y-float svg {
@@ -3136,6 +3139,110 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 max-width: 520px;
                 margin-left: auto;
                 margin-right: auto;
+            }
+        }
+
+        /* ===== TESTIMONIALS MOBILE SLIDER ===== */
+        .testimonials-mobile-controls { display: none; }
+
+        @media (max-width: 600px) {
+            .testimonials-slider-wrapper {
+                overflow: hidden;
+                position: relative;
+                border-radius: 16px;
+            }
+
+            .testimonials-grid {
+                display: flex !important;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                gap: 0;
+                max-width: none;
+                margin-left: 0;
+                margin-right: 0;
+                margin-top: 36px;
+                transition: transform 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                will-change: transform;
+            }
+
+            .testimonial-card {
+                min-width: 100%;
+                width: 100%;
+                flex-shrink: 0;
+                border-radius: 16px;
+            }
+
+            /* hide the hover lift on mobile */
+            .testimonial-card:hover {
+                transform: none;
+            }
+
+            /* controls row */
+            .testimonials-mobile-controls {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 18px;
+                margin-top: 22px;
+            }
+
+            /* arrow buttons */
+            .t-btn {
+                background: rgba(78, 205, 196, 0.12);
+                border: 1.5px solid rgba(78, 205, 196, 0.45);
+                color: var(--teal);
+                width: 46px;
+                height: 46px;
+                border-radius: 50%;
+                font-size: 17px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background 0.2s, transform 0.15s;
+                -webkit-tap-highlight-color: transparent;
+                flex-shrink: 0;
+            }
+
+            .t-btn:not(:disabled):active {
+                background: rgba(78, 205, 196, 0.28);
+                transform: scale(0.92);
+            }
+
+            .t-btn:disabled {
+                opacity: 0.28;
+                cursor: default;
+            }
+
+            /* dots */
+            .testimonials-dots-container {
+                display: flex;
+                gap: 7px;
+                align-items: center;
+            }
+
+            .t-dot {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: rgba(78, 205, 196, 0.22);
+                transition: background 0.3s, width 0.3s, border-radius 0.3s;
+                cursor: pointer;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .t-dot.active {
+                background: var(--teal);
+                width: 26px;
+                border-radius: 4px;
+            }
+
+            /* counter badge */
+            .t-counter {
+                font-size: 13px;
+                color: var(--gray-light);
+                min-width: 36px;
+                text-align: center;
             }
         }
 
@@ -3767,6 +3874,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <p class="section-subtitle">עסקים שעבדו איתנו  בדברים שלהם</p>
             </div>
 
+            <div class="testimonials-slider-wrapper">
             <div class="testimonials-grid">
 
                 <!-- Card 1 -->
@@ -3889,7 +3997,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     </div>
                 </div>
 
+            </div><!-- /.testimonials-grid -->
+            </div><!-- /.testimonials-slider-wrapper -->
+
+            <!-- Mobile slider controls -->
+            <div class="testimonials-mobile-controls" aria-label="ניווט המלצות">
+                <button class="t-btn t-btn-prev" aria-label="הקודם" disabled>&#10094;</button>
+                <div class="testimonials-dots-container"></div>
+                <button class="t-btn t-btn-next" aria-label="הבא">&#10095;</button>
             </div>
+
         </div>
     </section>
 
@@ -5914,6 +6031,85 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 });
             });
         }
+
+        // ===== Testimonials Mobile Slider =====
+        (function () {
+            function initTestimonialsSlider() {
+                if (window.innerWidth > 600) return;
+
+                var grid = document.querySelector('.testimonials-grid');
+                var wrapper = document.querySelector('.testimonials-slider-wrapper');
+                var dotsContainer = document.querySelector('.testimonials-dots-container');
+                var btnPrev = document.querySelector('.t-btn-prev');
+                var btnNext = document.querySelector('.t-btn-next');
+                if (!grid || !wrapper) return;
+
+                var cards = grid.querySelectorAll('.testimonial-card');
+                var total = cards.length;
+                var current = 0;
+
+                // build dots
+                dotsContainer.innerHTML = '';
+                for (var i = 0; i < total; i++) {
+                    var dot = document.createElement('button');
+                    dot.className = 't-dot' + (i === 0 ? ' active' : '');
+                    dot.setAttribute('aria-label', 'כרטיס ' + (i + 1));
+                    dot.dataset.index = i;
+                    dotsContainer.appendChild(dot);
+                }
+
+                function goTo(index) {
+                    if (index < 0 || index >= total) return;
+                    current = index;
+                    grid.style.transform = 'translateX(' + (current * 100) + '%)';
+                    dotsContainer.querySelectorAll('.t-dot').forEach(function (d, i) {
+                        d.classList.toggle('active', i === current);
+                    });
+                    btnPrev.disabled = current === 0;
+                    btnNext.disabled = current === total - 1;
+                }
+
+                goTo(0);
+
+                btnNext.addEventListener('click', function () { goTo(current + 1); });
+                btnPrev.addEventListener('click', function () { goTo(current - 1); });
+
+                dotsContainer.addEventListener('click', function (e) {
+                    var dot = e.target.closest('.t-dot');
+                    if (dot) goTo(parseInt(dot.dataset.index, 10));
+                });
+
+                // Touch swipe
+                var touchStartX = 0, touchStartY = 0;
+                wrapper.addEventListener('touchstart', function (e) {
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                }, { passive: true });
+
+                wrapper.addEventListener('touchend', function (e) {
+                    var dx = touchStartX - e.changedTouches[0].clientX;
+                    var dy = touchStartY - e.changedTouches[0].clientY;
+                    if (Math.abs(dx) < Math.abs(dy) || Math.abs(dx) < 40) return;
+                    if (dx > 0) goTo(current + 1);
+                    else goTo(current - 1);
+                }, { passive: true });
+            }
+
+            initTestimonialsSlider();
+
+            var resizeTimer;
+            window.addEventListener('resize', function () {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(function () {
+                    var grid = document.querySelector('.testimonials-grid');
+                    if (window.innerWidth > 600 && grid) {
+                        grid.style.transform = '';
+                    } else {
+                        initTestimonialsSlider();
+                    }
+                }, 150);
+            });
+        })();
     </script>
 
     <!-- ===== COOKIE CONSENT ===== -->
