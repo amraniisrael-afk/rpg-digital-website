@@ -719,6 +719,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             background-clip: text;
         }
 
+        .rotating-word {
+            display: inline;
+            background: linear-gradient(135deg, var(--teal), #7FDBDA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: opacity 0.35s ease;
+        }
+
+        .rotating-word.fade {
+            opacity: 0;
+        }
+
         .hero .subtitle {
             font-size: clamp(17px, 2.2vw, 22px);
             font-weight: 300;
@@ -3077,9 +3090,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="hero-content">
             <div class="hero-badge">פרסום ממומן מבוסס דאטה ו-AI</div>
             <h1>
-                הכפילו את ההכנסות מפרסום<br>
-                <span class="highlight">תוך 90 יום</span><br>
-                בלי לשרוף תקציב על ניחושים
+                הכפילו את ההכנסות שלכם עם<br>
+                <span class="rotating-word" id="rotatingWord">אסטרטגיה חדה</span>
             </h1>
             <p class="subtitle">
                 מחליפים ניחושים בנתונים.
@@ -5506,5 +5518,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
     </script>
     <script src="datalayer.js"></script>
+    <script>
+        (function () {
+            const el = document.getElementById('rotatingWord');
+            if (!el) return;
+            const words = ['אסטרטגיה חדה', 'חקר שוק', 'מדידה מדויקת', 'קריאטיב ממיר'];
+            let current = 0;
+
+            setInterval(function () {
+                el.classList.add('fade');
+                setTimeout(function () {
+                    current = (current + 1) % words.length;
+                    el.textContent = words[current];
+                    el.classList.remove('fade');
+                }, 350);
+            }, 2500);
+        })();
+    </script>
 </body>
 </html>
