@@ -341,7 +341,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             padding: 8px 14px;
             color: var(--cream);
             text-decoration: none;
-            font-size: 15px;
+            font-size: 17px;
             font-weight: 500;
             border-radius: 8px;
             transition: color 0.2s ease, background 0.2s ease;
@@ -1135,155 +1135,102 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             margin: 0 auto;
         }
 
-        /* ===== BENTO GRID ===== */
+        /* ===== VALUE LIST ===== */
         .value-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: auto auto auto;
-            gap: 20px;
+            counter-reset: val;
+            display: flex;
+            flex-direction: column;
+            margin-top: 56px;
+            border-top: 1px solid rgba(255,255,255,0.07);
         }
-
-        /* bento positioning */
-        .value-grid .value-card:nth-child(1) { grid-column: 1 / 3; }                  /* רחב */
-        .value-grid .value-card:nth-child(2) { grid-column: 3; grid-row: 1 / 3; }     /* גבוה */
-        .value-grid .value-card:nth-child(3) { grid-column: 1; grid-row: 2; }
-        .value-grid .value-card:nth-child(4) { grid-column: 2; grid-row: 2; }
-        .value-grid .value-card:nth-child(5) { grid-column: 1; grid-row: 3; }
-        .value-grid .value-card:nth-child(6) { grid-column: 2 / 4; grid-row: 3; }     /* רחב */
 
         .value-card {
-            padding: 32px;
-            background: linear-gradient(var(--dark), var(--dark)) padding-box,
-                        linear-gradient(135deg, rgba(78,205,196,0.18), rgba(168,85,247,0.08)) border-box;
-            border: 1px solid transparent;
-            border-radius: 18px;
-            transition: all 0.35s ease;
+            counter-increment: val;
+            display: grid;
+            grid-template-columns: 72px 1fr 44px;
+            align-items: center;
+            gap: 24px;
+            padding: 28px 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
             position: relative;
-            overflow: hidden;
+            cursor: default;
+            transition: background 0.25s ease;
         }
 
-        /* glow sweep on hover */
+        .value-card::before {
+            content: counter(val, decimal-leading-zero);
+            font-size: 42px;
+            font-weight: 800;
+            line-height: 1;
+            color: rgba(255,255,255,0.06);
+            font-family: 'Inter', sans-serif;
+            transition: color 0.25s ease;
+            text-align: right;
+        }
+
+        /* accent bar on hover */
         .value-card::after {
             content: '';
             position: absolute;
-            inset: 0;
-            border-radius: 18px;
-            opacity: 0;
-            transition: opacity 0.35s ease;
-            background: radial-gradient(ellipse at 50% 0%, rgba(78,205,196,0.07) 0%, transparent 70%);
+            right: 0;
+            top: 10%;
+            height: 80%;
+            width: 2px;
+            background: var(--teal);
+            transform: scaleY(0);
+            transform-origin: center;
+            transition: transform 0.25s ease;
+            border-radius: 2px;
         }
 
-        .value-card:hover::after { opacity: 1; }
+        .value-card:hover { background: rgba(78,205,196,0.03); }
+        .value-card:hover::before { color: rgba(78,205,196,0.35); }
+        .value-card:hover::after { transform: scaleY(1); }
+        .value-card:hover h4 { color: var(--teal); }
 
-        .value-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.35);
-        }
-
-        /* hero card — card 1 */
-        .value-grid .value-card:nth-child(1) {
-            background: linear-gradient(135deg, rgba(78,205,196,0.06) 0%, var(--dark) 60%) padding-box,
-                        linear-gradient(135deg, rgba(78,205,196,0.4), rgba(168,85,247,0.15)) border-box;
-        }
-        .value-grid .value-card:nth-child(1) h4 { font-size: 22px; }
-        .value-grid .value-card:nth-child(1) .value-card-icon {
-            width: 60px;
-            height: 60px;
-        }
-        .value-grid .value-card:nth-child(1) .value-card-icon svg {
-            width: 28px;
-            height: 28px;
-        }
-
-        /* tall card — card 2 */
-        .value-grid .value-card:nth-child(2) {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            background: linear-gradient(160deg, rgba(168,85,247,0.07) 0%, var(--dark) 55%) padding-box,
-                        linear-gradient(160deg, rgba(168,85,247,0.45), rgba(78,205,196,0.1)) border-box;
-        }
-
-        /* wide bottom card — card 6 */
-        .value-grid .value-card:nth-child(6) {
-            background: linear-gradient(90deg, rgba(251,191,36,0.05) 0%, var(--dark) 50%) padding-box,
-                        linear-gradient(90deg, rgba(251,191,36,0.3), rgba(168,85,247,0.1)) border-box;
+        .value-card h4 {
+            font-size: clamp(18px, 2vw, 22px);
+            font-weight: 700;
+            margin: 0;
+            transition: color 0.25s ease;
         }
 
         .value-card-icon {
-            width: 50px;
-            height: 50px;
-            margin-bottom: 18px;
-            border-radius: 14px;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.35s ease;
-            position: relative;
+            flex-shrink: 0;
+            transition: transform 0.25s ease;
         }
 
-        /* glow behind icon */
-        .value-card-icon::after {
-            content: '';
-            position: absolute;
-            inset: -4px;
-            border-radius: 18px;
-            opacity: 0;
-            transition: opacity 0.35s ease;
-            filter: blur(8px);
-        }
-
-        .value-card:hover .value-card-icon { transform: translateY(-3px); }
-        .value-card:hover .value-card-icon::after { opacity: 0.6; }
+        .value-card:hover .value-card-icon { transform: scale(1.1); }
 
         .value-card-icon svg {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             fill: none;
-            stroke: var(--teal);
             stroke-width: 1.8;
             stroke-linecap: round;
             stroke-linejoin: round;
-            position: relative;
-            z-index: 1;
         }
 
-        /* צבעי אייקון שונים לכל כרטיס */
-        .value-grid .value-card:nth-child(1) .value-card-icon { background: rgba(78,205,196,0.12); }
+        .value-grid .value-card:nth-child(1) .value-card-icon { background: rgba(78,205,196,0.1); }
         .value-grid .value-card:nth-child(1) .value-card-icon svg { stroke: var(--teal); }
-        .value-grid .value-card:nth-child(1) .value-card-icon::after { background: rgba(78,205,196,0.4); }
-
-        .value-grid .value-card:nth-child(2) .value-card-icon { background: rgba(168,85,247,0.12); }
+        .value-grid .value-card:nth-child(2) .value-card-icon { background: rgba(168,85,247,0.1); }
         .value-grid .value-card:nth-child(2) .value-card-icon svg { stroke: #a855f7; }
-        .value-grid .value-card:nth-child(2) .value-card-icon::after { background: rgba(168,85,247,0.4); }
-
-        .value-grid .value-card:nth-child(3) .value-card-icon { background: rgba(249,115,22,0.12); }
+        .value-grid .value-card:nth-child(3) .value-card-icon { background: rgba(249,115,22,0.1); }
         .value-grid .value-card:nth-child(3) .value-card-icon svg { stroke: #f97316; }
-        .value-grid .value-card:nth-child(3) .value-card-icon::after { background: rgba(249,115,22,0.4); }
-
-        .value-grid .value-card:nth-child(4) .value-card-icon { background: rgba(236,72,153,0.12); }
+        .value-grid .value-card:nth-child(4) .value-card-icon { background: rgba(236,72,153,0.1); }
         .value-grid .value-card:nth-child(4) .value-card-icon svg { stroke: #ec4899; }
-        .value-grid .value-card:nth-child(4) .value-card-icon::after { background: rgba(236,72,153,0.4); }
-
-        .value-grid .value-card:nth-child(5) .value-card-icon { background: rgba(34,197,94,0.12); }
+        .value-grid .value-card:nth-child(5) .value-card-icon { background: rgba(34,197,94,0.1); }
         .value-grid .value-card:nth-child(5) .value-card-icon svg { stroke: #22c55e; }
-        .value-grid .value-card:nth-child(5) .value-card-icon::after { background: rgba(34,197,94,0.4); }
-
-        .value-grid .value-card:nth-child(6) .value-card-icon { background: rgba(251,191,36,0.12); }
+        .value-grid .value-card:nth-child(6) .value-card-icon { background: rgba(251,191,36,0.1); }
         .value-grid .value-card:nth-child(6) .value-card-icon svg { stroke: #fbbf24; }
-        .value-grid .value-card:nth-child(6) .value-card-icon::after { background: rgba(251,191,36,0.4); }
 
-        .value-card h4 {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-
-        .value-card p {
-            font-size: 16px;
-            color: var(--gray-light);
-            line-height: 1.75;
-        }
+        .value-card p { display: none; }
 
         /* ========== WHO IS THIS FOR ========== */
         .who-section {
@@ -1502,21 +1449,34 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
 
         /* ========== RISK REVERSAL ========== */
+        .guarantee-urgency-row {
+            display: flex;
+            align-items: stretch;
+        }
+
         .guarantee-section {
-            padding: 80px 20px;
+            flex: 1;
+            padding: 80px 40px;
             background: var(--dark);
         }
 
         .guarantee-container {
-            max-width: 800px;
+            max-width: 100%;
             margin: 0 auto;
             text-align: center;
         }
 
         .guarantee-shield {
-            font-size: 64px;
+            margin-top: 20px;
             margin-bottom: 20px;
             animation: float 3s ease-in-out infinite;
+            display: flex;
+            justify-content: center;
+        }
+
+        .guarantee-shield svg {
+            width: 64px;
+            height: 64px;
         }
 
         .guarantee-container h2 {
@@ -1535,14 +1495,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         /* ========== SCARCITY & URGENCY ========== */
         .urgency-section {
-            padding: 80px 20px;
+            flex: 1;
+            padding: 80px 40px;
             background: linear-gradient(135deg, rgba(78, 205, 196, 0.08), rgba(78, 205, 196, 0.02));
-            border-top: 1px solid rgba(78, 205, 196, 0.15);
-            border-bottom: 1px solid rgba(78, 205, 196, 0.15);
+            border-right: 1px solid rgba(78, 205, 196, 0.15);
+            border-top: none;
+            border-bottom: none;
         }
 
         .urgency-container {
-            max-width: 800px;
+            max-width: 100%;
             margin: 0 auto;
             text-align: center;
         }
@@ -1602,12 +1564,22 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         /* ========== FAQ ========== */
         .faq-section {
-            padding: 100px 20px;
+            padding: 100px 40px;
         }
 
         .faq-container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1.7fr;
+            gap: 80px;
+            align-items: start;
+            direction: rtl;
+        }
+
+        .faq-header-col {
+            position: sticky;
+            top: 120px;
         }
 
         .faq-item {
@@ -1673,73 +1645,165 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         /* ========== LEAD FORM ========== */
         .lead-section {
-            padding: 100px 20px;
+            padding: 120px 40px;
             background: var(--dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lead-section::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            right: -200px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(78,205,196,0.12) 0%, transparent 65%);
+            pointer-events: none;
+        }
+
+        .lead-section::after {
+            content: '';
+            position: absolute;
+            bottom: -200px;
+            left: -200px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(78,205,196,0.08) 0%, transparent 65%);
+            pointer-events: none;
         }
 
         .lead-container {
-            max-width: 600px;
+            max-width: 1200px;
             margin: 0 auto;
-            text-align: center;
+            display: grid;
+            grid-template-columns: 1fr 1.4fr;
+            gap: 80px;
+            align-items: center;
+            direction: rtl;
+            position: relative;
+            z-index: 1;
+        }
+
+        .lead-text-col {
+            text-align: right;
         }
 
         .lead-container h2 {
-            font-size: clamp(26px, 3.5vw, 38px);
+            font-size: clamp(28px, 3.5vw, 48px);
             font-weight: 800;
-            margin-bottom: 16px;
+            margin-bottom: 18px;
+            line-height: 1.2;
         }
 
         .lead-container .lead-desc {
             font-size: 17px;
-            color: var(--gray-light);
-            margin-bottom: 40px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 0;
+        }
+
+        .lead-form-card {
+            background: rgba(40, 58, 79, 0.6);
+            border: 1px solid rgba(78, 205, 196, 0.25);
+            border-radius: 24px;
+            padding: 48px 52px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 60px rgba(0,0,0,0.35), 0 0 0 1px rgba(78,205,196,0.08) inset;
+            text-align: right;
         }
 
         .lead-form {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 20px;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.55);
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
         }
 
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
+            gap: 20px;
         }
 
         .form-input {
             width: 100%;
-            padding: 16px 20px;
-            background: var(--dark-2);
-            border: 1px solid rgba(78, 205, 196, 0.15);
+            padding: 15px 18px;
+            background: rgba(33, 50, 68, 0.8);
+            border: 1.5px solid rgba(78, 205, 196, 0.18);
             border-radius: 12px;
             color: var(--cream);
             font-family: 'Heebo', sans-serif;
             font-size: 15px;
             outline: none;
-            transition: all 0.3s ease;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
             direction: rtl;
+        }
+
+        .form-input:hover {
+            border-color: rgba(78, 205, 196, 0.35);
         }
 
         .form-input:focus {
             border-color: var(--teal);
-            box-shadow: none;
+            background: rgba(33, 50, 68, 1);
+            box-shadow: 0 0 0 3px rgba(78,205,196,0.12), 0 2px 12px rgba(78,205,196,0.08);
         }
 
         .form-input::placeholder {
-            color: var(--gray);
+            color: rgba(255,255,255,0.3);
         }
 
         textarea.form-input {
             resize: vertical;
-            min-height: 120px;
+            min-height: 110px;
+        }
+
+        .lead-form-divider {
+            height: 1px;
+            background: rgba(78,205,196,0.12);
+            margin: 4px 0;
         }
 
         .form-submit {
             padding: 18px;
             font-size: 18px;
-            margin-top: 8px;
+            margin-top: 4px;
             width: 100%;
+            letter-spacing: 0.02em;
+        }
+
+        .lead-trust-row {
+            display: flex;
+            justify-content: center;
+            gap: 28px;
+            margin-top: 28px;
+            flex-wrap: wrap;
+        }
+
+        .lead-trust-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .lead-trust-item svg {
+            color: var(--teal);
+            flex-shrink: 0;
         }
 
         /* ========== CONSENT CHECKBOX ========== */
@@ -1802,6 +1866,145 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         .consent-link:hover {
             color: var(--teal-dark);
+        }
+
+        /* ========== NEWSLETTER ========== */
+        .newsletter-section {
+            padding: 90px 20px;
+            background: var(--black);
+            position: relative;
+            overflow: hidden;
+            border-top: 1px solid rgba(78, 205, 196, 0.08);
+        }
+
+        .newsletter-section::before {
+            content: '';
+            position: absolute;
+            top: -120px;
+            left: -120px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(78, 205, 196, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .newsletter-inner {
+            max-width: 1060px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+            direction: rtl;
+            position: relative;
+        }
+
+        .newsletter-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .newsletter-visual h2 {
+            font-size: clamp(26px, 3.2vw, 38px);
+            font-weight: 800;
+            line-height: 1.3;
+            margin-bottom: 6px;
+        }
+
+        .newsletter-visual p {
+            font-size: 16px;
+            color: var(--gray-light);
+            line-height: 1.7;
+        }
+
+        .newsletter-perks {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .newsletter-perk {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+            color: var(--cream-dark);
+        }
+
+        .newsletter-perk-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--teal);
+            flex-shrink: 0;
+        }
+
+        .newsletter-inner::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 10%;
+            width: 1px;
+            height: 80%;
+            background: linear-gradient(to bottom, transparent, rgba(78, 205, 196, 0.2), transparent);
+        }
+
+        .newsletter-form-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .newsletter-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .newsletter-select {
+            width: 100%;
+            padding: 16px 20px;
+            background: var(--dark-2);
+            border: 1px solid rgba(78, 205, 196, 0.15);
+            border-radius: 12px;
+            color: var(--gray);
+            font-family: 'Heebo', sans-serif;
+            font-size: 15px;
+            outline: none;
+            cursor: pointer;
+            direction: rtl;
+            appearance: none;
+            -webkit-appearance: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .newsletter-select:focus {
+            border-color: var(--teal);
+        }
+
+        .newsletter-select option {
+            background: var(--dark-2);
+            color: var(--cream);
+        }
+
+        .newsletter-submit {
+            width: 100%;
+            padding: 16px;
+            font-size: 17px;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .newsletter-inner {
+                grid-template-columns: 1fr;
+                gap: 36px;
+                text-align: center;
+            }
+            .newsletter-inner::after { display: none; }
+            .newsletter-perk { justify-content: center; }
+            .newsletter-row { grid-template-columns: 1fr; }
         }
 
         /* ========== FOOTER ========== */
@@ -2470,6 +2673,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 margin: 0 8px;
             }
 
+            .guarantee-urgency-row {
+                flex-direction: column;
+            }
+
+            .urgency-section {
+                border-left: none !important;
+                border-top: 1px solid rgba(78, 205, 196, 0.15);
+                border-bottom: 1px solid rgba(78, 205, 196, 0.15);
+            }
+
             .urgency-container {
                 padding: 0 8px;
             }
@@ -2478,10 +2691,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             .solution-container,
             .value-container,
             .who-container,
-            .faq-container,
-            .lead-container,
             .guarantee-container {
                 padding: 0 4px;
+            }
+
+            .faq-container {
+                grid-template-columns: 1fr;
+                gap: 32px;
+                padding: 0 4px;
+            }
+
+            .faq-header-col {
+                position: static;
+            }
+
+            .lead-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
             }
 
             .social-proof-platforms {
@@ -2724,8 +2950,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 padding: 18px 20px;
             }
 
+            .lead-form-card {
+                padding: 28px 22px;
+                border-radius: 18px;
+            }
+
             .lead-form {
-                padding: 0 4px;
+                gap: 16px;
+            }
+
+            .lead-trust-row {
+                gap: 16px;
             }
 
             .slots-left {
@@ -3061,7 +3296,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
 
         .quiz-container {
-            max-width: 700px;
+            max-width: 900px;
             margin: 0 auto;
         }
 
@@ -3330,6 +3565,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </style>
 </head>
 <body>
+
+
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MM2VRX4V"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -3711,36 +3948,30 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <p class="section-subtitle">כל רכיב בשירות שלנו פותר בעיה ספציפית בדרך לתוצאות שאתם רוצים</p>
             </div>
 
-            <div class="value-grid">
-                <div class="value-card reveal">
-                    <div class="value-card-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div>
+            <div class="value-grid reveal">
+                <div class="value-card">
                     <h4>דשבורד BI בזמן אמת</h4>
-                    <p>תראו בדיוק לאן הולך כל שקל ומה הוא מחזיר. בלי אקסלים, בלי "תכף נשלח דוח". הכל שקוף, הכל בזמן אמת.</p>
+                    <div class="value-card-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div>
                 </div>
-                <div class="value-card reveal" style="transition-delay: 0.1s;">
-                    <div class="value-card-icon"><svg viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 1 4 4v2a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"/><path d="M16 14H8a4 4 0 0 0-4 4v2h16v-2a4 4 0 0 0-4-4z"/><circle cx="9" cy="7" r="0.5" fill="var(--teal)"/><circle cx="15" cy="7" r="0.5" fill="var(--teal)"/></svg></div>
+                <div class="value-card">
                     <h4>אופטימיזציה מבוססת AI</h4>
-                    <p>האלגוריתמים שלנו מזהים דפוסים שהעין האנושית מפספסת  ומתאימים את הקמפיינים אוטומטית למקסום ביצועים.</p>
+                    <div class="value-card-icon"><svg viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 1 4 4v2a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"/><path d="M16 14H8a4 4 0 0 0-4 4v2h16v-2a4 4 0 0 0-4-4z"/></svg></div>
                 </div>
-                <div class="value-card reveal" style="transition-delay: 0.2s;">
-                    <div class="value-card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+                <div class="value-card">
                     <h4>מיקוד קהלים מדויק</h4>
-                    <p>ניתוח דאטה מעמיק שחושף את הקהלים הכי רווחיים שלכם  ומפסיק את הבזבוז על קהלים שלא ממירים.</p>
+                    <div class="value-card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
                 </div>
-                <div class="value-card reveal" style="transition-delay: 0.3s;">
-                    <div class="value-card-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="6" height="10" rx="1"/><rect x="9" y="4" width="6" height="16" rx="1"/><rect x="16" y="9" width="6" height="8" rx="1"/></svg></div>
+                <div class="value-card">
                     <h4>ניהול רב-ערוצי</h4>
-                    <p>Meta, Google, LinkedIn, TikTok ו-Outbrain  הכל תחת קורת גג אחת, עם אסטרטגיה אחודה שמנצלת את החוזקות של כל פלטפורמה.</p>
+                    <div class="value-card-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="6" height="10" rx="1"/><rect x="9" y="4" width="6" height="16" rx="1"/><rect x="16" y="9" width="6" height="8" rx="1"/></svg></div>
                 </div>
-                <div class="value-card reveal" style="transition-delay: 0.4s;">
-                    <div class="value-card-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+                <div class="value-card">
                     <h4>דוחות ביצועים שבועיים</h4>
-                    <p>לא סתם מספרים  תובנות אקשנביליות. כל דוח כולל המלצות קונקרטיות לשיפור מבוססות דאטה.</p>
+                    <div class="value-card-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
                 </div>
-                <div class="value-card reveal" style="transition-delay: 0.5s;">
-                    <div class="value-card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></div>
+                <div class="value-card">
                     <h4>אסטרטגיה ומחקר שוק</h4>
-                    <p>לפני שמשקיעים שקל בפרסום  אנחנו חוקרים את השוק, המתחרים והקהלים. ככה מתחילים עם יתרון.</p>
+                    <div class="value-card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg></div>
                 </div>
             </div>
         </div>
@@ -4383,7 +4614,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             padding: 10px 0 36px;
         }
         .chart-wrapper {
-            max-width: 820px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 0 24px;
             display: flex;
@@ -4741,7 +4972,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <div class="quiz-question" data-q="3">
                         <h3>לאן הגולש מגיע אחרי שהוא לוחץ על המודעה?</h3>
                         <div class="quiz-options">
-                            <button class="quiz-option" data-score="15">עמוד נחיתה ייעודי — בנוי ומיוצל לקמפיין</button>
+                            <button class="quiz-option" data-score="15">עמוד נחיתה ייעודי — בנוי ומותאם לקמפיין</button>
                             <button class="quiz-option" data-score="10">דף מוצר או שירות ספציפי באתר</button>
                             <button class="quiz-option" data-score="3">דף הבית — אותו עמוד לכל הקמפיינים</button>
                             <button class="quiz-option" data-score="0">לא יודעים / לא בדקנו</button>
@@ -4817,33 +5048,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
     </section>
 
-    <!-- ========== GRAND SLAM OFFER ========== -->
-    <section class="offer-section">
-        <div class="offer-container reveal">
-            <div class="offer-badge">ההצעה שלנו</div>
-            <h2>שיחת אסטרטגיה חינמית <br><span style="color: var(--teal)">שווה מאות שקלים</span></h2>
-            <p class="offer-desc">
-                ב-30 דקות נבנה לכם תמונת מצב מלאה: מה עובד, מה לא,
-                ואיפה הכסף הכי גדול מתחבא. בלי התחייבות, בלי לחץ מכירות.
-            </p>
-            <ul class="offer-includes" style="list-style: none;">
-                <li><span class="check">✓</span> ניתוח מצב קמפיינים קיימים</li>
-                <li><span class="check">✓</span> זיהוי הזדמנויות צמיחה מיידיות</li>
-                <li><span class="check">✓</span> מפת דרכים מותאמת אישית לעסק שלכם</li>
-                <li><span class="check">✓</span> ללא עלות וללא התחייבות</li>
-            </ul>
-            <a href="#lead-form" class="cta-button offer-cta">
-                רוצה שיחת אסטרטגיה חינמית
-                <span>←</span>
-            </a>
-        </div>
-    </section>
-
     <!-- ========== RISK REVERSAL ========== -->
+    <div class="guarantee-urgency-row">
     <section class="guarantee-section">
         <div class="guarantee-container reveal">
-            <div class="guarantee-shield">🛡️</div>
             <h2>אפס סיכון. מילה שלנו.</h2>
+            <div class="guarantee-shield">
+                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M32 4L8 14v18c0 13.3 10.3 25.7 24 29 13.7-3.3 24-15.7 24-29V14L32 4z" fill="rgba(78,205,196,0.12)" stroke="var(--teal)" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M32 12L14 20v12c0 8.8 6.8 17 18 19.5C45.2 49 52 40.8 52 32V20L32 12z" fill="rgba(78,205,196,0.08)"/>
+                    <polyline points="22,32 29,39 42,26" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
             <p>
                 אם תוך 30 הימים הראשונים לא תראו שיפור מדיד בביצועי הקמפיינים שלכם 
                 נחזיר לכם את דמי הניהול. בלי שאלות, בלי אותיות קטנות.
@@ -4855,7 +5071,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </section>
 
     <!-- ========== SCARCITY & URGENCY ========== -->
-    <section class="urgency-section">
+    <section class="urgency-section" style="border-left: 1px solid rgba(78,205,196,0.15);">
         <div class="urgency-container reveal">
             <h2>למה דווקא <span style="color: var(--teal);">עכשיו?</span></h2>
             <p>
@@ -4875,15 +5091,59 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </a>
         </div>
     </section>
+    </div>
+
+    <!-- ========== NEWSLETTER ========== -->
+    <section class="newsletter-section">
+        <div class="newsletter-inner">
+            <div class="newsletter-visual">
+                <h2>הצטרפו ל<span style="color: var(--teal);">ניוזלטר</span> שלנו</h2>
+                <p>טיפים מעשיים, עדכוני ענף ותובנות על עולם הפרסום הממומן — ישירות למייל, פעם בשבוע.</p>
+                <div class="newsletter-perks">
+                    <div class="newsletter-perk">
+                        <div class="newsletter-perk-dot"></div>
+                        תוכן בלעדי שלא מפורסם בשום מקום אחר
+                    </div>
+                    <div class="newsletter-perk">
+                        <div class="newsletter-perk-dot"></div>
+                        אסטרטגיות שעובדות עכשיו — לא תיאוריה
+                    </div>
+                    <div class="newsletter-perk">
+                        <div class="newsletter-perk-dot"></div>
+                        ללא ספאם. ביטול בכל עת
+                    </div>
+                </div>
+            </div>
+            <form class="newsletter-form-wrap" onsubmit="handleNewsletterSubmit(); return false;">
+                <div class="newsletter-row">
+                    <input type="email" id="nl-email" class="form-input" placeholder="כתובת המייל שלי" required>
+                    <input type="text" id="nl-name" class="form-input" placeholder="שם פרטי" required>
+                </div>
+                <select id="nl-type" class="newsletter-select">
+                    <option value="" disabled selected>האם אתה?</option>
+                    <option value="business">בעל עסק</option>
+                    <option value="marketer">מנהל שיווק</option>
+                    <option value="agency">סוכנות פרסום</option>
+                    <option value="other">אחר</option>
+                </select>
+                <label class="consent-label">
+                    <input type="checkbox" id="nl-consent" class="consent-checkbox" required>
+                    <span class="consent-text">אני מאשר לקבל דיוור אלקטרוני.</span>
+                </label>
+                <button type="submit" id="nl-btn" class="cta-button newsletter-submit">הצטרפו</button>
+            </form>
+        </div>
+    </section>
 
     <!-- ========== FAQ ========== -->
     <section class="faq-section" id="faq">
         <div class="faq-container">
-            <div class="section-header reveal">
+            <div class="faq-header-col reveal">
                 <div class="section-tag">שאלות נפוצות</div>
-                <h2 class="section-title">בטח יש לכם שאלות  הנה התשובות</h2>
+                <h2 class="section-title" style="text-align:right; margin-top: 16px;">בטח יש לכם שאלות —<br>הנה התשובות</h2>
             </div>
 
+            <div class="faq-items-col">
             <div class="faq-item reveal">
                 <div class="faq-question">
                     <span>כמה עולה השירות?</span>
@@ -4938,42 +5198,62 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <p>כן, בתנאי שתקציב הפרסום החודשי הוא לפחות ₪5,000. מתחת לזה קשה לייצר דאטה מספיקה כדי שהשיטה שלנו תעבוד במלואה.</p>
                 </div>
             </div>
+            </div><!-- end faq-items-col -->
         </div>
     </section>
 
     <!-- ========== LEAD FORM ========== -->
     <section class="lead-section" id="lead-form">
         <div class="lead-container">
-            <div class="section-header reveal">
+            <div class="lead-text-col reveal">
+                <div class="section-tag" style="margin-bottom: 20px;">צרו קשר</div>
                 <h2>מוכנים להפסיק לנחש<br>ולהתחיל <span style="color: var(--teal);">לצמוח?</span></h2>
                 <p class="lead-desc">השאירו פרטים ונחזור אליכם תוך 24 שעות עם תוכנית פעולה מותאמת</p>
             </div>
 
-            <form class="lead-form reveal" id="leadForm" onsubmit="handleSubmit(event)">
-                <div class="form-row">
-                    <input type="text" id="name" class="form-input" placeholder="שם מלא *" required>
-                    <input type="text" id="business" class="form-input" placeholder="שם העסק *" required>
-                </div>
-                <div class="form-row">
-                    <input type="tel" id="phone" class="form-input" placeholder="טלפון *" required>
-                    <input type="email" id="email" class="form-input" placeholder="אימייל">
-                </div>
-                <input type="text" id="budget" class="form-input" placeholder="תקציב פרסום חודשי משוער (לא חובה)">
-                <textarea id="message" class="form-input" placeholder="ספרו לנו בקצרה על העסק שלכם..."></textarea>
-                <label class="consent-label">
-                    <input type="checkbox" id="consent" class="consent-checkbox" required>
-                    <span class="consent-text">
-                        אני מאשר/ת את <a href="privacy.html" target="_blank" class="consent-link">מדיניות הפרטיות</a> של האתר וכי מאשר/ת לקבל תוכן מקצועי, עדכונים והצעות פרסומיות.
-                    </span>
-                </label>
-                <button type="submit" class="cta-button form-submit">
-                    שלחו ונתחיל לעבוד
-                    <span>←</span>
-                </button>
-                <p style="font-size: 13px; color: var(--gray); margin-top: 8px;">
-                    🔒 הפרטים שלכם מאובטחים ולא יועברו לצד שלישי
-                </p>
-            </form>
+            <div class="lead-form-card reveal">
+                <form class="lead-form" id="leadForm" onsubmit="handleSubmit(event)">
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label class="form-label" for="name">שם מלא *</label>
+                            <input type="text" id="name" class="form-input" placeholder="ישראל ישראלי" required>
+                        </div>
+                        <div class="form-field">
+                            <label class="form-label" for="business">שם העסק *</label>
+                            <input type="text" id="business" class="form-input" placeholder="שם החברה / המותג" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label class="form-label" for="phone">טלפון *</label>
+                            <input type="tel" id="phone" class="form-input" placeholder="050-0000000" required>
+                        </div>
+                        <div class="form-field">
+                            <label class="form-label" for="email">אימייל</label>
+                            <input type="email" id="email" class="form-input" placeholder="name@company.com">
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label" for="budget">תקציב פרסום חודשי</label>
+                        <input type="text" id="budget" class="form-input" placeholder="לא חובה — עוזר לנו להכין הצעה מדויקת">
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label" for="message">ספרו לנו על העסק</label>
+                        <textarea id="message" class="form-input" placeholder="מה אתם מוכרים? מה נסיון קודם בפרסום? מה האתגר המרכזי שלכם?"></textarea>
+                    </div>
+                    <div class="lead-form-divider"></div>
+                    <label class="consent-label">
+                        <input type="checkbox" id="consent" class="consent-checkbox" required>
+                        <span class="consent-text">
+                            אני מאשר/ת את <a href="privacy.html" target="_blank" class="consent-link">מדיניות הפרטיות</a> של האתר וכי מאשר/ת לקבל תוכן מקצועי, עדכונים והצעות פרסומיות.
+                        </span>
+                    </label>
+                    <button type="submit" class="cta-button form-submit">
+                        שלחו ונתחיל לעבוד
+                        <span>←</span>
+                    </button>
+                </form>
+            </div><!-- end lead-form-card -->
         </div>
     </section>
 
