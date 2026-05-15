@@ -177,11 +177,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </style>
 </head>
 <body>
+<a href="#main-content" class="skip-link" style="position:absolute;inset-inline-start:-9999px;top:8px;z-index:10000;background:#4ECDC4;color:#0f2035;font-weight:700;font-size:16px;padding:12px 24px;border-radius:8px;text-decoration:none;">דלג לתוכן הראשי</a>
+<style>.skip-link:focus{inset-inline-start:16px;}</style>
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MM2VRX4V"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
-    <nav class="top-bar">
+    <nav class="top-bar" role="navigation" aria-label="ניווט ראשי">
         <a href="index.html"><img src="logo.png" alt="RPG Digital" class="logo"></a>
         <a href="index.html" class="back-link">→ חזרה לעמוד הראשי</a>
     </nav>
@@ -191,6 +193,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="update-date">עודכן לאחרונה: אפריל 2026</p>
     </div>
 
+    <main id="main-content">
     <div class="page-container">
         <div class="content-section">
             <p>RPG Digital מחויבת להנגשת האתר לאנשים עם מוגבלויות, בהתאם לחוק שוויון זכויות לאנשים עם מוגבלות, התשנ"ח-1998, ותקנות הנגישות לשירותי אינטרנט, התשע"ג-2013.</p>
@@ -223,14 +226,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <h2>נתקלתם בבעיית נגישות?</h2>
             <p>אנחנו כאן כדי לעזור. אם נתקלתם בבעיה כלשהי בנגישות האתר, נשמח לשמוע:</p>
             <ul>
-                <li>טלפון: <a href="tel:+972546288340">054-628-8340</a></li>
-                <li>וואטסאפ: <a href="https://wa.me/972546288340">054-628-8340</a></li>
+                <li>רכז הנגישות: ישראל עמרני</li>
+                <li>טלפון: <a href="tel:+972546288340" dir="ltr">054-628-8340</a></li>
+                <li>וואטסאפ: <a href="https://wa.me/972546288340" dir="ltr">054-628-8340</a></li>
+                <li>דוא"ל: <a href="mailto:amrani.israel@gmail.com" dir="ltr">amrani.israel@gmail.com</a></li>
             </ul>
             <p>אנו מתחייבים לטפל בכל פנייה בנושא נגישות תוך 7 ימי עסקים.</p>
         </div>
     </div>
+    </main><!-- end #main-content -->
 
-    <footer class="footer">
+    <footer class="footer" role="contentinfo">
         <div class="footer-grid">
             <div class="footer-col footer-col-brand">
                 <div class="brand-name">⚡ RPG Digital</div>
@@ -258,10 +264,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <h4>הצטרפו לניוזלטר שלנו!</h4>
                 <p>רוצים לקבל מאיתנו טיפים ועדכונים שוטפים על עולם הפרסום הממומן? הירשמו עכשיו!</p>
                 <div class="footer-newsletter-row">
-                    <input type="email" id="nl-email" placeholder="כתובת המייל שלי">
-                    <input type="text" id="nl-name" placeholder="שם פרטי">
+                    <label style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);" for="acc-nl-email">כתובת אימייל</label>
+                    <input type="email" id="acc-nl-email" placeholder="כתובת המייל שלי" dir="ltr">
+                    <label style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);" for="acc-nl-name">שם פרטי</label>
+                    <input type="text" id="acc-nl-name" placeholder="שם פרטי">
                 </div>
-                <select id="nl-type">
+                <label style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);" for="acc-nl-type">סוג משתמש</label>
+                <select id="acc-nl-type">
                     <option value="">מי אתה?</option>
                     <option>בעל עסק</option>
                     <option>מנהל שיווק</option>
@@ -269,16 +278,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <option>אחר</option>
                 </select>
                 <div class="footer-newsletter-check">
-                    <input type="checkbox" id="nl-consent">
-                    <label for="nl-consent">אני מאשר לקבל דיוור אלקטרוני.</label>
+                    <input type="checkbox" id="acc-nl-consent">
+                    <label for="acc-nl-consent">אני מאשר לקבל דיוור אלקטרוני.</label>
                 </div>
-                <button class="footer-newsletter-btn" id="nl-btn" onclick="handleNewsletterSubmit()">הצטרפו!</button>
+                <button class="footer-newsletter-btn" id="acc-nl-btn" onclick="handleAccNewsletterSubmit()">הצטרפו!</button>
             </div>
             <div class="footer-col footer-col-visit">
                 <h4>בואו לבקר</h4>
                 <p>כתובתנו: קפלן 16, אזור</p>
                 <div class="footer-map">
-                    <iframe src="https://maps.google.com/maps?q=קפלן+16+אזור&output=embed&hl=he" width="100%" height="150" style="border:0;display:block;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <iframe src="https://maps.google.com/maps?q=קפלן+16+אזור&output=embed&hl=he" width="100%" height="150" style="border:0;display:block;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="מפה של מיקום RPG Digital — קפלן 16, אזור"></iframe>
                 </div>
             </div>
         </div>
@@ -288,12 +297,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </footer>
 
     <script>
-        function handleNewsletterSubmit() {
-            var email = document.getElementById('nl-email').value.trim();
-            var name = document.getElementById('nl-name').value.trim();
-            var userType = document.getElementById('nl-type').value;
-            var consent = document.getElementById('nl-consent').checked;
-            var btn = document.getElementById('nl-btn');
+        function handleAccNewsletterSubmit() {
+            var email = document.getElementById('acc-nl-email').value.trim();
+            var name = document.getElementById('acc-nl-name').value.trim();
+            var userType = document.getElementById('acc-nl-type').value;
+            var consent = document.getElementById('acc-nl-consent').checked;
+            var btn = document.getElementById('acc-nl-btn');
             if (!email || !name) { alert('נא למלא אימייל ושם פרטי'); return; }
             if (!consent) { alert('יש לאשר קבלת דיוור אלקטרוני'); return; }
             btn.textContent = '⏳ שולח...'; btn.disabled = true;
@@ -302,8 +311,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             })
             .then(function() {
                 btn.textContent = '✓ נרשמת בהצלחה!'; btn.style.background = '#2ecc71';
-                document.getElementById('nl-email').value = ''; document.getElementById('nl-name').value = '';
-                document.getElementById('nl-type').value = ''; document.getElementById('nl-consent').checked = false;
+                document.getElementById('acc-nl-email').value = ''; document.getElementById('acc-nl-name').value = '';
+                document.getElementById('acc-nl-type').value = ''; document.getElementById('acc-nl-consent').checked = false;
                 setTimeout(function() { btn.textContent = 'הצטרפו!'; btn.style.background = ''; btn.disabled = false; }, 3000);
             })
             .catch(function() {
@@ -311,6 +320,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 setTimeout(function() { btn.textContent = 'הצטרפו!'; btn.style.background = ''; btn.disabled = false; }, 3000);
             });
         }
+
     </script>
     <script src="a11y-widget.js"></script>
     <script src="datalayer.js"></script>

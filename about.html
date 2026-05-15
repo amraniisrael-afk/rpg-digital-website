@@ -112,7 +112,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             top: 0;
             z-index: 100;
         }
-        .top-bar .logo { height: 55px; border-radius: 6px; }
+        .top-bar .logo { height: 40px; }
+        .nav-links { list-style: none; display: flex; gap: 24px; }
+        .nav-link { color: #b0b0b0; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+        .nav-link:hover, .nav-link.active { color: var(--teal); }
+        .btn-cta-nav { background: var(--teal); color: var(--black); padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 14px; transition: background 0.2s; }
+        .btn-cta-nav:hover { background: #3db8b0; }
+        @media (max-width: 768px) { .nav-links { display: none; } }
         .back-link {
             display: inline-flex;
             align-items: center;
@@ -383,7 +389,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <nav class="top-bar">
         <a href="index.html"><img src="logo.png" alt="RPG Digital" class="logo"></a>
-        <a href="index.html" class="back-link">→ חזרה לעמוד הראשי</a>
+        <ul class="nav-links">
+            <li><a href="index.html" class="nav-link">דף הבית</a></li>
+            <li><a href="index.html#results" class="nav-link">תוצאות</a></li>
+            <li><a href="index.html#testimonials" class="nav-link">המלצות</a></li>
+            <li><a href="index.html#solution" class="nav-link">השיטה שלנו</a></li>
+            <li><a href="index.html#who" class="nav-link">למי מתאים</a></li>
+            <li><a href="index.html#quiz" class="nav-link">שאלון</a></li>
+            <li><a href="index.html#faq" class="nav-link">שאלות נפוצות</a></li>
+            <li><a href="case-study.html" class="nav-link">קייס סטאדי</a></li>
+        </ul>
+        <a href="contact.html" class="btn-cta-nav">קבע פגישת אסטרטגיה ←</a>
     </nav>
 
     <div class="page-hero">
