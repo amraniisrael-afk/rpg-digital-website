@@ -645,6 +645,66 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 grid-template-columns: 1fr;
             }
         }
+    /* ===== LIGHT THEME OVERRIDES ===== */
+    body {
+        background-color: #FAF6F0 !important;
+        color: #111111 !important;
+    }
+    ::-webkit-scrollbar-track { background: #FAF6F0 !important; }
+    ::-webkit-scrollbar-thumb { background: #FF5500 !important; }
+
+    .top-bar {
+        background: rgba(250,246,240,0.95) !important;
+        border-bottom-color: rgba(0,0,0,0.08) !important;
+    }
+    .top-bar.scrolled { background: rgba(250,246,240,0.99) !important; }
+    .nav-link { color: #333 !important; }
+    .nav-link:hover, .nav-link.active { color: #FF5500 !important; background: rgba(255,85,0,0.06) !important; }
+    .top-bar .logo { filter: none !important; }
+
+    .blog-hero {
+        background: linear-gradient(180deg, #f0ebe2 0%, #FAF6F0 100%) !important;
+    }
+    .blog-hero h1 { color: #111111 !important; }
+    .blog-hero h1 span { color: #FF5500 !important; }
+    .blog-hero p { color: #555555 !important; }
+    .blog-hero-tag {
+        background: rgba(255,85,0,0.08) !important;
+        border-color: rgba(255,85,0,0.25) !important;
+        color: #FF5500 !important;
+    }
+
+    .blog-card {
+        background: #ffffff !important;
+        border-color: rgba(0,0,0,0.08) !important;
+        box-shadow: 0 2px 16px rgba(0,0,0,0.06) !important;
+    }
+    .blog-card:hover {
+        box-shadow: 0 12px 40px rgba(255,85,0,0.1) !important;
+        border-color: rgba(255,85,0,0.2) !important;
+    }
+    .card-image { background: linear-gradient(135deg, #f0ebe2, #e8ddd2) !important; }
+    .card-image-overlay { background: linear-gradient(to bottom, transparent 40%, rgba(250,246,240,0.6) 100%) !important; }
+    .card-title { color: #111111 !important; }
+    .blog-card:hover .card-title { color: #FF5500 !important; }
+    .card-excerpt { color: #666666 !important; }
+    .card-meta-item { color: #888888 !important; }
+    .card-tag {
+        background: rgba(255,85,0,0.08) !important;
+        color: #FF5500 !important;
+        border-color: rgba(255,85,0,0.2) !important;
+    }
+    .card-read-more { color: #FF5500 !important; }
+
+    .footer-col h4 { color: #111111 !important; }
+    .footer-col ul li a { color: #666666 !important; }
+    .footer-col ul li a:hover { color: #FF5500 !important; }
+    .footer-bottom { color: #888888 !important; border-top-color: rgba(0,0,0,0.08) !important; }
+    .footer-socials a {
+        background: rgba(255,85,0,0.06) !important;
+        border-color: rgba(255,85,0,0.15) !important;
+    }
+    .footer-socials a svg { fill: #FF5500 !important; }
     </style>
 </head>
 <body>
