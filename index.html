@@ -3935,15 +3935,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             color: #111111;
         }
         :root {
-            --teal: #FF5500;
-            --teal-dark: #E04A00;
-            --teal-glow: rgba(255, 85, 0, 0.2);
-            --black: #111111;
-            --dark: #111111;
-            --dark-2: #1A1A1A;
-            --bg: #FAF6F0;
-            --text: #111111;
-            --text-muted: #666666;
+            --teal:       #FF5500;
+            --teal-dark:  #E04A00;
+            --teal-glow:  rgba(255, 85, 0, 0.2);
+            --black:      #FAF6F0;
+            --dark:       #ffffff;
+            --dark-2:     #F0EBE2;
+            --cream:      #111111;
+            --cream-dark: #333333;
+            --white:      #ffffff;
+            --gray:       #666666;
+            --gray-light: #444444;
+            --bg:         #FAF6F0;
+            --text:       #111111;
+            --text-muted: #555555;
         }
         ::-webkit-scrollbar-track { background: #FAF6F0; }
 
@@ -3977,7 +3982,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         /* 4. SECTION HEADERS on light bg */
         .section-title { color: #111111; }
-        .section-subtitle { color: #666666; }
+        .section-subtitle { color: #444444; }
         .section-tag {
             background: rgba(255, 85, 0, 0.08);
             border-color: rgba(255, 85, 0, 0.2);
@@ -4810,7 +4815,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="social-proof-stats">
                 <div class="stat-item">
                     <div class="stat-number">50+</div>
-                    <div class="stat-label">עסקים שהכפילו מכירות</div>
+                    <div class="stat-label">עסקים שהגדילו מכירות</div>
                 </div>
                 <div class="stat-divider"></div>
                 <div class="stat-item">
@@ -4912,7 +4917,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="section-header reveal">
                 <div class="section-tag">לקוחות מספרים</div>
                 <h2 class="section-title">התוצאות מדברות בעד עצמן</h2>
-                <p class="section-subtitle">עסקים שעבדו איתנו  בדברים שלהם</p>
+                <p class="section-subtitle">גלו איך עזרנו לעסקים כמו שלכם לצמוח</p>
             </div>
 
             <div class="testimonials-slider-wrapper">
@@ -5961,7 +5966,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
     .stat-divider { flex-shrink: 0 !important; height: 50px !important; }
     @media (max-width: 600px) {
-        .social-proof-stats { flex-wrap: wrap !important; gap: 12px !important; }
+        .social-proof-stats {
+            flex-wrap: wrap !important;
+            gap: 12px !important;
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            grid-template-rows: 1fr 1fr !important;
+        }
+        .stat-item {
+            padding: 16px 12px !important;
+            height: 100% !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+        .stat-divider { display: none !important; }
     }
 
     /* --- Wave dividers between sections ---
