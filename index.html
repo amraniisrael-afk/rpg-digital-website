@@ -146,7 +146,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@300;400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>
+    <link rel="preload" as="image" href="תמונות קרוסלה/c1.webp" fetchpriority="high">
     <style>
         /* ========== RESET & BASE ========== */
         *, *::before, *::after {
@@ -8274,7 +8276,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         // TODO: הוסף כאן את קוד Google Analytics / Meta Pixel / Google Ads לפי prefs.analytics ו-prefs.marketing
     }
     </script>
-    <script src="datalayer.js"></script>
+    <script src="datalayer.js" defer></script>
     <script>
         (function () {
             const el = document.getElementById('rotatingWord');
