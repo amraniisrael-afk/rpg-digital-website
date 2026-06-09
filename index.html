@@ -6901,46 +6901,139 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
     </section>
 
-    <!-- ========== RISK REVERSAL ========== -->
-    <div class="guarantee-urgency-row">
-    <section class="guarantee-section">
-        <div class="guarantee-container reveal">
-            <h2>אפס סיכון. מילה שלנו.</h2>
-            <div class="guarantee-shield">
-                <img src="SHIELD.webp" alt="ערבות" loading="lazy">
-            </div>
-            <p>
-                אם תוך 30 הימים הראשונים לא תראו שיפור מדיד בביצועי הקמפיינים שלכם 
-                נחזיר לכם את דמי הניהול. בלי שאלות, בלי אותיות קטנות.
-                <br><br>
-                אנחנו מאמינים בשיטה שלנו מספיק חזק כדי לשים את הכסף שלנו על השולחן.
-                <strong style="color: var(--teal);"> אם אנחנו לא מביאים תוצאות  לא מגיע לנו לקבל תשלום.</strong>
-            </p>
-        </div>
-    </section>
-
     <!-- ========== SCARCITY & URGENCY ========== -->
-    <section class="urgency-section" style="border-left: 1px solid rgba(255, 85, 0,0.15);">
-        <div class="urgency-container reveal">
-            <h2>למה דווקא <span style="color: var(--teal);">עכשיו?</span></h2>
-            <p>
-                אנחנו עובדים עם מספר מוגבל של לקוחות בו-זמנית  כי איכות הניהול חשובה לנו
-                יותר מכמות. ברגע שהמקומות מתמלאים, הרשימה נסגרת.
-            </p>
-            <div class="slots-left">
-                🔥 נותרו רק 3 מקומות החודש
+    <style>
+    .urgency-section {
+        padding: 80px 20px !important;
+        background: #FAF6F0 !important;
+        display: flex !important;
+        justify-content: center !important;
+        border: none !important;
+        flex: unset !important;
+    }
+    .urgency-ticket {
+        max-width: 620px;
+        width: 100%;
+        border-radius: 24px;
+        box-shadow: 0 24px 64px rgba(0,0,0,0.13);
+        overflow: hidden;
+    }
+    .ticket-header {
+        background: linear-gradient(135deg, #1A2B3C 0%, #243547 100%);
+        padding: 40px 40px 32px;
+        text-align: center;
+        color: #fff;
+    }
+    .ticket-label-top {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255,85,0,0.18);
+        border: 1px solid rgba(255,85,0,0.45);
+        color: #FF5500;
+        padding: 5px 18px;
+        border-radius: 50px;
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+    .ticket-big-number {
+        font-size: clamp(80px, 16vw, 120px);
+        font-weight: 900;
+        color: #FF5500;
+        line-height: 1;
+        display: block;
+        letter-spacing: -4px;
+    }
+    .ticket-big-label {
+        font-size: 20px;
+        font-weight: 700;
+        color: rgba(255,255,255,0.9);
+        margin-top: 8px;
+        display: block;
+    }
+    .ticket-tear {
+        background: #1A2B3C;
+        display: flex;
+        align-items: center;
+        height: 28px;
+    }
+    .ticket-notch {
+        width: 28px;
+        height: 28px;
+        background: #FAF6F0;
+        border-radius: 50%;
+        flex-shrink: 0;
+        margin: 0 -14px;
+        z-index: 2;
+    }
+    .ticket-dashes {
+        flex: 1;
+        height: 2px;
+        background: repeating-linear-gradient(
+            to right,
+            rgba(255,255,255,0.3) 0,
+            rgba(255,255,255,0.3) 8px,
+            transparent 8px,
+            transparent 16px
+        );
+    }
+    .ticket-body {
+        background: #ffffff;
+        padding: 36px 44px 44px;
+        text-align: center;
+    }
+    .ticket-body h2 {
+        font-size: clamp(22px, 3vw, 30px) !important;
+        font-weight: 800 !important;
+        color: #111111 !important;
+        margin-bottom: 14px !important;
+    }
+    .ticket-body p {
+        font-size: 16px !important;
+        color: #555555 !important;
+        line-height: 1.8 !important;
+        max-width: 460px;
+        margin: 0 auto 20px !important;
+    }
+    @media (max-width: 600px) {
+        .urgency-section { padding: 48px 16px !important; }
+        .ticket-header { padding: 32px 24px 24px; }
+        .ticket-body { padding: 28px 24px 36px; }
+        .ticket-big-number { font-size: 72px; letter-spacing: -2px; }
+        .ticket-big-label { font-size: 17px; }
+    }
+    </style>
+
+    <section class="urgency-section">
+        <div class="urgency-ticket reveal">
+            <div class="ticket-header">
+                <div class="ticket-label-top">🔥 זמינות מוגבלת</div>
+                <span class="ticket-big-number">3</span>
+                <span class="ticket-big-label">מקומות אחרונים פנויים</span>
             </div>
-            <p style="margin-top: 25px; font-size: 15px;">
-                כל יום שעובר בלי אופטימיזציה מבוססת דאטה  הוא יום שהמתחרים שלכם מתקדמים
-                ואתם נשארים מאחור. אל תדחו את ההחלטה הזאת.
-            </p>
-            <a href="#lead-form" class="cta-button" style="margin-top: 25px;">
-                שריינו מקום עכשיו
-                <span>←</span>
-            </a>
+            <div class="ticket-tear">
+                <div class="ticket-notch"></div>
+                <div class="ticket-dashes"></div>
+                <div class="ticket-notch"></div>
+            </div>
+            <div class="ticket-body">
+                <h2>למה דווקא <span style="color:#FF5500;">עכשיו?</span></h2>
+                <p>
+                    אנחנו עובדים עם מספר מוגבל של לקוחות בו-זמנית — כי איכות הניהול
+                    חשובה לנו יותר מכמות. ברגע שהמקומות מתמלאים, הרשימה נסגרת.
+                </p>
+                <p style="font-size:15px!important; color:#777!important;">
+                    כל יום שעובר בלי אופטימיזציה מבוססת דאטה הוא יום שהמתחרים שלכם
+                    מתקדמים. אל תדחו את ההחלטה הזאת.
+                </p>
+                <a href="#lead-form" class="cta-button" style="margin-top:8px;">
+                    שריינו מקום עכשיו
+                    <span>←</span>
+                </a>
+            </div>
         </div>
     </section>
-    </div>
 
     <!-- ========== NEWSLETTER ========== -->
     <section class="newsletter-section">
