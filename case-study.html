@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
 <!-- Google Tag Manager -->
@@ -879,6 +879,325 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             .hub-card { padding: 28px 22px 24px; }
         }
     </style>
+
+    <!-- =====================================================
+         LIGHT THEME OVERRIDE — matches index.html redesign
+         ===================================================== -->
+    <style>
+        /* === VARIABLES === */
+        :root {
+            --black:      #FAF6F0;
+            --dark:       #ffffff;
+            --dark-2:     #FAF6F0;
+            --teal:       #FF5500;
+            --teal-dark:  #E04A00;
+            --teal-glow:  rgba(255, 85, 0, 0.2);
+            --cream:      #111111;
+            --white:      #ffffff;
+            --gray:       #888888;
+            --gray-light: #555555;
+        }
+
+        /* === BASE === */
+        body {
+            background-color: #FAF6F0 !important;
+            color: #111111 !important;
+        }
+        ::-webkit-scrollbar-track { background: #FAF6F0 !important; }
+        ::-webkit-scrollbar-thumb { background: #FF5500 !important; }
+
+        /* === NAV === */
+        .top-bar {
+            background: #ffffff !important;
+            border-bottom-color: rgba(0,0,0,0.07) !important;
+            backdrop-filter: none !important;
+        }
+        .logo { height: 52px !important; }
+        .nav-link { color: #444444 !important; }
+        .nav-link:hover, .nav-link.active { color: #FF5500 !important; }
+        .btn-cta-nav {
+            background: #1A2B3C !important;
+            color: #ffffff !important;
+        }
+        .btn-cta-nav:hover { background: #253d57 !important; }
+
+        /* === HERO SECTION === */
+        .hub-hero {
+            background: linear-gradient(160deg, #FAF6F0 0%, #F0EBE2 100%) !important;
+            border-bottom-color: rgba(0,0,0,0.07) !important;
+        }
+        .hub-hero::before {
+            background: radial-gradient(circle, rgba(255,85,0,0.06) 0%, transparent 70%) !important;
+        }
+        .hub-breadcrumb { color: #888888 !important; }
+        .hub-breadcrumb a { color: #FF5500 !important; }
+        .hub-badge {
+            background: rgba(255,85,0,0.08) !important;
+            color: #FF5500 !important;
+            border-color: rgba(255,85,0,0.2) !important;
+        }
+        .hub-title { color: #111111 !important; }
+        .hub-subtitle { color: #FF5500 !important; }
+        .hub-intro { color: #555555 !important; }
+
+        /* Hero stats bar */
+        .hub-stats {
+            background: #ffffff !important;
+            border-color: rgba(0,0,0,0.09) !important;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important;
+        }
+        .hub-stat { border-left-color: rgba(0,0,0,0.08) !important; }
+        .hub-stat-val { color: #111111 !important; }
+        .hub-stat-label { color: #888888 !important; }
+
+        /* === HUB BROWSE GRID === */
+        .hub-browse { background: #FAF6F0 !important; }
+        .hub-section-label { color: #888888 !important; }
+
+        /* Cards */
+        .hub-card {
+            background: #ffffff !important;
+            border-color: rgba(0,0,0,0.08) !important;
+            border-top-color: rgba(255,85,0,0.25) !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+        }
+        .hub-card:hover {
+            border-color: rgba(255,85,0,0.3) !important;
+            border-top-color: #FF5500 !important;
+            box-shadow: 0 12px 36px rgba(255,85,0,0.09) !important;
+        }
+        .hub-card.active {
+            border-color: #FF5500 !important;
+            border-top-color: #FF5500 !important;
+            background: rgba(255,85,0,0.03) !important;
+            box-shadow: 0 0 0 1px rgba(255,85,0,0.15), 0 16px 56px rgba(255,85,0,0.08) !important;
+        }
+        .hub-card-badge { background: #FF5500 !important; color: #ffffff !important; }
+        .hub-card-num { color: rgba(255,85,0,0.12) !important; }
+        .hub-card.active .hub-card-num { color: rgba(255,85,0,0.22) !important; }
+        .hub-card-platform { color: #FF5500 !important; }
+        .hub-card-title { color: #111111 !important; }
+        .hub-card-meta { color: #888888 !important; border-bottom-color: rgba(0,0,0,0.07) !important; }
+        .hub-card-metrics {
+            border-color: rgba(0,0,0,0.09) !important;
+        }
+        .hub-metric {
+            background: #FAF6F0 !important;
+            border-left-color: rgba(0,0,0,0.07) !important;
+        }
+        .hub-metric-label { color: #888888 !important; }
+        .hub-card-cta {
+            background: rgba(255,85,0,0.07) !important;
+            color: #FF5500 !important;
+            border-color: rgba(255,85,0,0.2) !important;
+        }
+        .hub-card:hover .hub-card-cta,
+        .hub-card.active .hub-card-cta {
+            background: #FF5500 !important;
+            color: #ffffff !important;
+            border-color: #FF5500 !important;
+        }
+
+        /* === CONTENT AREA === */
+        .cs-content-area {
+            background: #FAF6F0 !important;
+            border-top-color: rgba(0,0,0,0.08) !important;
+        }
+        .cs-content-header {
+            background: rgba(250,246,240,0.97) !important;
+            border-bottom-color: rgba(0,0,0,0.08) !important;
+            backdrop-filter: none !important;
+        }
+        .back-to-hub-btn {
+            border-color: rgba(255,85,0,0.25) !important;
+            color: #FF5500 !important;
+        }
+        .back-to-hub-btn:hover {
+            background: rgba(255,85,0,0.06) !important;
+            border-color: rgba(255,85,0,0.45) !important;
+        }
+        .cs-reading-label { color: #555555 !important; }
+        .cs-reading-label strong { color: #FF5500 !important; }
+
+        /* Article */
+        .article-container { background: #FAF6F0 !important; }
+
+        /* Section tags */
+        .section-tag { color: #FF5500 !important; }
+
+        /* CS intro */
+        .cs-intro { border-bottom-color: rgba(0,0,0,0.08) !important; }
+        .cs-intro-badge {
+            background: rgba(255,85,0,0.08) !important;
+            color: #FF5500 !important;
+            border: 1px solid rgba(255,85,0,0.2) !important;
+        }
+        .cs-intro h2 { color: #111111 !important; }
+        .cs-intro h2 span { color: #FF5500 !important; }
+        .cs-intro-meta { color: #888888 !important; }
+        .cs-intro-kpis {
+            border-color: rgba(0,0,0,0.09) !important;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05) !important;
+        }
+        .cs-intro-kpi {
+            background: #ffffff !important;
+            border-left-color: rgba(0,0,0,0.07) !important;
+        }
+        .cs-intro-kpi-label { color: #888888 !important; }
+        .cs-intro-kpi-value { color: #111111 !important; }
+        .cs-intro-kpi-value.hi { color: #FF5500 !important; }
+
+        /* Sections */
+        .cs-section { border-bottom-color: rgba(0,0,0,0.08) !important; }
+        .cs-section h2 { color: #111111 !important; }
+        .section-sub { color: #555555 !important; }
+
+        /* Problem intro */
+        .problem-intro {
+            background: rgba(255,82,82,0.04) !important;
+            border-color: rgba(255,82,82,0.25) !important;
+            color: #222222 !important;
+        }
+
+        /* Tables */
+        .styled-table thead tr { background: #F0EBE2 !important; }
+        .styled-table th { color: #555555 !important; border-bottom-color: rgba(0,0,0,0.1) !important; }
+        .styled-table td { border-bottom-color: rgba(0,0,0,0.06) !important; color: #222222 !important; }
+        .styled-table tr:hover td { background: rgba(255,85,0,0.03) !important; }
+
+        /* Insight box */
+        .insight-box {
+            background: rgba(255,85,0,0.04) !important;
+            border-color: rgba(255,85,0,0.18) !important;
+            border-right-color: #FF5500 !important;
+        }
+        .insight-title { color: #FF5500 !important; }
+        .insight-box p { color: #222222 !important; }
+        .insight-box p strong { color: #FF5500 !important; }
+
+        /* Segment cards */
+        .segment-card {
+            background: #ffffff !important;
+            border-color: rgba(0,0,0,0.08) !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+        }
+        .segment-card:hover { border-color: rgba(255,85,0,0.2) !important; }
+        .seg-name  { color: #444444 !important; }
+        .seg-desc  { color: #555555 !important; }
+        .seg-action {
+            background: #FAF6F0 !important;
+            border-color: rgba(0,0,0,0.09) !important;
+            color: #444444 !important;
+        }
+        .seg-action strong { color: #111111 !important; }
+
+        /* Asset cards */
+        .asset-card {
+            background: #ffffff !important;
+            border-color: rgba(0,0,0,0.08) !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+        }
+        .asset-title    { color: #111111 !important; }
+        .asset-creative { color: #555555 !important; }
+
+        /* Loop steps */
+        .loop-step-num {
+            background: #FF5500 !important;
+            color: #ffffff !important;
+        }
+        .loop-step-body {
+            background: #ffffff !important;
+            border-color: rgba(0,0,0,0.08) !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+        }
+        .loop-q { color: #111111 !important; }
+        .loop-a { color: #555555 !important; }
+
+        /* Architecture / funnel layers */
+        .arch-layer, .funnel-layer {
+            background: #ffffff !important;
+            border-color: rgba(0,0,0,0.08) !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+        }
+        .arch-detail, .funnel-detail { color: #555555 !important; }
+        .arch-arrow, .funnel-arrow { color: #aaaaaa !important; }
+        .layer-acq .arch-budget { background: rgba(255,85,0,0.1) !important; color: #FF5500 !important; }
+
+        /* Awareness bar */
+        .aw-seg {
+            background: #ffffff !important;
+            border-color: rgba(0,0,0,0.08) !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+        }
+        .aw-focus {
+            border-color: #FF5500 !important;
+            background: rgba(255,85,0,0.04) !important;
+        }
+        .aw-desc { color: #888888 !important; }
+
+        /* Result cards */
+        .result-card {
+            background: #ffffff !important;
+            border-color: rgba(0,0,0,0.08) !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+        }
+        .r-label  { color: #888888 !important; }
+        .r-before { color: #888888 !important; }
+
+        /* Lesson items */
+        .lesson-icon {
+            background: rgba(255,85,0,0.08) !important;
+            border-color: rgba(255,85,0,0.18) !important;
+        }
+        .lesson-title { color: #111111 !important; }
+        .lesson-desc  { color: #555555 !important; }
+
+        /* Article CTA */
+        .article-cta {
+            background: linear-gradient(135deg, #1A2B3C 0%, #253d57 100%) !important;
+            border-color: rgba(255,255,255,0.1) !important;
+        }
+        .article-cta h3 { color: #ffffff !important; }
+        .article-cta p  { color: rgba(255,255,255,0.7) !important; }
+        .btn-primary {
+            background: #FF5500 !important;
+            color: #ffffff !important;
+        }
+        .btn-primary:hover { background: #E04A00 !important; }
+
+        /* Back link */
+        .back-link { color: #FF5500 !important; }
+
+        /* Footer — keep dark like index.html */
+        .footer {
+            background: linear-gradient(180deg, #1A2B3C 0%, #0f1e2d 100%) !important;
+            border-top-color: rgba(255,255,255,0.1) !important;
+        }
+        .footer-col-brand .brand-name { color: #FF5500 !important; }
+        .footer-col h4 { color: #ffffff !important; }
+        .footer-col ul li a { color: rgba(255,255,255,0.6) !important; }
+        .footer-col ul li a:hover { color: #FF5500 !important; }
+        .footer-newsletter p { color: rgba(255,255,255,0.5) !important; }
+        .footer-newsletter-row input,
+        .footer-newsletter select {
+            background: rgba(255,255,255,0.06) !important;
+            border-color: rgba(255,255,255,0.12) !important;
+            color: #ffffff !important;
+        }
+        .footer-newsletter-btn {
+            background: #FF5500 !important;
+            color: #ffffff !important;
+        }
+        .footer-newsletter-btn:hover { background: #E04A00 !important; }
+        .footer-bottom { color: rgba(255,255,255,0.4) !important; border-top-color: rgba(255,255,255,0.08) !important; }
+        .footer-socials a {
+            background: rgba(255,255,255,0.06) !important;
+            border-color: rgba(255,255,255,0.1) !important;
+        }
+        .footer-socials a svg { fill: rgba(255,255,255,0.5) !important; }
+        .footer-socials a:hover { background: #FF5500 !important; border-color: #FF5500 !important; }
+        .footer-socials a:hover svg { fill: #ffffff !important; }
+    </style>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
@@ -889,7 +1208,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- ========== NAV ========== -->
     <nav class="top-bar">
         <a href="index.html">
-            <img src="logo.png" alt="RPG Digital" class="logo">
+            <img src="logo.webp" alt="RPG Digital" class="logo">
         </a>
         <ul class="nav-links">
             <li><a href="index.html" class="nav-link">דף הבית</a></li>
@@ -1713,3 +2032,4 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <script src="datalayer.js"></script>
 </body>
 </html>
+
