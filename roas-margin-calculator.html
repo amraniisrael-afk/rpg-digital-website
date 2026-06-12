@@ -1,0 +1,1995 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מחשבון ROAS ושולי רווח — RPG Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Heebo', sans-serif;
+  background: #F1F5F9;
+  color: #1E293B;
+  direction: rtl;
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+.page-header {
+  background: #1E293B;
+  padding: 28px 40px 24px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+.header-left h1 {
+  font-size: 26px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+.header-left h1 span { color: #FFC20E; }
+.header-left p { color: #94A3B8; font-size: 14px; font-weight: 500; margin-top: 6px; }
+.header-badge {
+  background: #FFC20E;
+  color: #1E293B;
+  font-size: 11px;
+  font-weight: 900;
+  padding: 6px 16px;
+  border-radius: 20px;
+  letter-spacing: 1px;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+/* ── NAV PILLS ── */
+.nav-pills {
+  background: #fff;
+  border-bottom: 1px solid #E2E8F0;
+  padding: 0 40px;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+}
+.nav-pills::-webkit-scrollbar { display: none; }
+.nav-pill {
+  padding: 0 18px;
+  height: 46px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #94A3B8;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s;
+}
+.nav-pill:hover { color: #475569; }
+.nav-pill.active { color: #8B5CF6; border-bottom-color: #8B5CF6; }
+
+/* ── MAIN CONTENT ── */
+.content-wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 24px 60px;
+}
+
+/* ── SECTION HEADING ── */
+.section-title {
+  font-size: 18px;
+  font-weight: 900;
+  color: #1E293B;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-title::before {
+  content: '';
+  width: 4px;
+  height: 22px;
+  background: #8B5CF6;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* ── CARDS ── */
+.card {
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #E2E8F0;
+  padding: 28px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+}
+.card-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #1E293B;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-title .icon { font-size: 20px; }
+
+/* ── CALCULATOR ── */
+.calc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+@media (max-width: 600px) { .calc-grid { grid-template-columns: 1fr; } }
+
+.field-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748B;
+  margin-bottom: 6px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+.field-group .input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.field-group .currency {
+  position: absolute;
+  right: 14px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #94A3B8;
+  pointer-events: none;
+}
+.field-group input {
+  width: 100%;
+  height: 50px;
+  padding: 0 40px 0 14px;
+  border: 2px solid #E2E8F0;
+  border-radius: 10px;
+  font-family: 'Heebo', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1E293B;
+  background: #FAFBFC;
+  outline: none;
+  transition: border-color 0.15s;
+  text-align: left;
+  direction: ltr;
+}
+.field-group input:focus { border-color: #8B5CF6; background: #fff; }
+
+/* ── RESULTS PANEL ── */
+.results-panel {
+  background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+  border-radius: 12px;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 600px) { .results-panel { grid-template-columns: 1fr; } }
+
+.result-item {
+  text-align: center;
+}
+.result-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748B;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.result-value {
+  font-size: 28px;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+}
+.result-value.yellow { color: #FFC20E; }
+.result-value.green  { color: #34D399; }
+.result-value.purple { color: #C084FC; }
+.result-sub {
+  font-size: 11px;
+  color: #64748B;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* ── STATUS BAR ── */
+.status-bar {
+  margin-top: 16px;
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s;
+}
+.status-bar.neutral { background: #F1F5F9; color: #475569; }
+.status-bar.profit  { background: #ECFDF5; color: #059669; border: 1px solid #A7F3D0; }
+.status-bar.loss    { background: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; }
+.status-bar.breakeven { background: #FFF7ED; color: #D97706; border: 1px solid #FED7AA; }
+
+/* ── ROAS SLIDER ── */
+.slider-section { margin-top: 20px; }
+.slider-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.slider-label { font-size: 12px; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.3px; }
+.slider-roas-display {
+  font-size: 20px;
+  font-weight: 900;
+  color: #8B5CF6;
+}
+input[type="range"] {
+  width: 100%;
+  height: 6px;
+  appearance: none;
+  background: #E2E8F0;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #8B5CF6;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(139,92,246,0.4);
+}
+.roas-zones {
+  display: flex;
+  margin-top: 8px;
+  border-radius: 6px;
+  overflow: hidden;
+  height: 6px;
+}
+.zone-loss    { background: #FCA5A5; }
+.zone-neutral { background: #FCD34D; }
+.zone-profit  { background: #6EE7B7; flex: 1; }
+.zone-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #94A3B8;
+}
+
+/* ── FORMULA BOX ── */
+.formula-box {
+  background: #F8F9FF;
+  border: 1px solid #C7D2FE;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin: 12px 0;
+  text-align: center;
+}
+.formula-text {
+  font-size: 16px;
+  font-weight: 800;
+  color: #4338CA;
+  direction: ltr;
+}
+.formula-desc {
+  font-size: 12px;
+  color: #6366F1;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* ── INFO STEPS ── */
+.steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.step-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.step-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #8B5CF6;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.step-content h4 { font-size: 14px; font-weight: 800; color: #1E293B; margin-bottom: 3px; }
+.step-content p  { font-size: 13px; color: #475569; font-weight: 500; line-height: 1.5; }
+
+/* ── COMPARISON TABLE ── */
+.compare-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #E2E8F0;
+}
+.compare-table thead tr th {
+  background: #1E293B;
+  color: #fff;
+  padding: 13px 18px;
+  font-size: 13px;
+  font-weight: 800;
+  text-align: right;
+}
+.compare-table thead tr th:first-child { color: #FFC20E; }
+.compare-table tbody tr td {
+  padding: 12px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1E293B;
+  border-bottom: 1px solid #F1F5F9;
+  text-align: right;
+}
+.compare-table tbody tr:last-child td { border-bottom: none; }
+.compare-table tbody tr:nth-child(even) td { background: #FAFBFC; }
+.compare-table .highlight-cell { font-weight: 800; color: #7C3AED; }
+.compare-table .danger-cell { color: #DC2626; font-weight: 700; }
+.compare-table .success-cell { color: #059669; font-weight: 700; }
+
+/* ── TIERS GRID ── */
+.tiers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 4px;
+}
+@media (max-width: 600px) { .tiers-grid { grid-template-columns: 1fr; } }
+
+.tier-card {
+  border-radius: 12px;
+  padding: 18px;
+  border: 2px solid;
+}
+.tier-card.high   { border-color: #A7F3D0; background: #ECFDF5; }
+.tier-card.mid    { border-color: #FED7AA; background: #FFF7ED; }
+.tier-card.low    { border-color: #FECACA; background: #FEF2F2; }
+
+.tier-label {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.tier-card.high .tier-label { color: #059669; }
+.tier-card.mid  .tier-label { color: #D97706; }
+.tier-card.low  .tier-label { color: #DC2626; }
+
+.tier-name { font-size: 15px; font-weight: 900; color: #1E293B; margin-bottom: 4px; }
+.tier-margin { font-size: 12px; color: #64748B; font-weight: 600; margin-bottom: 8px; }
+.tier-roas {
+  font-size: 22px;
+  font-weight: 900;
+  margin-bottom: 2px;
+}
+.tier-card.high .tier-roas { color: #059669; }
+.tier-card.mid  .tier-roas { color: #D97706; }
+.tier-card.low  .tier-roas { color: #DC2626; }
+.tier-roas-label { font-size: 11px; font-weight: 600; color: #94A3B8; }
+.tier-items {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0,0,0,0.07);
+  font-size: 12px;
+  color: #475569;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+/* ── ADVANCED METHOD ── */
+.method-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 10px;
+  background: #FAFBFC;
+  border: 1px solid #E2E8F0;
+  margin-bottom: 10px;
+  transition: border-color 0.15s, background 0.15s;
+}
+.method-row:hover { border-color: #C7D2FE; background: #F8F9FF; }
+.method-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #8B5CF6;
+  color: #fff;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.method-icon.gold    { background: #F59E0B; }
+.method-icon.blue    { background: #3B82F6; }
+.method-icon.green   { background: #10B981; }
+.method-icon.purple  { background: #8B5CF6; }
+.method-body h4 { font-size: 14px; font-weight: 800; color: #1E293B; margin-bottom: 4px; }
+.method-body p  { font-size: 13px; color: #475569; font-weight: 500; line-height: 1.5; }
+.method-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-top: 6px;
+  letter-spacing: 0.5px;
+}
+.tag-easy    { background: #ECFDF5; color: #059669; }
+.tag-medium  { background: #FFF7ED; color: #D97706; }
+.tag-advanced { background: #F5F0FF; color: #7C3AED; }
+
+/* ── QUICK REF TABLE ── */
+.quick-ref-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.quick-ref-table thead th {
+  background: #F8F0FF;
+  color: #7C3AED;
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 800;
+  text-align: right;
+  border-bottom: 2px solid #E9D5FF;
+}
+.quick-ref-table tbody td {
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  border-bottom: 1px solid #F1F5F9;
+  color: #1E293B;
+}
+.quick-ref-table tbody tr:last-child td { border-bottom: none; }
+.quick-ref-table .margin-col { font-weight: 800; }
+.quick-ref-table .roas-col { font-weight: 900; color: #7C3AED; font-size: 14px; }
+
+/* ── CALLOUT ── */
+.callout {
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-top: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.callout.purple { background: #F5F0FF; border: 1px solid #DDD6FE; }
+.callout.yellow { background: #FFFBEB; border: 1px solid #FDE68A; }
+.callout.red    { background: #FEF2F2; border: 1px solid #FECACA; }
+.callout.green  { background: #ECFDF5; border: 1px solid #A7F3D0; }
+.callout-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.callout-body { font-size: 13px; color: #475569; font-weight: 500; line-height: 1.6; }
+.callout-body strong { color: #1E293B; font-weight: 800; }
+
+/* ── VAT ROW ── */
+.vat-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: #FFFBEB;
+  border: 1.5px solid #FDE68A;
+  border-radius: 10px;
+  padding: 10px 16px;
+  margin-bottom: 4px;
+}
+.vat-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  color: #92400E;
+  user-select: none;
+}
+.vat-toggle-label input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  accent-color: #D97706;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.vat-toggle-text { white-space: nowrap; }
+.vat-rate-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #92400E;
+}
+.vat-rate-prefix { white-space: nowrap; }
+.vat-rate-wrap input[type="number"] {
+  width: 60px;
+  height: 34px;
+  padding: 0 8px;
+  border: 1.5px solid #FCD34D;
+  border-radius: 7px;
+  font-family: 'Heebo', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: #92400E;
+  background: #fff;
+  outline: none;
+  text-align: center;
+  direction: ltr;
+}
+.vat-rate-wrap input:focus { border-color: #D97706; }
+.vat-rate-suffix { font-size: 14px; font-weight: 800; }
+.vat-row-input { background: #FFF8F0; border-color: #FED7AA; flex-direction: column; align-items: flex-start; gap: 6px; }
+.vat-input-note { font-size: 11px; color: #92400E; font-weight: 500; line-height: 1.5; padding-right: 26px; }
+.bd-value.vat-credit { color: #16A34A; font-weight: 700; }
+.bd-row.vat-credit-row { background: #F0FDF4; }
+
+/* ── COST SECTION LABEL ── */
+.cost-section-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: #94A3B8;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.cost-section-label::before {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 2px;
+  background: #CBD5E1;
+  border-radius: 2px;
+}
+
+/* field hint */
+.field-hint {
+  font-size: 10px;
+  font-weight: 500;
+  color: #94A3B8;
+  font-style: italic;
+  margin-right: 4px;
+}
+
+/* % symbol variant */
+.pct-sym { font-size: 16px; font-weight: 800; right: 12px; }
+
+/* single-col calc grid */
+.calc-grid-single { display: flex; }
+
+/* ── COST BREAKDOWN TABLE ── */
+.breakdown-table {
+  border: 1.5px solid #E2E8F0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.bd-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 16px;
+  border-bottom: 1px solid #F1F5F9;
+  font-size: 13px;
+}
+.bd-row:last-child { border-bottom: none; }
+.bd-row.income  { background: #F0FDF4; }
+.bd-row.total   { background: #1E293B; }
+.bd-label { font-weight: 600; color: #475569; }
+.bd-label.bd-pct { color: #64748B; }
+.bd-value { font-weight: 700; font-size: 13px; color: #1E293B; direction: ltr; }
+.bd-row.income .bd-value { color: #16A34A; font-weight: 800; }
+.bd-value.cost  { color: #DC2626; }
+.bd-row.total .bd-label { color: #FFC20E; font-weight: 800; font-size: 13px; }
+.bd-value.total-val { color: #fff; font-weight: 900; font-size: 15px; }
+
+/* ── SECTION DIVIDER ── */
+.section-divider {
+  height: 1px;
+  background: #E2E8F0;
+  margin: 32px 0;
+}
+
+/* ── PAGE SECTIONS (for nav) ── */
+.page-section { scroll-margin-top: 20px; }
+
+/* ── CHEAT SHEET ── */
+.cheatsheet {
+  padding: 28px 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #fff;
+}
+.cs-header {
+  text-align: center;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #F1F5F9;
+}
+.cs-header h2 {
+  font-size: 22px;
+  font-weight: 900;
+  color: #1E293B;
+  letter-spacing: -0.5px;
+}
+.cs-header p { font-size: 13px; color: #94A3B8; font-weight: 600; margin-top: 4px; }
+
+.cs-row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 640px) { .cs-row2 { grid-template-columns: 1fr; } }
+
+.cs-box {
+  border: 1.5px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 18px 20px;
+  background: #FAFBFC;
+}
+.cs-box-title {
+  font-size: 14px;
+  font-weight: 900;
+  color: #1E293B;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cs-num {
+  width: 22px;
+  height: 22px;
+  background: #1E293B;
+  color: #FFC20E;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Checklist */
+.cs-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cs-checklist label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1E293B;
+  cursor: pointer;
+}
+.cs-checklist input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #E8590C;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.cs-note {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed #CBD5E1;
+  font-size: 12px;
+  color: #94A3B8;
+  font-weight: 600;
+  font-style: italic;
+}
+
+/* Steps flow */
+.cs-steps-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cs-step-box {
+  background: #fff;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1E293B;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cs-step-circle {
+  width: 20px;
+  height: 20px;
+  background: #1E293B;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.cs-arrow {
+  font-size: 16px;
+  color: #94A3B8;
+  text-align: center;
+  line-height: 1;
+  padding: 0 2px;
+}
+.cs-shortcut {
+  margin-top: 10px;
+  padding: 9px 12px;
+  background: #FFF8E7;
+  border: 1px solid #FDE68A;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #92400E;
+}
+
+/* Example box */
+.cs-example-box { background: #F8F9FF; border-color: #C7D2FE; }
+.cs-example-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.cs-ex-input {
+  background: #fff;
+  border: 1px solid #C7D2FE;
+  border-radius: 8px;
+  padding: 10px 14px;
+  text-align: center;
+}
+.cs-ex-label { font-size: 14px; font-weight: 800; color: #3730A3; }
+
+.cs-calc-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.cs-calc-box {
+  background: #fff;
+  border: 1.5px solid #C7D2FE;
+  border-radius: 10px;
+  padding: 10px 16px;
+  text-align: center;
+  min-width: 120px;
+}
+.cs-calc-label { font-size: 11px; font-weight: 700; color: #6366F1; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+.cs-calc-formula { font-size: 14px; font-weight: 700; color: #1E293B; direction: ltr; }
+.cs-calc-formula strong { color: #4338CA; font-size: 16px; }
+.cs-flow-arrow { font-size: 18px; color: #6366F1; font-weight: 900; }
+
+.cs-result-banner {
+  background: #E8590C;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 900;
+  text-align: center;
+  padding: 12px 20px;
+  border-radius: 10px;
+  letter-spacing: 0.3px;
+}
+
+/* Interpret */
+.cs-interp-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 640px) { .cs-interp-row { grid-template-columns: 1fr; } }
+
+.cs-interp {
+  border-radius: 10px;
+  padding: 14px 12px;
+  text-align: center;
+  border: 2px solid;
+}
+.cs-interp.loss    { background: #FEF2F2; border-color: #FECACA; }
+.cs-interp.neutral { background: #F8FAFC; border-color: #CBD5E1; }
+.cs-interp.profit  { background: #ECFDF5; border-color: #A7F3D0; }
+.cs-interp-label { font-size: 11px; font-weight: 700; color: #64748B; margin-bottom: 8px; line-height: 1.4; }
+.cs-interp-icon {
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.cs-interp.loss .cs-interp-icon    { color: #DC2626; }
+.cs-interp.neutral .cs-interp-icon { color: #64748B; }
+.cs-interp.profit .cs-interp-icon  { color: #059669; }
+.cs-interp-text { font-size: 13px; font-weight: 800; color: #1E293B; }
+
+/* Thumb rules */
+.cs-thumb-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 10px;
+  padding: 12px 0;
+  flex-wrap: wrap;
+}
+.cs-thumb-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.cs-thumb-pct  { font-size: 22px; font-weight: 900; line-height: 1; }
+.cs-thumb-eq   { font-size: 11px; font-weight: 600; color: #94A3B8; }
+.cs-thumb-roas { font-size: 15px; font-weight: 900; }
+.cs-thumb-desc { font-size: 10px; color: #94A3B8; font-weight: 600; }
+.cs-thumb-divider { font-size: 22px; color: #CBD5E1; }
+.cs-thumb-rule {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748B;
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px dashed #CBD5E1;
+}
+
+/* Quote */
+.cs-quote-box {
+  background: #1E293B;
+  border-radius: 12px;
+  padding: 20px 28px;
+  text-align: center;
+  position: relative;
+}
+.cs-quote-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #FFC20E;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+.cs-quote-marks {
+  font-size: 36px;
+  color: #E8590C;
+  line-height: 0.5;
+  font-family: Georgia, serif;
+  display: block;
+}
+.cs-quote-open  { margin-bottom: 8px; }
+.cs-quote-close { margin-top: 8px; text-align: left; }
+.cs-quote-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.8;
+}
+
+/* ── PRINT ── */
+@media print {
+  .page-header, .nav-pills, .section-title,
+  .section-divider, button { display: none !important; }
+  body { background: #fff; }
+  .content-wrap { padding: 0; max-width: 100%; }
+  .page-section:not(#client-sheet) { display: none !important; }
+  #client-sheet { margin: 0; }
+  .card { box-shadow: none; border: none; border-radius: 0; padding: 0; }
+  .cheatsheet { padding: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="header-left">
+    <h1>מחשבון <span>ROAS</span> ושולי רווח</h1>
+    <p>מחשב Break-even ROAS אוטומטי + מדריך מלא: שולי רווח, מרקאפ וניהול 1,000+ מוצרים</p>
+  </div>
+  <div class="header-badge">כלי עבודה</div>
+</div>
+
+<!-- NAV PILLS -->
+<div class="nav-pills">
+  <div class="nav-pill active" onclick="scrollTo('calc')">🧮 מחשבון</div>
+  <div class="nav-pill" onclick="scrollTo('theory')">📐 תיאוריה</div>
+  <div class="nav-pill" onclick="scrollTo('margin-vs-markup')">⚖️ Margin vs Markup</div>
+  <div class="nav-pill" onclick="scrollTo('scale')">📦 קטלוג גדול</div>
+  <div class="nav-pill" onclick="scrollTo('quickref')">📋 טבלת עזר</div>
+  <div class="nav-pill" onclick="scrollTo('client-sheet')">🗒 דף ללקוח</div>
+</div>
+
+<!-- MAIN -->
+<div class="content-wrap">
+
+  <!-- ─────────────── SECTION 1: CALCULATOR ─────────────── -->
+  <div class="page-section" id="calc">
+    <div class="section-title">מחשבון Break-even ROAS</div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">🧮</span> הכנס את נתוני המוצר שלך</div>
+
+      <!-- CORE INPUTS -->
+      <div class="cost-section-label">הכנסה ועלות מוצר</div>
+      <div class="calc-grid" style="margin-bottom:6px">
+        <div class="field-group">
+          <label>מחיר מכירה ללקוח</label>
+          <div class="input-wrap">
+            <span class="currency">₪</span>
+            <input type="number" id="sell-price" placeholder="150" min="0" oninput="recalc()">
+          </div>
+        </div>
+        <div class="field-group">
+          <label>עלות מוצר (רכישה / ייצור)</label>
+          <div class="input-wrap">
+            <span class="currency">₪</span>
+            <input type="number" id="cost-price" placeholder="60" min="0" oninput="recalc()">
+          </div>
+        </div>
+      </div>
+
+      <!-- VAT ROW -->
+      <div class="vat-row" id="vat-row-main">
+        <label class="vat-toggle-label">
+          <input type="checkbox" id="vat-included" onchange="recalc()">
+          <span class="vat-toggle-text">המחיר ללקוח כולל מע"מ</span>
+        </label>
+        <div class="vat-rate-wrap" id="vat-rate-wrap" style="display:none">
+          <span class="vat-rate-prefix">שיעור מע"מ</span>
+          <input type="number" id="vat-rate" value="18" min="0" max="100" step="0.1" oninput="recalc()">
+          <span class="vat-rate-suffix">%</span>
+        </div>
+      </div>
+      <div class="vat-row vat-row-input" id="vat-row-costs" style="display:none">
+        <label class="vat-toggle-label">
+          <input type="checkbox" id="vat-costs-included" checked onchange="recalc()">
+          <span class="vat-toggle-text">ההוצאות (עלות מוצר, משלוח, אריזה) גם כוללות מע"מ — קזז תשומות</span>
+        </label>
+        <div class="vat-input-note" id="vat-input-note">
+          כעוסק מורשה, אתה מחזיר את המע"מ ששילמת על הוצאות אלו. המחשבון יחשב הכל על בסיס נטו (ללא מע"מ).
+        </div>
+      </div>
+
+      <!-- LOGISTICS COSTS -->
+      <div class="cost-section-label" style="margin-top:14px">לוגיסטיקה (עלות קבועה למשלוח)</div>
+      <div class="calc-grid" style="margin-bottom:6px">
+        <div class="field-group">
+          <label>עלות משלוח ללקוח <span class="field-hint">שילמת לחברת המשלוח</span></label>
+          <div class="input-wrap">
+            <span class="currency">₪</span>
+            <input type="number" id="cost-shipping" placeholder="25" min="0" oninput="recalc()">
+          </div>
+        </div>
+        <div class="field-group">
+          <label>אריזה + חומרי אריזה</label>
+          <div class="input-wrap">
+            <span class="currency">₪</span>
+            <input type="number" id="cost-packaging" placeholder="5" min="0" oninput="recalc()">
+          </div>
+        </div>
+      </div>
+
+      <!-- FEE COSTS (%) -->
+      <div class="cost-section-label" style="margin-top:14px">עמלות (אחוז ממחיר המכירה)</div>
+      <div class="calc-grid" style="margin-bottom:6px">
+        <div class="field-group">
+          <label>עמלת סליקה / כרטיס אשראי <span class="field-hint">בד"כ 1.5%–3%</span></label>
+          <div class="input-wrap">
+            <span class="currency pct-sym">%</span>
+            <input type="number" id="cost-payment-pct" placeholder="2.5" min="0" max="100" step="0.1" oninput="recalc()">
+          </div>
+        </div>
+        <div class="field-group">
+          <label>עמלת פלטפורמה / מרקטפלייס <span class="field-hint">אמזון ~15%, שופיפי 0–2%</span></label>
+          <div class="input-wrap">
+            <span class="currency pct-sym">%</span>
+            <input type="number" id="cost-platform-pct" placeholder="0" min="0" max="100" step="0.1" oninput="recalc()">
+          </div>
+        </div>
+      </div>
+
+      <!-- RETURNS -->
+      <div class="cost-section-label" style="margin-top:14px">החזרות</div>
+      <div class="calc-grid-single" style="margin-bottom:16px">
+        <div class="field-group" style="max-width:320px">
+          <label>שיעור החזרות <span class="field-hint">% מהמכירות שחוזרות — מפחית הכנסה נטו</span></label>
+          <div class="input-wrap">
+            <span class="currency pct-sym">%</span>
+            <input type="number" id="cost-return-pct" placeholder="0" min="0" max="100" step="0.1" oninput="recalc()">
+          </div>
+        </div>
+      </div>
+
+      <!-- COST BREAKDOWN -->
+      <div id="cost-breakdown" style="display:none; margin-bottom:16px">
+        <div class="cost-section-label">פירוט עלויות לפי מכירה</div>
+        <div class="breakdown-table">
+          <div class="bd-row income">
+            <span class="bd-label">📥 מחיר ללקוח</span>
+            <span class="bd-value" id="bd-price-gross">+0.00 ₪</span>
+          </div>
+          <div class="bd-row" id="bd-row-vat" style="display:none">
+            <span class="bd-label bd-pct" id="bd-vat-lbl">🏛 מע"מ (18%)</span>
+            <span class="bd-value cost" id="bd-vat">−0.00 ₪</span>
+          </div>
+          <div class="bd-row income" id="bd-row-revenue-net" style="display:none">
+            <span class="bd-label" style="font-weight:800">📥 הכנסה נטו (לפני מע"מ)</span>
+            <span class="bd-value" id="bd-revenue">+0.00 ₪</span>
+          </div>
+          <div class="bd-row" id="bd-row-cogs">
+            <span class="bd-label">📦 עלות מוצר</span>
+            <span class="bd-value cost" id="bd-cogs">−0.00 ₪</span>
+          </div>
+          <div class="bd-row vat-credit-row" id="bd-row-vat-input" style="display:none">
+            <span class="bd-label bd-pct" id="bd-vat-input-lbl">↩ קיזוז מע"מ תשומות (18%)</span>
+            <span class="bd-value vat-credit" id="bd-vat-input">+0.00 ₪</span>
+          </div>
+          <div class="bd-row" id="bd-row-shipping" style="display:none">
+            <span class="bd-label">🚚 משלוח</span>
+            <span class="bd-value cost" id="bd-shipping">−0.00 ₪</span>
+          </div>
+          <div class="bd-row" id="bd-row-packaging" style="display:none">
+            <span class="bd-label">📬 אריזה</span>
+            <span class="bd-value cost" id="bd-packaging">−0.00 ₪</span>
+          </div>
+          <div class="bd-row" id="bd-row-payment" style="display:none">
+            <span class="bd-label bd-pct" id="bd-payment-lbl">💳 סליקה (2.5%)</span>
+            <span class="bd-value cost" id="bd-payment">−0.00 ₪</span>
+          </div>
+          <div class="bd-row" id="bd-row-platform" style="display:none">
+            <span class="bd-label bd-pct" id="bd-platform-lbl">🏪 פלטפורמה (0%)</span>
+            <span class="bd-value cost" id="bd-platform">−0.00 ₪</span>
+          </div>
+          <div class="bd-row" id="bd-row-returns" style="display:none">
+            <span class="bd-label bd-pct" id="bd-returns-lbl">🔄 השפעת החזרות (0%)</span>
+            <span class="bd-value cost" id="bd-returns">−0.00 ₪</span>
+          </div>
+          <div class="bd-row total">
+            <span class="bd-label">💰 רווח גולמי (לפני פרסום)</span>
+            <span class="bd-value total-val" id="bd-total">0.00 ₪</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULTS -->
+      <div class="results-panel">
+        <div class="result-item">
+          <div class="result-label">רווח גולמי</div>
+          <div class="result-value yellow" id="res-gross">—</div>
+          <div class="result-sub" id="res-gross-sub">לאחר כל העלויות</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">שולי רווח (Margin)</div>
+          <div class="result-value green" id="res-margin">—</div>
+          <div class="result-sub">מחושב מלמעלה</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">Break-even ROAS</div>
+          <div class="result-value purple" id="res-roas">—</div>
+          <div class="result-sub">נקודת האיזון שלך</div>
+        </div>
+      </div>
+
+      <!-- MINI FORMULA ROW -->
+      <div id="mini-formula" style="display:none; direction:ltr; text-align:center; padding:8px 0 4px; font-size:12px; font-weight:600; color:#64748B; letter-spacing:0.2px; line-height:1.8">
+        <span id="mf-margin"></span>
+        <span style="margin:0 14px; color:#CBD5E1">|</span>
+        <span id="mf-roas"></span>
+      </div>
+
+      <div class="status-bar neutral" id="status-bar">
+        ← הכנס לפחות מחיר מכירה ועלות מוצר כדי לחשב
+      </div>
+
+      <!-- ROAS SIMULATOR -->
+      <div class="slider-section" id="slider-section" style="display:none">
+        <div class="slider-label-row">
+          <span class="slider-label">סמלץ ROAS בפועל של הקמפיין</span>
+          <span class="slider-roas-display" id="slider-display">3.0</span>
+        </div>
+        <input type="range" id="roas-slider" min="0.5" max="15" step="0.1" value="3" oninput="updateSlider()">
+        <div class="roas-zones" id="roas-zones-bar">
+          <div class="zone-loss" id="zone-loss-bar" style="width:20%"></div>
+          <div class="zone-neutral" style="width:5%"></div>
+          <div class="zone-profit" id="zone-profit-bar"></div>
+        </div>
+        <div class="zone-labels">
+          <span>0.5</span>
+          <span id="zone-breakeven-label">—</span>
+          <span>15</span>
+        </div>
+        <div class="status-bar neutral" id="simulator-result" style="margin-top:12px">
+          הזז את הסליידר לראות את הרווחיות
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- ─────────────── SECTION 2: THEORY ─────────────── -->
+  <div class="page-section" id="theory">
+    <div class="section-title">התיאוריה — איך עובדת הנוסחה</div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">📐</span> הנוסחה הבסיסית</div>
+
+      <div class="formula-box">
+        <div class="formula-text">Break-even ROAS = 1 ÷ Gross Margin</div>
+        <div class="formula-desc">חלקים 1 בשולי הרווח (כשבר עשרוני) וקבלים את נקודת האיזון</div>
+      </div>
+
+      <div class="steps-list" style="margin-top:20px">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>חשב רווח גולמי בשקלים</h4>
+            <p>מחיר מכירה פחות עלות המוצר (ייצור, שילוח, אריזה, עמלות סליקה). זה הכסף שנשאר לפני הפרסום.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>חשב שולי רווח (Margin)</h4>
+            <p>רווח גולמי חלקי מחיר מכירה. אם מכרת ב-100 ₪ ועלות היא 30 ₪, הרווח הגולמי הוא 70 ₪ ושולי הרווח הם 70%.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>חשב Break-even ROAS</h4>
+            <p>1 חלקי שולי הרווח (כשבר עשרוני). 70% → 1 ÷ 0.7 = 1.43. כל ROAS מעל 1.43 — רווחי לחלוטין.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h4>קיצור דרך: חלק מחיר מכירה ברווח גולמי בשקלים</h4>
+            <p>70 חלקי 70 = 1. 100 חלקי 70 = 1.43. אותה תוצאה, בדרך ישירה יותר.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout purple">
+        <div class="callout-icon">💡</div>
+        <div class="callout-body">
+          <strong>הכלל הזהב:</strong> ROAS שווה לנקודת האיזון → הכנסות מכסות עלויות אבל אין רווח נקי. ROAS גבוה יותר → כל שקל שמעל האיזון הוא רווח נקי שנכנס לכיס.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">📊</span> דוגמאות לפי שולי רווח</div>
+      <div style="overflow-x:auto">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>תרחיש</th>
+              <th>מחיר מכירה</th>
+              <th>עלות מוצר</th>
+              <th>רווח גולמי</th>
+              <th>שולי רווח</th>
+              <th>Break-even ROAS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>שולי רווח נמוכים</td>
+              <td>100 ₪</td>
+              <td>90 ₪</td>
+              <td>10 ₪</td>
+              <td>10%</td>
+              <td class="danger-cell">10.0</td>
+            </tr>
+            <tr>
+              <td>שולי רווח בינוניים</td>
+              <td>100 ₪</td>
+              <td>70 ₪</td>
+              <td>30 ₪</td>
+              <td>30%</td>
+              <td>3.33</td>
+            </tr>
+            <tr>
+              <td>דוגמת השיחה שלנו</td>
+              <td>70 ₪</td>
+              <td>30 ₪</td>
+              <td>40 ₪</td>
+              <td>57.14%</td>
+              <td class="highlight-cell">1.75</td>
+            </tr>
+            <tr>
+              <td>שולי רווח גבוהים</td>
+              <td>100 ₪</td>
+              <td>50 ₪</td>
+              <td>50 ₪</td>
+              <td>50%</td>
+              <td>2.0</td>
+            </tr>
+            <tr>
+              <td>שולי רווח גבוהים מאוד</td>
+              <td>100 ₪</td>
+              <td>20 ₪</td>
+              <td>80 ₪</td>
+              <td>80%</td>
+              <td class="success-cell">1.25</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout red">
+        <div class="callout-icon">⚠️</div>
+        <div class="callout-body">
+          <strong>שולי רווח של 10% קשים מאוד לפרסום:</strong> ROAS של 10 בעקביות הוא אתגר משמעותי. לפני שמתחילים לפרסם מוצרים כאלה, חשוב לבדוק אם ניתן להעלות מחיר, להוזיל עלות, או לוותר על פרסום פרטני לטובת מוצרי הלוס-לידר.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- ─────────────── SECTION 3: MARGIN VS MARKUP ─────────────── -->
+  <div class="page-section" id="margin-vs-markup">
+    <div class="section-title">Margin vs Markup — החישוב מלמעלה ומלמטה</div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">⚖️</span> הבלבול הנפוץ ביותר באיקומרס</div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px">
+
+        <div style="background:#F0FDF4; border:2px solid #86EFAC; border-radius:12px; padding:18px">
+          <div style="font-size:11px; font-weight:900; color:#16A34A; letter-spacing:1px; text-transform:uppercase; margin-bottom:8px">✅ Margin — חישוב מלמעלה</div>
+          <div style="font-size:13px; color:#166534; font-weight:600; margin-bottom:10px">רווח ÷ מחיר מכירה</div>
+          <div class="formula-box" style="background:#DCFCE7; border-color:#86EFAC; margin:0">
+            <div class="formula-text" style="color:#16A34A; font-size:14px">20 ÷ 100 = 20%</div>
+          </div>
+          <div style="font-size:12px; color:#166534; margin-top:8px; font-weight:500">
+            "מתוך כל שקל שנכנס, 20 אגורות הן רווח"
+          </div>
+          <div style="margin-top:10px; padding:10px; background:#BBFFD7; border-radius:8px">
+            <div style="font-size:11px; font-weight:800; color:#166534; margin-bottom:4px">⭐ זה מה שמשתמשים לחישוב ROAS</div>
+            <div style="font-size:12px; color:#166534">ה-ROAS נמדד ביחס להכנסות — לכן גם שולי הרווח צריכים להיות ביחס להכנסות.</div>
+          </div>
+        </div>
+
+        <div style="background:#FFF7ED; border:2px solid #FCD34D; border-radius:12px; padding:18px">
+          <div style="font-size:11px; font-weight:900; color:#D97706; letter-spacing:1px; text-transform:uppercase; margin-bottom:8px">⚠️ Markup — חישוב מלמטה</div>
+          <div style="font-size:13px; color:#92400E; font-weight:600; margin-bottom:10px">רווח ÷ עלות המוצר</div>
+          <div class="formula-box" style="background:#FEF9C3; border-color:#FCD34D; margin:0">
+            <div class="formula-text" style="color:#B45309; font-size:14px">20 ÷ 80 = 25%</div>
+          </div>
+          <div style="font-size:12px; color:#92400E; margin-top:8px; font-weight:500">
+            "הוספתי 25% מעל עלות הרכישה"
+          </div>
+          <div style="margin-top:10px; padding:10px; background:#FDE68A; border-radius:8px">
+            <div style="font-size:11px; font-weight:800; color:#92400E; margin-bottom:4px">⚡ שימושי לתמחור ורכש</div>
+            <div style="font-size:12px; color:#92400E">עוזר להבין כמה להוסיף לעלות כשמגדירים מחיר. לא מתאים לחישובי פרסום.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="overflow-x:auto; margin-top:16px">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>קנה ב-</th>
+              <th>מכר ב-</th>
+              <th>רווח גולמי</th>
+              <th>Margin (מלמעלה)</th>
+              <th>Markup (מלמטה)</th>
+              <th>Break-even ROAS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>80 ₪</td>
+              <td>100 ₪</td>
+              <td>20 ₪</td>
+              <td class="highlight-cell">20%</td>
+              <td>25%</td>
+              <td class="highlight-cell">5.0</td>
+            </tr>
+            <tr>
+              <td>30 ₪</td>
+              <td>70 ₪</td>
+              <td>40 ₪</td>
+              <td class="highlight-cell">57.14%</td>
+              <td>133.33%</td>
+              <td class="highlight-cell">1.75</td>
+            </tr>
+            <tr>
+              <td>50 ₪</td>
+              <td>100 ₪</td>
+              <td>50 ₪</td>
+              <td class="highlight-cell">50%</td>
+              <td>100%</td>
+              <td class="highlight-cell">2.0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout yellow">
+        <div class="callout-icon">🔑</div>
+        <div class="callout-body">
+          <strong>הכלל הפשוט:</strong> בכל שיחה עם גוגל, פייסבוק, ומחלקת שיווק — תמיד מדברים ב-Margin (מלמעלה). בשיחה עם ספקים, יצרנים ומחלקת רכש — לעיתים מדברים ב-Markup (מלמטה). אל תתבלבל ביניהם.
+        </div>
+      </div>
+    </div>
+
+    <!-- MARGIN vs MARKUP CALCULATOR -->
+    <div class="card">
+      <div class="card-title"><span class="icon">🔄</span> מחשבון Margin vs Markup — השווה את שני החישובים</div>
+
+      <div class="calc-grid">
+        <div class="field-group">
+          <label>מחיר מכירה</label>
+          <div class="input-wrap">
+            <span class="currency">₪</span>
+            <input type="number" id="mm-sell" placeholder="100" min="0" oninput="calcMM()">
+          </div>
+        </div>
+        <div class="field-group">
+          <label>עלות המוצר</label>
+          <div class="input-wrap">
+            <span class="currency">₪</span>
+            <input type="number" id="mm-cost" placeholder="80" min="0" oninput="calcMM()">
+          </div>
+        </div>
+      </div>
+
+      <div id="mm-results" style="display:none">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:16px">
+
+          <div style="background:#F0FDF4; border:2px solid #86EFAC; border-radius:12px; padding:20px; text-align:center">
+            <div style="font-size:11px; font-weight:900; color:#16A34A; letter-spacing:1px; text-transform:uppercase; margin-bottom:8px">✅ Margin — מלמעלה</div>
+            <div style="font-size:13px; color:#166534; font-weight:600; margin-bottom:2px">רווח ÷ מחיר מכירה</div>
+            <div id="mm-formula-margin" style="font-size:13px; color:#166534; margin-bottom:12px; font-weight:500; direction:ltr">— ÷ — = —</div>
+            <div id="mm-margin-val" style="font-size:36px; font-weight:900; color:#16A34A; line-height:1">—</div>
+            <div style="font-size:11px; color:#16A34A; margin-top:4px; font-weight:600">שולי רווח (Margin)</div>
+            <div id="mm-margin-note" style="margin-top:10px; padding:8px; background:#BBFFD7; border-radius:8px; font-size:12px; font-weight:700; color:#166534">Break-even ROAS = —</div>
+          </div>
+
+          <div style="background:#FFF7ED; border:2px solid #FCD34D; border-radius:12px; padding:20px; text-align:center">
+            <div style="font-size:11px; font-weight:900; color:#D97706; letter-spacing:1px; text-transform:uppercase; margin-bottom:8px">⚡ Markup — מלמטה</div>
+            <div style="font-size:13px; color:#92400E; font-weight:600; margin-bottom:2px">רווח ÷ עלות מוצר</div>
+            <div id="mm-formula-markup" style="font-size:13px; color:#92400E; margin-bottom:12px; font-weight:500; direction:ltr">— ÷ — = —</div>
+            <div id="mm-markup-val" style="font-size:36px; font-weight:900; color:#D97706; line-height:1">—</div>
+            <div style="font-size:11px; color:#D97706; margin-top:4px; font-weight:600">מרווח מכירה (Markup)</div>
+            <div style="margin-top:10px; padding:8px; background:#FDE68A; border-radius:8px; font-size:12px; font-weight:700; color:#92400E">לא רלוונטי לחישוב ROAS</div>
+          </div>
+        </div>
+
+        <div id="mm-explainer" style="background:#F8F9FF; border:1px solid #C7D2FE; border-radius:10px; padding:14px 18px; font-size:13px; color:#4338CA; font-weight:600; text-align:center">
+          ← הכנס נתונים כדי לראות את ההסבר
+        </div>
+      </div>
+
+      <div id="mm-empty" style="color:#94A3B8; font-size:13px; font-weight:500; text-align:center; padding:20px 0">
+        ← הכנס מחיר מכירה ועלות מוצר כדי לחשב את ההפרש בין Margin ל-Markup
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- ─────────────── SECTION 4: SCALE ─────────────── -->
+  <div class="page-section" id="scale">
+    <div class="section-title">ניהול קטלוג של 1,000+ מוצרים</div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">📦</span> הבעיה בסדר גודל</div>
+      <p style="font-size:14px; color:#475569; font-weight:500; line-height:1.7; margin-bottom:16px">
+        כשיש לך 1,000+ מוצרים שונים, לכל אחד עלות אחרת ושולי רווח שונים.
+        לא ניתן לנהל יעד ROAS אחד לכולם — מוצר עם 60% רווח גולמי יהיה רווחי ב-ROAS של 2,
+        אבל אותו יעד עבור מוצר עם 15% רווח יגרום להפסד על כל מכירה.
+      </p>
+
+      <div class="tiers-grid">
+        <div class="tier-card high">
+          <div class="tier-label">High Margin</div>
+          <div class="tier-name">קבוצה א׳</div>
+          <div class="tier-margin">שולי רווח: 50%–70%+</div>
+          <div class="tier-roas">≥ 2.0</div>
+          <div class="tier-roas-label">יעד ROAS מינימלי</div>
+          <div class="tier-items">
+            ✅ אגרסיביים בתקציב<br>
+            ✅ קל להיות רווחיים<br>
+            ✅ מנוע הצמיחה של הקטלוג
+          </div>
+        </div>
+        <div class="tier-card mid">
+          <div class="tier-label">Mid Margin</div>
+          <div class="tier-name">קבוצה ב׳</div>
+          <div class="tier-margin">שולי רווח: 30%–49%</div>
+          <div class="tier-roas">≥ 3.5</div>
+          <div class="tier-roas-label">יעד ROAS מינימלי</div>
+          <div class="tier-items">
+            ⚡ תקציב מאוזן<br>
+            ⚡ מעקב שבועי על ביצועים<br>
+            ⚡ כוונון עדין לבידינג
+          </div>
+        </div>
+        <div class="tier-card low">
+          <div class="tier-label">Low Margin</div>
+          <div class="tier-name">קבוצה ג׳</div>
+          <div class="tier-margin">שולי רווח: מתחת ל-30%</div>
+          <div class="tier-roas">≥ 5.0+</div>
+          <div class="tier-roas-label">יעד ROAS מינימלי</div>
+          <div class="tier-items">
+            ⚠️ ROAS גבוה נדרש<br>
+            ⚠️ תקציב מוגבל<br>
+            ⚠️ שקול לוס-לידר בלבד
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">🏷</span> 4 שיטות לניהול רווחיות בסדר גודל</div>
+
+      <div class="method-row">
+        <div class="method-icon gold">📊</div>
+        <div class="method-body">
+          <h4>שיטה 1: Blended Margin — ממוצע שולי הרווח של החנות</h4>
+          <p>מחשבים את הרווח הגולמי הממוצע של כלל החנות בחודש (סה"כ רווח גולמי ÷ סה"כ הכנסות) ומגדירים Target ROAS אחד לפי הממוצע. מהיר וקל, אבל עלול להסתיר מוצרים מפסידים תחת ממוצע תקין.</p>
+          <span class="method-tag tag-easy">מתאים לחנויות קטנות-בינוניות</span>
+        </div>
+      </div>
+
+      <div class="method-row">
+        <div class="method-icon blue">🗂</div>
+        <div class="method-body">
+          <h4>שיטה 2: Margin Tiers — פיצול לקבוצות רווחיות</h4>
+          <p>מקבצים את כל המוצרים ל-3–4 קמפיינים נפרדים (High / Mid / Low Margin) ומגדירים לכל קמפיין Target ROAS שונה. הפתרון הנפוץ ביותר ב-Google Shopping ו-PMax לחנויות עם מאות מוצרים.</p>
+          <span class="method-tag tag-medium">מתאים לרוב החנויות</span>
+        </div>
+      </div>
+
+      <div class="method-row">
+        <div class="method-icon green">🔖</div>
+        <div class="method-body">
+          <h4>שיטה 3: Custom Labels בפיד המוצרים</h4>
+          <p>בפיד ה-Google Merchant Center, מוסיפים עמודת <code style="background:#F1F5F9; padding:1px 5px; border-radius:3px; font-size:12px">custom_label_0</code> ומצמידים לכל מוצר תווית טקסט (High_Margin / Mid_Margin / Low_Margin). הפלטפורמה קוראת את התוויות ומאפשרת פיצול קמפיינים ויעדי ROAS שונים לכל קבוצה.</p>
+          <span class="method-tag tag-medium">Google Merchant + PMax / Shopping</span>
+        </div>
+      </div>
+
+      <div class="method-row">
+        <div class="method-icon purple">🚀</div>
+        <div class="method-body">
+          <h4>שיטה 4: POAS — Profit On Ad Spend (הרמה המתקדמת ביותר)</h4>
+          <p>במקום שהאלגוריתם ייראה רק הכנסות (ROAS), משדרים לו את הרווח הגולמי בשקלים על כל רכישה. הגדרת יעד POAS גדול מ-1 אומרת לאלגוריתם "יעד: כל שקל שהוצאת על פרסום יחזיר יותר מ-1 ₪ רווח נקי". הוא עושה את חישובי המוצרים לבד בזמן אמת. כלים: ProfitMetrics, Wicked Reports, או חיבור API מותאם.</p>
+          <span class="method-tag tag-advanced">Enterprise / חנויות גדולות</span>
+        </div>
+      </div>
+
+      <div class="callout green">
+        <div class="callout-icon">🎯</div>
+        <div class="callout-body">
+          <strong>המלצה לרוב המקרים:</strong> התחל עם Margin Tiers + Custom Labels (שיטות 2 ו-3 יחד). זה הפתרון הכי פרקטי שנותן שליטה טובה בלי לדרוש פיתוח מותאם. POAS שמור לחנויות שכבר ממוקסמות בכל שאר הפרמטרים.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- ─────────────── SECTION 5: QUICK REF ─────────────── -->
+  <div class="page-section" id="quickref">
+    <div class="section-title">טבלת עזר מהירה — Margin → Break-even ROAS</div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">📋</span> לסריקה מהירה לפני בניית קמפיין</div>
+      <div style="overflow-x:auto">
+        <table class="quick-ref-table">
+          <thead>
+            <tr>
+              <th>שולי רווח (Margin)</th>
+              <th>Break-even ROAS</th>
+              <th>פרשנות</th>
+              <th>אסטרטגיה מומלצת</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="margin-col">80%+</td>
+              <td class="roas-col" style="color:#059669">1.25</td>
+              <td>שולי רווח מעולים</td>
+              <td>אגרסיביים — מקסם תקציב</td>
+            </tr>
+            <tr>
+              <td class="margin-col">70%</td>
+              <td class="roas-col" style="color:#059669">1.43</td>
+              <td>שולי רווח מצוינים</td>
+              <td>הגדל תקציב בביטחון</td>
+            </tr>
+            <tr>
+              <td class="margin-col">60%</td>
+              <td class="roas-col" style="color:#059669">1.67</td>
+              <td>שולי רווח גבוהים</td>
+              <td>יעד ROAS נמוך, גדל ביחס</td>
+            </tr>
+            <tr>
+              <td class="margin-col">57% (דוגמת השיחה)</td>
+              <td class="roas-col" style="color:#7C3AED">1.75</td>
+              <td>מכרת ב-70, עלות 30</td>
+              <td>מרווח בינוני-גבוה, נוח לניהול</td>
+            </tr>
+            <tr>
+              <td class="margin-col">50%</td>
+              <td class="roas-col">2.0</td>
+              <td>שולי רווח בינוניים-גבוהים</td>
+              <td>Target ROAS ≥ 2.5–3</td>
+            </tr>
+            <tr>
+              <td class="margin-col">40%</td>
+              <td class="roas-col">2.5</td>
+              <td>שולי רווח בינוניים</td>
+              <td>Target ROAS ≥ 3.5</td>
+            </tr>
+            <tr>
+              <td class="margin-col">30%</td>
+              <td class="roas-col">3.33</td>
+              <td>שולי רווח בינוניים-נמוכים</td>
+              <td>Target ROAS ≥ 4–5, פקח היטב</td>
+            </tr>
+            <tr>
+              <td class="margin-col">20%</td>
+              <td class="roas-col" style="color:#D97706">5.0</td>
+              <td>שולי רווח נמוכים</td>
+              <td>קשה לפרסם, בדוק תמחור</td>
+            </tr>
+            <tr>
+              <td class="margin-col">15%</td>
+              <td class="roas-col" style="color:#DC2626">6.67</td>
+              <td>שולי רווח מאוד נמוכים</td>
+              <td>פרסם רק אם יש LTV גבוה</td>
+            </tr>
+            <tr>
+              <td class="margin-col">10%</td>
+              <td class="roas-col" style="color:#DC2626">10.0</td>
+              <td>כמעט בלתי אפשרי לפרסם</td>
+              <td>הימנע מפרסום ישיר</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout purple" style="margin-top:16px">
+        <div class="callout-icon">📌</div>
+        <div class="callout-body">
+          <strong>כלל האצבע:</strong> הגדר תמיד Target ROAS שגבוה ב-20%–40% מנקודת האיזון. למשל אם האיזון הוא ROAS 2.0 — הגדר Target ROAS 2.5–2.8. זה מאפשר לאלגוריתם מרווח תמרון ועדיין מבטיח שלא תפסיד.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- ─────────────── SECTION 6: CLIENT CHEAT SHEET ─────────────── -->
+  <div class="page-section" id="client-sheet">
+    <div class="section-title">דף עזר — שיחה עם לקוח</div>
+
+    <div class="card" style="padding:0; overflow:hidden">
+
+      <!-- PRINT BUTTON -->
+      <div style="padding:16px 24px 0; display:flex; justify-content:flex-end; gap:10px">
+        <button onclick="window.print()" style="background:#1E293B; color:#fff; border:none; border-radius:8px; padding:8px 18px; font-family:'Heebo',sans-serif; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px">🖨 הדפס דף</button>
+      </div>
+
+      <!-- CHEAT SHEET BODY -->
+      <div class="cheatsheet" id="printable">
+
+        <!-- TITLE -->
+        <div class="cs-header">
+          <h2>מדריך מהיר: איך מחשבים ROAS רווחי?</h2>
+          <p>דף עזר קצר לשיחה עם לקוח</p>
+        </div>
+
+        <!-- ROW 1: 2 cols -->
+        <div class="cs-row2">
+
+          <!-- BOX 1: What to ask -->
+          <div class="cs-box">
+            <div class="cs-box-title">
+              <span class="cs-num">1</span> מה צריך לשאול קודם?
+            </div>
+            <div class="cs-checklist">
+              <label><input type="checkbox"> מה מחיר המכירה?</label>
+              <label><input type="checkbox"> מה עלות המוצר / הייצור / הקנייה?</label>
+              <label><input type="checkbox"> האם יש עלויות נוספות מעבר לפרסום?</label>
+            </div>
+            <div class="cs-note">אם אין עלויות נוספות — אפשר לחשב Break-even ROAS ישירות</div>
+          </div>
+
+          <!-- BOX 2: Fast calculation -->
+          <div class="cs-box">
+            <div class="cs-box-title">
+              <span class="cs-num">2</span> החישוב המהיר
+            </div>
+            <div class="cs-steps-flow">
+              <div class="cs-step-box">
+                <span class="cs-step-circle">1</span>
+                <span>רווח גולמי = מחיר מכירה − עלות</span>
+              </div>
+              <div class="cs-arrow">↓</div>
+              <div class="cs-step-box">
+                <span class="cs-step-circle">2</span>
+                <span>שולי רווח = רווח גולמי / מחיר מכירה</span>
+              </div>
+              <div class="cs-arrow">↓</div>
+              <div class="cs-step-box">
+                <span class="cs-step-circle">3</span>
+                <span>Break-even ROAS = 1 / שולי הרווח</span>
+              </div>
+            </div>
+            <div class="cs-shortcut">
+              <strong>קיצור דרך:</strong> Break-even ROAS = מחיר מכירה / רווח גולמי
+            </div>
+          </div>
+        </div>
+
+        <!-- BOX 3: Example -->
+        <div class="cs-box cs-example-box">
+          <div class="cs-box-title" style="justify-content:center">
+            <span class="cs-num">3</span> דוגמה לשיחה מול לקוח
+          </div>
+          <div class="cs-example-row">
+            <div class="cs-ex-input">
+              <span class="cs-ex-label">מחיר מכירה: 70 ₪</span>
+            </div>
+            <div class="cs-ex-input">
+              <span class="cs-ex-label">עלות: 30 ₪</span>
+            </div>
+          </div>
+          <div class="cs-calc-flow">
+            <div class="cs-calc-box">
+              <div class="cs-calc-label">Break-even ROAS</div>
+              <div class="cs-calc-formula">70 / 40 = <strong>1.75</strong></div>
+            </div>
+            <div class="cs-flow-arrow">←</div>
+            <div class="cs-calc-box">
+              <div class="cs-calc-label">שולי רווח</div>
+              <div class="cs-calc-formula">40 / 70 = <strong>57%</strong></div>
+            </div>
+            <div class="cs-flow-arrow">←</div>
+            <div class="cs-calc-box">
+              <div class="cs-calc-label">רווח גולמי</div>
+              <div class="cs-calc-formula">70 − 30 = <strong>40 ₪</strong></div>
+            </div>
+          </div>
+          <div class="cs-result-banner">
+            ✅ כל ROAS מעל 1.75 = רווחי
+          </div>
+        </div>
+
+        <!-- BOX 4: How to interpret -->
+        <div class="cs-box">
+          <div class="cs-box-title" style="justify-content:center">
+            <span class="cs-num">4</span> איך לפרש את המספר?
+          </div>
+          <div class="cs-interp-row">
+            <div class="cs-interp loss">
+              <div class="cs-interp-label">ROAS נמוך מה Break-even</div>
+              <div class="cs-interp-icon">✕</div>
+              <div class="cs-interp-text">מפסיד כסף</div>
+            </div>
+            <div class="cs-interp neutral">
+              <div class="cs-interp-label">ROAS שווה ל-Break-even</div>
+              <div class="cs-interp-icon" style="font-size:20px">=</div>
+              <div class="cs-interp-text">נקודת איזון</div>
+            </div>
+            <div class="cs-interp profit">
+              <div class="cs-interp-label">ROAS גבוה מה Break-even</div>
+              <div class="cs-interp-icon">✓</div>
+              <div class="cs-interp-text">רווחי</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOX 5: Quick thumb rules -->
+        <div class="cs-box">
+          <div class="cs-box-title" style="justify-content:center">
+            <span class="cs-num">5</span> כלל אצבע מהיר
+          </div>
+          <div class="cs-thumb-row">
+            <div class="cs-thumb-item">
+              <span class="cs-thumb-pct" style="color:#DC2626">10%</span>
+              <span class="cs-thumb-eq">שולי רווח =</span>
+              <span class="cs-thumb-roas" style="color:#DC2626">ROAS 10</span>
+              <span class="cs-thumb-desc">Break-even</span>
+            </div>
+            <div class="cs-thumb-divider">•</div>
+            <div class="cs-thumb-item">
+              <span class="cs-thumb-pct" style="color:#D97706">30%</span>
+              <span class="cs-thumb-eq">שולי רווח =</span>
+              <span class="cs-thumb-roas" style="color:#D97706">ROAS 3.3</span>
+              <span class="cs-thumb-desc">Break-even</span>
+            </div>
+            <div class="cs-thumb-divider">•</div>
+            <div class="cs-thumb-item">
+              <span class="cs-thumb-pct" style="color:#059669">50%</span>
+              <span class="cs-thumb-eq">שולי רווח =</span>
+              <span class="cs-thumb-roas" style="color:#059669">ROAS 2</span>
+              <span class="cs-thumb-desc">Break-even</span>
+            </div>
+          </div>
+          <div class="cs-thumb-rule">ככל ששולי הרווח נמוכים יותר — צריך ROAS גבוה יותר</div>
+        </div>
+
+        <!-- BOX 6: Quote -->
+        <div class="cs-quote-box">
+          <div class="cs-quote-label">משפט קצר שאפשר להגיד ללקוח</div>
+          <div class="cs-quote-marks cs-quote-open">&ldquo;</div>
+          <div class="cs-quote-text">
+            "אנחנו בודקים כמה נשאר לך מכל מכירה, ואז מחשבים איזה ROAS
+            אתה חייב כדי לא להפסיד כסף. כל מה שמעל נקודת האיזון — רווחי."
+          </div>
+          <div class="cs-quote-marks cs-quote-close">&rdquo;</div>
+        </div>
+
+      </div><!-- /cheatsheet -->
+    </div>
+  </div>
+
+</div><!-- /content-wrap -->
+
+<script>
+function recalc() {
+  const sellGross   = parseFloat(document.getElementById('sell-price').value)       || 0;
+  const cogs        = parseFloat(document.getElementById('cost-price').value)       || 0;
+  const shipping    = parseFloat(document.getElementById('cost-shipping').value)    || 0;
+  const packaging   = parseFloat(document.getElementById('cost-packaging').value)   || 0;
+  const paymentPct  = parseFloat(document.getElementById('cost-payment-pct').value) || 0;
+  const platformPct = parseFloat(document.getElementById('cost-platform-pct').value)|| 0;
+  const returnPct   = parseFloat(document.getElementById('cost-return-pct').value)  || 0;
+  const vatIncluded      = document.getElementById('vat-included').checked;
+  const vatRate          = parseFloat(document.getElementById('vat-rate').value) || 18;
+  const vatCostsIncluded = vatIncluded && document.getElementById('vat-costs-included').checked;
+
+  // Show/hide VAT controls
+  document.getElementById('vat-rate-wrap').style.display    = vatIncluded ? 'flex'  : 'none';
+  document.getElementById('vat-row-costs').style.display    = vatIncluded ? 'flex'  : 'none';
+
+  const breakdown = document.getElementById('cost-breakdown');
+  const sb = document.getElementById('status-bar');
+
+  if (sellGross <= 0 || cogs <= 0) {
+    ['res-gross','res-margin','res-roas'].forEach(id => document.getElementById(id).textContent = '—');
+    sb.className = 'status-bar neutral';
+    sb.textContent = '← הכנס לפחות מחיר מכירה ועלות מוצר כדי לחשב';
+    document.getElementById('slider-section').style.display = 'none';
+    document.getElementById('mini-formula').style.display = 'none';
+    breakdown.style.display = 'none';
+    return;
+  }
+
+  // ── VAT on revenue ──
+  const vatDivisor  = 1 + vatRate / 100;
+  const vatAmount   = vatIncluded ? sellGross - (sellGross / vatDivisor) : 0;
+  const sell        = sellGross - vatAmount; // הכנסה נטו
+
+  // ── VAT input credit on costs (if VAT-registered + costs include VAT) ──
+  const vatInputFactor = vatCostsIncluded ? (1 / vatDivisor) : 1; // multiply cost by this to get ex-VAT cost
+  const cogsNet        = cogs     * vatInputFactor;
+  const shippingNet    = shipping * vatInputFactor;
+  const packagingNet   = packaging * vatInputFactor;
+  const vatInputCredit = vatCostsIncluded
+    ? (cogs - cogsNet) + (shipping - shippingNet) + (packaging - packagingNet)
+    : 0;
+
+  // ── All other costs ──
+  const paymentFee   = sell * (paymentPct  / 100);
+  const platformFee  = sell * (platformPct / 100);
+  const returnImpact = sell * (returnPct   / 100);
+
+  const totalCosts = cogsNet + shippingNet + packagingNet + paymentFee + platformFee + returnImpact;
+  const gross      = sell - totalCosts;
+  const margin     = gross / sell;
+  // ROAS always uses the GROSS price (what the platform reports as revenue)
+  const beRoas     = gross > 0 ? sellGross / gross : Infinity;
+
+  // ── Breakdown panel ──
+  breakdown.style.display = 'block';
+  const fmt = v => Math.abs(v).toFixed(2) + ' ₪';
+
+  document.getElementById('bd-price-gross').textContent = '+' + fmt(sellGross);
+
+  // VAT row
+  document.getElementById('bd-row-vat').style.display = vatIncluded ? '' : 'none';
+  document.getElementById('bd-vat-lbl').textContent = `🏛 מע"מ (${vatRate}%)`;
+  document.getElementById('bd-vat').textContent = '−' + fmt(vatAmount);
+
+  // Net revenue row (only when VAT shown)
+  document.getElementById('bd-row-revenue-net').style.display = vatIncluded ? '' : 'none';
+  document.getElementById('bd-revenue').textContent = '+' + fmt(sell);
+
+  document.getElementById('bd-cogs').textContent = '−' + fmt(vatCostsIncluded ? cogs : cogs);
+
+  // VAT input credit row
+  const hasVatableInputs = vatCostsIncluded && (cogs > 0 || shipping > 0 || packaging > 0);
+  document.getElementById('bd-row-vat-input').style.display = hasVatableInputs ? '' : 'none';
+  document.getElementById('bd-vat-input-lbl').textContent = `↩ קיזוז מע"מ תשומות (${vatRate}%)`;
+  document.getElementById('bd-vat-input').textContent = '+' + fmt(vatInputCredit);
+
+  document.getElementById('bd-row-shipping').style.display = shipping > 0 ? '' : 'none';
+  document.getElementById('bd-shipping').textContent = '−' + fmt(vatCostsIncluded ? shippingNet : shipping);
+
+  document.getElementById('bd-row-packaging').style.display = packaging > 0 ? '' : 'none';
+  document.getElementById('bd-packaging').textContent = '−' + fmt(vatCostsIncluded ? packagingNet : packaging);
+
+  document.getElementById('bd-row-payment').style.display = paymentPct > 0 ? '' : 'none';
+  document.getElementById('bd-payment-lbl').textContent = `💳 סליקה (${paymentPct}%)`;
+  document.getElementById('bd-payment').textContent = '−' + fmt(paymentFee);
+
+  document.getElementById('bd-row-platform').style.display = platformPct > 0 ? '' : 'none';
+  document.getElementById('bd-platform-lbl').textContent = `🏪 פלטפורמה (${platformPct}%)`;
+  document.getElementById('bd-platform').textContent = '−' + fmt(platformFee);
+
+  document.getElementById('bd-row-returns').style.display = returnPct > 0 ? '' : 'none';
+  document.getElementById('bd-returns-lbl').textContent = `🔄 השפעת החזרות (${returnPct}%)`;
+  document.getElementById('bd-returns').textContent = '−' + fmt(returnImpact);
+
+  const totalEl = document.getElementById('bd-total');
+  totalEl.textContent = (gross >= 0 ? '+' : '−') + fmt(gross);
+  totalEl.style.color = gross >= 0 ? '#FFC20E' : '#EF4444';
+
+  // ── Results ──
+  if (gross <= 0) {
+    document.getElementById('res-gross').textContent  = '−' + fmt(gross);
+    document.getElementById('res-margin').textContent = (margin * 100).toFixed(1) + '%';
+    document.getElementById('res-roas').textContent   = '∞';
+    sb.className = 'status-bar loss';
+    sb.innerHTML = `⚠️ העלויות הכוללות עולות על ההכנסה נטו — <strong>אין רווח גולמי</strong>. בדוק את הנתונים.`;
+    document.getElementById('slider-section').style.display = 'none';
+    return;
+  }
+
+  document.getElementById('res-gross').textContent  = '+' + fmt(gross);
+  document.getElementById('res-margin').textContent = (margin * 100).toFixed(1) + '%';
+  document.getElementById('res-roas').textContent   = beRoas.toFixed(2);
+
+  const parts = [];
+  if (vatIncluded)                          parts.push(`מע"מ ${vatRate}%`);
+  if (shipping > 0 || packaging > 0)        parts.push('לוגיסטיקה');
+  if (paymentPct > 0 || platformPct > 0)   parts.push('עמלות');
+  if (returnPct > 0)                        parts.push('החזרות');
+  document.getElementById('res-gross-sub').textContent = parts.length
+    ? 'כולל: ' + parts.join(', ')
+    : 'עלות מוצר בלבד';
+
+  sb.className = 'status-bar neutral';
+  sb.innerHTML = `✅ Break-even ROAS: <strong>${beRoas.toFixed(2)}</strong> — כל ROAS מעל זה רווחי לחלוטין`;
+
+  // Mini formula row
+  const mf = document.getElementById('mini-formula');
+  mf.style.display = 'block';
+  document.getElementById('mf-margin').innerHTML =
+    `Margin = <strong style="color:#34D399">${fmt(gross)}</strong> ÷ <strong style="color:#94A3B8">${fmt(sellGross)}</strong> = <strong style="color:#34D399">${(margin*100).toFixed(1)}%</strong>`;
+  document.getElementById('mf-roas').innerHTML =
+    `Break-even ROAS = <strong style="color:#94A3B8">${fmt(sellGross)}</strong> ÷ <strong style="color:#34D399">${fmt(gross)}</strong> = <strong style="color:#C084FC">${beRoas.toFixed(2)}</strong>`;
+
+  document.getElementById('slider-section').style.display = 'block';
+  document.getElementById('zone-breakeven-label').textContent = beRoas.toFixed(2) + ' (נקודת איזון)';
+  const maxSlider = 15;
+  document.getElementById('zone-loss-bar').style.width = Math.min((beRoas / maxSlider) * 100, 95) + '%';
+
+  const slider = document.getElementById('roas-slider');
+  slider.setAttribute('data-breakeven', beRoas);
+  slider.setAttribute('data-sell', sellGross);
+  slider.setAttribute('data-gross', gross);
+  updateSlider(beRoas);
+}
+
+function updateSlider(beRoasOverride) {
+  const slider      = document.getElementById('roas-slider');
+  const currentRoas = parseFloat(slider.value);
+  const beRoas      = beRoasOverride || parseFloat(slider.getAttribute('data-breakeven') || 0);
+  const sell        = parseFloat(slider.getAttribute('data-sell')  || 0);
+  const gross       = parseFloat(slider.getAttribute('data-gross') || 0);
+
+  document.getElementById('slider-display').textContent = currentRoas.toFixed(1);
+
+  const simResult = document.getElementById('simulator-result');
+  if (!sell || !gross || !beRoas) return;
+
+  const adSpend        = sell / currentRoas;
+  const netProfit      = gross - adSpend;
+  const netMarginPct   = (netProfit / sell) * 100;
+
+  if (currentRoas < beRoas - 0.05) {
+    simResult.className = 'status-bar loss';
+    simResult.innerHTML = `📉 ROAS ${currentRoas.toFixed(1)} — <strong>הפסד של ${Math.abs(netProfit).toFixed(2)} ₪ לכל מכירה</strong>. הוצאת ${adSpend.toFixed(2)} ₪ על פרסום אבל הרווח הגולמי שלך הוא רק ${gross.toFixed(2)} ₪`;
+  } else if (currentRoas <= beRoas + 0.1) {
+    simResult.className = 'status-bar breakeven';
+    simResult.innerHTML = `⚖️ ROAS ${currentRoas.toFixed(1)} — <strong>נקודת האיזון</strong>. הוצאות הפרסום (${adSpend.toFixed(2)} ₪) שוות בדיוק לרווח הגולמי (${gross.toFixed(2)} ₪)`;
+  } else {
+    simResult.className = 'status-bar profit';
+    simResult.innerHTML = `✅ ROAS ${currentRoas.toFixed(1)} — <strong>רווח נקי ${netProfit.toFixed(2)} ₪ לכל מכירה</strong> | ${netMarginPct.toFixed(1)}% שולי רווח נקיים אחרי פרסום`;
+  }
+}
+
+function calcMM() {
+  const sell = parseFloat(document.getElementById('mm-sell').value) || 0;
+  const cost = parseFloat(document.getElementById('mm-cost').value) || 0;
+  const empty = document.getElementById('mm-empty');
+  const results = document.getElementById('mm-results');
+
+  if (sell <= 0 || cost <= 0 || cost >= sell) {
+    empty.style.display = 'block';
+    results.style.display = 'none';
+    return;
+  }
+
+  const gross  = sell - cost;
+  const margin = (gross / sell) * 100;
+  const markup = (gross / cost) * 100;
+  const beRoas = sell / gross;
+
+  empty.style.display = 'none';
+  results.style.display = 'block';
+
+  document.getElementById('mm-formula-margin').textContent = `${gross.toFixed(2)} ÷ ${sell} = ${margin.toFixed(2)}%`;
+  document.getElementById('mm-formula-markup').textContent = `${gross.toFixed(2)} ÷ ${cost} = ${markup.toFixed(2)}%`;
+  document.getElementById('mm-margin-val').textContent  = margin.toFixed(1) + '%';
+  document.getElementById('mm-markup-val').textContent  = markup.toFixed(1) + '%';
+  document.getElementById('mm-margin-note').textContent = `Break-even ROAS = ${beRoas.toFixed(2)}`;
+
+  const diff = markup - margin;
+  document.getElementById('mm-explainer').innerHTML =
+    `מכרת ב-<strong>${sell}₪</strong>, קנית ב-<strong>${cost}₪</strong>, רווח גולמי: <strong>${gross.toFixed(2)}₪</strong>.<br>
+    Margin (לפרסום) = <strong>${margin.toFixed(1)}%</strong> &nbsp;|&nbsp; Markup (לתמחור) = <strong>${markup.toFixed(1)}%</strong>.<br>
+    ההפרש בין שני המספרים: <strong>${diff.toFixed(1)} נקודות אחוז</strong> — ככל ששולי הרווח נמוכים יותר, הפער גדל.`;
+}
+
+function scrollTo(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.nav-pill').forEach((p, i) => {
+    p.classList.remove('active');
+  });
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>
