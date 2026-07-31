@@ -366,9 +366,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             if (!email || !name) { alert('נא למלא אימייל ושם פרטי'); return; }
             if (!consent) { alert('יש לאשר קבלת דיוור אלקטרוני'); return; }
             btn.textContent = '⏳ שולח...'; btn.disabled = true;
-            fetch('https://script.google.com/macros/s/AKfycbzn04fzYK_VWD6217-l-CRaeyVsgNGfnsfzMwCNgwFnJQSMerq-PBGGzl4QaRbkSaeJ/exec', {
+
+            var sheetsPromise = fetch('https://script.google.com/macros/s/AKfycbzn04fzYK_VWD6217-l-CRaeyVsgNGfnsfzMwCNgwFnJQSMerq-PBGGzl4QaRbkSaeJ/exec', {
                 method: 'POST', body: JSON.stringify({ formType: 'newsletter', email: email, name: name, userType: userType || 'לא צוין', consent: 'אישר' })
-            })
+            });
+
+            var klaviyoPromise = fetch('https://a.klaviyo.com/client/subscriptions/?company_id=UXdTZZ', {
+                method: 'POST',
+                headers: { 'content-type': 'application/json', 'revision': '2023-12-15' },
+                body: JSON.stringify({
+                    data: {
+                        type: 'subscription',
+                        attributes: {
+                            profile: { data: { type: 'profile', attributes: { email: email, first_name: name, properties: { user_type: userType || 'לא צוין' } } } }
+                        },
+                        relationships: { list: { data: { type: 'list', id: 'VLFXq8' } } }
+                    }
+                })
+            });
+
+            Promise.all([sheetsPromise, klaviyoPromise])
             .then(function() {
                 btn.textContent = '✓ נרשמת בהצלחה!'; btn.style.background = '#2ecc71';
                 document.getElementById('nl-email').value = ''; document.getElementById('nl-name').value = '';
