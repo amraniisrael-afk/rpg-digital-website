@@ -668,20 +668,58 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         function handleSubmit(e) {
             e.preventDefault();
+            var btn = e.target.querySelector('.submit-btn');
+            var originalBtnHtml = btn.innerHTML;
+            btn.textContent = '⏳ שולח...';
+            btn.disabled = true;
+
+            var name = document.getElementById('contact-name').value.trim();
+            var business = document.getElementById('contact-business').value.trim();
+            var phone = document.getElementById('contact-phone').value.trim();
+            var email = document.getElementById('contact-email').value.trim();
+            var budget = document.getElementById('contact-budget').value.trim();
+            var message = document.getElementById('contact-message').value.trim();
+
+            var data = {
+                formType: 'contact',
+                name: name,
+                business: business,
+                phone: phone,
+                email: email,
+                budget: budget || 'לא צוין',
+                message: message,
+                consent: 'אישר',
+                consentTimestamp: new Date().toLocaleString('he-IL')
+            };
+
             // DataLayer: form submitted
             window.dataLayer = window.dataLayer || [];
             dataLayer.push({
                 event: 'form_submit',
                 form_id: 'contactForm',
+                business_name: business,
                 page_path: window.location.pathname
             });
-            document.getElementById('contactForm').style.display = 'none';
-            document.getElementById('successMsg').style.display = 'block';
-            // DataLayer: lead generated
-            dataLayer.push({
-                event: 'generate_lead',
-                form_id: 'contactForm',
-                page_path: window.location.pathname
+
+            fetch('https://script.google.com/macros/s/AKfycbzn04fzYK_VWD6217-l-CRaeyVsgNGfnsfzMwCNgwFnJQSMerq-PBGGzl4QaRbkSaeJ/exec', {
+                method: 'POST',
+                body: JSON.stringify(data)
+            })
+            .then(function () {
+                document.getElementById('contactForm').style.display = 'none';
+                document.getElementById('successMsg').style.display = 'block';
+                // DataLayer: lead generated
+                dataLayer.push({
+                    event: 'generate_lead',
+                    form_id: 'contactForm',
+                    business_name: business,
+                    page_path: window.location.pathname
+                });
+            })
+            .catch(function () {
+                btn.innerHTML = originalBtnHtml;
+                btn.disabled = false;
+                alert('אירעה שגיאה בשליחת הפנייה, נסו שוב או צרו קשר טלפונית.');
             });
         }
     </script>

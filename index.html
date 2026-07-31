@@ -1073,18 +1073,60 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
 
         .method-name {
-            display: inline-block;
+            display: block;
             font-size: clamp(28px, 3.5vw, 42px);
             font-weight: 900;
-            padding: 16px 50px;
+            padding: 20px 40px;
             border: 2px solid var(--teal);
             border-radius: 12px;
             margin: 30px 0;
             position: relative;
+            text-align: center;
         }
 
         .method-name .highlight {
             color: var(--teal);
+        }
+
+        .solution-tag-wrap {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .solution-split {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            margin-top: 20px;
+        }
+
+        .solution-text {
+            flex: 1;
+            text-align: right;
+        }
+
+        .solution-text .section-title {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+
+        .solution-puzzle {
+            flex: 0 0 auto;
+        }
+
+        .puzzle-img {
+            width: 420px;
+            max-width: 100%;
+            height: auto;
+            border-radius: 20px;
+            filter: drop-shadow(0 24px 60px rgba(255, 85, 0, 0.18));
+            transition: transform 0.4s ease, filter 0.4s ease;
+        }
+
+        .puzzle-img:hover {
+            transform: translateY(-6px);
+            filter: drop-shadow(0 32px 70px rgba(255, 85, 0, 0.28));
         }
 
         .method-pillars {
@@ -2742,6 +2784,58 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
             .solution-section::before {
                 display: none;
+            }
+
+            /* Solution mobile: H2 + puzzle side by side, rest full width below */
+            .solution-split {
+                flex-wrap: wrap;
+                flex-direction: row;
+                align-items: flex-start;
+                gap: 14px;
+            }
+
+            .solution-text {
+                flex: 1;
+                min-width: 0;
+                text-align: right;
+            }
+
+            .solution-text .section-title {
+                font-size: 20px;
+                line-height: 1.35;
+                margin-bottom: 14px;
+            }
+
+            /* Method-name: no border box on mobile, just clean text */
+            .method-name {
+                display: block;
+                border: none;
+                background: none;
+                font-size: 13px;
+                padding: 0;
+                margin: 0 0 10px;
+                text-align: right;
+                color: #fff;
+            }
+
+            .method-name span[dir="ltr"] {
+                white-space: nowrap;
+                font-size: 12px;
+            }
+
+            .solution-puzzle {
+                flex: 0 0 120px;
+            }
+
+            .puzzle-img {
+                width: 120px;
+                max-width: 120px;
+            }
+
+            .solution-text .section-subtitle {
+                font-size: 13px;
+                line-height: 1.6;
+                margin-top: 10px !important;
             }
 
             .offer-section::before {
@@ -5084,18 +5178,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- ========== THE SOLUTION (The New Way) ========== -->
     <section class="solution-section" id="solution">
         <div class="solution-container">
-            <div class="section-header reveal">
+
+            <div class="solution-tag-wrap reveal">
                 <div class="section-tag">השיטה שמשנה את הכללים</div>
-                <h2 class="section-title">למה אנחנו מצליחים<br>איפה שאחרים נכשלים?</h2>
             </div>
 
-            <div class="reveal">
-                <div class="method-name">
-                    שיטת <span class="highlight">RPG</span><br>Research. Performance. Growth.
+            <div class="solution-split">
+                <div class="solution-text reveal">
+                    <h2 class="section-title">למה אנחנו מצליחים<br>איפה שאחרים נכשלים?</h2>
+                    <div class="method-name">
+                        שיטת <span class="highlight">RPG</span><br><span dir="ltr">Research. Performance. Growth.</span>
+                    </div>
+                    <p class="section-subtitle" style="margin-top: 20px;">
+                        פרסום ממומן מבוסס דאטה הוא שיטת פרסום שבה כל החלטה — קהל, מסר, תקציב — מתקבלת על בסיס נתונים מדידים ולא על ניחושים. שלושה עמודים שהופכים פרסום ממומן ממשחק ניחושים למכונת צמיחה מדידה.
+                    </p>
                 </div>
-                <p class="section-subtitle" style="margin-top: 25px;">
-                    פרסום ממומן מבוסס דאטה הוא שיטת פרסום שבה כל החלטהקהל, מסר, תקציבמתקבלת על בסיס נתונים מדידים ולא על ניחושים. שלושה עמודים שהופכים פרסום ממומן ממשחק ניחושים למכונת צמיחה מדידה
-                </p>
+                <div class="solution-puzzle reveal" style="transition-delay: 0.15s;">
+                    <img src="תמונות לעמודה/bdde277f-1719-477b-b4f8-939b3db63ecc.webp" alt="שיטת RPG Digital — Strategy, Data, Creative, Execution, Optimization, CRM & Insights" class="puzzle-img" loading="lazy">
+                </div>
             </div>
 
             <div class="method-pillars">
@@ -6252,39 +6352,66 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         }
     }
 
-    /* ===== PAS STEP IMAGES ===== */
-    .pas-step {
-        text-align: center !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-    }
+    /* ===== PAS STEP IMAGES — GLOBAL (prevent natural-size overflow) ===== */
     .pas-step-icon {
         background: transparent !important;
         border-radius: 0 !important;
         overflow: visible !important;
-        width: 120px !important;
-        height: 120px !important;
+        width: 100px !important;
+        height: 100px !important;
         padding: 0 !important;
-        margin-bottom: 20px !important;
+        margin-bottom: 16px !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
     }
     .pas-step-img {
-        width: 120px !important;
-        height: 120px !important;
+        width: 100px !important;
+        height: 100px !important;
         object-fit: contain !important;
         display: block !important;
     }
-    .pas-step-label {
-        text-align: center !important;
-    }
-    .pas-step-header {
-        text-align: center !important;
-    }
-    .pas-step p {
-        text-align: center !important;
+
+    /* ===== PAS STEP IMAGES — MOBILE GRID ===== */
+    @media (max-width: 768px) {
+        .pas-step {
+            text-align: right !important;
+            display: grid !important;
+            grid-template-columns: 44px 1fr !important;
+            grid-template-rows: auto auto auto !important;
+            column-gap: 12px !important;
+            align-items: center !important;
+            padding: 18px 16px !important;
+        }
+        .pas-step-icon {
+            width: 44px !important;
+            height: 44px !important;
+            margin-bottom: 0 !important;
+            grid-column: 1 !important;
+            grid-row: 1 !important;
+        }
+        .pas-step-img {
+            width: 44px !important;
+            height: 44px !important;
+        }
+        .pas-step-label {
+            text-align: right !important;
+            grid-column: 2 !important;
+            grid-row: 1 !important;
+            margin-bottom: 0 !important;
+        }
+        .pas-step-header {
+            text-align: right !important;
+            grid-column: 1 / -1 !important;
+            grid-row: 2 !important;
+            margin-top: 8px !important;
+            margin-bottom: 4px !important;
+        }
+        .pas-step p {
+            text-align: right !important;
+            grid-column: 1 / -1 !important;
+            grid-row: 3 !important;
+        }
     }
 
     /* ===== PILLAR IMAGES ===== */
