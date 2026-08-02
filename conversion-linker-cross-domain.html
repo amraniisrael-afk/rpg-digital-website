@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conversion Linker — Tracking Between 2 Websites</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f1f5f9;
+  --surface: #ffffff;
+  --border: #e2e8f0;
+  --yellow: #FFC20E;
+  --blue: #003764;
+  --text: #1e293b;
+  --muted: #64748b;
+  --green: #059669;
+  --cyan: #0891b2;
+  --purple: #7c3aed;
+  --orange: #ea580c;
+  --red: #dc2626;
+}
+
+body {
+  font-family: 'Heebo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ── Header ── */
+.header {
+  background: var(--blue);
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 3px solid var(--yellow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.logo { font-size: 18px; font-weight: 900; color: #fff; }
+.logo span { color: var(--yellow); }
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,194,14,0.12);
+  border: 1px solid rgba(255,194,14,0.3);
+  color: var(--yellow);
+  font-family: 'Heebo', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 7px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.back-btn:hover { background: rgba(255,194,14,0.22); }
+
+/* ── Hero ── */
+.hero {
+  background: linear-gradient(135deg, #003764 0%, #001d38 100%);
+  padding: 48px 32px 40px;
+  text-align: center;
+  border-bottom: 1px solid #1e3a5f;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,194,14,0.12);
+  border: 1px solid rgba(255,194,14,0.3);
+  color: var(--yellow);
+  font-size: 12px;
+  font-weight: 800;
+  padding: 5px 16px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+  margin-bottom: 18px;
+}
+.hero h1 { font-size: 32px; font-weight: 900; color: #fff; margin-bottom: 12px; line-height: 1.25; }
+.hero h1 span { color: var(--yellow); }
+.hero p { font-size: 15px; color: #94a3b8; max-width: 640px; margin: 0 auto 28px; line-height: 1.7; }
+.hero-stats { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+.hero-stat { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px 24px; text-align: center; }
+.hero-stat-num { font-size: 22px; font-weight: 900; color: var(--yellow); }
+.hero-stat-label { font-size: 11px; color: #64748b; margin-top: 2px; font-weight: 600; }
+
+/* ── Section wrapper ── */
+.section-wrap {
+  max-width: 1000px;
+  margin: 40px auto 0;
+  padding: 0 32px;
+}
+.section-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-title::before {
+  content: '';
+  display: inline-block;
+  width: 3px; height: 14px;
+  background: var(--yellow);
+  border-radius: 2px;
+}
+
+/* ── Flow diagram ── */
+.flow-diagram {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 36px 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  overflow-x: auto;
+}
+.flow-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  min-width: 700px;
+}
+.flow-box {
+  background: #f8fafc;
+  border: 2px solid #94a3b8;
+  border-radius: 6px;
+  padding: 16px 20px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  min-width: 130px;
+  line-height: 1.4;
+  flex-shrink: 0;
+}
+.flow-box.highlight {
+  background: #fffbeb;
+  border-color: var(--yellow);
+  color: #78350f;
+}
+.flow-box.key {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  color: #1e40af;
+}
+.flow-arrow-big {
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+.flow-arrow-big svg { width: 32px; height: 20px; }
+
+/* ── Problem / solution boxes ── */
+.problem-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.problem-card {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-right: 3px solid var(--red);
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+.problem-card .pc-title { font-size: 13px; font-weight: 800; color: #b91c1c; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.problem-card .pc-body { font-size: 13px; color: #475569; line-height: 1.6; }
+.solution-card {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-right: 3px solid var(--green);
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+.solution-card .sc-title { font-size: 13px; font-weight: 800; color: #15803d; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.solution-card .sc-body { font-size: 13px; color: #475569; line-height: 1.6; }
+
+/* ── Browser mock-up (cookie inspector) ── */
+.browser-mock {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
+}
+.browser-bar {
+  background: #f1f5f9;
+  border-bottom: 1px solid var(--border);
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.browser-dots { display: flex; gap: 5px; }
+.browser-dots span { width: 10px; height: 10px; border-radius: 50%; }
+.dot-r { background: #ef4444; }
+.dot-y { background: #f59e0b; }
+.dot-g { background: #22c55e; }
+.browser-url {
+  flex: 1;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.browser-url .gclid-part { color: #dc2626; font-weight: 700; }
+
+.browser-tabs {
+  background: #f8fafc;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  padding: 0 8px;
+}
+.browser-tab {
+  padding: 8px 16px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  cursor: default;
+}
+.browser-tab.active { color: #1d4ed8; border-bottom-color: #1d4ed8; font-weight: 700; }
+
+.browser-body { display: flex; }
+
+.devtools-sidebar {
+  width: 180px;
+  border-left: 1px solid var(--border);
+  padding: 12px 0;
+  flex-shrink: 0;
+  background: #f8fafc;
+}
+.devtools-section { padding: 0 12px 8px; }
+.devtools-label { font-size: 10px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.devtools-item {
+  font-size: 11px;
+  color: #475569;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.devtools-item.active { background: #dbeafe; color: #1d4ed8; font-weight: 700; }
+.devtools-arrow { font-size: 9px; color: var(--muted); }
+
+.cookie-table-wrap { flex: 1; overflow-x: auto; }
+.cookie-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+.cookie-table thead tr { background: #f1f5f9; border-bottom: 1px solid var(--border); }
+.cookie-table th { padding: 6px 10px; text-align: left; font-weight: 700; color: var(--muted); white-space: nowrap; }
+.cookie-table td { padding: 6px 10px; border-bottom: 1px solid #f1f5f9; font-family: 'Courier New', monospace; font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px; }
+.cookie-table tr.highlight-row td { background: #fffbeb; }
+.cookie-table tr.highlight-row td:first-child { font-weight: 800; color: #92400e; }
+.cookie-table td.gcl-val { color: #dc2626; font-weight: 700; }
+
+.cookie-detail {
+  background: #f8fafc;
+  border-top: 1px solid var(--border);
+  padding: 10px 14px;
+  font-size: 11px;
+}
+.cookie-detail .cd-label { font-weight: 800; color: var(--muted); margin-bottom: 4px; }
+.cookie-detail .cd-val { font-family: 'Courier New', monospace; color: #dc2626; font-weight: 700; }
+
+/* ── GTM Tag mock-up ── */
+.gtm-mock {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
+}
+.gtm-mock-header {
+  background: #f8fafc;
+  border-bottom: 1px solid var(--border);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.gtm-mock-title { font-size: 15px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 8px; }
+.gtm-mock-title .gtm-icon { width: 20px; height: 20px; background: #1a73e8; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #fff; font-weight: 900; }
+.gtm-save-btn { background: #1a73e8; color: #fff; font-size: 12px; font-weight: 700; padding: 6px 20px; border-radius: 4px; border: none; cursor: default; }
+
+.gtm-mock-body { padding: 20px 24px; }
+.gtm-no-config { font-size: 13px; color: var(--muted); margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
+.gtm-section-label { font-size: 13px; font-weight: 800; color: var(--text); margin-bottom: 16px; }
+
+.gtm-option-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.gtm-checkbox {
+  width: 16px; height: 16px;
+  border: 2px solid #94a3b8;
+  border-radius: 3px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+.gtm-checkbox.checked {
+  background: #1a73e8;
+  border-color: #1a73e8;
+  color: #fff;
+}
+.gtm-option-label { font-size: 13px; color: var(--text); font-weight: 600; }
+.gtm-option-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+.gtm-field-row { margin-bottom: 14px; padding-right: 26px; }
+.gtm-field-label { font-size: 11px; font-weight: 700; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.3px; display: flex; align-items: center; gap: 4px; }
+.gtm-field-label .gtm-help { width: 14px; height: 14px; border-radius: 50%; border: 1px solid var(--muted); display: inline-flex; align-items: center; justify-content: center; font-size: 9px; color: var(--muted); }
+.gtm-input {
+  background: #f8fafc;
+  border: 1px solid #94a3b8;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-family: 'Courier New', monospace;
+  color: var(--text);
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.gtm-input .gtm-input-val { color: #1d4ed8; }
+.gtm-select {
+  background: #f8fafc;
+  border: 1px solid #94a3b8;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--text);
+  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.gtm-select-arrow { color: var(--muted); font-size: 10px; }
+
+.gtm-triggering {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 20px;
+}
+.gtm-triggering-label { font-size: 12px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+.gtm-trigger-item {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+.gtm-trigger-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; flex-shrink: 0; }
+.gtm-trigger-name { font-weight: 700; color: var(--text); }
+.gtm-trigger-type { font-size: 11px; color: var(--muted); }
+
+/* ── Steps ── */
+.steps-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 0 32px 80px;
+}
+.step-block {
+  position: relative;
+  display: flex;
+  gap: 0;
+  margin-bottom: 48px;
+}
+.step-block:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 23px;
+  top: 56px;
+  bottom: -24px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--yellow), var(--border));
+  opacity: 0.5;
+}
+.step-num-col { width: 48px; flex-shrink: 0; display: flex; align-items: flex-start; padding-top: 2px; }
+.step-circle { width: 48px; height: 48px; background: var(--yellow); color: #000; border-radius: 50%; font-size: 20px; font-weight: 900; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 4px rgba(255,194,14,0.15); }
+.step-content { flex: 1; margin-right: 24px; }
+.step-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+.step-title { font-size: 19px; font-weight: 900; color: var(--text); }
+.step-tag { font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: 20px; letter-spacing: 0.3px; white-space: nowrap; }
+.tag-gtm    { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+.tag-concept{ background: #fdf4ff; color: #7e22ce; border: 1px solid #e9d5ff; }
+.tag-verify { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+.tag-warn   { background: #fff7ed; color: #9a3412; border: 1px solid #fed7aa; }
+
+.step-desc { font-size: 14px; color: #475569; line-height: 1.75; margin-bottom: 18px; }
+
+.tip-box {
+  background: #f0fdf4; border: 1px solid #bbf7d0; border-right: 3px solid var(--green);
+  border-radius: 10px; padding: 14px 18px; font-size: 13px; color: #166534;
+  margin-bottom: 16px; line-height: 1.6; display: flex; gap: 10px;
+}
+.tip-box .tip-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.info-box {
+  background: #f0f9ff; border: 1px solid #bae6fd; border-right: 3px solid var(--cyan);
+  border-radius: 10px; padding: 14px 18px; font-size: 13px; color: #0c4a6e;
+  margin-bottom: 16px; line-height: 1.7;
+}
+.warn-box {
+  background: #fff7ed; border: 1px solid #fed7aa; border-right: 3px solid var(--orange);
+  border-radius: 10px; padding: 14px 18px; font-size: 13px; color: #7c2d12;
+  margin-bottom: 16px; line-height: 1.6; display: flex; gap: 10px;
+}
+.warn-box .warn-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+/* Config table */
+.config-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 18px; font-size: 13px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.config-table thead tr { background: #fffbeb; border-bottom: 1px solid var(--border); }
+.config-table th { padding: 10px 16px; text-align: right; font-size: 11px; font-weight: 800; color: #92400e; text-transform: uppercase; letter-spacing: 0.5px; }
+.config-table td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--text); font-weight: 500; }
+.config-table tr:last-child td { border-bottom: none; }
+.config-table td.mono-val { color: var(--cyan); font-family: 'Courier New', monospace; font-size: 12px; }
+.config-table tr:hover td { background: #f8fafc; }
+
+code { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px; padding: 1px 7px; font-family: 'Courier New', monospace; font-size: 12px; color: #0369a1; }
+
+/* Summary */
+.summary-card {
+  background: linear-gradient(135deg, #fffbeb, #eff6ff);
+  border: 1px solid #fde68a; border-radius: 16px; padding: 32px;
+  max-width: 1000px; margin: 0 auto 60px;
+}
+.summary-card h2 { font-size: 22px; font-weight: 900; color: var(--text); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.summary-steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
+.sum-step { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; display: flex; align-items: flex-start; gap: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.sum-num { width: 26px; height: 26px; background: var(--yellow); color: #000; border-radius: 50%; font-size: 12px; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.sum-text { font-size: 13px; color: #475569; font-weight: 600; line-height: 1.5; }
+
+@media (max-width: 640px) {
+  .hero h1 { font-size: 24px; }
+  .section-wrap, .steps-container { padding-right: 16px; padding-left: 16px; }
+  .summary-card { margin: 0 16px 40px; }
+  .problem-grid { grid-template-columns: 1fr; }
+  .browser-mock { font-size: 10px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="logo">RPG <span>Digital</span></div>
+  <a href="RPG-Hub.html" class="back-btn">← חזרה ל-Hub</a>
+</div>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-badge">🔗 GTM · Conversion Linker · Cross-Domain</div>
+  <h1>Tracking Between 2 Websites<br><span>With Conversion Linker</span></h1>
+  <p>כשגולש עובר בין שני אתרים שונים לפני המרה — הקוקי של ה-gclid נאבד. Conversion Linker מעביר אותו חצות ושומר את הייחוס לגוגל אדס</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-num">gclid</div><div class="hero-stat-label">הפרמטר המרכזי</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">_gcl_aw</div><div class="hero-stat-label">הקוקי שנוצר</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">2</div><div class="hero-stat-label">אתרים</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">GTM</div><div class="hero-stat-label">כלי ההגדרה</div></div>
+  </div>
+</div>
+
+<!-- Flow Diagram -->
+<div class="section-wrap">
+  <div class="section-title">איך Conversion Linker עובד — הפלואו המלא</div>
+  <div class="flow-diagram">
+    <div class="flow-row">
+      <div class="flow-box">Visitor clicks<br>a Google ad</div>
+      <div class="flow-arrow-big">
+        <svg viewBox="0 0 32 20" fill="none"><path d="M2 10 H26 M20 4 L28 10 L20 16" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="flow-box key">URL contains<br><strong>gclid=</strong></div>
+      <div class="flow-arrow-big">
+        <svg viewBox="0 0 32 20" fill="none"><path d="M2 10 H26 M20 4 L28 10 L20 16" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="flow-box highlight">Conversion Linker<br>creates a cookie</div>
+      <div class="flow-arrow-big">
+        <svg viewBox="0 0 32 20" fill="none"><path d="M2 10 H26 M20 4 L28 10 L20 16" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="flow-box">Visitor<br>converts</div>
+      <div class="flow-arrow-big">
+        <svg viewBox="0 0 32 20" fill="none"><path d="M2 10 H26 M20 4 L28 10 L20 16" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="flow-box key">Conversion tracked<br>with cookie's data</div>
+    </div>
+  </div>
+</div>
+
+<!-- Problem / Solution -->
+<div class="section-wrap" style="margin-top:24px">
+  <div class="section-title">הבעיה ופתרונה</div>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="pc-title">❌ הבעיה — ללא Conversion Linker</div>
+      <div class="pc-body">
+        גולש לוחץ על מודעה → מגיע לאתר A עם <code>?gclid=123</code> → עובר לאתר B (דף תשלום/צ'קאאוט) → הקוקי של gclid לא מועבר → גוגל <strong>מאבדת את הייחוס</strong> ולא יודעת שזו המרה מהמודעה.
+      </div>
+    </div>
+    <div class="solution-card">
+      <div class="sc-title">✅ הפתרון — עם Conversion Linker</div>
+      <div class="sc-body">
+        Conversion Linker ב-GTM של אתר A מוסיף את ה-gclid לכל לינק שמוביל לאתר B → אתר B מקבל גם הוא את ה-gclid ב-URL → יוצר קוקי <code>_gcl_aw</code> → ההמרה <strong>מיוחסת נכון</strong>.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cookie mock-up -->
+<div class="section-wrap" style="margin-top:24px">
+  <div class="section-title">איך נראה ה-Cookie ב-DevTools — Application Tab</div>
+  <div class="browser-mock">
+    <div class="browser-bar">
+      <div class="browser-dots">
+        <span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>
+      </div>
+      <div class="browser-url">
+        https://gtmplayground.com/?<span class="gclid-part">gclid=1234567890</span>&gtm_debug=1717578532457
+      </div>
+    </div>
+    <div class="browser-tabs">
+      <div class="browser-tab">Elements</div>
+      <div class="browser-tab">Console</div>
+      <div class="browser-tab">Network</div>
+      <div class="browser-tab active">Application</div>
+      <div class="browser-tab">Security</div>
+    </div>
+    <div class="browser-body">
+      <div class="devtools-sidebar">
+        <div class="devtools-section">
+          <div class="devtools-label">Storage</div>
+          <div class="devtools-item">📁 Local storage</div>
+          <div class="devtools-item">📁 Session storage</div>
+          <div class="devtools-item">🗄 IndexedDB</div>
+          <div class="devtools-item active">🍪 Cookies ▸</div>
+          <div class="devtools-item" style="padding-right:20px">🔗 https://gtmpla...</div>
+        </div>
+      </div>
+      <div class="cookie-table-wrap">
+        <table class="cookie-table">
+          <thead>
+            <tr>
+              <th>Name</th><th>Value</th><th>Domain</th><th>Path</th><th>Expires</th><th>Size</th><th>HttpOnly</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>_ga</td><td>GA1.1.557681859...</td><td>.gtmplayground.com</td><td>/</td><td>2025-...</td><td>29</td><td></td></tr>
+            <tr><td>_ga_ENQM2MB206</td><td>GS1.1717107157...</td><td>.gtmplayground.com</td><td>/</td><td>2025-...</td><td>51</td><td></td></tr>
+            <tr><td>_gcl_au</td><td>1.1.4164972581...</td><td>.gtmplayground.com</td><td>/</td><td>2024-...</td><td>31</td><td></td></tr>
+            <tr class="highlight-row">
+              <td>_gcl_aw</td>
+              <td class="gcl-val">GCL.1717578535.1234567890</td>
+              <td>.gtmplayground.com</td><td>/</td><td>2024-...</td><td>32</td><td></td>
+            </tr>
+            <tr><td>bid_1_password_pr...</td><td>bid_1%C1718185...</td><td>.gtmplayground.com</td><td>/</td><td>Session</td><td>82</td><td>✓</td></tr>
+          </tbody>
+        </table>
+        <div class="cookie-detail">
+          <div class="cd-label">Cookie Value — _gcl_aw</div>
+          <div class="cd-val">GCL.1717578535.1234567890</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="info-box">
+    <strong>מה רואים כאן:</strong> לאחר שגוגל לחץ על המודעה עם <code>gclid=1234567890</code> — Conversion Linker יצר קוקי <code>_gcl_aw</code> עם הערך <code>GCL.timestamp.gclid</code>. זה הקוקי שגוגל תשתמש בו בעת ההמרה לייחוס נכון.
+  </div>
+</div>
+
+<!-- Steps -->
+<div class="steps-container">
+
+  <!-- STEP 1 -->
+  <div class="step-block">
+    <div class="step-num-col"><div class="step-circle">1</div></div>
+    <div class="step-content">
+      <div class="step-header">
+        <div class="step-title">צור תג Conversion Linker ב-GTM של אתר A</div>
+        <span class="step-tag tag-gtm">GTM — אתר A</span>
+      </div>
+      <p class="step-desc">
+        ב-GTM Container של האתר <strong>שממנו</strong> הגולש מגיע (אתר A) — צור תג חדש מסוג <strong>Conversion Linker</strong>.
+        אין צורך בהגדרה מיוחדת לתג הבסיסי — הוא פועל אוטומטית.
+      </p>
+
+      <!-- GTM Mock -->
+      <div class="gtm-mock">
+        <div class="gtm-mock-header">
+          <div class="gtm-mock-title">
+            <div class="gtm-icon">G</div>
+            Conversion Linker
+          </div>
+          <button class="gtm-save-btn">Save</button>
+        </div>
+        <div class="gtm-mock-body">
+          <div class="gtm-no-config">No configuration required. <span style="color:#1a73e8; cursor:default;">Learn more.</span></div>
+
+          <div class="gtm-section-label">Linker Options</div>
+
+          <div class="gtm-option-row">
+            <div class="gtm-checkbox"></div>
+            <div><div class="gtm-option-label">Enable linking on all page URLs</div></div>
+          </div>
+
+          <div class="gtm-option-row">
+            <div class="gtm-checkbox checked">✓</div>
+            <div>
+              <div class="gtm-option-label">Enable linking across domains</div>
+            </div>
+          </div>
+
+          <div class="gtm-field-row">
+            <div class="gtm-field-label">Auto Link Domains <span class="gtm-help">?</span></div>
+            <div class="gtm-input">
+              <span class="gtm-input-val">s1.com,gtmcourse.myshopify.com</span>
+              <span>🗓</span>
+            </div>
+          </div>
+
+          <div class="gtm-field-row">
+            <div class="gtm-field-label">Decorate Forms</div>
+            <div class="gtm-select">False <span class="gtm-select-arrow">▼</span></div>
+          </div>
+
+          <div class="gtm-field-row">
+            <div class="gtm-field-label">URL Position <span class="gtm-help">?</span></div>
+            <div class="gtm-select">Query Parameter <span class="gtm-select-arrow">▼</span></div>
+          </div>
+
+          <div class="gtm-option-row">
+            <div class="gtm-checkbox checked">✓</div>
+            <div><div class="gtm-option-label">Accept incoming linker parameters</div></div>
+          </div>
+
+          <div class="gtm-option-row">
+            <div class="gtm-checkbox"></div>
+            <div><div class="gtm-option-label">Override cookie settings (advanced)</div></div>
+          </div>
+
+          <div class="gtm-triggering">
+            <div class="gtm-triggering-label">Triggering — Firing Triggers</div>
+            <div class="gtm-trigger-item">
+              <div class="gtm-trigger-dot"></div>
+              <div>
+                <div class="gtm-trigger-name">All Pages</div>
+                <div class="gtm-trigger-type">Page View</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <span class="tip-icon">💡</span>
+        <span>
+          <strong>Auto Link Domains</strong> — רשימת הדומיינים של אתר B (מופרדים בפסיק). כך GTM יוסיף את ה-gclid לכל לינק שמוביל לאתרים האלה.
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step-block">
+    <div class="step-num-col"><div class="step-circle">2</div></div>
+    <div class="step-content">
+      <div class="step-header">
+        <div class="step-title">הגדר את שדות Linker Options בדיוק</div>
+        <span class="step-tag tag-gtm">הגדרת שדות</span>
+      </div>
+      <p class="step-desc">
+        כל שדה בתג משפיע על איך ה-gclid מועבר בין האתרים. להלן הסבר לכל שדה:
+      </p>
+
+      <table class="config-table">
+        <thead><tr><th>שדה</th><th>ערך מומלץ</th><th>הסבר</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Enable linking on all page URLs</td>
+            <td class="mono-val">❌ לא מסומן</td>
+            <td>מוסיף gclid לכל URL באתר — לא נחוץ בד"כ</td>
+          </tr>
+          <tr>
+            <td>Enable linking across domains</td>
+            <td class="mono-val">✅ מסומן</td>
+            <td>מאפשר העברת gclid בין דומיינים שונים</td>
+          </tr>
+          <tr>
+            <td>Auto Link Domains</td>
+            <td class="mono-val">site-b.com,checkout.com</td>
+            <td>רשימת דומיינים של אתר B — מופרדים בפסיק</td>
+          </tr>
+          <tr>
+            <td>Decorate Forms</td>
+            <td class="mono-val">False</td>
+            <td>True רק אם עוברים דרך Form submission</td>
+          </tr>
+          <tr>
+            <td>URL Position</td>
+            <td class="mono-val">Query Parameter</td>
+            <td>מוסיף gclid כ-?gclid= ב-URL (סטנדרט)</td>
+          </tr>
+          <tr>
+            <td>Accept incoming linker parameters</td>
+            <td class="mono-val">✅ מסומן</td>
+            <td>על אתר B לאשר קבלת הפרמטרים מאתר A</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="warn-box">
+        <span class="warn-icon">⚠️</span>
+        <span><strong>Fragment vs Query:</strong> URL Position = Query Parameter שולח <code>?gclid=123</code>. Fragment שולח <code>#gclid=123</code> — Fragment לא נשלח לשרת ולא נקרא ב-Server Side. בד"כ Query Parameter הוא הבחירה הנכונה.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step-block">
+    <div class="step-num-col"><div class="step-circle">3</div></div>
+    <div class="step-content">
+      <div class="step-header">
+        <div class="step-title">הוסף Conversion Linker גם ב-GTM של אתר B</div>
+        <span class="step-tag tag-gtm">GTM — אתר B</span>
+      </div>
+      <p class="step-desc">
+        לא מספיק להגדיר רק באתר A. אתר B חייב גם הוא Conversion Linker עם <strong>"Accept incoming linker parameters"</strong> מסומן — כדי לקרוא את ה-gclid שהגיע ב-URL וליצור ממנו קוקי <code>_gcl_aw</code>.
+      </p>
+
+      <table class="config-table">
+        <thead><tr><th>שדה</th><th>אתר A (שולח)</th><th>אתר B (מקבל)</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Enable linking across domains</td>
+            <td class="mono-val">✅ חובה</td>
+            <td class="mono-val">אופציונלי</td>
+          </tr>
+          <tr>
+            <td>Auto Link Domains</td>
+            <td class="mono-val">domain-b.com</td>
+            <td class="mono-val">domain-a.com (אם דו-כיווני)</td>
+          </tr>
+          <tr>
+            <td>Accept incoming linker parameters</td>
+            <td class="mono-val">אופציונלי</td>
+            <td class="mono-val">✅ חובה</td>
+          </tr>
+          <tr>
+            <td>Trigger</td>
+            <td class="mono-val">All Pages</td>
+            <td class="mono-val">All Pages</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="info-box">
+        <strong>הלוגיקה:</strong> אתר A <em>מוסיף</em> את ה-gclid ל-URL → אתר B <em>קורא</em> אותו ו<em>יוצר</em> קוקי <code>_gcl_aw</code> → תג ה-Conversion Tracking באתר B קורא את הקוקי → ההמרה מיוחסת נכון.
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step-block">
+    <div class="step-num-col"><div class="step-circle">4</div></div>
+    <div class="step-content">
+      <div class="step-header">
+        <div class="step-title">בדוק שהקוקי _gcl_aw נוצר — DevTools Application</div>
+        <span class="step-tag tag-verify">בדיקה</span>
+      </div>
+      <p class="step-desc">
+        לחץ על מודעת גוגל (או הוסף <code>?gclid=TEST123</code> ל-URL ידנית) → פתח DevTools → Application → Cookies → חפש <code>_gcl_aw</code>.
+      </p>
+
+      <div class="tip-box">
+        <span class="tip-icon">✅</span>
+        <span>
+          <strong>מה לבדוק:</strong><br>
+          • קוקי <code>_gcl_aw</code> קיים = Conversion Linker עובד<br>
+          • ערכו: <code>GCL.&lt;timestamp&gt;.&lt;gclid&gt;</code> — גלה את ה-gclid המקורי מה-URL<br>
+          • הדומיין: <code>.yourdomain.com</code> (עם נקודה = כל subdomain)<br>
+          • Expires: ~90 יום מתאריך הקליק
+        </span>
+      </div>
+
+      <div class="warn-box">
+        <span class="warn-icon">⚠️</span>
+        <span>אם <code>_gcl_aw</code> לא קיים — בדוק: (1) Conversion Linker נפרס ב-GTM? (2) הטריגר = All Pages? (3) ה-URL מכיל gclid?</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="step-block">
+    <div class="step-num-col"><div class="step-circle">5</div></div>
+    <div class="step-content">
+      <div class="step-header">
+        <div class="step-title">בדוק שה-gclid עובר בלינקים בין האתרים</div>
+        <span class="step-tag tag-verify">בדיקה מתקדמת</span>
+      </div>
+      <p class="step-desc">
+        לחץ על לינק שמוביל מאתר A לאתר B → בדוק את ה-URL של אתר B — הוא חייב להכיל <code>?gclid=</code> (או כ-Query Parameter בסוף).
+      </p>
+
+      <div class="info-box">
+        <strong>URL תקין באתר B ייראה כך:</strong><br>
+        <code>https://site-b.com/checkout?gclid=1234567890&amp;gclsrc=aw.ds</code><br><br>
+        הפרמטר <code>gclsrc=aw.ds</code> מאשר שהמקור הוא Google Ads (aw = AdWords, ds = DoubleClick Search).
+      </div>
+
+      <div class="tip-box">
+        <span class="tip-icon">💡</span>
+        <span>אפשר לבדוק ב-GTM Preview של אתר B: פתח Debug → בדוק אם הטריגר של Conversion Linker יורה → ב-Variables תראה <code>gclid</code> עם ערך אמיתי.</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Summary -->
+<div class="summary-card" style="margin: 0 32px 60px; max-width:1000px; margin-left:auto; margin-right:auto;">
+  <h2>🔗 סיכום — Conversion Linker בין 2 אתרים</h2>
+  <div class="summary-steps">
+    <div class="sum-step"><div class="sum-num">1</div><div class="sum-text">צור תג Conversion Linker ב-GTM של אתר A עם Auto Link Domains</div></div>
+    <div class="sum-step"><div class="sum-num">2</div><div class="sum-text">Enable linking across domains ✅ — רשום את דומיין אתר B</div></div>
+    <div class="sum-step"><div class="sum-num">3</div><div class="sum-text">הוסף Conversion Linker ב-GTM של אתר B עם Accept incoming ✅</div></div>
+    <div class="sum-step"><div class="sum-num">4</div><div class="sum-text">בדוק שהקוקי <code>_gcl_aw</code> נוצר ב-DevTools → Application → Cookies</div></div>
+    <div class="sum-step"><div class="sum-num">5</div><div class="sum-text">וודא שה-gclid מופיע ב-URL של אתר B בעת מעבר בין האתרים</div></div>
+  </div>
+</div>
+
+</body>
+</html>

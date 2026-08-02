@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>מדריך אינטראקטיבי: Customer Lifecycle Optimization ו-Value Rules ב-Google Ads</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #17212b;
+      --muted: #5f6b7a;
+      --line: #dce3ec;
+      --primary: #1a73e8;
+      --primary-dark: #1558b0;
+      --soft-blue: #e8f0fe;
+      --green: #12805c;
+      --soft-green: #e7f5ef;
+      --orange: #b45f06;
+      --soft-orange: #fff4e5;
+      --red: #b3261e;
+      --soft-red: #fce8e6;
+      --purple: #6f42c1;
+      --soft-purple: #f0e7ff;
+      --shadow: 0 10px 30px rgba(20, 35, 55, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    a { color: var(--primary); }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #13294b, #1a73e8);
+      color: white;
+      padding: 34px;
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+      margin-bottom: 22px;
+    }
+
+    header h1 {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.15;
+    }
+
+    header p {
+      margin: 0;
+      max-width: 840px;
+      color: rgba(255,255,255,0.88);
+      font-size: 18px;
+    }
+
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    button, .button-like {
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 16px;
+      cursor: pointer;
+      font-weight: 700;
+      background: var(--primary);
+      color: white;
+      transition: transform .15s ease, background .15s ease, opacity .15s ease;
+      font-size: 14px;
+    }
+
+    button:hover, .button-like:hover {
+      transform: translateY(-1px);
+      background: var(--primary-dark);
+    }
+
+    button.secondary {
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.34);
+    }
+
+    button.secondary:hover { background: rgba(255,255,255,0.24); }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    nav {
+      position: sticky;
+      top: 16px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 14px;
+    }
+
+    nav h3 {
+      margin: 0 0 10px;
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    nav a {
+      display: block;
+      text-decoration: none;
+      color: var(--text);
+      padding: 9px 10px;
+      border-radius: 12px;
+      font-size: 14px;
+    }
+
+    nav a:hover, nav a.active {
+      background: var(--soft-blue);
+      color: var(--primary-dark);
+    }
+
+    main { min-width: 0; }
+
+    section {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 28px;
+      line-height: 1.25;
+    }
+
+    h3 {
+      margin: 24px 0 8px;
+      font-size: 20px;
+    }
+
+    p { margin: 8px 0; }
+
+    .muted { color: var(--muted); }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    .mini-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      background: #fff;
+    }
+
+    .mini-card h4 {
+      margin: 0 0 8px;
+      font-size: 17px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: 999px;
+      margin: 3px 3px 6px 0;
+      background: var(--soft-blue);
+      color: var(--primary-dark);
+    }
+
+    .tag.green { background: var(--soft-green); color: var(--green); }
+    .tag.orange { background: var(--soft-orange); color: var(--orange); }
+    .tag.red { background: var(--soft-red); color: var(--red); }
+    .tag.purple { background: var(--soft-purple); color: var(--purple); }
+
+    .note {
+      padding: 14px 16px;
+      border-radius: 15px;
+      border: 1px solid var(--line);
+      margin: 14px 0;
+      background: var(--soft-blue);
+    }
+
+    .warning {
+      background: var(--soft-red);
+      border-color: #f4b4ae;
+    }
+
+    .success {
+      background: var(--soft-green);
+      border-color: #b8dfce;
+    }
+
+    .formula {
+      direction: ltr;
+      text-align: left;
+      background: #0f172a;
+      color: #e7eefc;
+      padding: 16px;
+      border-radius: 16px;
+      overflow-x: auto;
+      font-family: Consolas, Monaco, monospace;
+      margin: 14px 0;
+    }
+
+    details {
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      margin: 10px 0;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    summary {
+      cursor: pointer;
+      padding: 14px 16px;
+      font-weight: 700;
+      background: #fbfcfe;
+    }
+
+    details .details-body {
+      padding: 0 16px 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 14px 0;
+    }
+
+    .tab {
+      background: #edf2f7;
+      color: #243447;
+    }
+
+    .tab.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .scenario-box {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      background: #fbfcfe;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      margin: 12px 0 6px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #c9d4e2;
+      border-radius: 12px;
+      font-size: 15px;
+      background: white;
+    }
+
+    .calc-result {
+      margin-top: 14px;
+      padding: 16px;
+      border-radius: 16px;
+      background: var(--soft-blue);
+      font-weight: 700;
+    }
+
+    .small {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      margin: 14px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 780px;
+      background: white;
+    }
+
+    th, td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: right;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f4f7fb;
+      color: #2c3a4b;
+      font-size: 14px;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .checklist label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-weight: 400;
+      margin: 10px 0;
+      cursor: pointer;
+    }
+
+    .checklist input {
+      width: auto;
+      margin-top: 6px;
+    }
+
+    .progress {
+      height: 12px;
+      background: #e5eaf1;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: var(--green);
+      transition: width .2s ease;
+    }
+
+    .quiz-question {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      margin: 12px 0;
+    }
+
+    .quiz-options button {
+      margin: 5px;
+      background: #edf2f7;
+      color: #17212b;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+
+    .quiz-options button.correct { background: var(--soft-green); color: var(--green); }
+    .quiz-options button.wrong { background: var(--soft-red); color: var(--red); }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 24px;
+    }
+
+    @media (max-width: 920px) {
+      .layout { grid-template-columns: 1fr; }
+      nav { position: static; }
+      .grid.two, .grid.three { grid-template-columns: 1fr; }
+      header { padding: 24px; }
+      .page { padding: 14px; }
+    }
+
+    @media print {
+      body { background: white; }
+      nav, .top-actions, .tabs, .quiz-options button, .footer { display: none !important; }
+      section, header { box-shadow: none; break-inside: avoid; }
+      .tab-panel { display: block !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>מדריך הפעלה אינטראקטיבי: Customer Lifecycle Optimization ו־Value Rules</h1>
+      <p>מדריך פרקטי להבנת ההגדרות שדיברנו עליהן ב־Google Ads: לקוחות חדשים, לקוחות חדשים בעלי ערך גבוה, לקוחות רדומים, לקוחות רדומים בעלי ערך גבוה וכללי ערך המרה.</p>
+      <div class="top-actions">
+        <button onclick="window.print()">הדפס / שמור כ־PDF</button>
+        <button class="secondary" onclick="expandAll()">פתח את כל ההסברים</button>
+        <button class="secondary" onclick="collapseAll()">סגור את כל ההסברים</button>
+      </div>
+    </header>
+
+    <div class="layout">
+      <nav>
+        <h3>ניווט מהיר</h3>
+        <a href="#overview">תמונה כללית</a>
+        <a href="#core-formula">הלוגיקה של הבידינג</a>
+        <a href="#new-customers">New customers</a>
+        <a href="#new-high-value">New customers high value</a>
+        <a href="#lapsed">Lapsed customers</a>
+        <a href="#lapsed-high-value">Lapsed high value</a>
+        <a href="#segments">בניית קהלים נכונה</a>
+        <a href="#value-rules">Value Rules</a>
+        <a href="#calculator">סימולטור ערך</a>
+        <a href="#decision">עץ החלטה</a>
+        <a href="#checklist">צ׳קליסט הפעלה</a>
+        <a href="#quiz">בדיקת הבנה</a>
+      </nav>
+
+      <main>
+        <section id="overview">
+          <h2>1. התמונה הכללית</h2>
+          <p>ההגדרות שדיברנו עליהן לא משנות את המוצר, המחיר או ההכנסה האמיתית שלך. הן משנות את <strong>הערך ש־Google Ads רואה לצורכי אופטימיזציה ובידינג</strong>.</p>
+          <div class="grid two">
+            <div class="mini-card">
+              <h4>Customer Lifecycle Optimization</h4>
+              <p>עוסק בזהות הלקוח ביחס לעסק: חדש, קיים, רדום, איכותי או שילוב שלהם.</p>
+              <span class="tag">לקוח חדש</span><span class="tag orange">לקוח רדום</span><span class="tag purple">High value</span>
+            </div>
+            <div class="mini-card">
+              <h4>Value Rules</h4>
+              <p>עוסק בתנאים שבהם המרה מסוימת שווה יותר או פחות: מיקום, מכשיר, קהל וכדומה.</p>
+              <span class="tag green">Location</span><span class="tag green">Device</span><span class="tag green">Audience</span>
+            </div>
+          </div>
+          <div class="note">
+            <strong>העיקרון המרכזי:</strong> אתה לא “מטרגט” ישירות דרך ההגדרות האלה. אתה משנה את הערך שהמערכת רואה, וכך משפיע על האופן שבו Smart Bidding מקצה תקציב ובידים.
+          </div>
+        </section>
+
+        <section id="core-formula">
+          <h2>2. הלוגיקה של הבידינג — החידוד החשוב</h2>
+          <p>החידוד החשוב שעלה בשיחה: תוספת ערך ללקוח חדש או רדום לא אומרת שכל משתמש מקבל בוסט מלא ללא קשר לכוונת קנייה. גוגל עדיין מעריכה הסתברות להמרה.</p>
+          <div class="formula">Expected bidding value ≈ Probability to convert × (Expected order value + Incremental customer value)</div>
+          <p>כלומר: אם למשתמש אין כמעט כוונת רכישה, גם אם הוא “חדש”, הערך הצפוי שלו עדיין יכול להיות נמוך.</p>
+          <div class="grid two">
+            <div class="mini-card">
+              <h4>משתמש עם סבירות גבוהה</h4>
+              <p>צפי רכישה: 300 ₪</p>
+              <p>תוספת לקוח חדש: 500 ₪</p>
+              <p>סיכוי המרה: 10%</p>
+              <p><strong>ערך צפוי: 80 ₪</strong></p>
+            </div>
+            <div class="mini-card">
+              <h4>משתמש עם סבירות נמוכה</h4>
+              <p>צפי רכישה: 300 ₪</p>
+              <p>תוספת לקוח חדש: 500 ₪</p>
+              <p>סיכוי המרה: 0.2%</p>
+              <p><strong>ערך צפוי: 1.6 ₪</strong></p>
+            </div>
+          </div>
+          <div class="note warning">
+            <strong>ניסוח חד:</strong> ה־New Customer Value לא מייצר כוונת קנייה. הוא מנפח את הערך של כוונת קנייה קיימת כאשר גוגל מעריכה שמדובר בסוג הלקוח שהגדרת.
+          </div>
+        </section>
+
+        <section id="new-customers">
+          <h2>3. New customers — לקוחות חדשים רגילים</h2>
+          <p>כאן אתה אומר לגוגל: <strong>לקוח חדש שווה לי יותר מלקוח קיים</strong>.</p>
+          <details open>
+            <summary>מה עושה השדה “Add an incremental conversion value for new customers”?</summary>
+            <div class="details-body">
+              <p>זהו סכום תוספתי שאתה מוסיף לערך ההמרה של לקוח חדש. לדוגמה: אם רכישה שווה 300 ₪ והגדרת תוספת של 200 ₪, גוגל יכולה להתייחס להמרה של לקוח חדש כאילו היא שווה 500 ₪ לצורכי בידינג.</p>
+              <p>זה לא אומר שהלקוח שילם יותר. זה משנה את הערך במערכת לצורכי אופטימיזציה.</p>
+            </div>
+          </details>
+          <details>
+            <summary>למה צריך להוסיף Audience segments של לקוחות קיימים?</summary>
+            <div class="details-body">
+              <p>כדי לזהות מי לקוח חדש, גוגל צריכה להבין מי כבר לקוח קיים. לכן מוסיפים קהלים כמו כל הרוכשים, לקוחות CRM, Customer Match, Purchasers מ־GA4 ועוד.</p>
+              <p>בלי רשימות טובות, לקוח קיים עלול להיות מזוהה בטעות כלקוח חדש.</p>
+            </div>
+          </details>
+          <div class="note success">
+            מתאים כאשר מטרת העל היא להגדיל את כמות הלקוחות החדשים, ויש לך דאטה מספיק אמין על לקוחות קיימים.
+          </div>
+        </section>
+
+        <section id="new-high-value">
+          <h2>4. New customers (high value) — לקוחות חדשים בעלי ערך גבוה</h2>
+          <p>כאן אתה לא אומר רק “תביא לי לקוחות חדשים”, אלא: <strong>תביא לי לקוחות חדשים שדומים ללקוחות הכי איכותיים שלי</strong>.</p>
+          <div class="grid two">
+            <div class="mini-card">
+              <h4>New customers רגיל</h4>
+              <p>מעדיף לקוחות חדשים על פני לקוחות קיימים.</p>
+              <span class="tag">כמות לקוחות חדשים</span>
+            </div>
+            <div class="mini-card">
+              <h4>New customers high value</h4>
+              <p>מעדיף לקוחות חדשים שיש להם פוטנציאל להיות איכותיים יותר.</p>
+              <span class="tag purple">איכות לקוחות חדשים</span>
+            </div>
+          </div>
+          <details open>
+            <summary>איזה קהל מוסיפים כאן?</summary>
+            <div class="details-body">
+              <p>כאן מוסיפים קהל של <strong>לקוחות קיימים בעלי ערך גבוה</strong>. לדוגמה: לקוחות שקנו 2+ פעמים, לקוחות עם LTV גבוה, לקוחות עם סל קנייה גבוה, לקוחות שקנו מוצרים רווחיים או לקוחות VIP.</p>
+              <p>הקהל הזה משמש כ־reference point: כך נראה לקוח איכותי אצל העסק שלי.</p>
+            </div>
+          </details>
+          <div class="note warning">
+            לא להפעיל רק כי האפשרות קיימת. אם אין קהל High Value מספיק גדול ונקי, המערכת עלולה לקבל סיגנל חלש או מטעה.
+          </div>
+        </section>
+
+        <section id="lapsed">
+          <h2>5. Lapsed customers — לקוחות רדומים</h2>
+          <p>כאן המטרה היא להחזיר לקוחות שקנו או היו פעילים בעבר, אבל לא פעילים עכשיו.</p>
+          <details open>
+            <summary>מה זה לקוח רדום?</summary>
+            <div class="details-body">
+              <p>לקוח רדום הוא לקוח שהיה איתך בעבר אבל נעלם: קנה לפני 180 יום ולא חזר, היה לקוח קבוע והפסיק, או נמצא ב־CRM אבל לא ביצע פעילות לאחרונה.</p>
+            </div>
+          </details>
+          <details>
+            <summary>מה עושה “Add an incremental conversion value for lapsed customers”?</summary>
+            <div class="details-body">
+              <p>אתה מוסיף ערך תוספתי להמרה של לקוח רדום שחזר. לדוגמה: רכישה של 300 ₪ + תוספת 150 ₪ = גוגל תראה 450 ₪ לצורכי בידינג.</p>
+            </div>
+          </details>
+          <details>
+            <summary>איך גוגל יודעת שזה לקוח רדום?</summary>
+            <div class="details-body">
+              <p>במסך הזה אתה אמור להגיד לה: להוסיף קהל שמוגדר מראש כלקוחות רדומים. לדוגמה: כל מי שקנה בעבר אבל לא קנה ב־180 הימים האחרונים.</p>
+              <p>אפשר לבנות את הקהל דרך Shopify/CRM, Customer Match, GA4 Audience או רשימות לקוחות.</p>
+            </div>
+          </details>
+          <div class="note">
+            לפי המסכים שדיברנו עליהם, Retention/Lapsed נתמך בעיקר ב־Performance Max.
+          </div>
+        </section>
+
+        <section id="lapsed-high-value">
+          <h2>6. Lapsed customers (high value) — לקוחות רדומים בעלי ערך גבוה</h2>
+          <p>כאן המטרה היא לא להחזיר כל לקוח רדום, אלא להחזיר לקוחות עבר שהיו איכותיים במיוחד.</p>
+          <div class="grid two">
+            <div class="mini-card">
+              <h4>Lapsed רגיל</h4>
+              <p>כל מי שקנה בעבר ולא קנה לאחרונה.</p>
+              <span class="tag orange">החזרת לקוחות רדומים</span>
+            </div>
+            <div class="mini-card">
+              <h4>Lapsed high value</h4>
+              <p>לקוחות איכותיים בעבר שלא קנו הרבה זמן.</p>
+              <span class="tag purple">החזרת רדומים איכותיים</span>
+            </div>
+          </div>
+          <details open>
+            <summary>החידוד מהשיחה: אם מוסיפים High Value Customers, איך גוגל יודעת מי רדום?</summary>
+            <div class="details-body">
+              <p>קהל High Value לבדו לא בהכרח מגדיר מי רדום. הוא מלמד את גוגל מי איכותי. כדי לזהות רדומים צריך קהל/סיגנל נוסף שמראה פעילות היסטורית והיעדר פעילות אחרונה.</p>
+              <p>ההגדרה המקצועית הטובה היא לבנות קהל ספציפי כמו: <strong>High-value lapsed customers = לקוחות עם LTV גבוה שלא קנו 180 יום</strong>.</p>
+            </div>
+          </details>
+          <div class="note warning">
+            הסיכון: לשלם יותר מדי כדי להחזיר לקוחות שלא באמת שווים את זה. לכן קהל High-value lapsed חייב להיות נקי ומבוסס על ערך עסקי אמיתי.
+          </div>
+        </section>
+
+        <section id="segments">
+          <h2>7. בניית קהלים נכונה — המבנה המומלץ</h2>
+          <p>ככל שהקהלים יותר נקיים, כך האופטימיזציה פחות “מנחשת”. ההמלצה היא לבנות כמה שכבות קהלים ולא קהל אחד כללי.</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>קהל</th>
+                  <th>הגדרה מומלצת</th>
+                  <th>שימוש</th>
+                  <th>טעות נפוצה</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>All customers</td>
+                  <td>כל מי שקנה אי פעם</td>
+                  <td>עוזר להבדיל בין חדש לקיים</td>
+                  <td>לא לעדכן את הרשימה באופן שוטף</td>
+                </tr>
+                <tr>
+                  <td>Recent customers</td>
+                  <td>קנו ב־30/90/180 ימים אחרונים</td>
+                  <td>זיהוי לקוחות פעילים</td>
+                  <td>להגדיר חלון קצר מדי ביחס למחזור הרכישה</td>
+                </tr>
+                <tr>
+                  <td>Lapsed customers</td>
+                  <td>קנו בעבר אבל לא קנו ב־X ימים</td>
+                  <td>Retention / Re-engagement</td>
+                  <td>לכלול לקוחות שקנו ממש לאחרונה</td>
+                </tr>
+                <tr>
+                  <td>High-value customers</td>
+                  <td>2+ רכישות, LTV גבוה, AOV גבוה או VIP</td>
+                  <td>איתות לאיכות לקוח</td>
+                  <td>להגדיר High Value לפי תחושה ולא לפי דאטה</td>
+                </tr>
+                <tr>
+                  <td>High-value lapsed</td>
+                  <td>לקוחות איכותיים שלא קנו תקופה ארוכה</td>
+                  <td>החזרת לקוחות רדומים איכותיים</td>
+                  <td>לבלבל בין “איכותי” לבין “רדום”</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="note success">
+            מבנה מינימלי טוב להתחלה: All customers + Recent customers + Lapsed customers + High-value customers. אחר כך להוסיף High-value lapsed אם יש נפח מספיק.
+          </div>
+        </section>
+
+        <section id="value-rules">
+          <h2>8. Value Rules — כללי ערך המרה</h2>
+          <p>Value Rules מאפשרים לשנות את ערך ההמרה לפי תנאים כמו מיקום, מכשיר או קהל. זה לא סטטוס לקוח, אלא תנאי שבו ההמרה שווה יותר או פחות.</p>
+
+          <div class="tabs" role="tablist">
+            <button class="tab active" data-tab="vr-location">Location</button>
+            <button class="tab" data-tab="vr-device">Device</button>
+            <button class="tab" data-tab="vr-audience">Audience</button>
+            <button class="tab" data-tab="vr-adjustment">Add / Multiply / Set</button>
+          </div>
+
+          <div id="vr-location" class="tab-panel active">
+            <div class="scenario-box">
+              <h3>Location</h3>
+              <p>כלל לפי מיקום. לדוגמה: לידים מתל אביב נסגרים טוב יותר, או משלוחים לאזור מסוים רווחיים יותר.</p>
+              <p><strong>שימוש נכון:</strong> כאשר יש לך נתוני איכות/רווחיות לפי אזור.</p>
+              <p><strong>סיכון:</strong> לתת ערך גבוה לאזור רק כי הוא “נראה איכותי”, בלי נתוני סגירה או רווח.</p>
+            </div>
+          </div>
+
+          <div id="vr-device" class="tab-panel">
+            <div class="scenario-box">
+              <h3>Device</h3>
+              <p>כלל לפי מכשיר. לדוגמה: אם לידים מדסקטופ נסגרים טוב יותר ממובייל, אפשר להעלות את ערך הדסקטופ או להפחית את ערך המובייל.</p>
+              <p><strong>שימוש נכון:</strong> כשיש הבדל מוכח באיכות בין מובייל, דסקטופ וטאבלט.</p>
+            </div>
+          </div>
+
+          <div id="vr-audience" class="tab-panel">
+            <div class="scenario-box">
+              <h3>Audience</h3>
+              <p>כלל לפי קהל. לדוגמה: קהל VIP, משתמשים עם כוונת קנייה גבוהה, או רשימת CRM איכותית.</p>
+              <p><strong>שימוש נכון:</strong> כאשר הקהל באמת מייצג ערך עסקי שונה.</p>
+            </div>
+          </div>
+
+          <div id="vr-adjustment" class="tab-panel">
+            <div class="scenario-box">
+              <h3>Add / Multiply / Set</h3>
+              <p><strong>Add:</strong> מוסיף סכום קבוע לערך ההמרה. מתאים כשכל המרה מקבלת תוספת ערך דומה.</p>
+              <p><strong>Multiply:</strong> מכפיל את ערך ההמרה. מתאים יותר באיקומרס, כאשר ערכי רכישה משתנים.</p>
+              <p><strong>Set:</strong> קובע ערך קבוע. מתאים בעיקר ללידים כאשר הערך הבסיסי לא מועבר או לא מדויק.</p>
+            </div>
+          </div>
+
+          <div class="note warning">
+            אם אתה מזין סכום גבוה מדי, לדוגמה 26,626 ₪ כתוספת, אתה אומר למערכת שכל המרה בתנאי הזה שווה בצורה חריגה. זה עלול לגרום לבידים אגרסיביים ולבזבוז תקציב.
+          </div>
+        </section>
+
+        <section id="calculator">
+          <h2>9. סימולטור ערך — להבין איך הבוסט משפיע</h2>
+          <p>השתמש בסימולטור כדי לראות איך תוספת ערך משנה את הערך שגוגל עשויה לראות לצורכי בידינג.</p>
+          <div class="grid two">
+            <div class="mini-card">
+              <label for="baseValue">ערך המרה בסיסי</label>
+              <input id="baseValue" type="number" value="300" min="0" />
+
+              <label for="incrementalValue">ערך תוספתי</label>
+              <input id="incrementalValue" type="number" value="200" min="0" />
+
+              <label for="probability">סיכוי המרה משוער באחוזים</label>
+              <input id="probability" type="number" value="5" min="0" max="100" step="0.1" />
+
+              <label for="adjustmentType">סוג התאמה</label>
+              <select id="adjustmentType">
+                <option value="add">Add — הוסף סכום</option>
+                <option value="multiply">Multiply — הכפל</option>
+              </select>
+
+              <label for="multiplier">מכפיל, רק אם בחרת Multiply</label>
+              <input id="multiplier" type="number" value="1.2" min="0" step="0.1" />
+
+              <button style="margin-top:14px" onclick="calculateValue()">חשב</button>
+            </div>
+            <div class="mini-card">
+              <h3>תוצאה</h3>
+              <div id="calcResult" class="calc-result">לחץ על “חשב” כדי לראות תוצאה.</div>
+              <p class="small">הסימולטור הוא המחשה לימודית. בפועל גוגל משתמשת בהרבה יותר סיגנלים בזמן אמת.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="decision">
+          <h2>10. עץ החלטה קצר</h2>
+          <details open>
+            <summary>אני רוצה יותר לקוחות חדשים</summary>
+            <div class="details-body">
+              <p>בדוק את <strong>New customers</strong>. ודא שיש לך רשימת לקוחות קיימים מספיק טובה כדי שגוגל לא תסווג לקוחות קיימים כחדשים.</p>
+            </div>
+          </details>
+          <details>
+            <summary>אני רוצה לקוחות חדשים איכותיים, לא רק יותר לקוחות</summary>
+            <div class="details-body">
+              <p>בדוק את <strong>New customers high value</strong>. דרוש קהל High-value מבוסס דאטה, למשל 2+ רכישות או LTV גבוה.</p>
+            </div>
+          </details>
+          <details>
+            <summary>אני רוצה להחזיר לקוחות שלא קנו הרבה זמן</summary>
+            <div class="details-body">
+              <p>בדוק את <strong>Lapsed customers</strong>. בנה קהל ברור של לקוחות שקנו בעבר ולא קנו ב־X ימים.</p>
+            </div>
+          </details>
+          <details>
+            <summary>אני רוצה להחזיר דווקא לקוחות עבר איכותיים</summary>
+            <div class="details-body">
+              <p>בדוק את <strong>Lapsed customers high value</strong>. הקהל צריך לשלב גם איכות וגם רדימות, לדוגמה: LTV גבוה + לא קנה 180 יום.</p>
+            </div>
+          </details>
+          <details>
+            <summary>יש אזורים, מכשירים או קהלים ששווים לי יותר</summary>
+            <div class="details-body">
+              <p>בדוק את <strong>Value Rules</strong>. השתמש בזה רק כשיש לך הוכחה עסקית שהמרה בתנאי מסוים שווה יותר או פחות.</p>
+            </div>
+          </details>
+        </section>
+
+        <section id="checklist">
+          <h2>11. צ׳קליסט הפעלה לפני שנוגעים בהגדרות</h2>
+          <p>סמן מה כבר קיים אצלך. המטרה היא לוודא שאתה לא מפעיל אופטימיזציות מתקדמות על דאטה חלש.</p>
+          <div class="progress"><span id="progressBar"></span></div>
+          <p id="progressText" class="small">0 מתוך 10 הושלמו</p>
+          <div class="checklist">
+            <label><input type="checkbox" onchange="updateProgress()" /> רכישות / לידים נמדדים נכון ב־Google Ads.</label>
+            <label><input type="checkbox" onchange="updateProgress()" /> ערכי רכישה עוברים נכון, כולל מטבע וסכום.</label>
+            <label><input type="checkbox" onchange="updateProgress()" /> Enhanced Conversions מוגדרים.</label>
+            <label><input type="checkbox" onchange="updateProgress()" /> יש רשימת All customers מסודרת.</label>
+            <label><input type="checkbox" onchange="updateProgress()" /> יש רשימת Recent customers.</label>
+            <label><input type="checkbox" onchange="updateProgress()" /> יש רשימת Lapsed customers לפי חלון זמן הגיוני.</label>
+            <label><input type="checkbox" onchange="updateProgress()" /> יש הגדרה עסקית ל־High-value customers.</label>
+            <label><input type="checkbox" onchange="updateProgress()" /> יש לפחות 1,000 משתמשים פעילים בקהלים הרלוונטיים, כאשר גוגל דורשת זאת.</label>
+            <label><input type="checkbox" onchange="updateProgress()" /> הערך התוספתי מבוסס על LTV/רווחיות ולא רק על Suggested value.</label>
+            <label><input type="checkbox" onchange="updateProgress()" /> יש תוכנית בדיקה: לפני/אחרי, ROAS אמיתי, לקוחות חדשים אמיתיים ואיכות לקוחות.</label>
+          </div>
+        </section>
+
+        <section id="quiz">
+          <h2>12. בדיקת הבנה קצרה</h2>
+          <div class="quiz-question">
+            <h3>שאלה 1: האם New Customer Value נותן בוסט מלא לכל משתמש חדש גם אם אין לו כוונת קנייה?</h3>
+            <div class="quiz-options" data-answer="no">
+              <button onclick="answerQuiz(this, 'yes')">כן</button>
+              <button onclick="answerQuiz(this, 'no')">לא</button>
+            </div>
+            <p class="small quiz-feedback"></p>
+          </div>
+          <div class="quiz-question">
+            <h3>שאלה 2: מה ההבדל בין New customers לבין New customers high value?</h3>
+            <div class="quiz-options" data-answer="quality">
+              <button onclick="answerQuiz(this, 'same')">אין הבדל, זה אותו דבר</button>
+              <button onclick="answerQuiz(this, 'quality')">הרגיל מחפש יותר חדשים; High value מחפש חדשים איכותיים</button>
+              <button onclick="answerQuiz(this, 'retention')">High value מיועד רק ללקוחות רדומים</button>
+            </div>
+            <p class="small quiz-feedback"></p>
+          </div>
+          <div class="quiz-question">
+            <h3>שאלה 3: מה Value Rules עושים?</h3>
+            <div class="quiz-options" data-answer="value">
+              <button onclick="answerQuiz(this, 'targeting')">מטרגטים ישירות קהל חדש</button>
+              <button onclick="answerQuiz(this, 'value')">משנים את ערך ההמרה לפי תנאים</button>
+              <button onclick="answerQuiz(this, 'creative')">משנים את הקריאייטיב לפי מיקום</button>
+            </div>
+            <p class="small quiz-feedback"></p>
+          </div>
+        </section>
+
+        <section>
+          <h2>סיכום חד</h2>
+          <div class="grid two">
+            <div class="mini-card"><h4>New customers</h4><p>יותר לקוחות חדשים.</p></div>
+            <div class="mini-card"><h4>New customers high value</h4><p>יותר לקוחות חדשים שדומים ללקוחות הכי טובים שלך.</p></div>
+            <div class="mini-card"><h4>Lapsed customers</h4><p>החזרת לקוחות שנעלמו.</p></div>
+            <div class="mini-card"><h4>Lapsed high value</h4><p>החזרת לקוחות עבר איכותיים שנעלמו.</p></div>
+            <div class="mini-card"><h4>Value Rules</h4><p>שינוי ערך המרה לפי תנאים כמו מיקום, מכשיר או קהל.</p></div>
+            <div class="mini-card"><h4>כלל הזהב</h4><p>לא להפעיל על אוטומט. קודם דאטה נקי, אחר כך ערכים שמרניים, ואז בדיקה.</p></div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <div class="footer">מדריך לימודי פנימי ל־Google Ads — Customer Lifecycle Optimization ו־Value Rules</div>
+  </div>
+
+  <script>
+    function expandAll() {
+      document.querySelectorAll('details').forEach(d => d.open = true);
+    }
+
+    function collapseAll() {
+      document.querySelectorAll('details').forEach(d => d.open = false);
+    }
+
+    document.querySelectorAll('.tab').forEach(button => {
+      button.addEventListener('click', () => {
+        const target = button.dataset.tab;
+        document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        button.classList.add('active');
+        document.getElementById(target).classList.add('active');
+      });
+    });
+
+    function calculateValue() {
+      const base = Number(document.getElementById('baseValue').value || 0);
+      const inc = Number(document.getElementById('incrementalValue').value || 0);
+      const prob = Number(document.getElementById('probability').value || 0) / 100;
+      const type = document.getElementById('adjustmentType').value;
+      const multiplier = Number(document.getElementById('multiplier').value || 1);
+
+      let adjusted;
+      let explanation;
+
+      if (type === 'add') {
+        adjusted = base + inc;
+        explanation = `ערך מותאם = ${base.toLocaleString()} + ${inc.toLocaleString()} = ${adjusted.toLocaleString()} ₪`;
+      } else {
+        adjusted = base * multiplier;
+        explanation = `ערך מותאם = ${base.toLocaleString()} × ${multiplier} = ${adjusted.toLocaleString()} ₪`;
+      }
+
+      const expected = adjusted * prob;
+      document.getElementById('calcResult').innerHTML = `
+        <p>${explanation}</p>
+        <p>ערך צפוי לבידינג ≈ ${adjusted.toLocaleString()} × ${(prob * 100).toLocaleString()}% = ${expected.toLocaleString(undefined, {maximumFractionDigits: 2})} ₪</p>
+      `;
+    }
+
+    function updateProgress() {
+      const boxes = Array.from(document.querySelectorAll('.checklist input[type="checkbox"]'));
+      const checked = boxes.filter(b => b.checked).length;
+      const pct = boxes.length ? (checked / boxes.length) * 100 : 0;
+      document.getElementById('progressBar').style.width = pct + '%';
+      document.getElementById('progressText').textContent = `${checked} מתוך ${boxes.length} הושלמו`;
+    }
+
+    function answerQuiz(button, selected) {
+      const container = button.closest('.quiz-options');
+      const answer = container.dataset.answer;
+      const feedback = container.parentElement.querySelector('.quiz-feedback');
+      container.querySelectorAll('button').forEach(b => {
+        b.classList.remove('correct', 'wrong');
+        b.disabled = true;
+      });
+      if (selected === answer) {
+        button.classList.add('correct');
+        feedback.textContent = 'נכון.';
+      } else {
+        button.classList.add('wrong');
+        const correct = Array.from(container.querySelectorAll('button')).find(b => b.getAttribute('onclick').includes(`'${answer}'`));
+        if (correct) correct.classList.add('correct');
+        feedback.textContent = 'לא מדויק. התשובה הנכונה מסומנת בירוק.';
+      }
+    }
+
+    calculateValue();
+    updateProgress();
+  </script>
+</body>
+</html>

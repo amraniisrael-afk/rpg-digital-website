@@ -1,0 +1,3511 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GA4 Events — מדריך מלא</title>
+<style>
+  :root {
+    --auto: #4f46e5;
+    --enhanced: #0891b2;
+    --rec-all: #059669;
+    --rec-ecom: #d97706;
+    --rec-lead: #dc2626;
+    --rec-games: #7c3aed;
+    --bg: #f1f5f9;
+    --card: #ffffff;
+    --border: #e2e8f0;
+    --text: #1e293b;
+    --muted: #64748b;
+    --highlight: #d97706;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 24px 16px;
+    overflow-x: hidden;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 4px;
+    color: #1e293b;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-bottom: 28px;
+  }
+
+  /* STATS BAR */
+  .stats {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+  .stat-chip {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 6px 16px;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  .stat-chip span { color: #1e293b; font-weight: 700; }
+
+  /* CONTROLS */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .search-wrap {
+    flex: 1;
+    min-width: 220px;
+    position: relative;
+  }
+  .search-wrap input {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 16px 10px 40px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color .2s;
+  }
+  .search-wrap input:focus { border-color: #6366f1; }
+  .search-wrap svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+  }
+
+  .filter-btns {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    max-width: 100%;
+  }
+  .filter-btns::-webkit-scrollbar { height: 3px; }
+  .filter-btns::-webkit-scrollbar-track { background: transparent; }
+  .filter-btns::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+  .btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  .btn:hover { color: #1e293b; border-color: #6366f1; background: #e0e7ff; }
+  .btn.active { color: #fff; border-color: transparent; }
+
+  .btn[data-cat="all"].active  { background: #475569; color: #fff; }
+  .btn[data-cat="auto"].active { background: var(--auto); }
+  .btn[data-cat="enhanced"].active { background: var(--enhanced); }
+  .btn[data-cat="rec-all"].active { background: var(--rec-all); }
+  .btn[data-cat="rec-ecom"].active { background: var(--rec-ecom); }
+  .btn[data-cat="rec-lead"].active { background: var(--rec-lead); }
+  .btn[data-cat="rec-games"].active { background: var(--rec-games); }
+
+  /* PLATFORM FILTER */
+  .platform-btns { display: flex; gap: 6px; }
+  .pbtn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 600;
+    transition: all .2s;
+  }
+  .pbtn.active { background: #e0e7ff; color: #4f46e5; border-color: #6366f1; }
+
+  /* LEGEND */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 20px;
+    align-items: center;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* TABLE */
+  .table-wrap {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+
+  thead tr {
+    background: #e2e8f0;
+    border-bottom: 2px solid var(--border);
+  }
+
+  th {
+    padding: 13px 14px;
+    text-align: right;
+    color: var(--muted);
+    font-weight: 700;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+  }
+  th:hover { color: #1e293b; }
+  th.sorted { color: var(--highlight); }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background .15s;
+  }
+  tbody tr:hover { background: rgba(99,102,241,0.05); }
+  tbody tr.hidden { display: none; }
+
+  td {
+    padding: 11px 14px;
+    vertical-align: top;
+  }
+
+  /* EVENT NAME */
+  .event-name {
+    font-family: 'Consolas', monospace;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+  .copy-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--muted);
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    opacity: 0;
+    transition: opacity .2s, color .2s;
+  }
+  tbody tr:hover .copy-btn { opacity: 1; }
+  .copy-btn:hover { color: var(--highlight); }
+  .copy-btn.copied { color: #4ade80; opacity: 1; }
+
+  /* CATEGORY BADGE */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .badge-auto     { background: rgba(79,70,229,.12);  color: #4338ca; }
+  .badge-enhanced { background: rgba(8,145,178,.12);  color: #0369a1; }
+  .badge-rec-all  { background: rgba(5,150,105,.12);  color: #047857; }
+  .badge-rec-ecom { background: rgba(217,119,6,.12);  color: #b45309; }
+  .badge-rec-lead { background: rgba(220,38,38,.12);  color: #b91c1c; }
+  .badge-rec-games{ background: rgba(124,58,237,.12); color: #6d28d9; }
+
+  /* PLATFORM ICONS */
+  .platforms {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .platform-tag {
+    font-size: 0.7rem;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .pt-web     { background: rgba(99,102,241,.12); color: #4338ca; }
+  .pt-ios     { background: rgba(168,85,247,.12); color: #6d28d9; }
+  .pt-android { background: rgba(34,197,94,.12);  color: #047857; }
+
+  /* TRIGGER */
+  .trigger-text {
+    color: #374151;
+    line-height: 1.5;
+    max-width: 320px;
+  }
+
+  /* PARAMS */
+  .params-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .param-tag {
+    font-family: monospace;
+    font-size: 0.7rem;
+    padding: 2px 7px;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    color: #475569;
+    white-space: nowrap;
+  }
+
+  /* IMPORTANCE */
+  .importance {
+    display: flex;
+    gap: 2px;
+  }
+  .star { color: #f59e0b; font-size: 0.85rem; }
+  .star.off { color: #cbd5e1; }
+
+  /* NOTES */
+  .note-text {
+    color: var(--muted);
+    font-size: 0.82rem;
+    line-height: 1.4;
+    max-width: 220px;
+  }
+  .note-text strong { color: #b45309; }
+
+  /* COUNT */
+  .count-bar {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.82rem;
+    margin-top: 12px;
+  }
+  .count-bar span { color: #1e293b; font-weight: 700; }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--muted);
+    display: none;
+  }
+  .empty-state svg { margin-bottom: 12px; opacity: .4; }
+
+  /* TOOLTIP */
+  [data-tip] { position: relative; }
+  [data-tip]:hover::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #f1f5f9;
+    font-size: 0.75rem;
+    padding: 5px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  /* SECTION HEADERS */
+  .section-row td {
+    background: #e8edf4;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+  }
+  .section-row td:hover { background: #dde3ed; }
+  .section-row .collapse-arrow {
+    display: inline-block;
+    margin-left: 8px;
+    transition: transform .2s;
+    font-style: normal;
+  }
+  .section-row.collapsed .collapse-arrow { transform: rotate(-90deg); }
+
+  @media (max-width: 768px) {
+    h1 { font-size: 1.4rem; }
+    .note-text, .trigger-text { max-width: 160px; }
+  }
+
+  /* PAGE-LEVEL TABS */
+  .page-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 28px;
+    border-bottom: 2px solid var(--border);
+  }
+  .ptab-main {
+    padding: 10px 22px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 700;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  .ptab-main:hover { color: #1e293b; }
+  .ptab-main.active { color: #4f46e5; border-bottom-color: #4f46e5; }
+
+  /* DIMS — TYPE BADGES */
+  .type-dim    { background: rgba(99,102,241,.12);  color: #4338ca; }
+  .type-metric { background: rgba(217,119,6,.12);   color: #b45309; }
+
+  /* DIMS — CATEGORY BADGES */
+  .dcat-user       { background: rgba(139,92,246,.12);  color: #6d28d9; }
+  .dcat-device     { background: rgba(20,184,166,.12);  color: #0f766e; }
+  .dcat-traffic    { background: rgba(59,130,246,.12);  color: #1d4ed8; }
+  .dcat-page       { background: rgba(16,185,129,.12);  color: #047857; }
+  .dcat-event      { background: rgba(79,70,229,.12);   color: #4338ca; }
+  .dcat-ecom       { background: rgba(217,119,6,.12);   color: #b45309; }
+  .dcat-datetime   { background: rgba(236,72,153,.12);  color: #be185d; }
+  .dcat-geo        { background: rgba(34,197,94,.12);   color: #15803d; }
+  .dcat-users      { background: rgba(139,92,246,.12);  color: #6d28d9; }
+  .dcat-sessions   { background: rgba(59,130,246,.12);  color: #1d4ed8; }
+  .dcat-engagement { background: rgba(16,185,129,.12);  color: #047857; }
+  .dcat-events_m   { background: rgba(79,70,229,.12);   color: #4338ca; }
+  .dcat-conversions{ background: rgba(217,119,6,.12);   color: #b45309; }
+  .dcat-revenue    { background: rgba(34,197,94,.12);   color: #15803d; }
+  .dcat-app        { background: rgba(220,38,38,.12);   color: #b91c1c; }
+  .dcat-demo       { background: rgba(236,72,153,.12);  color: #be185d; }
+  .dcat-link       { background: rgba(59,130,246,.12);  color: #1d4ed8; }
+  .dcat-video      { background: rgba(239,68,68,.12);   color: #b91c1c; }
+  .dcat-gaming     { background: rgba(124,58,237,.12);  color: #6d28d9; }
+  .dcat-general    { background: rgba(100,116,139,.12); color: #475569; }
+
+  /* DIMS TOP BAR */
+  .dims-top-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 16px;
+    min-width: 0;
+  }
+  .dims-cat-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .dbtn {
+    padding: 6px 13px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  .dbtn:hover { color: #1e293b; border-color: #6366f1; background: #eef2ff; }
+  .dbtn.active { color: #4338ca; border-color: #6366f1; background: #e0e7ff; }
+
+  /* MASTER / DETAIL */
+  .dim-master-detail {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .dim-list {
+    width: 300px;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    max-height: 72vh;
+    overflow-y: auto;
+    background: var(--card);
+  }
+  .dim-list::-webkit-scrollbar { width: 4px; }
+  .dim-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+  .dim-cat-header {
+    padding: 7px 14px;
+    background: #f1f5f9;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  .dim-item {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background .12s;
+  }
+  .dim-item:last-child { border-bottom: none; }
+  .dim-item:hover { background: #f8fafc; }
+  .dim-item.active { background: #eef2ff; border-right: 3px solid #6366f1; }
+  .dim-item-api {
+    font-family: 'Consolas', monospace;
+    font-weight: 700;
+    font-size: 0.84rem;
+    color: #1e293b;
+  }
+  .dim-item-display { font-size: 0.74rem; color: #64748b; margin-top: 2px; }
+
+  .dim-detail {
+    flex: 1;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    min-height: 400px;
+    max-height: 72vh;
+    overflow-y: auto;
+    background: var(--card);
+  }
+  .dim-detail::-webkit-scrollbar { width: 4px; }
+  .dim-detail::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+  .dim-detail-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 400px;
+    color: #94a3b8;
+    gap: 10px;
+    text-align: center;
+  }
+  .dim-detail-placeholder small { font-size: 0.8rem; }
+
+  .dim-detail-head {
+    padding: 18px 20px 14px;
+    background: #f8fafc;
+    border-bottom: 1px solid var(--border);
+  }
+  .dim-detail-api {
+    font-family: 'Consolas', monospace;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 2px;
+  }
+  .dim-detail-name { font-size: 0.82rem; color: #64748b; margin-bottom: 8px; }
+  .dim-detail-desc { font-size: 0.87rem; color: #374151; line-height: 1.5; }
+  .dim-detail-example { font-family: monospace; font-size: 0.75rem; color: #94a3b8; margin-top: 5px; }
+  .dim-detail-stars { display: flex; gap: 2px; margin-top: 8px; }
+
+  .dim-metrics-wrap { padding: 16px 20px; }
+  .dim-metrics-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    margin-bottom: 12px;
+  }
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 10px;
+  }
+  .metric-card {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .metric-card:hover { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,.08); }
+  .metric-card-api { font-family: 'Consolas', monospace; font-size: 0.71rem; color: #94a3b8; margin-bottom: 3px; }
+  .metric-card-display { font-weight: 700; font-size: 0.87rem; color: #1e293b; margin-bottom: 4px; }
+  .metric-card-desc { font-size: 0.75rem; color: #64748b; line-height: 1.4; }
+  .metric-card-stars { display: flex; gap: 1px; margin-top: 7px; }
+
+  /* REFERENCE TABS (all metrics / all dims) */
+  .ref-top-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .ref-stats {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-right: auto;
+  }
+
+  /* ACCORDION */
+  .acc-group {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    background: var(--card);
+  }
+  .acc-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 18px;
+    cursor: pointer;
+    background: #f8fafc;
+    border-bottom: 1px solid var(--border);
+    user-select: none;
+    transition: background .15s;
+  }
+  .acc-header:hover { background: #f1f5f9; }
+  .acc-title {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #1e293b;
+    flex: 1;
+  }
+  .acc-count {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    background: #e2e8f0;
+    padding: 2px 9px;
+    border-radius: 99px;
+    font-weight: 600;
+  }
+  .acc-arrow {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    transition: transform .2s;
+  }
+  .acc-group.open .acc-arrow { transform: rotate(180deg); }
+  .acc-body {
+    display: none;
+    padding: 16px 18px;
+  }
+  .acc-group.open .acc-body { display: block; }
+
+  /* REF GRID */
+  .ref-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 10px;
+  }
+  .ref-item {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .ref-item:hover { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,.07); }
+  .ref-item.hidden { display: none; }
+  .ref-item-api {
+    font-family: 'Consolas', monospace;
+    font-size: 0.72rem;
+    color: #94a3b8;
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .ref-item-name {
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: #1e293b;
+    margin-bottom: 4px;
+  }
+  .ref-item-desc {
+    font-size: 0.77rem;
+    color: #64748b;
+    line-height: 1.45;
+  }
+  .ref-copy-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #cbd5e1;
+    font-size: 0.7rem;
+    padding: 0 2px;
+    border-radius: 3px;
+    transition: color .15s;
+  }
+  .ref-copy-btn:hover { color: var(--highlight); }
+  .ref-copy-btn.copied { color: #22c55e; }
+
+  /* ATTRIBUTION SIMULATOR */
+  .attr-header { text-align:center; margin-bottom:28px; }
+  .attr-header h2 { font-size:1.5rem; font-weight:800; color:#1e293b; margin-bottom:6px; }
+  .attr-header p { color:var(--muted); font-size:.9rem; }
+
+  .attr-builder {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:12px; padding:20px; margin-bottom:20px;
+  }
+  .builder-header {
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:16px; flex-wrap:wrap; gap:12px;
+  }
+  .builder-header h3 { font-size:1rem; font-weight:700; color:#1e293b; }
+  .conv-value-wrap {
+    display:flex; align-items:center; gap:8px;
+    font-size:.9rem; font-weight:600; color:#1e293b;
+  }
+  .conv-value-wrap input {
+    width:90px; padding:6px 10px; border:1px solid var(--border);
+    border-radius:8px; font-size:.9rem; font-weight:700; color:#1e293b; background:#f8fafc;
+  }
+  .conv-value-wrap input:focus { outline:none; border-color:#4f46e5; }
+
+  .touchpoints-list { display:flex; flex-direction:column; gap:10px; margin-bottom:16px; }
+  .touchpoint-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  .tp-num {
+    width:28px; height:28px; border-radius:50%; background:#e0e7ff; color:#4338ca;
+    font-weight:700; font-size:.78rem; display:flex; align-items:center;
+    justify-content:center; flex-shrink:0;
+  }
+  .tp-channel { flex:2; min-width:150px; }
+  .tp-days { width:90px; }
+  .tp-campaign { flex:1; min-width:110px; }
+  .tp-channel select, .tp-days input, .tp-campaign input {
+    width:100%; padding:8px 10px; border:1px solid var(--border); border-radius:8px;
+    font-size:.83rem; background:#f8fafc; color:#1e293b; font-family:inherit;
+  }
+  .tp-channel select:focus, .tp-days input:focus, .tp-campaign input:focus {
+    outline:none; border-color:#4f46e5;
+  }
+  .tp-delete {
+    width:32px; height:32px; border:1px solid #fecaca; background:#fef2f2;
+    color:#dc2626; border-radius:8px; cursor:pointer; font-size:1rem;
+    display:flex; align-items:center; justify-content:center;
+    transition:all .2s; flex-shrink:0;
+  }
+  .tp-delete:hover { background:#fee2e2; }
+
+  .builder-actions { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  .add-tp-btn {
+    padding:8px 16px; background:#f1f5f9; border:1px dashed #94a3b8;
+    border-radius:8px; color:#475569; font-weight:600; font-size:.85rem;
+    cursor:pointer; transition:all .2s;
+  }
+  .add-tp-btn:hover { background:#e0e7ff; border-color:#6366f1; color:#4338ca; }
+  .calc-btn {
+    padding:8px 20px; background:linear-gradient(135deg,#4f46e5 0%,#7c3aed 100%);
+    border:none; border-radius:8px; color:#fff; font-weight:700;
+    font-size:.9rem; cursor:pointer; box-shadow:0 4px 12px rgba(79,70,229,.3);
+    transition:all .3s;
+  }
+  .calc-btn:hover { transform:translateY(-1px); box-shadow:0 6px 16px rgba(79,70,229,.4); }
+
+  .attr-timeline {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:12px; padding:20px; margin-bottom:20px;
+  }
+  .attr-timeline h3 { font-size:1rem; font-weight:700; color:#1e293b; margin-bottom:16px; }
+  .timeline-viz {
+    display:flex; align-items:flex-start; overflow-x:auto;
+    padding:8px 4px 24px; gap:0;
+  }
+  .tl-node { display:flex; flex-direction:column; align-items:center; flex-shrink:0; }
+  .tl-dot {
+    width:38px; height:38px; border-radius:50%; border:3px solid #fff;
+    box-shadow:0 0 0 3px rgba(0,0,0,.1); display:flex; align-items:center;
+    justify-content:center; font-size:.85rem; z-index:2;
+  }
+  .tl-label {
+    margin-top:8px; font-size:.72rem; font-weight:700; color:#1e293b;
+    text-align:center; max-width:76px;
+  }
+  .tl-days { font-size:.66rem; color:var(--muted); margin-top:2px; text-align:center; }
+  .tl-line {
+    flex:1; min-width:36px; height:3px; margin-top:18px; margin-bottom:0;
+    background:linear-gradient(90deg, var(--from), var(--to));
+  }
+  .tl-conversion { display:flex; flex-direction:column; align-items:center; flex-shrink:0; }
+  .tl-conv-dot {
+    width:44px; height:44px; border-radius:50%;
+    background:linear-gradient(135deg,#059669 0%,#10b981 100%);
+    display:flex; align-items:center; justify-content:center; font-size:1.1rem;
+    box-shadow:0 4px 12px rgba(5,150,105,.4);
+  }
+  .tl-conv-label { margin-top:8px; font-size:.72rem; font-weight:800; color:#059669; }
+
+  .attr-results { display:flex; flex-direction:column; gap:20px; }
+  .attr-section {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:12px; padding:20px;
+  }
+  .attr-section h3 { font-size:1rem; font-weight:700; color:#1e293b; margin-bottom:4px; }
+  .attr-section .section-sub { font-size:.8rem; color:var(--muted); margin-bottom:16px; }
+
+  .attr-table { width:100%; border-collapse:collapse; font-size:.83rem; }
+  .attr-table thead tr { background:#f1f5f9; border-bottom:2px solid var(--border); }
+  .attr-table th {
+    padding:10px 14px; text-align:center; font-weight:700;
+    color:var(--muted); font-size:.75rem; text-transform:uppercase;
+    letter-spacing:.04em; white-space:nowrap;
+  }
+  .attr-table th:first-child { text-align:right; }
+  .attr-table td { padding:10px 14px; text-align:center; border-bottom:1px solid var(--border); }
+  .attr-table td:first-child { text-align:right; font-weight:700; color:#1e293b; min-width:120px; }
+  .attr-table tbody tr:hover { background:rgba(99,102,241,.04); }
+  .cell-val { font-weight:700; color:#1e293b; }
+  .cell-pct { font-size:.7rem; color:var(--muted); }
+  .cell-bar { height:4px; border-radius:99px; margin:3px auto 0; max-width:80px; transition:width .4s; }
+
+  .charts-grid { display:flex; flex-direction:column; gap:12px; }
+  .chart-row { display:flex; gap:10px; align-items:center; }
+  .chart-model-label { width:130px; flex-shrink:0; font-size:.8rem; font-weight:700; color:#1e293b; text-align:right; }
+  .chart-bars { flex:1; display:flex; height:26px; border-radius:6px; overflow:hidden; gap:1px; min-width:0; }
+  .chart-segment {
+    height:100%; display:flex; align-items:center; justify-content:center;
+    font-size:.65rem; font-weight:700; color:#fff; overflow:hidden;
+    transition:width .5s ease; cursor:default; white-space:nowrap;
+  }
+  .chart-total { width:60px; flex-shrink:0; font-size:.78rem; font-weight:700; color:#059669; }
+
+  .model-cards {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:10px; margin-top:4px;
+  }
+  .model-card {
+    background:#f8fafc; border:1px solid var(--border);
+    border-radius:10px; padding:14px;
+  }
+  .model-card h4 { font-size:.85rem; font-weight:700; color:#1e293b; margin-bottom:5px; }
+  .model-card p { font-size:.76rem; color:var(--muted); line-height:1.5; }
+  .model-card .verdict { margin-top:7px; font-size:.73rem; font-weight:700; color:#4f46e5; }
+
+  /* ══════════════════════════════════════════════════════ */
+  /* SIMULATOR STYLES                                       */
+  /* ══════════════════════════════════════════════════════ */
+  .simulator-container {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .simulator-header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .simulator-header h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 8px;
+  }
+
+  .simulator-header p {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .simulator-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 32px;
+    align-items: flex-end;
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .control-group label {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #1e293b;
+  }
+
+  .control-group select {
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background: var(--card);
+    color: #1e293b;
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  .control-group select:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79,70,229,.1);
+  }
+
+  .fire-btn {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all .3s;
+    box-shadow: 0 4px 12px rgba(79,70,229,.3);
+  }
+
+  .fire-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(79,70,229,.4);
+  }
+
+  .fire-btn:active {
+    transform: translateY(0);
+  }
+
+  .clear-btn {
+    padding: 10px 20px;
+    background: #e2e8f0;
+    color: #64748b;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+  }
+
+  .clear-btn:hover {
+    background: #cbd5e1;
+    color: #475569;
+  }
+
+  .simulator-dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .dashboard-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    transition: all .2s;
+  }
+
+  .dashboard-card:hover {
+    border-color: #4f46e5;
+    box-shadow: 0 4px 12px rgba(79,70,229,.1);
+  }
+
+  .dashboard-card h3 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+  }
+
+  .metric-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #4f46e5;
+    transition: transform .2s ease-out;
+  }
+
+  .events-log {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 32px;
+  }
+
+  .events-log h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 16px;
+  }
+
+  .log-container {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #f8fafc;
+  }
+
+  .log-empty {
+    padding: 32px 16px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .log-entry {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+  }
+
+  .log-entry:last-child {
+    border-bottom: none;
+  }
+
+  .log-entry:hover {
+    background: #f1f5f9;
+  }
+
+  .log-entry-time {
+    color: var(--muted);
+    font-family: monospace;
+    font-size: 0.75rem;
+    min-width: 60px;
+  }
+
+  .log-entry-event {
+    font-weight: 700;
+    color: #1e293b;
+    flex: 1;
+    margin: 0 12px;
+  }
+
+  .log-entry-badge {
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    background: rgba(79,70,229,.12);
+    color: #4338ca;
+  }
+
+</style>
+</head>
+<body>
+
+<h1>📊 GA4 Events — מדריך מלא</h1>
+<p class="subtitle">כל האירועים מחולקים לפי קטגוריות | לחץ לסינון • חפש • העתק שם</p>
+
+<div class="page-tabs">
+  <button class="ptab-main active" data-tab="events">📋 אירועים</button>
+  <button class="ptab-main" data-tab="dims">📐 מימדים ומטריקות</button>
+  <button class="ptab-main" data-tab="allmetrics">📊 כל המטריקות (168)</button>
+  <button class="ptab-main" data-tab="alldims">📁 כל המימדים (356)</button>
+  <button class="ptab-main" data-tab="simulator">🎮 סימולטור Events</button>
+  <button class="ptab-main" data-tab="attribution">📊 Attribution</button>
+</div>
+
+<div id="eventsSection">
+<div class="stats">
+  <div class="stat-chip">סה"כ אירועים: <span id="totalCount">0</span></div>
+  <div class="stat-chip">Automatic: <span>17</span></div>
+  <div class="stat-chip">Enhanced: <span>10</span></div>
+  <div class="stat-chip">Recommended: <span>28</span></div>
+</div>
+
+<div class="controls">
+  <div class="search-wrap">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="searchInput" placeholder="חפש אירוע... (למשל: purchase, scroll, video)" autocomplete="off">
+  </div>
+
+  <div class="filter-btns">
+    <button class="btn active" data-cat="all">הכל</button>
+    <button class="btn" data-cat="auto">🤖 Automatic</button>
+    <button class="btn" data-cat="enhanced">⚡ Enhanced</button>
+    <button class="btn" data-cat="rec-all">🌐 Recommended — All</button>
+    <button class="btn" data-cat="rec-ecom">🛒 Recommended — Ecom</button>
+    <button class="btn" data-cat="rec-lead">🎯 Recommended — Lead Gen</button>
+    <button class="btn" data-cat="rec-games">🎮 Recommended — Games</button>
+  </div>
+</div>
+
+<div class="controls" style="margin-top:-8px">
+  <div class="platform-btns">
+    <span style="color:var(--muted);font-size:.8rem;line-height:2">פלטפורמה:</span>
+    <button class="pbtn active" data-platform="all">הכל</button>
+    <button class="pbtn" data-platform="web">🌐 Web</button>
+    <button class="pbtn" data-platform="ios">🍎 iOS</button>
+    <button class="pbtn" data-platform="android">🤖 Android</button>
+  </div>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="dot" style="background:var(--auto)"></div> Automatically Collected</div>
+  <div class="legend-item"><div class="dot" style="background:var(--enhanced)"></div> Enhanced Measurement</div>
+  <div class="legend-item"><div class="dot" style="background:var(--rec-all)"></div> Recommended — All Props</div>
+  <div class="legend-item"><div class="dot" style="background:var(--rec-ecom)"></div> Recommended — Ecommerce</div>
+  <div class="legend-item"><div class="dot" style="background:var(--rec-lead)"></div> Recommended — Lead Gen</div>
+  <div class="legend-item"><div class="dot" style="background:var(--rec-games)"></div> Recommended — Games</div>
+</div>
+
+<div class="table-wrap">
+<table id="eventsTable">
+  <thead>
+    <tr>
+      <th>שם האירוע</th>
+      <th>קטגוריה</th>
+      <th>פלטפורמה</th>
+      <th>🔥 מתי עובד הטריגר?</th>
+      <th>פרמטרים מרכזיים</th>
+      <th>חשיבות</th>
+      <th>הערות</th>
+    </tr>
+  </thead>
+  <tbody id="tableBody">
+  </tbody>
+</table>
+<div class="empty-state" id="emptyState">
+  <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+  <p>לא נמצאו אירועים מתאימים לחיפוש</p>
+</div>
+</div>
+
+<div class="count-bar" id="countBar">מציג <span id="shownCount">0</span> אירועים</div>
+</div><!-- /eventsSection -->
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- DIMS & METRICS SECTION                                 -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="dimsSection" style="display:none">
+
+<div class="dims-top-bar">
+  <div class="search-wrap" style="max-width:340px">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="dimsSearch" placeholder="חפש מימד..." autocomplete="off">
+  </div>
+  <div class="dims-cat-btns">
+    <button class="dbtn active" data-dcat="all">הכל</button>
+    <button class="dbtn" data-dcat="user">👤 משתמש</button>
+    <button class="dbtn" data-dcat="demo">🧬 דמוגרפיה</button>
+    <button class="dbtn" data-dcat="device">💻 מכשיר</button>
+    <button class="dbtn" data-dcat="geo">🌍 גיאוגרפיה</button>
+    <button class="dbtn" data-dcat="traffic">🚦 תנועה</button>
+    <button class="dbtn" data-dcat="page">📄 עמודים</button>
+    <button class="dbtn" data-dcat="event">⚡ אירועים</button>
+    <button class="dbtn" data-dcat="ecom">🛒 איקומרס</button>
+    <button class="dbtn" data-dcat="datetime">📅 תאריך</button>
+    <button class="dbtn" data-dcat="link">🔗 קישורים</button>
+    <button class="dbtn" data-dcat="video">🎬 וידאו</button>
+    <button class="dbtn" data-dcat="gaming">🎮 גיימינג</button>
+    <button class="dbtn" data-dcat="general">⚙️ כללי</button>
+  </div>
+  <div class="count-bar" style="margin:0" id="dimCountBar">מציג <span id="dimsShownCount">0</span> מימדים</div>
+</div>
+
+<div class="dim-master-detail">
+
+  <!-- RIGHT: dimension list -->
+  <div class="dim-list" id="dimList"></div>
+
+  <!-- LEFT: metric detail panel -->
+  <div class="dim-detail" id="dimDetail">
+    <div class="dim-detail-placeholder">
+      <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" opacity=".3"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+      <p>בחר מימד מהרשימה</p>
+      <small>תראה כאן את המטריקות הרלוונטיות + דוגמאות</small>
+    </div>
+  </div>
+
+</div>
+
+</div><!-- /dimsSection -->
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- ALL METRICS SECTION                                     -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="allMetricsSection" style="display:none">
+  <div class="ref-top-bar">
+    <div class="search-wrap" style="max-width:340px">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="metricsSearch" placeholder="חפש מטריקה..." autocomplete="off">
+    </div>
+    <div class="ref-stats">
+      מציג <span id="metricsShownCount">168</span> מתוך 168 מטריקות
+    </div>
+  </div>
+  <div id="metricsAccordion"></div>
+</div><!-- /allMetricsSection -->
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- ALL DIMS SECTION                                        -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="allDimsSection" style="display:none">
+  <div class="ref-top-bar">
+    <div class="search-wrap" style="max-width:340px">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="allDimsSearch" placeholder="חפש מימד..." autocomplete="off">
+    </div>
+    <div class="ref-stats">
+      מציג <span id="allDimsShownCount">356</span> מתוך 356 מימדים
+    </div>
+  </div>
+  <div id="allDimsAccordion"></div>
+</div><!-- /allDimsSection -->
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SIMULATOR SECTION                                      -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="simulatorSection" style="display:none">
+  <div class="simulator-container">
+    <div class="simulator-header">
+      <h2>🎮 סימולטור Events</h2>
+      <p>בחר תעשיה וטריגר Events כדי לראות כיצד הנתונים מצטברים בDashboard</p>
+    </div>
+
+    <div class="simulator-controls">
+      <div class="control-group">
+        <label>בחר תעשיה:</label>
+        <select id="industrySelect">
+          <option value="ecommerce">🛒 E-commerce</option>
+          <option value="leadgen">🎯 Lead Generation</option>
+          <option value="games">🎮 Gaming</option>
+          <option value="media">📺 Media & Publishing</option>
+          <option value="saas">💻 SaaS</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label>בחר Event:</label>
+        <select id="eventSelect"></select>
+      </div>
+
+      <button id="fireEventBtn" class="fire-btn">🔥 Trigger Event</button>
+      <button id="clearDataBtn" class="clear-btn">🗑️ Clear Data</button>
+    </div>
+
+    <div class="simulator-dashboard">
+      <div class="dashboard-card">
+        <h3>📊 Events Fired</h3>
+        <div class="metric-value" id="totalEventsFired">0</div>
+      </div>
+
+      <div class="dashboard-card">
+        <h3>🎯 Conversions</h3>
+        <div class="metric-value" id="conversionCount">0</div>
+      </div>
+
+      <div class="dashboard-card">
+        <h3>💰 Est. Revenue</h3>
+        <div class="metric-value" id="estRevenue">$0.00</div>
+      </div>
+
+      <div class="dashboard-card">
+        <h3>⏱️ Avg Session Duration</h3>
+        <div class="metric-value" id="avgSessionDuration">0s</div>
+      </div>
+    </div>
+
+    <div class="events-log">
+      <h3>📜 Events Log</h3>
+      <div class="log-container" id="eventsLog">
+        <div class="log-empty">אנו מחכים ל-Events...</div>
+      </div>
+    </div>
+  </div>
+</div><!-- /simulatorSection -->
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- ATTRIBUTION SECTION                                    -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="attributionSection" style="display:none">
+
+  <div class="attr-header">
+    <h2>📊 Attribution Simulator</h2>
+    <p>בנה User Journey ובדוק כיצד כל מודל מחלק את קרדיט ההמרה בין ערוצי השיווק</p>
+  </div>
+
+  <div class="attr-builder">
+    <div class="builder-header">
+      <h3>🛤️ User Journey</h3>
+      <div class="conv-value-wrap">
+        ערך המרה:
+        <input type="number" id="conversionValue" value="500" min="1">
+        ₪
+      </div>
+    </div>
+    <div class="touchpoints-list" id="touchpointsList"></div>
+    <div class="builder-actions">
+      <button class="add-tp-btn" id="addTouchpointBtn">+ הוסף Touchpoint</button>
+      <button class="calc-btn" id="calcAttrBtn">▶ חשב Attribution</button>
+    </div>
+  </div>
+
+  <div class="attr-timeline">
+    <h3>📅 Timeline — מהביקור הראשון עד ההמרה</h3>
+    <div class="timeline-viz" id="timelineViz">
+      <div style="color:var(--muted);font-size:.85rem;padding:8px 0">הוסף Touchpoints לראות Timeline</div>
+    </div>
+  </div>
+
+  <div class="attr-results" id="attrResults" style="display:none">
+
+    <div class="attr-section">
+      <h3>📊 טבלת Attribution</h3>
+      <p class="section-sub">כמה ₪ כל מודל מייחס לכל ערוץ</p>
+      <div style="overflow-x:auto">
+        <table class="attr-table">
+          <thead id="attrTableHead"></thead>
+          <tbody id="attrTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="attr-section">
+      <h3>📉 ויזואליזציה — חלוקה לפי מודל</h3>
+      <p class="section-sub">כל שורה מראה כיצד מודל שונה מחלק את ₪ ההמרה</p>
+      <div class="charts-grid" id="chartsGrid"></div>
+    </div>
+
+    <div class="attr-section">
+      <h3>💡 הסבר על המודלים</h3>
+      <p class="section-sub">מה כל מודל אומר ומתי משתמשים בו</p>
+      <div class="model-cards" id="modelCards"></div>
+    </div>
+
+  </div>
+
+</div><!-- /attributionSection -->
+
+<script>
+const events = [
+  // ── AUTOMATICALLY COLLECTED ──────────────────────────────────────────
+  {
+    name: "first_visit",
+    cat: "auto",
+    platforms: ["web","android","ios"],
+    trigger: "ביקור ראשון אי-פעם של המשתמש בנכס",
+    params: ["language","page_location","page_referrer","page_title","screen_resolution"],
+    importance: 5,
+    note: "<strong>מדד בסיסי</strong> — מגדיר New User. קורה פעם אחת בחיים."
+  },
+  {
+    name: "session_start",
+    cat: "auto",
+    platforms: ["web","android","ios"],
+    trigger: "כניסה לסשן חדש (30 דק' חוסר פעילות = סשן חדש)",
+    params: ["ga_session_id","ga_session_number"],
+    importance: 5,
+    note: "בסיס מדד Sessions. <strong>כל session = session_start אחד</strong>."
+  },
+  {
+    name: "user_engagement",
+    cat: "auto",
+    platforms: ["web","android","ios"],
+    trigger: "כל 1 שניה שהאפליקציה/אתר בפוקוס (foreground). יורה כשעוזבים דף אחרי שהיה engaged.",
+    params: ["engagement_time_msec","session_id"],
+    importance: 4,
+    note: "בסיס מדד <strong>Engaged Sessions</strong>. גם כן בבסיס Bounce Rate."
+  },
+  {
+    name: "page_view",
+    cat: "auto",
+    platforms: ["web"],
+    trigger: "כל טעינת דף — כולל SPA עם History API (pushState)",
+    params: ["page_location","page_referrer","page_title"],
+    importance: 5,
+    note: "Web בלבד. ב-SPA לוודא שה-gtag מדווח שינויי נתיב."
+  },
+  {
+    name: "screen_view",
+    cat: "auto",
+    platforms: ["android","ios"],
+    trigger: "כל מעבר בין מסכים באפליקציה",
+    params: ["firebase_screen","firebase_screen_class","firebase_screen_id","firebase_previous_screen"],
+    importance: 5,
+    note: "מקביל ל-page_view אבל לאפליקציות."
+  },
+  {
+    name: "app_exception",
+    cat: "auto",
+    platforms: ["android","ios"],
+    trigger: "קריסה או exception לא מטופל באפליקציה",
+    params: ["fatal","timestamp"],
+    importance: 4,
+    note: "קריטי למוניטורינג איכות האפליקציה."
+  },
+  {
+    name: "first_open",
+    cat: "auto",
+    platforms: ["android","ios"],
+    trigger: "הפתיחה הראשונה של האפליקציה לאחר התקנה",
+    params: ["previous_app_version","previous_os_version","updated_with_analytics","reset_analytics_cause"],
+    importance: 5,
+    note: "מקביל ל-first_visit של Web. בסיס מדד Installs."
+  },
+  {
+    name: "app_update",
+    cat: "auto",
+    platforms: ["android","ios"],
+    trigger: "הפתיחה הראשונה לאחר עדכון גרסה",
+    params: ["previous_app_version"],
+    importance: 3,
+    note: "שימושי למדידת קצב אימוץ עדכונים."
+  },
+  {
+    name: "os_update",
+    cat: "auto",
+    platforms: ["android","ios"],
+    trigger: "הפתיחה הראשונה לאחר עדכון מערכת הפעלה",
+    params: ["previous_os_version"],
+    importance: 2,
+    note: "עוזר להבין קצב שדרוג OS של הבסיס."
+  },
+  {
+    name: "in_app_purchase",
+    cat: "auto",
+    platforms: ["android","ios"],
+    trigger: "רכישה שנעשית דרך App Store / Play Store (IAP מובנה)",
+    params: ["product_id","price","value","currency","quantity","transaction_id"],
+    importance: 5,
+    note: "<strong>ייחודי ל-IAP</strong>. לרכישות Web השתמש ב-purchase Recommended."
+  },
+  {
+    name: "notification_receive",
+    cat: "auto",
+    platforms: ["android","ios"],
+    trigger: "קבלת Push Notification (גם כשהאפ סגורה)",
+    params: ["message_name","message_time","message_device_time","message_id","topic"],
+    importance: 3,
+    note: "דורש הגדרת FCM (Firebase Cloud Messaging)."
+  },
+  {
+    name: "notification_open",
+    cat: "auto",
+    platforms: ["android","ios"],
+    trigger: "לחיצה על Push Notification",
+    params: ["message_name","message_time","message_id","topic"],
+    importance: 4,
+    note: "בסיס מדד Click Rate של Push."
+  },
+  {
+    name: "notification_dismiss",
+    cat: "auto",
+    platforms: ["android"],
+    trigger: "סגירת/דחיית Push Notification (Android בלבד)",
+    params: ["message_name","message_time","message_id"],
+    importance: 2,
+    note: "iOS לא תומך — מגבלת מערכת."
+  },
+  {
+    name: "notification_foreground",
+    cat: "auto",
+    platforms: ["android","ios"],
+    trigger: "Push Notification מתקבל כשהאפ פתוחה ב-foreground",
+    params: ["message_name","message_time","message_id","message_type"],
+    importance: 2,
+    note: ""
+  },
+  {
+    name: "app_store_refund",
+    cat: "auto",
+    platforms: ["android"],
+    trigger: "Google מאשר החזר כספי על רכישה (Android בלבד)",
+    params: ["product_id","value","currency","quantity","transaction_id"],
+    importance: 3,
+    note: "עוזר לחשב Revenue נטו."
+  },
+  {
+    name: "app_clear_data",
+    cat: "auto",
+    platforms: ["android"],
+    trigger: "המשתמש מנקה את נתוני האפליקציה דרך הגדרות Android",
+    params: [],
+    importance: 2,
+    note: "אחרי זה user_id מתאפס."
+  },
+  {
+    name: "app_remove",
+    cat: "auto",
+    platforms: ["android"],
+    trigger: "הסרת האפליקציה (Android בלבד — iOS לא מאפשר)",
+    params: [],
+    importance: 3,
+    note: "שימושי לחישוב Uninstall Rate."
+  },
+
+  // ── ENHANCED MEASUREMENT ─────────────────────────────────────────────
+  {
+    name: "scroll",
+    cat: "enhanced",
+    platforms: ["web"],
+    trigger: "משתמש גולל לעומק 90% מהדף בפעם הראשונה בסשן",
+    params: ["percent_scrolled","page_location","page_title"],
+    importance: 4,
+    note: "<strong>רק 90%</strong> — לא ניתן לשנות ל-%50 בלי GTM. Enable בממשק GA4."
+  },
+  {
+    name: "click",
+    cat: "enhanced",
+    platforms: ["web"],
+    trigger: "לחיצה על קישור שמוביל לדומיין חיצוני (Outbound Click)",
+    params: ["link_classes","link_domain","link_id","link_text","link_url","outbound"],
+    importance: 4,
+    note: "רק לינקים חיצוניים! לפנימיים השתמש ב-GTM."
+  },
+  {
+    name: "view_search_results",
+    cat: "enhanced",
+    platforms: ["web"],
+    trigger: "טעינת דף שה-URL שלו מכיל פרמטר חיפוש (q, s, search, query, keyword וכו')",
+    params: ["search_term"],
+    importance: 4,
+    note: "GA4 מזהה אוטומטית פרמטרים סטנדרטיים. ניתן להגדיר מותאם."
+  },
+  {
+    name: "video_start",
+    cat: "enhanced",
+    platforms: ["web"],
+    trigger: "התחלת הפעלת סרטון YouTube מוטמע (YouTube iframe API)",
+    params: ["video_current_time","video_duration","video_percent","video_provider","video_title","video_url","visible"],
+    importance: 4,
+    note: "עובד רק עם <strong>YouTube embeds</strong>. לסרטוני HTML5 — GTM נדרש."
+  },
+  {
+    name: "video_progress",
+    cat: "enhanced",
+    platforms: ["web"],
+    trigger: "הגעה ל-10%, 25%, 50%, 75% מזמן הסרטון",
+    params: ["video_current_time","video_duration","video_percent","video_provider","video_title","video_url"],
+    importance: 3,
+    note: "4 אירועים אוטומטיים. לא ניתן לשנות את אחוזי ה-milestone."
+  },
+  {
+    name: "video_complete",
+    cat: "enhanced",
+    platforms: ["web"],
+    trigger: "סיום הצפייה בסרטון YouTube מוטמע (הגעה לסוף)",
+    params: ["video_current_time","video_duration","video_percent","video_provider","video_title","video_url"],
+    importance: 3,
+    note: "video_percent=100 בזמן הפעולה."
+  },
+  {
+    name: "file_download",
+    cat: "enhanced",
+    platforms: ["web"],
+    trigger: "לחיצה על לינק לקבצים: pdf, doc, xls, ppt, zip, rar, csv, txt, exe, dmg וכו'",
+    params: ["file_extension","file_name","link_classes","link_id","link_text","link_url"],
+    importance: 4,
+    note: "מתנה! מדד Lead Magnet downloads ללא קוד."
+  },
+  {
+    name: "form_start",
+    cat: "enhanced",
+    platforms: ["web"],
+    trigger: "לחיצה ראשונה בתוך טופס (Beta — לא תמיד אמין)",
+    params: ["form_id","form_name","form_destination"],
+    importance: 2,
+    note: "<strong>Beta / לא יציב</strong>. מומלץ להשתמש ב-GTM לדיוק."
+  },
+  {
+    name: "form_submit",
+    cat: "enhanced",
+    platforms: ["web"],
+    trigger: "לחיצה על כפתור submit בטופס HTML (Beta — לא תמיד אמין)",
+    params: ["form_id","form_name","form_destination","form_submit_text"],
+    importance: 2,
+    note: "<strong>Beta / לא יציב</strong>. GTM עם Form Trigger עדיף בהרבה."
+  },
+  {
+    name: "page_view (SPA)",
+    cat: "enhanced",
+    platforms: ["web"],
+    trigger: "שינוי ב-History (pushState/replaceState) באפליקציות Single Page",
+    params: ["page_location","page_title","page_referrer"],
+    importance: 4,
+    note: "ניתן לכיבוי אם ה-SPA מדווח page_view ידנית."
+  },
+
+  // ── RECOMMENDED — ALL PROPERTIES ─────────────────────────────────────
+  {
+    name: "login",
+    cat: "rec-all",
+    platforms: ["web","android","ios"],
+    trigger: "כניסה מוצלחת לחשבון — לאחר אימות",
+    params: ["method"],
+    importance: 4,
+    note: "method = 'google' / 'email' / 'facebook'. קורלציה ל-user_id."
+  },
+  {
+    name: "sign_up",
+    cat: "rec-all",
+    platforms: ["web","android","ios"],
+    trigger: "יצירת חשבון חדש בהצלחה",
+    params: ["method"],
+    importance: 5,
+    note: "<strong>Conversion קלאסי</strong>. שלב ב-Funnel לאחר first_visit."
+  },
+  {
+    name: "search",
+    cat: "rec-all",
+    platforms: ["web","android","ios"],
+    trigger: "ביצוע חיפוש פנימי באתר/אפליקציה",
+    params: ["search_term"],
+    importance: 4,
+    note: "שונה מ-view_search_results — זה מדווח ידנית ברגע השליחה."
+  },
+  {
+    name: "select_content",
+    cat: "rec-all",
+    platforms: ["web","android","ios"],
+    trigger: "בחירת תוכן ספציפי — תמונה, מאמר, קטגוריה",
+    params: ["content_type","item_id"],
+    importance: 3,
+    note: "גנרי — השתמש כשאין event ספציפי יותר."
+  },
+  {
+    name: "share",
+    cat: "rec-all",
+    platforms: ["web","android","ios"],
+    trigger: "שיתוף תוכן ברשתות חברתיות, WhatsApp, Email וכו'",
+    params: ["method","content_type","item_id"],
+    importance: 3,
+    note: "method = 'facebook' / 'whatsapp' וכו'."
+  },
+  {
+    name: "tutorial_begin",
+    cat: "rec-all",
+    platforms: ["web","android","ios"],
+    trigger: "תחילת תהליך onboarding / tutorial",
+    params: [],
+    importance: 3,
+    note: "בשילוב עם tutorial_complete — מודד Completion Rate."
+  },
+  {
+    name: "tutorial_complete",
+    cat: "rec-all",
+    platforms: ["web","android","ios"],
+    trigger: "סיום מוצלח של tutorial / onboarding",
+    params: [],
+    importance: 3,
+    note: ""
+  },
+
+  // ── RECOMMENDED — ECOMMERCE ───────────────────────────────────────────
+  {
+    name: "view_item",
+    cat: "rec-ecom",
+    platforms: ["web","android","ios"],
+    trigger: "צפייה בדף מוצר בודד",
+    params: ["currency","value","items[]"],
+    importance: 5,
+    note: "בסיס Funnel. <strong>items חובה</strong> עם item_id, item_name."
+  },
+  {
+    name: "view_item_list",
+    cat: "rec-ecom",
+    platforms: ["web","android","ios"],
+    trigger: "צפייה ברשימת מוצרים — קטגוריה, תוצאות חיפוש, Homepage Carousel",
+    params: ["item_list_id","item_list_name","items[]"],
+    importance: 4,
+    note: "כולל index לכל מוצר — מאפשר ניתוח מיקום."
+  },
+  {
+    name: "select_item",
+    cat: "rec-ecom",
+    platforms: ["web","android","ios"],
+    trigger: "לחיצה על מוצר מתוך רשימה (list → PDP)",
+    params: ["item_list_id","item_list_name","items[]"],
+    importance: 4,
+    note: "CTR מהרשימה לדף מוצר."
+  },
+  {
+    name: "add_to_cart",
+    cat: "rec-ecom",
+    platforms: ["web","android","ios"],
+    trigger: "הוספת מוצר לסל קניות",
+    params: ["currency","value","items[]"],
+    importance: 5,
+    note: "<strong>Micro-conversion קריטי</strong>. value = מחיר × כמות."
+  },
+  {
+    name: "remove_from_cart",
+    cat: "rec-ecom",
+    platforms: ["web","android","ios"],
+    trigger: "הסרת מוצר מהסל",
+    params: ["currency","value","items[]"],
+    importance: 3,
+    note: "עוזר לזהות friction — מוצרים שמוסרים לעתים קרובות."
+  },
+  {
+    name: "view_cart",
+    cat: "rec-ecom",
+    platforms: ["web","android","ios"],
+    trigger: "כניסה לעמוד הסל / פתיחת cart drawer",
+    params: ["currency","value","items[]"],
+    importance: 4,
+    note: "שלב בין ATC לבין begin_checkout."
+  },
+  {
+    name: "add_to_wishlist",
+    cat: "rec-ecom",
+    platforms: ["web","android","ios"],
+    trigger: "הוספת מוצר ל-Wishlist / Favorites",
+    params: ["currency","value","items[]"],
+    importance: 3,
+    note: "אינדיקטור Intent גבוה — מועמד טוב ל-Retargeting."
+  },
+  {
+    name: "begin_checkout",
+    cat: "rec-ecom",
+    platforms: ["web","android","ios"],
+    trigger: "כניסה לתהליך Checkout (שלב 1)",
+    params: ["currency","value","coupon","items[]"],
+    importance: 5,
+    note: "<strong>Top of Checkout Funnel</strong>. אחרי זה add_shipping → add_payment → purchase."
+  },
+  {
+    name: "add_shipping_info",
+    cat: "rec-ecom",
+    platforms: ["web","android","ios"],
+    trigger: "אישור פרטי משלוח בתהליך Checkout",
+    params: ["currency","value","coupon","shipping_tier","items[]"],
+    importance: 4,
+    note: "shipping_tier = 'Ground' / 'Express'. Drop-off כאן = בעיית משלוח."
+  },
+  {
+    name: "add_payment_info",
+    cat: "rec-ecom",
+    platforms: ["web","android","ios"],
+    trigger: "הזנת / אישור פרטי תשלום",
+    params: ["currency","value","coupon","payment_type","items[]"],
+    importance: 4,
+    note: "payment_type = 'credit_card' / 'paypal'. Drop-off = בעיית תשלום."
+  },
+  {
+    name: "purchase",
+    cat: "rec-ecom",
+    platforms: ["web","android","ios"],
+    trigger: "השלמת רכישה מוצלחת — דף אישור הזמנה",
+    params: ["transaction_id","value","tax","shipping","currency","coupon","affiliation","items[]"],
+    importance: 5,
+    note: "<strong>ה-Conversion המרכזי</strong>. transaction_id חובה למניעת כפילויות."
+  },
+  {
+    name: "refund",
+    cat: "rec-ecom",
+    platforms: ["web","android","ios"],
+    trigger: "ביצוע החזר כספי — ידנית מהקוד או מ-Measurement Protocol",
+    params: ["transaction_id","value","currency","items[]"],
+    importance: 4,
+    note: "מאפשר לחשב <strong>Revenue נטו</strong>. בדרך כלל server-side."
+  },
+  {
+    name: "view_promotion",
+    cat: "rec-ecom",
+    platforms: ["web","android","ios"],
+    trigger: "צפייה בבאנר/פרומו פנימי (Hero Banner, Pop-up, Sale Strip)",
+    params: ["creative_name","creative_slot","promotion_id","promotion_name","items[]"],
+    importance: 3,
+    note: "מדד Impression Rate של פרומושן."
+  },
+  {
+    name: "select_promotion",
+    cat: "rec-ecom",
+    platforms: ["web","android","ios"],
+    trigger: "לחיצה על באנר/פרומו פנימי",
+    params: ["creative_name","creative_slot","promotion_id","promotion_name","items[]"],
+    importance: 3,
+    note: "CTR של פרומושן — ratio עם view_promotion."
+  },
+  {
+    name: "generate_lead",
+    cat: "rec-ecom",
+    platforms: ["web","android","ios"],
+    trigger: "שליחת טופס יצירת קשר / בקשת הצעת מחיר",
+    params: ["currency","value"],
+    importance: 4,
+    note: "משותף גם לקטגורית Lead Gen."
+  },
+
+  // ── RECOMMENDED — LEAD GENERATION ────────────────────────────────────
+  {
+    name: "contact",
+    cat: "rec-lead",
+    platforms: ["web","android","ios"],
+    trigger: "פנייה ליצירת קשר — טלפון, צ'אט, מייל לחוצים",
+    params: [],
+    importance: 4,
+    note: "<strong>Micro-conversion</strong> לעסקים Service-based."
+  },
+  {
+    name: "schedule",
+    cat: "rec-lead",
+    platforms: ["web","android","ios"],
+    trigger: "קביעת פגישה / תור",
+    params: [],
+    importance: 4,
+    note: "קריטי לעסקים כמו רופאים, יועצים, ספא וכו'."
+  },
+  {
+    name: "submit_application",
+    cat: "rec-lead",
+    platforms: ["web","android","ios"],
+    trigger: "שליחת בקשה/מועמדות — השכרה, עבודה, הלוואה וכו'",
+    params: [],
+    importance: 4,
+    note: "שונה מ-generate_lead — מרמז על תהליך ארוך יותר."
+  },
+  {
+    name: "subscribe",
+    cat: "rec-lead",
+    platforms: ["web","android","ios"],
+    trigger: "הרשמה לניוזלטר / מנוי / הודעות",
+    params: ["currency","value"],
+    importance: 4,
+    note: "value אופציונלי — LTV של subscriber."
+  },
+  {
+    name: "start_trial",
+    cat: "rec-lead",
+    platforms: ["web","android","ios"],
+    trigger: "התחלת תקופת ניסיון חינמית",
+    params: ["currency","value"],
+    importance: 5,
+    note: "מרכזי ב-SaaS. Trial→Paid Conversion הוא ה-KPI."
+  },
+  {
+    name: "purchase (lead-gen)",
+    cat: "rec-lead",
+    platforms: ["web","android","ios"],
+    trigger: "רכישת מנוי / שירות",
+    params: ["transaction_id","value","currency"],
+    importance: 5,
+    note: "אותו event כמו Ecom אבל בהקשר Lead→Customer."
+  },
+
+  // ── RECOMMENDED — GAMES ───────────────────────────────────────────────
+  {
+    name: "level_start",
+    cat: "rec-games",
+    platforms: ["web","android","ios"],
+    trigger: "תחילת שלב/רמה במשחק",
+    params: ["level_name"],
+    importance: 4,
+    note: ""
+  },
+  {
+    name: "level_end",
+    cat: "rec-games",
+    platforms: ["web","android","ios"],
+    trigger: "סיום שלב — הצלחה או כישלון",
+    params: ["level_name","success"],
+    importance: 4,
+    note: "success=true/false. Drop-off per level = UX insight."
+  },
+  {
+    name: "level_up",
+    cat: "rec-games",
+    platforms: ["web","android","ios"],
+    trigger: "עלייה ברמה / score milestone",
+    params: ["level","character"],
+    importance: 3,
+    note: ""
+  },
+  {
+    name: "post_score",
+    cat: "rec-games",
+    platforms: ["web","android","ios"],
+    trigger: "שמירת/שיתוף תוצאה/ניקוד",
+    params: ["score","level","character"],
+    importance: 3,
+    note: ""
+  },
+  {
+    name: "earn_virtual_currency",
+    cat: "rec-games",
+    platforms: ["web","android","ios"],
+    trigger: "רכישת/קבלת מטבע וירטואלי, gems, coins וכו'",
+    params: ["virtual_currency_name","value"],
+    importance: 4,
+    note: "בסיס Economy Analysis."
+  },
+  {
+    name: "spend_virtual_currency",
+    cat: "rec-games",
+    platforms: ["web","android","ios"],
+    trigger: "שימוש/הוצאת מטבע וירטואלי",
+    params: ["virtual_currency_name","value","item_name"],
+    importance: 4,
+    note: "מה מוציאים עליו? → Item popularity."
+  },
+  {
+    name: "unlock_achievement",
+    cat: "rec-games",
+    platforms: ["web","android","ios"],
+    trigger: "פתיחת הישג/achievement",
+    params: ["achievement_id"],
+    importance: 3,
+    note: ""
+  },
+  {
+    name: "join_group",
+    cat: "rec-games",
+    platforms: ["web","android","ios"],
+    trigger: "הצטרפות לקבוצה/גילד/צוות",
+    params: ["group_id"],
+    importance: 2,
+    note: ""
+  },
+];
+
+const catLabels = {
+  auto: "🤖 Automatic",
+  enhanced: "⚡ Enhanced",
+  "rec-all": "🌐 Rec — All",
+  "rec-ecom": "🛒 Rec — Ecom",
+  "rec-lead": "🎯 Rec — Lead",
+  "rec-games": "🎮 Rec — Games",
+};
+
+let activeCat = "all";
+let activePlatform = "all";
+let searchTerm = "";
+
+function buildBadge(cat) {
+  return `<span class="badge badge-${cat}">${catLabels[cat]}</span>`;
+}
+
+function buildPlatforms(platforms) {
+  return platforms.map(p => {
+    const label = p === "web" ? "🌐 Web" : p === "ios" ? "🍎 iOS" : "🤖 Android";
+    return `<span class="platform-tag pt-${p}">${label}</span>`;
+  }).join("");
+}
+
+function buildStars(n) {
+  let s = "";
+  for (let i = 1; i <= 5; i++) {
+    s += `<span class="star${i > n ? " off" : ""}">★</span>`;
+  }
+  return `<div class="importance">${s}</div>`;
+}
+
+function buildParams(params) {
+  if (!params.length) return '<span style="color:var(--muted);font-size:.75rem">—</span>';
+  return `<div class="params-list">${params.map(p => `<span class="param-tag">${p}</span>`).join("")}</div>`;
+}
+
+function renderTable() {
+  const tbody = document.getElementById("tableBody");
+  const lastCat = { val: null };
+  let html = "";
+  let shown = 0;
+
+  const sectionTitles = {
+    auto: "🤖 AUTOMATICALLY COLLECTED EVENTS — ללא קוד, תמיד פועל",
+    enhanced: "⚡ ENHANCED MEASUREMENT EVENTS — הפעלה בממשק GA4",
+    "rec-all": "🌐 RECOMMENDED EVENTS — For All Properties",
+    "rec-ecom": "🛒 RECOMMENDED EVENTS — E-Commerce",
+    "rec-lead": "🎯 RECOMMENDED EVENTS — Lead Generation",
+    "rec-games": "🎮 RECOMMENDED EVENTS — Games",
+  };
+
+  events.forEach((ev, idx) => {
+    const catMatch = activeCat === "all" || ev.cat === activeCat;
+    const platformMatch = activePlatform === "all" || ev.platforms.includes(activePlatform);
+    const name = ev.name.replace(" (SPA)", "").replace(" (lead-gen)", "");
+    const searchMatch = !searchTerm ||
+      ev.name.toLowerCase().includes(searchTerm) ||
+      ev.trigger.toLowerCase().includes(searchTerm) ||
+      ev.params.some(p => p.toLowerCase().includes(searchTerm)) ||
+      (ev.note && ev.note.toLowerCase().includes(searchTerm)) ||
+      catLabels[ev.cat].toLowerCase().includes(searchTerm);
+
+    const visible = catMatch && platformMatch && searchMatch;
+
+    if (visible) {
+      if (lastCat.val !== ev.cat && (activeCat === "all" || activeCat === ev.cat)) {
+        html += `<tr class="section-row" data-section="${ev.cat}" onclick="toggleSection('${ev.cat}', this)"><td colspan="7">${sectionTitles[ev.cat]}<i class="collapse-arrow">▾</i></td></tr>`;
+        lastCat.val = ev.cat;
+      }
+      shown++;
+    }
+
+    html += `<tr class="${visible ? "" : "hidden"}" data-cat="${ev.cat}" data-platforms="${ev.platforms.join(",")}" data-search="${ev.name} ${ev.trigger} ${ev.params.join(" ")} ${ev.note}">
+      <td>
+        <div class="event-name">
+          ${name}
+          <button class="copy-btn" onclick="copyName('${name}', this)" title="העתק שם">⧉</button>
+        </div>
+      </td>
+      <td>${buildBadge(ev.cat)}</td>
+      <td><div class="platforms">${buildPlatforms(ev.platforms)}</div></td>
+      <td><div class="trigger-text">${ev.trigger}</div></td>
+      <td>${buildParams(ev.params)}</td>
+      <td>${buildStars(ev.importance)}</td>
+      <td><div class="note-text">${ev.note || "—"}</div></td>
+    </tr>`;
+  });
+
+  tbody.innerHTML = html;
+
+  // restore collapsed state after re-render
+  collapsedSections.forEach(cat => {
+    const headerRow = tbody.querySelector(`tr[data-section="${cat}"]`);
+    if (headerRow) headerRow.classList.add("collapsed");
+    tbody.querySelectorAll(`tr[data-cat="${cat}"]`).forEach(r => {
+      if (!r.classList.contains("hidden")) r.style.display = "none";
+    });
+  });
+
+  document.getElementById("shownCount").textContent = shown;
+  document.getElementById("totalCount").textContent = events.length;
+  document.getElementById("emptyState").style.display = shown === 0 ? "block" : "none";
+}
+
+const collapsedSections = new Set();
+
+function toggleSection(cat, headerRow) {
+  const isCollapsed = collapsedSections.has(cat);
+  if (isCollapsed) {
+    collapsedSections.delete(cat);
+    headerRow.classList.remove("collapsed");
+  } else {
+    collapsedSections.add(cat);
+    headerRow.classList.add("collapsed");
+  }
+  const rows = document.querySelectorAll(`#tableBody tr[data-cat="${cat}"]`);
+  rows.forEach(r => {
+    if (!r.classList.contains("hidden")) {
+      r.style.display = isCollapsed ? "" : "none";
+    }
+  });
+}
+
+function copyName(name, btn) {
+  navigator.clipboard.writeText(name).then(() => {
+    btn.textContent = "✓";
+    btn.classList.add("copied");
+    setTimeout(() => {
+      btn.textContent = "⧉";
+      btn.classList.remove("copied");
+    }, 1500);
+  });
+}
+
+// Filter buttons
+document.querySelectorAll(".btn[data-cat]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".btn[data-cat]").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    activeCat = btn.dataset.cat;
+    renderTable();
+  });
+});
+
+document.querySelectorAll(".pbtn[data-platform]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".pbtn[data-platform]").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    activePlatform = btn.dataset.platform;
+    renderTable();
+  });
+});
+
+document.getElementById("searchInput").addEventListener("input", e => {
+  searchTerm = e.target.value.toLowerCase().trim();
+  renderTable();
+});
+
+renderTable();
+
+// ══════════════════════════════════════════════════════════════════════
+// PAGE TABS
+// ══════════════════════════════════════════════════════════════════════
+document.querySelectorAll(".ptab-main").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".ptab-main").forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+    const target = tab.dataset.tab;
+    document.getElementById("eventsSection").style.display    = target === "events"     ? "" : "none";
+    document.getElementById("dimsSection").style.display      = target === "dims"       ? "" : "none";
+    document.getElementById("allMetricsSection").style.display = target === "allmetrics" ? "" : "none";
+    document.getElementById("allDimsSection").style.display    = target === "alldims"   ? "" : "none";
+  });
+});
+
+// ══════════════════════════════════════════════════════════════════════
+// DIMS & METRICS — MASTER/DETAIL
+// ══════════════════════════════════════════════════════════════════════
+const metricsDict = {
+  totalUsers:              { display:"Total Users",              desc:"סך כל המשתמשים שהפעילו אירוע אחד לפחות",        importance:5 },
+  newUsers:                { display:"New Users",                desc:"משתמשים שהביקור בתקופה הוא first_visit שלהם",    importance:5 },
+  returningUsers:          { display:"Returning Users",          desc:"משתמשים שחזרו בתקופה הנבחרת",                   importance:4 },
+  sessionsPerUser:         { display:"Sessions / User",          desc:"ממוצע סשנים למשתמש",                            importance:3 },
+  dauPerMau:               { display:"DAU / MAU",                desc:"מדד Stickiness — פעילות יומית מתוך חודשית",     importance:3 },
+  sessions:                { display:"Sessions",                  desc:"סך הסשנים שנוצרו",                              importance:5 },
+  engagedSessions:         { display:"Engaged Sessions",         desc:"סשנים עם 10+ שניות / Conversion / 2+ PV",       importance:5 },
+  averageSessionDuration:  { display:"Avg. Session Duration",    desc:"משך הסשן הממוצע",                               importance:4 },
+  bounceRate:              { display:"Bounce Rate",               desc:"% סשנים שלא היו Engaged",                       importance:5 },
+  engagementRate:          { display:"Engagement Rate",          desc:"% סשנים שהיו Engaged (היפך של Bounce Rate)",    importance:5 },
+  screenPageViews:         { display:"Views",                    desc:"צפיות בעמודים ומסכים",                          importance:5 },
+  screenPageViewsPerSession:{ display:"Views / Session",         desc:"צפיות ממוצעות לסשן",                            importance:4 },
+  averageEngagementTime:   { display:"Avg. Engagement Time",     desc:"זמן מעורבות ממוצע לסשן",                        importance:5 },
+  scrolledUsers:           { display:"Scrolled Users",           desc:"משתמשים שגללו 90%+ מהדף",                       importance:3 },
+  eventCount:              { display:"Event Count",              desc:"ספירת אירועים",                                  importance:5 },
+  conversions:             { display:"Conversions",              desc:"סך המרות מכל סוג",                              importance:5 },
+  sessionConversionRate:   { display:"Session Conv. Rate",       desc:"% סשנים שהובילו להמרה",                         importance:5 },
+  userConversionRate:      { display:"User Conv. Rate",          desc:"% משתמשים שביצעו המרה",                         importance:5 },
+  totalRevenue:            { display:"Total Revenue",            desc:"הכנסה כוללת",                                    importance:5 },
+  purchaseRevenue:         { display:"Purchase Revenue",         desc:"הכנסה מאירועי purchase בלבד",                   importance:5 },
+  transactions:            { display:"Transactions",             desc:"מספר רכישות שהושלמו",                           importance:5 },
+  purchaserConversionRate: { display:"Purchaser Conv. Rate",     desc:"% משתמשים שרכשו",                               importance:4 },
+  averagePurchaseRevenue:  { display:"AOV",                      desc:"ממוצע הכנסה לרכישה (Average Order Value)",       importance:5 },
+  averagePurchaseRevenuePerUser:{ display:"ARPU",                desc:"ממוצע הכנסה למשתמש",                            importance:4 },
+  itemsViewed:             { display:"Items Viewed",             desc:"מוצרים שנצפו — view_item events",               importance:4 },
+  itemsAddedToCart:        { display:"Items Added to Cart",      desc:"מוצרים שהוסיפו לסל",                           importance:4 },
+  itemsPurchased:          { display:"Items Purchased",          desc:"מוצרים שנרכשו",                                 importance:4 },
+  itemRevenue:             { display:"Item Revenue",             desc:"הכנסה ברמת המוצר הבודד",                        importance:4 },
+  cartToViewRate:          { display:"Cart-to-View Rate",        desc:"% צפיות שהפכו להוספה לסל",                     importance:4 },
+  purchaseToViewRate:      { display:"Purchase-to-View Rate",    desc:"% צפיות שהפכו לרכישה",                          importance:4 },
+  keyEvents:               { display:"Key Events",               desc:"אירועים שמוגדרים כ-Key Events בנכס",            importance:5 },
+  userEngagementDuration:  { display:"User Engagement Duration", desc:"סך זמן מעורבות כל המשתמשים (שניות)",           importance:4 },
+};
+
+const dimsMaster = [
+  // ── USER ──────────────────────────────────────────────────────────────
+  { apiName:"newVsReturning",      display:"New / Returning",        cat:"user",    desc:"האם המשתמש חדש (ביקור ראשון) או חוזר בחלון הזמן שנבחר", importance:5, example:"New, Returning",                   metrics:["totalUsers","newUsers","returningUsers","sessions","sessionsPerUser","bounceRate","engagementRate","conversions","userConversionRate","totalRevenue"] },
+  { apiName:"signedInWithUserId",  display:"Signed In With User ID", cat:"user",    desc:"האם האירוע נשלח עם User ID מותאם אישית",                importance:3, example:"yes, no",                          metrics:["totalUsers","sessions","conversions","userConversionRate","averagePurchaseRevenuePerUser"] },
+  { apiName:"audienceName",        display:"Audience Name",          cat:"user",    desc:"שם הקהל ש-GA4 שייך אליו את המשתמש בזמן האירוע",         importance:4, example:"All Users, Purchasers, Cart Abandoners",metrics:["totalUsers","sessions","conversions","sessionConversionRate","totalRevenue"] },
+
+  // ── DEMOGRAPHICS ───────────────────────────────────────────────────────
+  { apiName:"userAgeBracket",      display:"Age",                    cat:"demo",    desc:"קבוצת גיל המשתמש לפי Google Signals — דורש קישור Signals",importance:4, example:"18-24, 25-34, 35-44, 45-54, 55-64, 65+",metrics:["totalUsers","newUsers","sessions","bounceRate","engagementRate","conversions","sessionConversionRate","totalRevenue"] },
+  { apiName:"userGender",          display:"Gender",                 cat:"demo",    desc:"מין המשתמש לפי Google Signals — דורש קישור Signals",     importance:3, example:"male, female, unknown",             metrics:["totalUsers","sessions","bounceRate","engagementRate","conversions","totalRevenue"] },
+  { apiName:"userInterests",       display:"Interests",              cat:"demo",    desc:"תחומי עניין של המשתמש לפי Google Signals",              importance:3, example:"Sports & Fitness, Technology, Travel",metrics:["totalUsers","sessions","conversions"] },
+
+  // ── DEVICE ─────────────────────────────────────────────────────────────
+  { apiName:"deviceCategory",      display:"Device Category",        cat:"device",  desc:"סוג המכשיר: מחשב, נייד, טאבלט",                        importance:5, example:"desktop, mobile, tablet",          metrics:["totalUsers","sessions","bounceRate","engagementRate","averageEngagementTime","screenPageViews","conversions","sessionConversionRate","totalRevenue"] },
+  { apiName:"browser",             display:"Browser",                cat:"device",  desc:"דפדפן המשתמש",                                          importance:4, example:"Chrome, Safari, Firefox, Edge",     metrics:["totalUsers","sessions","bounceRate","engagementRate","conversions"] },
+  { apiName:"browserVersion",      display:"Browser Version",        cat:"device",  desc:"גרסה מדויקת של הדפדפן",                                 importance:2, example:"120.0.0, 17.2, 122.0",             metrics:["totalUsers","sessions","bounceRate"] },
+  { apiName:"operatingSystem",     display:"Operating System",       cat:"device",  desc:"מערכת הפעלה של המשתמש",                                 importance:4, example:"Windows, iOS, Android, macOS",     metrics:["totalUsers","sessions","bounceRate","engagementRate","screenPageViews"] },
+  { apiName:"operatingSystemVersion", display:"OS Version",          cat:"device",  desc:"גרסת מערכת ההפעלה",                                     importance:2, example:"14.4, 13, Windows 11",             metrics:["totalUsers","sessions","bounceRate"] },
+  { apiName:"platform",            display:"Platform",               cat:"device",  desc:"פלטפורמת הנכס שממנה הגיע האירוע",                      importance:4, example:"Web, Android, iOS",                metrics:["totalUsers","sessions","screenPageViews","eventCount","conversions"] },
+  { apiName:"screenResolution",    display:"Screen Resolution",      cat:"device",  desc:"רזולוציית מסך המשתמש",                                  importance:3, example:"1920x1080, 390x844, 2560x1440",    metrics:["totalUsers","sessions","bounceRate"] },
+  { apiName:"deviceBranding",      display:"Device Brand",           cat:"device",  desc:"מותג המכשיר",                                           importance:2, example:"Apple, Samsung, Google, Xiaomi",    metrics:["totalUsers","sessions","bounceRate"] },
+  { apiName:"deviceModel",         display:"Device Model",           cat:"device",  desc:"דגם המכשיר הספציפי",                                    importance:2, example:"iPhone 15, Galaxy S24",             metrics:["totalUsers","sessions","bounceRate"] },
+  { apiName:"mobileModel",         display:"Mobile Model (full)",    cat:"device",  desc:"דגם המכשיר הנייד",                                      importance:2, example:"iPhone 15 Pro, Pixel 8",           metrics:["totalUsers","sessions","bounceRate","engagementRate"] },
+  { apiName:"language",            display:"Language",               cat:"device",  desc:"שפת הדפדפן / מכשיר של המשתמש",                         importance:3, example:"he, en-us, ar, fr",                metrics:["totalUsers","sessions","bounceRate","engagementRate"] },
+  { apiName:"streamId",            display:"Stream ID",              cat:"device",  desc:"מזהה ה-Data Stream שממנו הגיע האירוע",                  importance:2, example:"1234567890",                       metrics:["totalUsers","sessions","eventCount"] },
+  { apiName:"streamName",          display:"Stream Name",            cat:"device",  desc:"שם ה-Data Stream",                                      importance:2, example:"My Website, iOS App",              metrics:["totalUsers","sessions","eventCount"] },
+
+  // ── GEO ───────────────────────────────────────────────────────────────
+  { apiName:"country",             display:"Country",                cat:"geo",     desc:"ארץ המשתמש לפי כתובת IP",                               importance:5, example:"Israel, United States, Germany",   metrics:["totalUsers","newUsers","sessions","bounceRate","engagementRate","averageEngagementTime","conversions","sessionConversionRate","totalRevenue"] },
+  { apiName:"countryId",           display:"Country ID",             cat:"geo",     desc:"קוד ארץ ISO 3166 — שימושי לפילטורים ב-API",            importance:3, example:"IL, US, GB, DE",                   metrics:["totalUsers","sessions","conversions"] },
+  { apiName:"city",                display:"City",                   cat:"geo",     desc:"עיר המשתמש לפי IP",                                     importance:4, example:"Tel Aviv, Jerusalem, London",      metrics:["totalUsers","sessions","bounceRate","conversions","totalRevenue"] },
+  { apiName:"region",              display:"Region",                 cat:"geo",     desc:"מחוז / אזור גיאוגרפי",                                  importance:3, example:"Tel Aviv District, California",    metrics:["totalUsers","sessions","bounceRate","conversions"] },
+  { apiName:"continent",           display:"Continent",              cat:"geo",     desc:"יבשת המשתמש",                                           importance:2, example:"Americas, Europe, Asia",           metrics:["totalUsers","sessions","conversions","totalRevenue"] },
+  { apiName:"subContinent",        display:"Subcontinent",           cat:"geo",     desc:"תת-יבשת המשתמש",                                        importance:2, example:"Western Asia, Northern Europe",    metrics:["totalUsers","sessions","conversions"] },
+
+  // ── TRAFFIC ───────────────────────────────────────────────────────────
+  { apiName:"sessionSource",       display:"Session Source",         cat:"traffic", desc:"מקור התנועה שפתח את הסשן — session-scoped",             importance:5, example:"google, facebook, (direct)",       metrics:["sessions","newUsers","engagedSessions","bounceRate","engagementRate","conversions","sessionConversionRate","totalRevenue","averagePurchaseRevenue"] },
+  { apiName:"sessionMedium",       display:"Session Medium",         cat:"traffic", desc:"המדיום של הסשן הנוכחי",                                 importance:5, example:"organic, cpc, email, referral",    metrics:["sessions","newUsers","engagedSessions","bounceRate","conversions","sessionConversionRate","totalRevenue"] },
+  { apiName:"sessionCampaignName", display:"Session Campaign",       cat:"traffic", desc:"שם הקמפיין שהביא את הסשן (utm_campaign)",              importance:5, example:"Black_Friday_2024, brand_il",      metrics:["sessions","newUsers","conversions","sessionConversionRate","totalRevenue","averagePurchaseRevenue"] },
+  { apiName:"sessionDefaultChannelGroup", display:"Default Channel Group", cat:"traffic", desc:"קבוצת ערוץ שגוגל מקצה אוטומטית לסשן",           importance:5, example:"Organic Search, Paid Social, Direct",metrics:["sessions","newUsers","engagedSessions","bounceRate","conversions","sessionConversionRate","totalRevenue"] },
+  { apiName:"sessionSourceMedium", display:"Source / Medium",        cat:"traffic", desc:"מקור + מדיום בסשן — שדה משולב נוח לדוחות",            importance:5, example:"google / cpc, (direct) / (none)",  metrics:["sessions","newUsers","bounceRate","conversions","sessionConversionRate","totalRevenue"] },
+  { apiName:"sessionGoogleAdsKeyword", display:"Keyword (Google Ads)", cat:"traffic", desc:"מילת המפתח שהפעילה את המודעה ב-Google Ads",         importance:4, example:"נעלי ריצה, buy shoes online",      metrics:["sessions","conversions","sessionConversionRate","totalRevenue","averagePurchaseRevenue"] },
+  { apiName:"sessionGoogleAdsAdGroupName", display:"Ad Group Name",  cat:"traffic", desc:"שם קבוצת המודעות שהביאה את הסשן",                    importance:4, example:"Brand_Keywords_IL, PMAX_Shoes",    metrics:["sessions","conversions","sessionConversionRate","totalRevenue","averagePurchaseRevenue"] },
+  { apiName:"sessionGoogleAdsMatchType", display:"Match Type",       cat:"traffic", desc:"סוג ההתאמה של מילת המפתח",                             importance:3, example:"Exact, Phrase, Broad",             metrics:["sessions","conversions","sessionConversionRate"] },
+  { apiName:"sessionGoogleAdsCampaignType", display:"Campaign Type", cat:"traffic", desc:"סוג הקמפיין ב-Google Ads",                             importance:4, example:"Search, Display, Performance Max, Shopping",metrics:["sessions","conversions","sessionConversionRate","totalRevenue"] },
+  { apiName:"firstUserSource",     display:"First User Source",      cat:"traffic", desc:"מקור הביקור הראשון — User-scoped, לא משתנה לעולם",    importance:4, example:"google, instagram.com, (direct)",  metrics:["totalUsers","newUsers","conversions","userConversionRate","totalRevenue"] },
+  { apiName:"firstUserMedium",     display:"First User Medium",      cat:"traffic", desc:"מדיום הביקור הראשון של המשתמש — User-scoped",          importance:4, example:"organic, cpc, referral",           metrics:["totalUsers","newUsers","conversions","userConversionRate"] },
+  { apiName:"firstUserCampaignName", display:"First User Campaign",  cat:"traffic", desc:"הקמפיין שהביא את המשתמש בפעם הראשונה",                importance:4, example:"summer_sale, brand_awareness",     metrics:["totalUsers","newUsers","conversions","userConversionRate"] },
+  { apiName:"firstUserDefaultChannelGroup", display:"First User Channel Group", cat:"traffic", desc:"ערוץ הביקור הראשון של המשתמש",              importance:4, example:"Paid Search, Organic Social",       metrics:["totalUsers","newUsers","conversions","userConversionRate","totalRevenue"] },
+
+  // ── PAGE ───────────────────────────────────────────────────────────────
+  { apiName:"pagePath",            display:"Page Path",              cat:"page",    desc:"נתיב העמוד ללא הדומיין וללא Query String",              importance:5, example:"/pricing, /blog/ga4-tips",         metrics:["screenPageViews","totalUsers","averageEngagementTime","bounceRate","conversions","scrolledUsers"] },
+  { apiName:"pageTitle",           display:"Page Title",             cat:"page",    desc:"כותרת הדף — תוכן תגית <title>",                       importance:4, example:"דף הבית | RPG Digital",            metrics:["screenPageViews","totalUsers","averageEngagementTime","bounceRate"] },
+  { apiName:"landingPage",         display:"Landing Page",           cat:"page",    desc:"העמוד הראשון שנצפה בסשן — קריטי לניתוח דפי נחיתה",    importance:5, example:"/landing/pmax-sale, /",           metrics:["sessions","newUsers","bounceRate","engagementRate","averageEngagementTime","conversions","sessionConversionRate","totalRevenue"] },
+  { apiName:"hostName",            display:"Hostname",               cat:"page",    desc:"שם הדומיין — שימושי כשיש מספר נכסים / sub-domains",   importance:3, example:"rpgdigital.co.il, shop.example.com",metrics:["sessions","screenPageViews","totalUsers","bounceRate"] },
+  { apiName:"pagePathPlusQueryString", display:"Page Path + Query String", cat:"page", desc:"נתיב מלא כולל פרמטרי URL — שימושי לניתוח חיפוש פנימי",importance:3, example:"/search?q=shoes&color=red",     metrics:["screenPageViews","totalUsers","bounceRate"] },
+  { apiName:"contentGroup",        display:"Content Group",          cat:"page",    desc:"קבוצת תוכן מותאמת — עד 5 קבוצות, מוגדרות ידנית",     importance:3, example:"Blog, Product Pages, Landing Pages",metrics:["screenPageViews","totalUsers","bounceRate","averageEngagementTime","conversions"] },
+  { apiName:"pageReferrer",        display:"Page Referrer",          cat:"page",    desc:"ה-URL המלא של הדף הקודם שהפנה לדף הנוכחי",            importance:3, example:"https://google.com, https://t.co",metrics:["sessions","totalUsers","screenPageViews"] },
+  { apiName:"pageLocation",        display:"Page Location",          cat:"page",    desc:"ה-URL המלא של הדף כולל פרוטוקול ודומיין",             importance:3, example:"https://rpgdigital.co.il/pricing",  metrics:["screenPageViews","totalUsers","bounceRate"] },
+  { apiName:"landingPagePlusQueryString", display:"Landing Page + Query String", cat:"page", desc:"דף נחיתה מלא כולל פרמטרי URL",               importance:3, example:"/landing?utm_campaign=brand",      metrics:["sessions","newUsers","bounceRate","conversions"] },
+
+  // ── EVENT ──────────────────────────────────────────────────────────────
+  { apiName:"eventName",           display:"Event Name",             cat:"event",   desc:"שם האירוע כפי שנשלח ל-GA4",                             importance:5, example:"page_view, purchase, add_to_cart", metrics:["eventCount","totalUsers","conversions","sessionConversionRate"] },
+  { apiName:"isKeyEvent",          display:"Is Key Event",           cat:"event",   desc:"האם האירוע מוגדר כ-Key Event בהגדרות הנכס",            importance:4, example:"true, false",                      metrics:["keyEvents","eventCount","conversions","sessionConversionRate","userConversionRate"] },
+
+  // ── ECOM ───────────────────────────────────────────────────────────────
+  { apiName:"itemName",            display:"Item Name",              cat:"ecom",    desc:"שם המוצר",                                              importance:5, example:"נעלי ריצה Nike Air Max",           metrics:["itemsViewed","itemsAddedToCart","itemsPurchased","itemRevenue","cartToViewRate","purchaseToViewRate","transactions"] },
+  { apiName:"itemId",              display:"Item ID",                cat:"ecom",    desc:"מזהה ייחודי של המוצר — SKU",                            importance:5, example:"SKU-1234, PROD-ABC",               metrics:["itemsViewed","itemsAddedToCart","itemsPurchased","itemRevenue","cartToViewRate"] },
+  { apiName:"itemCategory",        display:"Item Category",          cat:"ecom",    desc:"קטגוריה ראשית של המוצר",                                importance:4, example:"נעליים, אלקטרוניקה, ביגוד",        metrics:["itemsViewed","itemsAddedToCart","itemsPurchased","itemRevenue","cartToViewRate","transactions"] },
+  { apiName:"itemCategory2",       display:"Item Category 2",        cat:"ecom",    desc:"קטגוריה שניה של המוצר",                                 importance:3, example:"נעלי ריצה, Smartphones",           metrics:["itemsViewed","itemsAddedToCart","itemsPurchased","itemRevenue"] },
+  { apiName:"itemBrand",           display:"Item Brand",             cat:"ecom",    desc:"מותג המוצר",                                            importance:4, example:"Nike, Samsung, Apple, Zara",        metrics:["itemsViewed","itemsAddedToCart","itemsPurchased","itemRevenue"] },
+  { apiName:"itemVariant",         display:"Item Variant",           cat:"ecom",    desc:"גרסת המוצר — גודל, צבע וכד'",                          importance:3, example:"XL / שחור, 42, Red",               metrics:["itemsViewed","itemsAddedToCart","itemsPurchased","itemRevenue"] },
+  { apiName:"itemListName",        display:"Item List Name",         cat:"ecom",    desc:"שם הרשימה שבה הוצג המוצר",                              importance:4, example:"Homepage Carousel, Search Results",metrics:["itemsViewed","itemsAddedToCart","cartToViewRate","itemsPurchased","itemRevenue"] },
+  { apiName:"itemPromotionName",   display:"Promotion Name",         cat:"ecom",    desc:"שם הפרומושן שהמשתמש ראה",                               importance:3, example:"Summer Sale, Black Friday Banner",  metrics:["itemsViewed","itemsAddedToCart","itemsPurchased"] },
+  { apiName:"transactionId",       display:"Transaction ID",         cat:"ecom",    desc:"מזהה ייחודי לכל עסקה — חשוב לגילוי כפילויות",         importance:4, example:"TXN-9821, ORD-001",                metrics:["transactions","totalRevenue","itemsPurchased","averagePurchaseRevenue"] },
+  { apiName:"orderCoupon",         display:"Order Coupon",           cat:"ecom",    desc:"קופון שהוחל על ההזמנה",                                importance:3, example:"SUMMER20, BLACKFRI10",             metrics:["transactions","totalRevenue","averagePurchaseRevenue","itemsPurchased"] },
+  { apiName:"paymentType",         display:"Payment Type",           cat:"ecom",    desc:"אמצעי תשלום שנבחר",                                     importance:3, example:"credit_card, PayPal, bit",         metrics:["transactions","totalRevenue","purchaserConversionRate"] },
+  { apiName:"shippingTier",        display:"Shipping Tier",          cat:"ecom",    desc:"אפשרות המשלוח שנבחרה",                                  importance:3, example:"Ground, Express, Free",            metrics:["transactions","totalRevenue","averagePurchaseRevenue"] },
+
+  // ── DATETIME ───────────────────────────────────────────────────────────
+  { apiName:"date",                display:"Date",                   cat:"datetime", desc:"תאריך האירוע בפורמט YYYYMMDD",                          importance:5, example:"20240115, 20241201",               metrics:["sessions","totalUsers","newUsers","screenPageViews","conversions","totalRevenue","bounceRate"] },
+  { apiName:"dateHour",            display:"Date + Hour",            cat:"datetime", desc:"תאריך + שעה בפורמט YYYYMMDDHH — לניתוח שעתי מדויק",   importance:4, example:"2024011514, 2024120109",           metrics:["sessions","totalUsers","conversions","totalRevenue"] },
+  { apiName:"dayOfWeek",           display:"Day of Week",            cat:"datetime", desc:"יום בשבוע: 0=ראשון, 6=שבת",                            importance:4, example:"0 (ראשון), 5 (שישי)",              metrics:["sessions","totalUsers","conversions","totalRevenue","bounceRate","engagementRate"] },
+  { apiName:"hour",                display:"Hour",                   cat:"datetime", desc:"שעת האירוע (0–23) — שימושי לניתוח שעות שיא",           importance:3, example:"9, 14, 20",                        metrics:["sessions","totalUsers","conversions","bounceRate"] },
+  { apiName:"week",                display:"Week",                   cat:"datetime", desc:"שבוע בשנה (01–53)",                                     importance:3, example:"01, 26, 52",                       metrics:["sessions","totalUsers","newUsers","conversions","totalRevenue"] },
+  { apiName:"month",               display:"Month",                  cat:"datetime", desc:"חודש (01–12)",                                          importance:4, example:"01, 06, 12",                       metrics:["sessions","totalUsers","newUsers","conversions","totalRevenue"] },
+  { apiName:"year",                display:"Year",                   cat:"datetime", desc:"שנה — שימושי לניתוח מגמות שנתיות",                     importance:3, example:"2024, 2025",                       metrics:["sessions","totalUsers","newUsers","conversions","totalRevenue"] },
+  { apiName:"nthDay",              display:"Nth Day",                cat:"datetime", desc:"מספר הימים מתחילת תקופת הדוח",                         importance:2, example:"0, 1, 30",                         metrics:["sessions","totalUsers","screenPageViews","conversions"] },
+
+  // ── LINK ───────────────────────────────────────────────────────────────
+  { apiName:"linkUrl",             display:"Link URL",               cat:"link",    desc:"כתובת ה-URL המלאה של הקישור שנלחץ",                     importance:5, example:"https://example.com/page",          metrics:["eventCount","totalUsers"] },
+  { apiName:"linkText",            display:"Link Text",              cat:"link",    desc:"הטקסט הגלוי של הקישור שנלחץ",                           importance:4, example:"לחץ כאן, Read More, Download",      metrics:["eventCount","totalUsers"] },
+  { apiName:"linkDomain",          display:"Link Domain",            cat:"link",    desc:"הדומיין של כתובת יעד הקישור",                           importance:4, example:"example.com, facebook.com",         metrics:["eventCount","totalUsers"] },
+  { apiName:"outbound",            display:"Outbound",               cat:"link",    desc:"האם הקישור יוצא לדומיין חיצוני — true/false",           importance:4, example:"true, false",                      metrics:["eventCount","totalUsers"] },
+  { apiName:"linkId",              display:"Link ID",                cat:"link",    desc:"מזהה HTML של הקישור (id attribute)",                    importance:2, example:"cta-button, nav-link-home",         metrics:["eventCount","totalUsers"] },
+  { apiName:"linkClasses",         display:"Link Classes",           cat:"link",    desc:"מחלקות CSS של הקישור שנלחץ",                            importance:2, example:"btn btn-primary, nav-item",         metrics:["eventCount","totalUsers"] },
+
+  // ── VIDEO ──────────────────────────────────────────────────────────────
+  { apiName:"videoTitle",          display:"Video Title",            cat:"video",   desc:"כותרת הסרטון שנצפה — לניתוח ביצועי וידאו",             importance:5, example:"GA4 Tutorial 2024, Brand Story",    metrics:["eventCount","totalUsers","averageEngagementTime","userEngagementDuration"] },
+  { apiName:"videoUrl",            display:"Video URL",              cat:"video",   desc:"כתובת ה-URL המלאה של הסרטון",                           importance:4, example:"https://youtube.com/watch?v=...",    metrics:["eventCount","totalUsers"] },
+  { apiName:"videoProvider",       display:"Video Provider",         cat:"video",   desc:"ספק הסרטון — כרגע תמיד youtube",                        importance:3, example:"youtube",                           metrics:["eventCount","totalUsers"] },
+
+  // ── GAMING ─────────────────────────────────────────────────────────────
+  { apiName:"achievementId",       display:"Achievement ID",         cat:"gaming",  desc:"מזהה ההישג שהושג במשחק (unlocked_achievement)",         importance:4, example:"first_win, level_10_complete",      metrics:["eventCount","totalUsers"] },
+  { apiName:"character",           display:"Character",              cat:"gaming",  desc:"שם הדמות שהשחקן בחר / השתמש בה",                       importance:3, example:"Warrior, Mage, Archer",              metrics:["eventCount","totalUsers","sessions"] },
+  { apiName:"level",               display:"Level",                  cat:"gaming",  desc:"שלב / רמה שהשחקן הגיע אליו",                           importance:4, example:"1, 5, 10, 50",                      metrics:["eventCount","totalUsers","sessions"] },
+  { apiName:"virtualCurrencyName", display:"Virtual Currency Name",  cat:"gaming",  desc:"שם המטבע הווירטואלי שנרכש / הוצא",                     importance:3, example:"Coins, Gems, Gold",                  metrics:["eventCount","totalUsers"] },
+
+  // ── GENERAL ───────────────────────────────────────────────────────────
+  { apiName:"searchTerm",          display:"Search Term",            cat:"general", desc:"מונח חיפוש שהמשתמש הזין בתוך האתר",                    importance:5, example:"נעלי ריצה, iPhone 15, מחיר",        metrics:["eventCount","totalUsers","sessions","screenPageViews"] },
+  { apiName:"fileExtension",       display:"File Extension",         cat:"general", desc:"סוג הקובץ שהורד",                                       importance:3, example:"pdf, docx, xlsx, zip",               metrics:["eventCount","totalUsers"] },
+  { apiName:"fileName",            display:"File Name",              cat:"general", desc:"שם הקובץ שהורד",                                        importance:3, example:"catalog-2024.pdf, price-list.xlsx",  metrics:["eventCount","totalUsers"] },
+  { apiName:"method",              display:"Method",                 cat:"general", desc:"שיטה ששלחת עם האירוע — login, share וכד'",              importance:3, example:"google, email, facebook",             metrics:["eventCount","totalUsers"] },
+  { apiName:"percentScrolled",     display:"Percent Scrolled",       cat:"general", desc:"אחוז הגלילה — Enhanced Measurement מדווח כשמגיעים ל-90%",importance:3, example:"90",                              metrics:["eventCount","totalUsers","scrolledUsers"] },
+  { apiName:"contentGroup",        display:"Content Group",          cat:"general", desc:"קבוצת תוכן מותאמת",                                     importance:3, example:"Blog, Product Pages, Campaigns",     metrics:["screenPageViews","totalUsers","bounceRate","averageEngagementTime"] },
+];
+
+const dimCatLabels2 = {
+  user:"👤 משתמש", demo:"🧬 דמוגרפיה", device:"💻 מכשיר",
+  geo:"🌍 גיאוגרפיה", traffic:"🚦 מקורות תנועה", page:"📄 עמודים",
+  event:"⚡ אירועים", ecom:"🛒 איקומרס", datetime:"📅 תאריך ושעה",
+  link:"🔗 קישורים", video:"🎬 וידאו", gaming:"🎮 גיימינג", general:"⚙️ כללי"
+};
+
+let activeDcat2 = "all";
+let dimSearch2  = "";
+let selectedDimApi = null;
+
+function starsHtml(n, cls) {
+  return Array.from({length:5},(_,i)=>`<span class="star${cls||""} ${i>=n?" off":""}"  >★</span>`).join("");
+}
+
+function selectDim(apiName) {
+  selectedDimApi = apiName;
+  document.querySelectorAll(".dim-item").forEach(el =>
+    el.classList.toggle("active", el.dataset.api === apiName));
+
+  const dim = dimsMaster.find(d => d.apiName === apiName);
+  const panel = document.getElementById("dimDetail");
+
+  const metricsHtml = dim.metrics.map(mKey => {
+    const m = metricsDict[mKey];
+    if (!m) return "";
+    return `<div class="metric-card">
+      <div class="metric-card-api">${mKey}</div>
+      <div class="metric-card-display">${m.display}</div>
+      <div class="metric-card-desc">${m.desc}</div>
+      <div class="metric-card-stars">${starsHtml(m.importance)}</div>
+    </div>`;
+  }).join("");
+
+  panel.innerHTML = `
+    <div class="dim-detail-head">
+      <div class="dim-detail-api">
+        ${dim.apiName}
+        <button class="copy-btn" style="opacity:1" onclick="copyName('${dim.apiName}',this)" title="העתק">⧉</button>
+        <span class="badge dcat-${dim.cat}">${dimCatLabels2[dim.cat]}</span>
+      </div>
+      <div class="dim-detail-name">${dim.display}</div>
+      <div class="dim-detail-desc">${dim.desc}</div>
+      <div class="dim-detail-example">דוגמה: ${dim.example}</div>
+      <div class="dim-detail-stars">${starsHtml(dim.importance)}</div>
+    </div>
+    <div class="dim-metrics-wrap">
+      <div class="dim-metrics-title">📊 ${dim.metrics.length} מטריקות רלוונטיות</div>
+      <div class="metrics-grid">${metricsHtml}</div>
+    </div>`;
+}
+
+function renderDimList() {
+  const list = document.getElementById("dimList");
+  const term = dimSearch2;
+  let html = "";
+  let shown = 0;
+  let lastCat = null;
+
+  const catOrder = ["user","demo","device","geo","traffic","page","event","ecom","datetime","link","video","gaming","general"];
+  const filtered = dimsMaster.filter(d => {
+    const catOk = activeDcat2 === "all" || d.cat === activeDcat2;
+    const termOk = !term || d.apiName.toLowerCase().includes(term) || d.display.toLowerCase().includes(term) || d.desc.includes(term);
+    return catOk && termOk;
+  });
+
+  catOrder.forEach(cat => {
+    const items = filtered.filter(d => d.cat === cat);
+    if (!items.length) return;
+    html += `<div class="dim-cat-header">${dimCatLabels2[cat]}</div>`;
+    items.forEach(d => {
+      shown++;
+      html += `<div class="dim-item${selectedDimApi===d.apiName?" active":""}" data-api="${d.apiName}" onclick="selectDim('${d.apiName}')">
+        <div class="dim-item-api">${d.apiName}</div>
+        <div class="dim-item-display">${d.display}</div>
+      </div>`;
+    });
+  });
+
+  list.innerHTML = html || `<div style="padding:24px;text-align:center;color:#94a3b8;font-size:.85rem">לא נמצאו מימדים</div>`;
+  document.getElementById("dimsShownCount").textContent = shown;
+}
+
+document.querySelectorAll(".dbtn[data-dcat]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".dbtn[data-dcat]").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    activeDcat2 = btn.dataset.dcat;
+    renderDimList();
+  });
+});
+
+document.getElementById("dimsSearch").addEventListener("input", e => {
+  dimSearch2 = e.target.value.toLowerCase().trim();
+  renderDimList();
+});
+
+renderDimList();
+
+// ══════ legacy dimsData stub (unused) ══════
+const dimsData = [
+  // ── USER ──────────────────────────────────────────────────────────
+  { apiName:"newVsReturning",         display:"New / Returning",               type:"dim",    cat:"user",      desc:"האם המשתמש חדש (ביקור ראשון) או חוזר בחלון הזמן שנבחר",               example:"New, Returning",        importance:5, note:"מבוסס על ה-cookie — מאופס בעת ניקוי עוגיות." },
+  { apiName:"userPseudoId",           display:"User Pseudo ID",                type:"dim",    cat:"user",      desc:"מזהה אנונימי ייחודי למשתמש — מבוסס cookie, נשמר עד 2 שנים",          example:"2A3B4C...",              importance:4, note:"משמש לניתוח מסע משתמש ב-BigQuery." },
+  { apiName:"signedInWithUserId",     display:"Signed In With User ID",        type:"dim",    cat:"user",      desc:"האם נשלח User ID מותאם אישית לאירוע",                                 example:"yes, no",               importance:3, note:"דורש הגדרת <code>user_id</code> ב-gtag." },
+
+  // ── DEVICE ────────────────────────────────────────────────────────
+  { apiName:"deviceCategory",         display:"Device Category",               type:"dim",    cat:"device",    desc:"סוג המכשיר של המשתמש",                                                example:"desktop, mobile, tablet",importance:5, note:"קריטי לניתוח חוויה לפי מכשיר." },
+  { apiName:"browser",                display:"Browser",                       type:"dim",    cat:"device",    desc:"דפדפן שבו צפה המשתמש",                                               example:"Chrome, Safari, Firefox",importance:4, note:"" },
+  { apiName:"browserVersion",         display:"Browser Version",               type:"dim",    cat:"device",    desc:"גרסה מדויקת של הדפדפן",                                              example:"120.0.0, 17.2",         importance:2, note:"" },
+  { apiName:"operatingSystem",        display:"Operating System",              type:"dim",    cat:"device",    desc:"מערכת הפעלה של המשתמש",                                              example:"Windows, iOS, Android",  importance:4, note:"" },
+  { apiName:"operatingSystemVersion", display:"OS Version",                    type:"dim",    cat:"device",    desc:"גרסת מערכת ההפעלה",                                                  example:"14.4, 13",              importance:2, note:"" },
+  { apiName:"platform",               display:"Platform",                      type:"dim",    cat:"device",    desc:"פלטפורמת הנכס שממנה הגיע האירוע",                                    example:"Web, Android, iOS",     importance:4, note:"" },
+  { apiName:"screenResolution",       display:"Screen Resolution",             type:"dim",    cat:"device",    desc:"רזולוציית המסך של המשתמש",                                           example:"1920x1080, 390x844",    importance:3, note:"" },
+  { apiName:"mobileModel",            display:"Mobile Model",                  type:"dim",    cat:"device",    desc:"דגם המכשיר הנייד",                                                   example:"iPhone 15, Pixel 8",    importance:2, note:"" },
+  { apiName:"mobileDeviceBranding",   display:"Mobile Device Brand",           type:"dim",    cat:"device",    desc:"מותג המכשיר הנייד",                                                  example:"Apple, Samsung, Google",importance:2, note:"" },
+
+  // ── GEO ───────────────────────────────────────────────────────────
+  { apiName:"country",                display:"Country",                       type:"dim",    cat:"geo",       desc:"ארץ המשתמש לפי כתובת IP",                                            example:"Israel, United States",  importance:5, note:"" },
+  { apiName:"countryId",              display:"Country ID",                    type:"dim",    cat:"geo",       desc:"קוד ארץ ISO 3166",                                                   example:"IL, US, GB",            importance:3, note:"" },
+  { apiName:"city",                   display:"City",                          type:"dim",    cat:"geo",       desc:"עיר המשתמש לפי IP",                                                  example:"Tel Aviv, London",      importance:4, note:"" },
+  { apiName:"region",                 display:"Region",                        type:"dim",    cat:"geo",       desc:"מחוז/אזור גיאוגרפי",                                                 example:"Tel Aviv District",     importance:3, note:"" },
+  { apiName:"language",               display:"Language",                      type:"dim",    cat:"geo",       desc:"שפת הדפדפן / מכשיר של המשתמש",                                       example:"he, en-us, ar",         importance:3, note:"" },
+
+  // ── TRAFFIC ───────────────────────────────────────────────────────
+  { apiName:"sessionSource",          display:"Session Source",                type:"dim",    cat:"traffic",   desc:"מקור התנועה שפתח את הסשן הנוכחי",                                    example:"google, facebook, (direct)",importance:5, note:"Session-scoped — נוגע לסשן לא למשתמש." },
+  { apiName:"sessionMedium",          display:"Session Medium",                type:"dim",    cat:"traffic",   desc:"המדיום של הסשן הנוכחי",                                              example:"organic, cpc, email, referral",importance:5, note:"" },
+  { apiName:"sessionCampaignName",    display:"Session Campaign",              type:"dim",    cat:"traffic",   desc:"שם הקמפיין שהביא את הסשן",                                           example:"Black_Friday_2024",     importance:5, note:"לפי utm_campaign." },
+  { apiName:"sessionDefaultChannelGroup", display:"Default Channel Group",     type:"dim",    cat:"traffic",   desc:"קבוצת הערוץ שגוגל מקצה אוטומטית לסשן",                              example:"Organic Search, Paid Social, Direct",importance:5, note:"קבוצות מוגדרות מראש ע\"י גוגל — ניתן להתאים." },
+  { apiName:"sessionGoogleAdsAdGroupName", display:"Ad Group Name",            type:"dim",    cat:"traffic",   desc:"שם קבוצת המודעות שהביאה את הסשן (Google Ads)",                      example:"Brand_Keywords_IL",     importance:4, note:"דורש קישור Google Ads ← GA4." },
+  { apiName:"sessionGoogleAdsKeyword", display:"Keyword",                      type:"dim",    cat:"traffic",   desc:"מילת המפתח שהפעילה את המודעה",                                       example:"נעלי ריצה, buy shoes",  importance:4, note:"" },
+  { apiName:"sessionGoogleAdsMatchType", display:"Match Type",                 type:"dim",    cat:"traffic",   desc:"סוג ההתאמה של מילת המפתח",                                           example:"Exact, Phrase, Broad",  importance:3, note:"" },
+  { apiName:"firstUserSource",        display:"First User Source",             type:"dim",    cat:"traffic",   desc:"מקור הביקור הראשון של המשתמש — User-scoped",                         example:"google, instagram.com", importance:4, note:"לא משתנה גם אם המשתמש חוזר דרך מקור אחר." },
+  { apiName:"firstUserMedium",        display:"First User Medium",             type:"dim",    cat:"traffic",   desc:"המדיום של הביקור הראשון — User-scoped",                              example:"organic, cpc, referral",importance:4, note:"" },
+  { apiName:"firstUserCampaignName",  display:"First User Campaign",           type:"dim",    cat:"traffic",   desc:"הקמפיין שהביא את המשתמש בפעם הראשונה",                              example:"summer_sale",           importance:4, note:"" },
+  { apiName:"firstUserDefaultChannelGroup", display:"First User Channel",      type:"dim",    cat:"traffic",   desc:"ערוץ הביקור הראשון של המשתמש",                                       example:"Paid Search, Organic Social",importance:4, note:"" },
+  { apiName:"sessionSourceMedium",    display:"Source / Medium",               type:"dim",    cat:"traffic",   desc:"מקור + מדיום בסשן — שדה משולב נוח לדוחות",                          example:"google / cpc, (direct) / (none)",importance:5, note:"" },
+
+  // ── PAGES ─────────────────────────────────────────────────────────
+  { apiName:"pagePath",               display:"Page Path",                     type:"dim",    cat:"page",      desc:"נתיב העמוד ללא הדומיין וללא Query String",                           example:"/pricing, /blog/ga4-guide",importance:5, note:"לדוחות ב-Explore — Page Path הוא שדה נפוץ מאוד." },
+  { apiName:"pageTitle",              display:"Page Title",                    type:"dim",    cat:"page",      desc:"כותרת הדף — תוכן תגית &lt;title&gt;",                               example:"דף הבית | RPG Digital", importance:4, note:"" },
+  { apiName:"landingPage",            display:"Landing Page",                  type:"dim",    cat:"page",      desc:"העמוד הראשון שנצפה בסשן",                                            example:"/landing/pmax-sale",    importance:5, note:"קריטי לניתוח ביצועי דפי נחיתה." },
+  { apiName:"pagePathPlusQueryString",display:"Page Path + Query String",      type:"dim",    cat:"page",      desc:"נתיב מלא כולל פרמטרי URL",                                           example:"/search?q=shoes",       importance:3, note:"שימושי לניתוח חיפוש פנימי." },
+  { apiName:"hostName",               display:"Hostname",                      type:"dim",    cat:"page",      desc:"שם הדומיין/מארח של העמוד",                                           example:"rpgdigital.co.il",      importance:3, note:"שימושי כשיש מספר נכסים/דומיינים." },
+  { apiName:"contentGroup",           display:"Content Group",                 type:"dim",    cat:"page",      desc:"קבוצת תוכן מותאמת — מוגדרת ידנית בקוד",                             example:"Blog, Product Pages",   importance:3, note:"עד 5 content groups בהגדרות הנכס." },
+
+  // ── EVENT ─────────────────────────────────────────────────────────
+  { apiName:"eventName",              display:"Event Name",                    type:"dim",    cat:"event",     desc:"שם האירוע כפי שנשלח ל-GA4",                                          example:"page_view, purchase, click",importance:5, note:"" },
+  { apiName:"isConversionEvent",      display:"Is Conversion Event",           type:"dim",    cat:"event",     desc:"האם האירוע מוגדר כ-Conversion בהגדרות הנכס",                         example:"true, false",           importance:4, note:"" },
+
+  // ── ECOMMERCE ─────────────────────────────────────────────────────
+  { apiName:"itemName",               display:"Item Name",                     type:"dim",    cat:"ecom",      desc:"שם המוצר",                                                           example:"נעלי ריצה Nike Air",    importance:5, note:"" },
+  { apiName:"itemId",                 display:"Item ID",                       type:"dim",    cat:"ecom",      desc:"קוד המוצר — SKU",                                                    example:"SKU-1234",              importance:5, note:"" },
+  { apiName:"itemCategory",           display:"Item Category",                 type:"dim",    cat:"ecom",      desc:"קטגוריית המוצר הראשית",                                              example:"נעליים, אלקטרוניקה",    importance:4, note:"" },
+  { apiName:"itemCategory2",          display:"Item Category 2",               type:"dim",    cat:"ecom",      desc:"קטגוריית משנה של המוצר",                                             example:"נעלי ריצה",             importance:3, note:"יש עד item_category5." },
+  { apiName:"itemBrand",              display:"Item Brand",                    type:"dim",    cat:"ecom",      desc:"מותג המוצר",                                                         example:"Nike, Samsung, Apple",  importance:4, note:"" },
+  { apiName:"itemVariant",            display:"Item Variant",                  type:"dim",    cat:"ecom",      desc:"גרסת המוצר — גודל, צבע וכו'",                                       example:"XL / שחור, 42",         importance:3, note:"" },
+  { apiName:"itemListName",           display:"Item List Name",                type:"dim",    cat:"ecom",      desc:"שם הרשימה שבה הוצג המוצר",                                           example:"Homepage Carousel, Search Results",importance:4, note:"" },
+  { apiName:"orderCoupon",            display:"Order Coupon",                  type:"dim",    cat:"ecom",      desc:"קופון שהוחל על ההזמנה",                                              example:"SUMMER20, BLACKFRI",    importance:3, note:"" },
+  { apiName:"shippingTier",           display:"Shipping Tier",                 type:"dim",    cat:"ecom",      desc:"אפשרות המשלוח שנבחרה",                                               example:"Ground, Express, Free", importance:3, note:"" },
+  { apiName:"paymentType",            display:"Payment Type",                  type:"dim",    cat:"ecom",      desc:"אמצעי תשלום שנבחר",                                                  example:"credit_card, PayPal, bit",importance:3, note:"" },
+
+  // ── DATE/TIME ─────────────────────────────────────────────────────
+  { apiName:"date",                   display:"Date",                          type:"dim",    cat:"datetime",  desc:"תאריך האירוע בפורמט YYYYMMDD",                                       example:"20240115",              importance:5, note:"" },
+  { apiName:"dateHour",               display:"Date Hour",                     type:"dim",    cat:"datetime",  desc:"תאריך + שעה בפורמט YYYYMMDDHH",                                      example:"2024011514",            importance:4, note:"" },
+  { apiName:"dayOfWeek",              display:"Day of Week",                   type:"dim",    cat:"datetime",  desc:"יום בשבוע (0=ראשון, 6=שבת)",                                         example:"0, 1, 5",               importance:4, note:"שימושי לניתוח עונתיות שבועית." },
+  { apiName:"hour",                   display:"Hour",                          type:"dim",    cat:"datetime",  desc:"שעת האירוע (0–23)",                                                  example:"9, 14, 20",             importance:3, note:"" },
+  { apiName:"week",                   display:"Week",                          type:"dim",    cat:"datetime",  desc:"שבוע בשנה (01–53)",                                                  example:"01, 26, 52",            importance:3, note:"" },
+  { apiName:"month",                  display:"Month",                         type:"dim",    cat:"datetime",  desc:"חודש (01–12)",                                                       example:"01, 06, 12",            importance:4, note:"" },
+  { apiName:"year",                   display:"Year",                          type:"dim",    cat:"datetime",  desc:"שנה",                                                                example:"2024, 2025",            importance:3, note:"" },
+  { apiName:"nthDay",                 display:"Nth Day",                       type:"dim",    cat:"datetime",  desc:"מספר הימים מתחילת תקופת הדוח",                                       example:"0, 1, 30",              importance:3, note:"" },
+
+  // ── METRICS — USERS ───────────────────────────────────────────────
+  { apiName:"totalUsers",             display:"Total Users",                   type:"metric", cat:"users",     desc:"סך כל המשתמשים שהפעילו לפחות אירוע אחד בתקופה",                     example:"12,450",                importance:5, note:"הופיע בדוחות כ-Active Users — הוחלף בשם ב-2023." },
+  { apiName:"newUsers",               display:"New Users",                     type:"metric", cat:"users",     desc:"משתמשים שהביקור בתקופה הנוכחית הוא first_visit שלהם",                example:"8,230",                 importance:5, note:"" },
+  { apiName:"activeUsers",            display:"Active Users",                  type:"metric", cat:"users",     desc:"משתמשים שהיו Engaged (10+ שניות / Conversion / 2+ PV)",              example:"9,100",                 importance:5, note:"בדוחות רגילים זהה ל-Total Users — שונה ב-Explore." },
+  { apiName:"returningUsers",         display:"Returning Users",               type:"metric", cat:"users",     desc:"משתמשים שזוהו כחוזרים בתקופה",                                       example:"4,220",                 importance:4, note:"" },
+  { apiName:"dauPerMau",              display:"DAU / MAU",                     type:"metric", cat:"users",     desc:"יחס משתמשים יומיים למשתמשים חודשיים — מדד Stickiness",              example:"0.23 (23%)",            importance:4, note:"ערך גבוה = מוצר ממכר יותר." },
+  { apiName:"dauPerWau",              display:"DAU / WAU",                     type:"metric", cat:"users",     desc:"יחס משתמשים יומיים לשבועיים",                                        example:"0.41 (41%)",            importance:3, note:"" },
+
+  // ── METRICS — SESSIONS ────────────────────────────────────────────
+  { apiName:"sessions",               display:"Sessions",                      type:"metric", cat:"sessions",  desc:"סך הסשנים שנוצרו בתקופה (כל session_start)",                         example:"23,400",                importance:5, note:"" },
+  { apiName:"engagedSessions",        display:"Engaged Sessions",              type:"metric", cat:"sessions",  desc:"סשנים שהיו engaged: 10+ שניות, Conversion, או 2+ צפיות",             example:"15,800",                importance:5, note:"הבסיס לחישוב Engagement Rate ו-Bounce Rate." },
+  { apiName:"sessionsPerUser",        display:"Sessions Per User",             type:"metric", cat:"sessions",  desc:"מספר הסשנים הממוצע למשתמש בתקופה",                                   example:"1.88",                  importance:4, note:"" },
+  { apiName:"averageSessionDuration", display:"Avg. Session Duration",         type:"metric", cat:"sessions",  desc:"משך הסשן הממוצע (שניות)",                                            example:"00:02:34",              importance:4, note:"" },
+  { apiName:"bounceRate",             display:"Bounce Rate",                   type:"metric", cat:"sessions",  desc:"אחוז הסשנים שלא היו Engaged — 1 פחות Engagement Rate",               example:"42.3%",                 importance:5, note:"GA4 Bounce Rate ≠ UA Bounce Rate — הגדרה שונה לחלוטין." },
+
+  // ── METRICS — ENGAGEMENT ──────────────────────────────────────────
+  { apiName:"engagementRate",         display:"Engagement Rate",               type:"metric", cat:"engagement",desc:"אחוז הסשנים שהיו Engaged מסך הסשנים",                                example:"67.5%",                 importance:5, note:"ההיפך מ-Bounce Rate." },
+  { apiName:"userEngagementDuration", display:"User Engagement Duration",      type:"metric", cat:"engagement",desc:"סך זמן המעורבות הכולל של כל המשתמשים (שניות)",                       example:"1,234,567",             importance:4, note:"מבוסס על user_engagement — בעוד האפ/אתר ב-foreground." },
+  { apiName:"averageEngagementTime",  display:"Avg. Engagement Time Per Session",type:"metric",cat:"engagement",desc:"זמן מעורבות ממוצע לסשן",                                             example:"00:01:52",              importance:5, note:"מדד איכות תוכן מרכזי." },
+  { apiName:"averageEngagementTimePerUser",display:"Avg. Engagement Time Per User",type:"metric",cat:"engagement",desc:"זמן מעורבות ממוצע למשתמש",                                        example:"00:03:10",              importance:4, note:"" },
+  { apiName:"screenPageViews",        display:"Views",                         type:"metric", cat:"engagement",desc:"סך צפיות בעמודים ומסכים (page_view + screen_view)",                  example:"67,200",                importance:5, note:"שם קודם: Pageviews. כולל גם אפליקציות." },
+  { apiName:"screenPageViewsPerSession",display:"Views Per Session",           type:"metric", cat:"engagement",desc:"מספר הצפיות הממוצע לסשן",                                            example:"2.87",                  importance:4, note:"" },
+  { apiName:"screenPageViewsPerUser", display:"Views Per User",                type:"metric", cat:"engagement",desc:"מספר הצפיות הממוצע למשתמש",                                          example:"5.40",                  importance:3, note:"" },
+  { apiName:"scrolledUsers",          display:"Scrolled Users",                type:"metric", cat:"engagement",desc:"מספר המשתמשים שגללו לפחות 90% מהדף",                                example:"5,400",                 importance:4, note:"מבוסס על enhanced measurement scroll event." },
+
+  // ── METRICS — EVENTS ──────────────────────────────────────────────
+  { apiName:"eventCount",             display:"Event Count",                   type:"metric", cat:"events_m",  desc:"סך כל האירועים שנשלחו בתקופה",                                       example:"340,500",               importance:5, note:"" },
+  { apiName:"eventsPerSession",       display:"Events Per Session",            type:"metric", cat:"events_m",  desc:"מספר אירועים ממוצע לסשן",                                            example:"14.6",                  importance:3, note:"" },
+  { apiName:"eventCountPerUser",      display:"Events Per User",               type:"metric", cat:"events_m",  desc:"מספר אירועים ממוצע למשתמש",                                          example:"27.4",                  importance:3, note:"" },
+
+  // ── METRICS — CONVERSIONS ─────────────────────────────────────────
+  { apiName:"conversions",            display:"Conversions",                   type:"metric", cat:"conversions",desc:"סך ההמרות — כל אירוע שמוגדר Conversion",                            example:"1,230",                 importance:5, note:"מוגדר ב-Configure → Conversions בנכס." },
+  { apiName:"sessionConversionRate",  display:"Session Conversion Rate",       type:"metric", cat:"conversions",desc:"אחוז הסשנים שהובילו להמרה לפחות אחת",                              example:"5.26%",                 importance:5, note:"" },
+  { apiName:"userConversionRate",     display:"User Conversion Rate",          type:"metric", cat:"conversions",desc:"אחוז המשתמשים שביצעו המרה לפחות אחת",                              example:"9.88%",                 importance:5, note:"" },
+
+  // ── METRICS — REVENUE ─────────────────────────────────────────────
+  { apiName:"totalRevenue",           display:"Total Revenue",                 type:"metric", cat:"revenue",   desc:"סך ההכנסות — רכישות + מינויים + פרסום",                              example:"₪128,450",              importance:5, note:"" },
+  { apiName:"purchaseRevenue",        display:"Purchase Revenue",              type:"metric", cat:"revenue",   desc:"הכנסות ממאורעות purchase בלבד (לפני מסים + משלוח)",                  example:"₪112,300",              importance:5, note:"" },
+  { apiName:"itemRevenue",            display:"Item Revenue",                  type:"metric", cat:"revenue",   desc:"הכנסות ברמת המוצר הבודד",                                            example:"₪89,200",               importance:4, note:"" },
+  { apiName:"transactions",           display:"Transactions",                  type:"metric", cat:"revenue",   desc:"מספר הרכישות (purchase events) שהושלמו",                             example:"560",                   importance:5, note:"" },
+  { apiName:"ecommercePurchases",     display:"Ecommerce Purchases",           type:"metric", cat:"revenue",   desc:"מספר הרכישות כולל IA Purchases",                                     example:"572",                   importance:4, note:"" },
+  { apiName:"purchaserConversionRate",display:"Purchaser Conversion Rate",     type:"metric", cat:"revenue",   desc:"אחוז המשתמשים שביצעו רכישה",                                         example:"4.50%",                 importance:5, note:"" },
+  { apiName:"averagePurchaseRevenue", display:"Avg. Purchase Revenue",         type:"metric", cat:"revenue",   desc:"הכנסה ממוצעת לעסקה (AOV)",                                           example:"₪228.30",               importance:5, note:"AOV = Average Order Value." },
+  { apiName:"averagePurchaseRevenuePerUser",display:"Avg. Revenue Per User",   type:"metric", cat:"revenue",   desc:"ARPU — הכנסה ממוצעת למשתמש בתקופה",                                  example:"₪10.32",                importance:4, note:"" },
+  { apiName:"itemsPurchased",         display:"Items Purchased",               type:"metric", cat:"revenue",   desc:"כמות פריטים שנרכשו (לא עסקאות)",                                     example:"1,240",                 importance:4, note:"" },
+  { apiName:"itemsViewed",            display:"Items Viewed",                  type:"metric", cat:"revenue",   desc:"כמות פריטים שנצפו (view_item events)",                               example:"32,400",                importance:4, note:"" },
+  { apiName:"itemsAddedToCart",       display:"Items Added to Cart",           type:"metric", cat:"revenue",   desc:"כמות פריטים שהוסיפו לסל",                                            example:"4,500",                 importance:4, note:"" },
+  { apiName:"cartToViewRate",         display:"Cart-to-View Rate",             type:"metric", cat:"revenue",   desc:"אחוז הצפיות שהפכו להוספה לסל",                                       example:"13.89%",                importance:4, note:"" },
+  { apiName:"purchaseToViewRate",     display:"Purchase-to-View Rate",         type:"metric", cat:"revenue",   desc:"אחוז הצפיות שהפכו לרכישה",                                           example:"1.73%",                 importance:4, note:"" },
+
+  // ── METRICS — APP ─────────────────────────────────────────────────
+  { apiName:"crashFreeUsersRate",     display:"Crash-Free Users Rate",         type:"metric", cat:"app",       desc:"אחוז המשתמשים שלא חוו קריסה באפליקציה",                             example:"99.2%",                 importance:4, note:"מבוסס על app_exception." },
+  { apiName:"crashAffectedUsers",     display:"Crash Affected Users",          type:"metric", cat:"app",       desc:"מספר המשתמשים שחוו קריסה",                                           example:"80",                    importance:4, note:"" },
+  { apiName:"wauPerMau",              display:"WAU / MAU",                     type:"metric", cat:"app",       desc:"יחס משתמשים שבועיים לחודשיים",                                       example:"0.52 (52%)",            importance:3, note:"" },
+];
+// (legacy stub — data not used)
+
+// ══════════════════════════════════════════════════════════════════════
+// ALL METRICS — 168 metrics organized by GA4 Explore categories
+// ══════════════════════════════════════════════════════════════════════
+const allMetricGroups = [
+  {
+    cat: "פרסום (Advertising)",
+    emoji: "📢",
+    items: [
+      { api:"advertiserAdClicks",            name:"Google Ads Clicks",                        desc:"מספר הקליקים על מודעות Google Ads" },
+      { api:"advertiserAdCost",              name:"Google Ads Cost",                          desc:"עלות מודעות Google Ads בתקופה" },
+      { api:"advertiserAdCostPerClick",      name:"Google Ads CPC",                           desc:"עלות ממוצעת לקליק במודעות Google Ads" },
+      { api:"advertiserAdCostPerKeyEvent",   name:"Google Ads Cost Per Key Event",            desc:"עלות ממוצעת לאירוע מפתח ממודעות Google Ads" },
+      { api:"advertiserAdImpressions",       name:"Google Ads Impressions",                   desc:"מספר הופעות מודעות Google Ads" },
+      { api:"returnOnAdSpend",               name:"Return On Ad Spend",                       desc:"החזר על הוצאות פרסום — הכנסות חלקי עלות פרסום" },
+      { api:"googleAdsVideoCost",            name:"Google Ads Video Cost",                    desc:"עלות מודעות וידאו של Google Ads" },
+      { api:"googleAdsVideoViews",           name:"Google Ads Video Views",                   desc:"מספר צפיות בסרטוני מודעות Google Ads" },
+      { api:"nonGoogleAdClicks",             name:"Non-Google Ad Clicks",                     desc:"קליקים על מודעות שאינן Google (פרסום ידני / ייבוא)" },
+      { api:"nonGoogleAdCost",               name:"Non-Google Ad Cost",                       desc:"עלות מודעות שאינן Google" },
+      { api:"nonGoogleAdCostPerClick",       name:"Non-Google Ad CPC",                        desc:"עלות ממוצעת לקליק במודעות שאינן Google" },
+      { api:"nonGoogleAdCostPerKeyEvent",    name:"Non-Google Ad Cost Per Key Event",         desc:"עלות ממוצעת לאירוע מפתח ממודעות שאינן Google" },
+      { api:"nonGoogleAdImpressions",        name:"Non-Google Ad Impressions",                desc:"הופעות מודעות שאינן Google" },
+      { api:"nonGoogleAdReturnOnAdSpend",    name:"Return On Non-Google Ad Spend",            desc:"ROAS על מודעות שאינן של Google" },
+    ]
+  },
+  {
+    cat: "איקומרס (Ecommerce)",
+    emoji: "🛒",
+    items: [
+      { api:"addToCarts",                    name:"Add To Carts",                             desc:"מספר פעמים שמוצרים הוספו לעגלה (add_to_cart)" },
+      { api:"checkouts",                     name:"Checkouts",                                desc:"מספר פעמים שהושלם שלב תשלום (begin_checkout)" },
+      { api:"ecommercePurchases",            name:"Ecommerce Purchases",                      desc:"מספר הרכישות שהושלמו (purchase)" },
+      { api:"grossItemRevenue",              name:"Gross Item Revenue",                       desc:"הכנסות ברוטו ברמת הפריט לפני הנחות" },
+      { api:"grossPurchaseRevenue",          name:"Gross Purchase Revenue",                   desc:"הכנסות ברוטו מרכישות לפני החזרות" },
+      { api:"itemDiscountAmount",            name:"Item Discount Amount",                     desc:"סך ההנחות שהוענקו על פריטים" },
+      { api:"itemQuantity",                  name:"Item Quantity",                            desc:"כמות הפריטים שנכללו בכל האירועים" },
+      { api:"itemRefundAmount",              name:"Item Refund Amount",                       desc:"סכום ההחזרות ברמת הפריט" },
+      { api:"itemRevenue",                   name:"Item Revenue",                             desc:"הכנסות נטו ברמת פריט בודד" },
+      { api:"itemViewEvents",                name:"Item View Events",                         desc:"מספר אירועי view_item" },
+      { api:"itemListClickEvents",           name:"Item-List Click Events",                   desc:"מספר אירועי select_item ברשימות מוצרים" },
+      { api:"itemListViewEvents",            name:"Item-List View Events",                    desc:"מספר אירועי view_item_list" },
+      { api:"itemsAddedToCart",              name:"Items Added To Cart",                      desc:"סך כמות הפריטים שהוספו לעגלה" },
+      { api:"itemsCheckedOut",               name:"Items Checked Out",                        desc:"סך כמות הפריטים שעברו begin_checkout" },
+      { api:"itemsClickedInList",            name:"Items Clicked In List",                    desc:"סך כמות הפריטים שנלחצו ברשימות" },
+      { api:"itemsClickedInPromotion",       name:"Items Clicked In Promotion",               desc:"פריטים שנלחצו בתוך פרומושן" },
+      { api:"itemsPurchased",                name:"Items Purchased",                          desc:"סך כמות הפריטים שנרכשו" },
+      { api:"itemsViewed",                   name:"Items Viewed",                             desc:"סך כמות הפריטים שנצפו" },
+      { api:"itemsViewedInList",             name:"Items Viewed In List",                     desc:"פריטים שנצפו ברשימות מוצרים" },
+      { api:"itemsViewedInPromotion",        name:"Items Viewed In Promotion",                desc:"פריטים שנצפו בתוך פרומושן" },
+      { api:"productRevenue",                name:"Product Revenue",                          desc:"הכנסות ממוצר — שם חלופי ל-Item Revenue בחלק מהממשקים" },
+      { api:"promotionClicks",               name:"Promotion Clicks",                         desc:"קליקים על פרומושן (select_promotion)" },
+      { api:"promotionViews",                name:"Promotion Views",                          desc:"הצגות פרומושן (view_promotion)" },
+      { api:"purchaseRevenue",               name:"Purchase Revenue",                         desc:"הכנסות נטו מרכישות (לפני מסים ומשלוח)" },
+      { api:"purchases",                     name:"Purchases",                                desc:"מספר אירועי purchase" },
+      { api:"quantity",                      name:"Quantity",                                 desc:"כמות כוללת של פריטים בכל האירועים" },
+      { api:"refundAmount",                  name:"Refund Amount",                            desc:"סכום ההחזרות הכולל (refund)" },
+      { api:"refunds",                       name:"Refunds",                                  desc:"מספר אירועי refund" },
+      { api:"shippingAmount",                name:"Shipping Amount",                          desc:"סכום המשלוח הכולל בכל הרכישות" },
+      { api:"taxAmount",                     name:"Tax Amount",                               desc:"סכום המיסים הכולל בכל הרכישות" },
+      { api:"transactions",                  name:"Transactions",                             desc:"מספר הרכישות שהושלמו" },
+      { api:"transactionsPerPurchaser",      name:"Transactions Per Purchaser",               desc:"מספר רכישות ממוצע לכל רוכש" },
+    ]
+  },
+  {
+    cat: "אירועים (Event)",
+    emoji: "⚡",
+    items: [
+      { api:"eventCount",                    name:"Event Count",                              desc:"סך כל האירועים שנשלחו בתקופה" },
+      { api:"eventCountPerUser",             name:"Event Count Per Active User",              desc:"מספר אירועים ממוצע למשתמש פעיל" },
+      { api:"eventValue",                    name:"Event Value",                              desc:"סך ערך האירועים — מבוסס על פרמטר value" },
+      { api:"eventsPerSession",              name:"Events Per Session",                       desc:"מספר אירועים ממוצע לסשן" },
+      { api:"firstOpens",                    name:"First Opens",                              desc:"פתיחות ראשונות של אפליקציה (first_open)" },
+      { api:"firstVisits",                   name:"First Visits",                             desc:"ביקורים ראשונים באתר (first_visit)" },
+      { api:"keyEvents",                     name:"Key Events",                               desc:"אירועים שמוגדרים כ-Key Events (המרות) בנכס" },
+    ]
+  },
+  {
+    cat: "חיפוש אורגני (Other)",
+    emoji: "🔍",
+    items: [
+      { api:"organicGoogleSearchAveragePosition", name:"Organic Google Search Avg Position", desc:"דירוג ממוצע בתוצאות חיפוש אורגני של Google" },
+      { api:"organicGoogleSearchClickThroughRate", name:"Organic Google Search CTR",        desc:"אחוז הקליקים מסך ההופעות בחיפוש אורגני" },
+      { api:"organicGoogleSearchClicks",     name:"Organic Google Search Clicks",            desc:"מספר קליקים אורגניים מחיפוש Google" },
+      { api:"organicGoogleSearchImpressions", name:"Organic Google Search Impressions",     desc:"מספר הופעות אורגניות בחיפוש Google" },
+    ]
+  },
+  {
+    cat: "עמוד/מסך (Page / Screen)",
+    emoji: "📄",
+    items: [
+      { api:"averagePageLoadTime",           name:"Elapsed Time From Last Page Request",      desc:"זמן שחלף מבקשת עמוד האחרון (מילישניות)" },
+      { api:"entrances",                     name:"Entrances",                                desc:"מספר פעמים שעמוד היה העמוד הראשון בסשן" },
+      { api:"exits",                         name:"Exits",                                    desc:"מספר פעמים שעמוד היה העמוד האחרון בסשן" },
+      { api:"screenPageViews",               name:"Views",                                    desc:"סך הצפיות בעמודים ומסכים (page_view + screen_view)" },
+      { api:"screenPageViewsPerUser",        name:"Views Per Active User",                    desc:"מספר צפיות ממוצע למשתמש פעיל" },
+      { api:"screenPageViewsPerSession",     name:"Views Per Session",                        desc:"מספר צפיות ממוצע לסשן" },
+    ]
+  },
+  {
+    cat: "פרסום תוכן (Publisher)",
+    emoji: "📰",
+    items: [
+      { api:"adUnitExposure",                name:"Ad Unit Exposure",                         desc:"זמן חשיפה ליחידת מודעה (מילישניות)" },
+      { api:"totalAdRevenue",                name:"Ad Exposure",                              desc:"סך ההכנסות ממודעות (AdMob / publisher)" },
+    ]
+  },
+  {
+    cat: "הכנסות (Revenue)",
+    emoji: "💰",
+    items: [
+      { api:"averageRevenuePerUser",         name:"ARPU (Average Revenue Per Active User)",   desc:"ממוצע הכנסות לכל משתמש פעיל בתקופה" },
+      { api:"averagePurchaseRevenuePerPayingUser", name:"ARPPU",                              desc:"ממוצע הכנסות לכל משתמש משלם (Average Revenue Per Paying User)" },
+      { api:"averageDailyRevenue",           name:"Average Daily Revenue",                    desc:"ממוצע הכנסות יומיות בתקופה הנבחרת" },
+      { api:"averagePurchaseRevenue",        name:"Average Purchase Revenue",                 desc:"ממוצע הכנסות לרכישה (AOV — Average Order Value)" },
+      { api:"averagePurchaseRevenuePerUser", name:"Average Purchase Revenue Per Active User", desc:"ממוצע הכנסות מרכישות לכל משתמש פעיל" },
+      { api:"maxDailyRevenue",               name:"Max Daily Revenue",                        desc:"שיא ההכנסות ביום בתקופה הנבחרת" },
+      { api:"minDailyRevenue",               name:"Min Daily Revenue",                        desc:"המינימום של הכנסות יומיות בתקופה הנבחרת" },
+      { api:"totalAdRevenue",                name:"Total Ad Revenue",                         desc:"סך הכנסות מפרסום (Google AdSense / AdMob)" },
+      { api:"totalRevenue",                  name:"Total Revenue",                            desc:"סך ההכנסות הכולל — רכישות + פרסום + מינויים" },
+    ]
+  },
+  {
+    cat: "סשן (Session)",
+    emoji: "🔄",
+    items: [
+      { api:"averageSessionDuration",        name:"Average Session Duration",                 desc:"משך הסשן הממוצע בשניות" },
+      { api:"bounceRate",                    name:"Bounce Rate",                              desc:"אחוז הסשנים שלא היו engaged — היפך של Engagement Rate" },
+      { api:"engagedSessions",               name:"Engaged Sessions",                         desc:"סשנים עם 10+ שניות פעילות / המרה / 2+ צפיות" },
+      { api:"engagedSessionsPerUser",        name:"Engaged Sessions Per Active User",         desc:"ממוצע סשנים engaged למשתמש פעיל" },
+      { api:"engagementRate",                name:"Engagement Rate",                          desc:"אחוז הסשנים שהיו engaged מסך הסשנים" },
+      { api:"sessionKeyEventRate",           name:"Session Key Event Rate",                   desc:"אחוז הסשנים שהובילו לאירוע מפתח" },
+      { api:"sessions",                      name:"Sessions",                                 desc:"סך הסשנים שנוצרו (session_start)" },
+      { api:"sessionsPerUser",               name:"Sessions Per Active User",                 desc:"מספר סשנים ממוצע למשתמש פעיל" },
+    ]
+  },
+  {
+    cat: "משתמש (User)",
+    emoji: "👤",
+    items: [
+      { api:"active1DayUsers",               name:"1-Day Active Users",                       desc:"משתמשים פעילים ב-24 השעות האחרונות" },
+      { api:"active28DayUsers",              name:"28-Day Active Users",                      desc:"משתמשים פעילים ב-28 הימים האחרונים" },
+      { api:"active7DayUsers",               name:"7-Day Active Users",                       desc:"משתמשים פעילים ב-7 הימים האחרונים" },
+      { api:"activeUsers",                   name:"Active Users",                             desc:"משתמשים שהיו engaged בתקופה הנבחרת" },
+      { api:"averageDailyPurchasers",        name:"Average Daily Purchasers",                 desc:"ממוצע יומי של משתמשים שרכשו בתקופה" },
+      { api:"averageEngagementTimePerSession", name:"Average Engagement Time Per Session",    desc:"זמן מעורבות ממוצע לסשן" },
+      { api:"dauPerMau",                     name:"DAU / MAU",                                desc:"יחס משתמשים יומיים למשתמשים חודשיים — מדד Stickiness" },
+      { api:"dauPerWau",                     name:"DAU / WAU",                                desc:"יחס משתמשים יומיים לשבועיים" },
+      { api:"firstTimePurchasers",           name:"First-Time Purchasers",                    desc:"משתמשים שביצעו רכישה ראשונה בתקופה" },
+      { api:"firstTimePurchasersPerNewUser", name:"First-Time Purchaser Rate",                desc:"אחוז המשתמשים החדשים שביצעו רכישה ראשונה" },
+      { api:"firstTimePurchasersPerNewUserRate", name:"First-Time Purchasers Per New User",   desc:"יחס רוכשים ראשונים ביחס למשתמשים חדשים" },
+      { api:"maxDailyPurchasers",            name:"Max Daily Purchasers",                     desc:"שיא הרוכשים ביום בתקופה הנבחרת" },
+      { api:"minDailyPurchasers",            name:"Min Daily Purchasers",                     desc:"המינימום של רוכשים יומיים בתקופה" },
+      { api:"newUsers",                      name:"New Users",                                desc:"משתמשים שביקרו לראשונה (first_visit)" },
+      { api:"paidActiveUsers1Day",           name:"1-Day Paid Active Users",                  desc:"משתמשים פעילים שרכשו ב-24 שעות האחרונות" },
+      { api:"paidActiveUsers7Day",           name:"2-7-Day Paid Active Users",                desc:"משתמשים שרכשו בין יומיים ל-7 ימים" },
+      { api:"paidActiveUsers28Day",          name:"8-30-Day Paid Active Users",               desc:"משתמשים שרכשו בין 8 ל-30 ימים" },
+      { api:"paidActiveUsers90Day",          name:"31-90-Day Paid Active Users",              desc:"משתמשים שרכשו בין 31 ל-90 ימים" },
+      { api:"pmauDau",                       name:"PMAU / DAU",                               desc:"יחס משתמשים משלמים חודשיים ליומיים" },
+      { api:"pwauDau",                       name:"PWAU / DAU",                               desc:"יחס משתמשים משלמים שבועיים ליומיים" },
+      { api:"returningUsers",                name:"Returning Users",                          desc:"משתמשים שחזרו בתקופה הנבחרת" },
+      { api:"totalPurchasers",               name:"Total Purchasers",                         desc:"סך כל המשתמשים שרכשו בתקופה" },
+      { api:"totalUsers",                    name:"Total Users",                              desc:"סך כל המשתמשים שהפעילו אירוע אחד לפחות" },
+      { api:"userEngagementDuration",        name:"User Engagement",                          desc:"סך זמן המעורבות הכולל של כל המשתמשים (שניות)" },
+      { api:"userKeyEventRate",              name:"User Key Event Rate",                      desc:"אחוז המשתמשים שביצעו אירוע מפתח" },
+      { api:"wauPerMau",                     name:"WAU / MAU",                                desc:"יחס משתמשים שבועיים לחודשיים" },
+      { api:"repeatPurchasers",              name:"Repeat Purchasers",                        desc:"משתמשים שרכשו יותר מפעם אחת בתקופה" },
+      { api:"paidUsers7Day",                 name:"7-Day Paid Active Users",                  desc:"משתמשים פעילים שרכשו ב-7 הימים האחרונים" },
+      { api:"paidUsers30Day",                name:"30-Day Paid Active Users",                 desc:"משתמשים פעילים שרכשו ב-30 הימים האחרונים" },
+      { api:"paidUsers90Day",                name:"90-Day Paid Active Users",                 desc:"משתמשים פעילים שרכשו ב-90 הימים האחרונים" },
+    ]
+  },
+];
+
+// ══════════════════════════════════════════════════════════════════════
+// ALL DIMENSIONS — 356 dims organized by GA4 Explore categories
+// ══════════════════════════════════════════════════════════════════════
+const allDimGroups = [
+  {
+    cat: "ייחוס (Attribution)",
+    emoji: "🏷️",
+    items: [
+      { api:"campaignName",                  name:"Campaign",                                 desc:"שם הקמפיין ששייך לאינטראקציה — מבוסס על last click" },
+      { api:"campaignId",                    name:"Campaign ID",                              desc:"מזהה הקמפיין המספרי בשיטת הייחוס האחרונה" },
+      { api:"defaultChannelGroup",           name:"Default Channel Group",                    desc:"קבוצת הערוץ הברירת-מחדל שקבע Google לאינטראקציה" },
+      { api:"medium",                        name:"Medium",                                   desc:"מדיום ייחוס — organic, cpc, email וכד'" },
+      { api:"primaryChannelGroup",           name:"Primary Channel Group",                    desc:"קבוצת הערוץ הראשי שקבוע ב-Data-Driven Attribution" },
+      { api:"source",                        name:"Source",                                   desc:"מקור ייחוס — google, facebook וכד'" },
+      { api:"sourceMedium",                  name:"Source / Medium",                          desc:"שילוב מקור + מדיום — שדה נפוץ בדוחות" },
+      { api:"sourcePlatform",                name:"Source Platform",                          desc:"פלטפורמה שממנה הגיע הקליק — Google Ads, Manual וכד'" },
+      // CM360
+      { api:"cm360AccountId",                name:"CM360 Account ID",                         desc:"מזהה חשבון Campaign Manager 360" },
+      { api:"cm360AccountName",              name:"CM360 Account Name",                       desc:"שם חשבון Campaign Manager 360" },
+      { api:"cm360AdvertiserId",             name:"CM360 Advertiser ID",                      desc:"מזהה המפרסם ב-CM360" },
+      { api:"cm360AdvertiserName",           name:"CM360 Advertiser Name",                    desc:"שם המפרסם ב-CM360" },
+      { api:"cm360CampaignId",               name:"CM360 Campaign ID",                        desc:"מזהה הקמפיין ב-CM360" },
+      { api:"cm360CampaignName",             name:"CM360 Campaign Name",                      desc:"שם הקמפיין ב-CM360" },
+      { api:"cm360CreativeFormat",           name:"CM360 Creative Format",                    desc:"פורמט הקריאייטיב ב-CM360" },
+      { api:"cm360CreativeId",               name:"CM360 Creative ID",                        desc:"מזהה הקריאייטיב ב-CM360" },
+      { api:"cm360CreativeName",             name:"CM360 Creative Name",                      desc:"שם הקריאייטיב ב-CM360" },
+      { api:"cm360CreativeType",             name:"CM360 Creative Type",                      desc:"סוג הקריאייטיב ב-CM360" },
+      { api:"cm360CreativeTypeId",           name:"CM360 Creative Type ID",                   desc:"מזהה סוג קריאייטיב ב-CM360" },
+      { api:"cm360CreativeVersion",          name:"CM360 Creative Version",                   desc:"גרסת הקריאייטיב ב-CM360" },
+      { api:"cm360Medium",                   name:"CM360 Medium",                             desc:"מדיום ב-CM360" },
+      { api:"cm360PlacementCostStructure",   name:"CM360 Placement Cost Structure",           desc:"מבנה עלות המיקום ב-CM360" },
+      { api:"cm360PlacementId",              name:"CM360 Placement ID",                       desc:"מזהה המיקום ב-CM360" },
+      { api:"cm360PlacementName",            name:"CM360 Placement Name",                     desc:"שם המיקום ב-CM360" },
+      { api:"cm360RenderingId",              name:"CM360 Rendering ID",                       desc:"מזהה רינדור ב-CM360" },
+      { api:"cm360SiteId",                   name:"CM360 Site ID",                            desc:"מזהה האתר ב-CM360" },
+      { api:"cm360SiteName",                 name:"CM360 Site Name",                          desc:"שם האתר ב-CM360" },
+      { api:"cm360Source",                   name:"CM360 Source",                             desc:"מקור ב-CM360" },
+      { api:"cm360SourceMedium",             name:"CM360 Source / Medium",                    desc:"מקור/מדיום ב-CM360" },
+      // DV360
+      { api:"dv360AdvertiserId",             name:"DV360 Advertiser ID",                      desc:"מזהה המפרסם ב-Display & Video 360" },
+      { api:"dv360AdvertiserName",           name:"DV360 Advertiser Name",                    desc:"שם המפרסם ב-DV360" },
+      { api:"dv360CampaignId",               name:"DV360 Campaign ID",                        desc:"מזהה הקמפיין ב-DV360" },
+      { api:"dv360CampaignName",             name:"DV360 Campaign Name",                      desc:"שם הקמפיין ב-DV360" },
+      { api:"dv360CreativeFormat",           name:"DV360 Creative Format",                    desc:"פורמט הקריאייטיב ב-DV360" },
+      { api:"dv360CreativeId",               name:"DV360 Creative ID",                        desc:"מזהה הקריאייטיב ב-DV360" },
+      { api:"dv360CreativeName",             name:"DV360 Creative Name",                      desc:"שם הקריאייטיב ב-DV360" },
+      { api:"dv360ExchangeId",               name:"DV360 Exchange ID",                        desc:"מזהה הבורסה ב-DV360" },
+      { api:"dv360ExchangeName",             name:"DV360 Exchange Name",                      desc:"שם הבורסה ב-DV360" },
+      { api:"dv360InsertionOrderId",         name:"DV360 Insertion Order ID",                 desc:"מזהה הזמנת ההכנסה ב-DV360" },
+      { api:"dv360InsertionOrderName",       name:"DV360 Insertion Order Name",               desc:"שם הזמנת ההכנסה ב-DV360" },
+      { api:"dv360LineItemId",               name:"DV360 Line Item ID",                       desc:"מזהה שורת הפריט ב-DV360" },
+      { api:"dv360LineItemName",             name:"DV360 Line Item Name",                     desc:"שם שורת הפריט ב-DV360" },
+      { api:"dv360Medium",                   name:"DV360 Medium",                             desc:"מדיום ב-DV360" },
+      { api:"dv360PartnerId",                name:"DV360 Partner ID",                         desc:"מזהה השותף ב-DV360" },
+      { api:"dv360PartnerName",              name:"DV360 Partner Name",                       desc:"שם השותף ב-DV360" },
+      { api:"dv360Source",                   name:"DV360 Source",                             desc:"מקור ב-DV360" },
+      { api:"dv360SourceMedium",             name:"DV360 Source / Medium",                    desc:"מקור/מדיום ב-DV360" },
+      // Google Ads
+      { api:"googleAdsAccountName",          name:"Google Ads Account Name",                  desc:"שם חשבון Google Ads" },
+      { api:"googleAdsAdGroupId",            name:"Google Ads Ad Group ID",                   desc:"מזהה קבוצת מודעות ב-Google Ads" },
+      { api:"googleAdsAdGroupName",          name:"Google Ads Ad Group Name",                 desc:"שם קבוצת המודעות ב-Google Ads" },
+      { api:"googleAdsAdNetworkType",        name:"Google Ads Ad Network Type",               desc:"סוג רשת מודעות — Search, Display, YouTube וכד'" },
+      { api:"googleAdsCampaignId",           name:"Google Ads Campaign ID",                   desc:"מזהה הקמפיין ב-Google Ads" },
+      { api:"googleAdsCampaignName",         name:"Google Ads Campaign Name",                 desc:"שם הקמפיין ב-Google Ads" },
+      { api:"googleAdsCampaignType",         name:"Google Ads Campaign Type",                 desc:"סוג הקמפיין — Search, Display, Performance Max וכד'" },
+      { api:"googleAdsCreativeId",           name:"Google Ads Creative ID",                   desc:"מזהה הקריאייטיב ב-Google Ads" },
+      { api:"googleAdsCustomerId",           name:"Google Ads Customer ID",                   desc:"מזהה הלקוח ב-Google Ads" },
+      // Manual (UTM)
+      { api:"manualAdContent",               name:"Manual Ad Content",                        desc:"utm_content — תוכן ידני לאבחנת מודעות" },
+      { api:"manualCampaignId",              name:"Manual Campaign ID",                       desc:"utm_id — מזהה קמפיין ידני" },
+      { api:"manualCampaignName",            name:"Manual Campaign Name",                     desc:"utm_campaign — שם הקמפיין הידני" },
+      { api:"manualCreativeFormat",          name:"Manual Creative Format",                   desc:"utm_creative_format — פורמט קריאייטיב ידני" },
+      { api:"manualMarketingTactic",         name:"Manual Marketing Tactic",                  desc:"utm_marketing_tactic — טקטיקת שיווק ידנית" },
+      { api:"manualMedium",                  name:"Manual Medium",                            desc:"utm_medium — מדיום ידני" },
+      { api:"manualSource",                  name:"Manual Source",                            desc:"utm_source — מקור ידני" },
+      { api:"manualSourceMedium",            name:"Manual Source / Medium",                   desc:"מקור/מדיום ידני משולב" },
+      { api:"manualSourcePlatform",          name:"Manual Source Platform",                   desc:"utm_source_platform — פלטפורמת מקור ידנית" },
+      { api:"manualTerm",                    name:"Manual Term",                              desc:"utm_term — מילת מפתח ידנית" },
+      { api:"manualAdId",                    name:"Manual Ad ID",                             desc:"utm_ad_id — מזהה מודעה ידני" },
+      // SA360
+      { api:"sa360AdGroupId",                name:"SA360 Ad Group ID",                        desc:"מזהה קבוצת מודעות ב-Search Ads 360" },
+      { api:"sa360AdGroupName",              name:"SA360 Ad Group Name",                      desc:"שם קבוצת המודעות ב-SA360" },
+      { api:"sa360CampaignId",               name:"SA360 Campaign ID",                        desc:"מזהה קמפיין ב-SA360" },
+      { api:"sa360CampaignName",             name:"SA360 Campaign Name",                      desc:"שם קמפיין ב-SA360" },
+      { api:"sa360CreativeFormat",           name:"SA360 Creative Format",                    desc:"פורמט קריאייטיב ב-SA360" },
+      { api:"sa360EngineAccountId",          name:"SA360 Engine Account ID",                  desc:"מזהה חשבון מנוע חיפוש ב-SA360" },
+      { api:"sa360EngineAccountName",        name:"SA360 Engine Account Name",                desc:"שם חשבון מנוע חיפוש ב-SA360" },
+      { api:"sa360EngineAccountType",        name:"SA360 Engine Account Type",                desc:"סוג חשבון מנוע חיפוש ב-SA360" },
+      { api:"sa360KeywordText",              name:"SA360 Keyword Text",                       desc:"טקסט מילת המפתח ב-SA360" },
+      { api:"sa360ManagerAccountId",         name:"SA360 Manager Account ID",                 desc:"מזהה חשבון מנהל ב-SA360" },
+      { api:"sa360ManagerAccountName",       name:"SA360 Manager Account Name",               desc:"שם חשבון מנהל ב-SA360" },
+      { api:"sa360Medium",                   name:"SA360 Medium",                             desc:"מדיום ב-SA360" },
+      { api:"sa360Query",                    name:"SA360 Query",                              desc:"שאילתת החיפוש ב-SA360" },
+      { api:"sa360Source",                   name:"SA360 Source",                             desc:"מקור ב-SA360" },
+    ]
+  },
+  {
+    cat: "דמוגרפיה (Demographics)",
+    emoji: "👥",
+    items: [
+      { api:"userAgeBracket",                name:"Age",                                      desc:"קבוצת גיל המשתמש: 18-24, 25-34, 35-44, 45-54, 55-64, 65+" },
+      { api:"userGender",                    name:"Gender",                                   desc:"מין המשתמש: male, female, unknown" },
+      { api:"userInterests",                 name:"Interests",                                desc:"תחומי עניין של המשתמש לפי Google Signals" },
+    ]
+  },
+  {
+    cat: "איקומרס (Ecommerce)",
+    emoji: "🛒",
+    items: [
+      { api:"itemName",                      name:"Item Name",                                desc:"שם המוצר" },
+      { api:"itemBrand",                     name:"Item Brand",                               desc:"מותג המוצר" },
+      { api:"itemCategory",                  name:"Item Category",                            desc:"קטגוריה ראשית של המוצר" },
+      { api:"itemCategory2",                 name:"Item Category 2",                          desc:"קטגוריה שניה של המוצר" },
+      { api:"itemCategory3",                 name:"Item Category 3",                          desc:"קטגוריה שלישית של המוצר" },
+      { api:"itemCategory4",                 name:"Item Category 4",                          desc:"קטגוריה רביעית של המוצר" },
+      { api:"itemCategory5",                 name:"Item Category 5",                          desc:"קטגוריה חמישית של המוצר" },
+      { api:"itemId",                        name:"Item ID",                                  desc:"מזהה המוצר — SKU" },
+      { api:"itemListId",                    name:"Item List ID",                             desc:"מזהה רשימת המוצרים" },
+      { api:"itemListName",                  name:"Item List Name",                           desc:"שם רשימת המוצרים" },
+      { api:"itemListPosition",              name:"Item List Position",                       desc:"מיקום המוצר ברשימה" },
+      { api:"itemLocationId",                name:"Item Location ID",                         desc:"מזהה מיקום המוצר (לחנויות פיזיות)" },
+      { api:"itemPromotionCreativeName",     name:"Item Promotion Creative Name",             desc:"שם הקריאייטיב של הפרומושן" },
+      { api:"itemPromotionCreativeSlot",     name:"Item Promotion Creative Slot",             desc:"חריץ הפרומושן" },
+      { api:"itemPromotionId",               name:"Item Promotion ID",                        desc:"מזהה הפרומושן" },
+      { api:"itemPromotionName",             name:"Item Promotion Name",                      desc:"שם הפרומושן" },
+      { api:"itemVariant",                   name:"Item Variant",                             desc:"גרסת המוצר — גודל, צבע וכד'" },
+      { api:"orderCoupon",                   name:"Order Coupon",                             desc:"קופון שהוחל על ההזמנה" },
+      { api:"paymentType",                   name:"Payment Type",                             desc:"אמצעי תשלום שנבחר" },
+      { api:"shippingTier",                  name:"Shipping Tier",                            desc:"שכבת משלוח שנבחרה" },
+      { api:"transactionId",                 name:"Transaction ID",                           desc:"מזהה ייחודי לכל עסקה" },
+      { api:"itemAffiliation",               name:"Item Affiliation",                         desc:"שיוך המוצר — שם חנות / שותף" },
+      { api:"itemCoupon",                    name:"Item Coupon",                              desc:"קופון ברמת הפריט" },
+      { api:"itemDiscountPercent",           name:"Item Discount Percent",                    desc:"אחוז ההנחה על הפריט" },
+    ]
+  },
+  {
+    cat: "אירוע (Event)",
+    emoji: "⚡",
+    items: [
+      { api:"eventName",                     name:"Event Name",                               desc:"שם האירוע כפי שנשלח ל-GA4" },
+      { api:"isKeyEvent",                    name:"Is Key Event",                             desc:"האם האירוע מוגדר כ-Key Event בנכס — true/false" },
+    ]
+  },
+  {
+    cat: "גיימינג (Gaming)",
+    emoji: "🎮",
+    items: [
+      { api:"achievementId",                 name:"Achievement ID",                           desc:"מזהה ההישג שהושג במשחק" },
+      { api:"character",                     name:"Character",                                desc:"שם הדמות שהשחקן השתמש בה" },
+      { api:"level",                         name:"Level",                                    desc:"שלב / רמה במשחק" },
+      { api:"virtualCurrencyName",           name:"Virtual Currency Name",                    desc:"שם המטבע הווירטואלי שנרכש/הוצא" },
+    ]
+  },
+  {
+    cat: "כללי (General)",
+    emoji: "⚙️",
+    items: [
+      { api:"abTestingExperimentEvent",      name:"A/B Testing Experiment Event",             desc:"אירוע ניסוי A/B" },
+      { api:"fileExtension",                 name:"File Extension",                           desc:"סוג הקובץ שהורד — pdf, docx וכד'" },
+      { api:"fileName",                      name:"File Name",                                desc:"שם הקובץ שהורד" },
+      { api:"groupId",                       name:"Group ID",                                 desc:"מזהה קבוצת משתמשים" },
+      { api:"method",                        name:"Method",                                   desc:"שיטה שנשלחה עם האירוע (login, share וכד')" },
+      { api:"percentScrolled",               name:"Percent Scrolled",                         desc:"אחוז הגלילה עד ל-90% מהדף — מוגדר על-ידי Enhanced Measurement" },
+      { api:"searchTerm",                    name:"Search Term",                              desc:"מונח חיפוש שהמשתמש הזין בתוך האתר" },
+      { api:"testDataFilterName",            name:"Test Data Filter Name",                    desc:"שם מסנן נתוני הבדיקה" },
+      { api:"visible",                       name:"Visible",                                  desc:"האם הרכיב היה גלוי למשתמש" },
+    ]
+  },
+  {
+    cat: "גיאוגרפיה (Geography)",
+    emoji: "🌍",
+    items: [
+      { api:"city",                          name:"City",                                     desc:"עיר המשתמש לפי כתובת IP" },
+      { api:"cityId",                        name:"City ID",                                  desc:"מזהה העיר (קוד Criteria)" },
+      { api:"continent",                     name:"Continent",                                desc:"יבשת המשתמש — Americas, Europe וכד'" },
+      { api:"continentId",                   name:"Continent ID",                             desc:"מזהה מספרי של היבשת" },
+      { api:"country",                       name:"Country",                                  desc:"ארץ המשתמש לפי כתובת IP" },
+      { api:"countryId",                     name:"Country ID",                               desc:"קוד ארץ ISO 3166 — IL, US, GB" },
+      { api:"region",                        name:"Region",                                   desc:"מחוז/אזור גיאוגרפי" },
+      { api:"regionId",                      name:"Region ID",                                desc:"מזהה מספרי של המחוז" },
+      { api:"subContinent",                  name:"Subcontinent",                             desc:"תת-יבשת — Western Asia, Northern Europe וכד'" },
+      { api:"subContinentId",                name:"Subcontinent ID",                          desc:"מזהה מספרי של תת-היבשת" },
+    ]
+  },
+  {
+    cat: "קישור (Link)",
+    emoji: "🔗",
+    items: [
+      { api:"linkClasses",                   name:"Link Classes",                             desc:"מחלקות CSS של הקישור שנלחץ" },
+      { api:"linkDomain",                    name:"Link Domain",                              desc:"דומיין היעד של הקישור שנלחץ" },
+      { api:"linkId",                        name:"Link ID",                                  desc:"מזהה HTML של הקישור" },
+      { api:"linkText",                      name:"Link Text",                                desc:"טקסט הקישור שנלחץ" },
+      { api:"linkUrl",                       name:"Link URL",                                 desc:"כתובת ה-URL המלאה של הקישור" },
+      { api:"outbound",                      name:"Outbound",                                 desc:"האם הקישור יוצא לדומיין חיצוני — true/false" },
+    ]
+  },
+  {
+    cat: "חיפוש אורגני (Other)",
+    emoji: "🔍",
+    items: [
+      { api:"organicGoogleSearchQuery",      name:"Organic Google Search Query",              desc:"שאילתת חיפוש אורגני ב-Google (דרך Search Console)" },
+    ]
+  },
+  {
+    cat: "עמוד/מסך (Page / Screen)",
+    emoji: "📄",
+    items: [
+      { api:"contentGroup",                  name:"Content Group",                            desc:"קבוצת תוכן מותאמת — עד 5 קבוצות לנכס" },
+      { api:"contentId",                     name:"Content ID",                               desc:"מזהה מותאם של פיסת תוכן" },
+      { api:"contentType",                   name:"Content Type",                             desc:"סוג התוכן המוצג" },
+      { api:"hostName",                      name:"Hostname",                                 desc:"שם הדומיין/מארח של הדף" },
+      { api:"landingPage",                   name:"Landing Page",                             desc:"עמוד הנחיתה — העמוד הראשון בסשן" },
+      { api:"landingPagePlusQueryString",    name:"Landing Page + Query String",              desc:"דף נחיתה כולל פרמטרי URL" },
+      { api:"pageLocation",                  name:"Page Location",                            desc:"ה-URL המלא של הדף כולל פרוטוקול ודומיין" },
+      { api:"pagePathPlusQueryString",       name:"Page Path + Query String",                 desc:"נתיב מלא + Query String ללא הדומיין" },
+      { api:"pagePathAndScreenClass",        name:"Page Path And Screen Class",               desc:"נתיב עמוד + שם מחלקת מסך אפליקציה" },
+      { api:"pageReferrer",                  name:"Page Referrer",                            desc:"ה-URL המלא של הדף הקודם (referrer)" },
+      { api:"pageTitle",                     name:"Page Title",                               desc:"כותרת הדף — תגית <title>" },
+      { api:"pageTitleAndScreenClass",       name:"Page Title And Screen Class",              desc:"כותרת דף + מחלקת מסך אפליקציה" },
+      { api:"pageTitleAndScreenName",        name:"Page Title And Screen Name",               desc:"כותרת דף + שם מסך אפליקציה" },
+    ]
+  },
+  {
+    cat: "פלטפורמה/מכשיר (Platform / Device)",
+    emoji: "💻",
+    items: [
+      { api:"appStore",                      name:"App Store",                                desc:"חנות האפליקציות שממנה הותקנה האפליקציה" },
+      { api:"appVersion",                    name:"App Version",                              desc:"גרסת האפליקציה המותקנת" },
+      { api:"browser",                       name:"Browser",                                  desc:"הדפדפן שבו גלש המשתמש" },
+      { api:"browserVersion",                name:"Browser Version",                          desc:"גרסה מדויקת של הדפדפן" },
+      { api:"fullAppVersion",                name:"Device",                                   desc:"שם המכשיר המלא" },
+      { api:"deviceBranding",                name:"Device Brand",                             desc:"מותג המכשיר — Apple, Samsung, Google וכד'" },
+      { api:"deviceCategory",                name:"Device Category",                          desc:"קטגוריית המכשיר — desktop, mobile, tablet" },
+      { api:"deviceModel",                   name:"Device Model",                             desc:"דגם המכשיר הספציפי" },
+      { api:"language",                      name:"Language",                                 desc:"שפת הדפדפן/מכשיר — he, en-us וכד'" },
+      { api:"languageCode",                  name:"Language Code",                            desc:"קוד שפה בלבד — he, en, ar" },
+      { api:"mobileModel",                   name:"Mobile Model",                             desc:"דגם המכשיר הנייד" },
+      { api:"operatingSystem",               name:"Operating System",                         desc:"מערכת הפעלה — Windows, iOS, Android" },
+      { api:"operatingSystemWithVersion",    name:"OS With Version",                          desc:"מערכת הפעלה + גרסה — iOS 17.2, Android 14" },
+      { api:"operatingSystemVersion",        name:"OS Version",                               desc:"גרסת מערכת ההפעלה" },
+      { api:"platform",                      name:"Platform",                                 desc:"פלטפורמת הנכס — Web, Android, iOS" },
+      { api:"screenResolution",              name:"Screen Resolution",                        desc:"רזולוציית המסך — 1920x1080, 390x844" },
+      { api:"streamId",                      name:"Stream ID",                                desc:"מזהה ה-Data Stream של הנכס" },
+      { api:"streamName",                    name:"Stream Name",                              desc:"שם ה-Data Stream של הנכס" },
+    ]
+  },
+  {
+    cat: "פרסום תוכן (Publisher)",
+    emoji: "📰",
+    items: [
+      { api:"adFormat",                      name:"Ad Format",                                desc:"פורמט המודעה — Banner, Interstitial, Rewarded וכד'" },
+      { api:"adSourceName",                  name:"Ad Source",                                desc:"מקור המודעה — AdMob Network, Custom וכד'" },
+      { api:"adUnitName",                    name:"Ad Unit",                                  desc:"שם יחידת המודעה" },
+    ]
+  },
+  {
+    cat: "זמן (Time)",
+    emoji: "🕐",
+    items: [
+      { api:"date",                          name:"Date",                                     desc:"תאריך האירוע בפורמט YYYYMMDD" },
+      { api:"dateHour",                      name:"Date + Hour",                              desc:"תאריך + שעה בפורמט YYYYMMDDHH" },
+      { api:"day",                           name:"Day",                                      desc:"יום בחודש (01–31)" },
+      { api:"hour",                          name:"Hour",                                     desc:"שעת האירוע (00–23)" },
+      { api:"month",                         name:"Month",                                    desc:"חודש (01–12)" },
+      { api:"nthDay",                        name:"Nth Day",                                  desc:"מספר הימים מתחילת תקופת הדוח" },
+      { api:"nthHour",                       name:"Nth Hour",                                 desc:"מספר השעות מתחילת תקופת הדוח" },
+      { api:"nthMonth",                      name:"Nth Month",                                desc:"מספר החודשים מתחילת תקופת הדוח" },
+      { api:"nthWeek",                       name:"Nth Week",                                 desc:"מספר השבועות מתחילת תקופת הדוח" },
+      { api:"nthYear",                       name:"Nth Year",                                 desc:"מספר השנים מתחילת תקופת הדוח" },
+      { api:"week",                          name:"Week",                                     desc:"שבוע בשנה (01–53)" },
+      { api:"year",                          name:"Year",                                     desc:"שנה (2024, 2025 וכד')" },
+    ]
+  },
+  {
+    cat: "מקור תנועה (Traffic Source)",
+    emoji: "🚦",
+    items: [
+      { api:"sessionCampaignName",           name:"Session Campaign",                         desc:"שם הקמפיין שפתח את הסשן הנוכחי" },
+      { api:"sessionCampaignId",             name:"Session Campaign ID",                      desc:"מזהה הקמפיין של הסשן" },
+      { api:"sessionDefaultChannelGroup",    name:"Session Default Channel Group",            desc:"קבוצת ערוץ שגוגל הקצה לסשן" },
+      { api:"sessionMedium",                 name:"Session Medium",                           desc:"מדיום שפתח את הסשן הנוכחי" },
+      { api:"sessionPrimaryChannelGroup",    name:"Session Primary Channel Group",            desc:"ערוץ ייחוס ראשי לסשן" },
+      { api:"sessionSource",                 name:"Session Source",                           desc:"מקור שפתח את הסשן הנוכחי" },
+      { api:"sessionSourceMedium",           name:"Session Source / Medium",                  desc:"מקור/מדיום של הסשן — שדה משולב נפוץ" },
+      { api:"sessionSourcePlatform",         name:"Session Source Platform",                  desc:"פלטפורמת מקור הסשן" },
+      // Session CM360
+      { api:"sessionCm360AccountName",       name:"Session CM360 Account Name",               desc:"שם חשבון CM360 של הסשן" },
+      { api:"sessionCm360CampaignName",      name:"Session CM360 Campaign Name",              desc:"שם קמפיין CM360 של הסשן" },
+      { api:"sessionCm360CreativeName",      name:"Session CM360 Creative Name",              desc:"שם קריאייטיב CM360 של הסשן" },
+      // Session DV360
+      { api:"sessionDv360AdvertiserName",    name:"Session DV360 Advertiser Name",            desc:"שם מפרסם DV360 של הסשן" },
+      { api:"sessionDv360CampaignName",      name:"Session DV360 Campaign Name",              desc:"שם קמפיין DV360 של הסשן" },
+      { api:"sessionDv360CreativeName",      name:"Session DV360 Creative Name",              desc:"שם קריאייטיב DV360 של הסשן" },
+      // Session Google Ads
+      { api:"sessionGoogleAdsAccountName",   name:"Session Google Ads Account Name",          desc:"שם חשבון Google Ads של הסשן" },
+      { api:"sessionGoogleAdsAdGroupId",     name:"Session Google Ads Ad Group ID",           desc:"מזהה קבוצת מודעות Google Ads של הסשן" },
+      { api:"sessionGoogleAdsAdGroupName",   name:"Session Google Ads Ad Group Name",         desc:"שם קבוצת מודעות Google Ads של הסשן" },
+      { api:"sessionGoogleAdsAdNetworkType", name:"Session Google Ads Ad Network Type",       desc:"סוג רשת Google Ads של הסשן" },
+      { api:"sessionGoogleAdsCampaignId",    name:"Session Google Ads Campaign ID",           desc:"מזהה קמפיין Google Ads של הסשן" },
+      { api:"sessionGoogleAdsCampaignName",  name:"Session Google Ads Campaign Name",         desc:"שם קמפיין Google Ads של הסשן" },
+      { api:"sessionGoogleAdsCampaignType",  name:"Session Google Ads Campaign Type",         desc:"סוג קמפיין Google Ads של הסשן" },
+      { api:"sessionGoogleAdsCreativeId",    name:"Session Google Ads Creative ID",           desc:"מזהה קריאייטיב Google Ads של הסשן" },
+      { api:"sessionGoogleAdsCustomerId",    name:"Session Google Ads Customer ID",           desc:"מזהה לקוח Google Ads של הסשן" },
+      { api:"sessionGoogleAdsKeyword",       name:"Session Google Ads Keyword",               desc:"מילת מפתח Google Ads של הסשן" },
+      { api:"sessionGoogleAdsMatchType",     name:"Session Google Ads Query Match Type",      desc:"סוג התאמת מילת המפתח בסשן" },
+      // Session SA360
+      { api:"sessionSa360AdGroupName",       name:"Session SA360 Ad Group Name",              desc:"שם קבוצת מודעות SA360 של הסשן" },
+      { api:"sessionSa360CampaignName",      name:"Session SA360 Campaign Name",              desc:"שם קמפיין SA360 של הסשן" },
+      { api:"sessionSa360EngineAccountName", name:"Session SA360 Engine Account Name",        desc:"שם חשבון מנוע SA360 של הסשן" },
+      { api:"sessionSa360KeywordText",       name:"Session SA360 Keyword Text",               desc:"מילת מפתח SA360 של הסשן" },
+      { api:"sessionSa360Medium",            name:"Session SA360 Medium",                     desc:"מדיום SA360 של הסשן" },
+      { api:"sessionSa360Query",             name:"Session SA360 Query",                      desc:"שאילתת SA360 של הסשן" },
+      { api:"sessionSa360Source",            name:"Session SA360 Source",                     desc:"מקור SA360 של הסשן" },
+      // Session Manual
+      { api:"sessionManualAdContent",        name:"Session Manual Ad Content",                desc:"utm_content של הסשן" },
+      { api:"sessionManualCampaignId",       name:"Session Manual Campaign ID",               desc:"utm_id של הסשן" },
+      { api:"sessionManualCampaignName",     name:"Session Manual Campaign Name",             desc:"utm_campaign של הסשן" },
+      { api:"sessionManualMedium",           name:"Session Manual Medium",                    desc:"utm_medium של הסשן" },
+      { api:"sessionManualSource",           name:"Session Manual Source",                    desc:"utm_source של הסשן" },
+      { api:"sessionManualTerm",             name:"Session Manual Term",                      desc:"utm_term של הסשן" },
+      // First User
+      { api:"firstUserCampaignName",         name:"First User Campaign",                      desc:"הקמפיין שהביא את המשתמש בפעם הראשונה" },
+      { api:"firstUserCampaignId",           name:"First User Campaign ID",                   desc:"מזהה קמפיין הביקור הראשון" },
+      { api:"firstUserDefaultChannelGroup",  name:"First User Default Channel Group",         desc:"ערוץ הביקור הראשון של המשתמש" },
+      { api:"firstUserMedium",               name:"First User Medium",                        desc:"מדיום הביקור הראשון" },
+      { api:"firstUserPrimaryChannelGroup",  name:"First User Primary Channel Group",         desc:"ערוץ ייחוס ראשי לביקור הראשון" },
+      { api:"firstUserSource",               name:"First User Source",                        desc:"מקור הביקור הראשון — User-scoped, לא משתנה" },
+      { api:"firstUserSourceMedium",         name:"First User Source / Medium",               desc:"מקור/מדיום הביקור הראשון" },
+      { api:"firstUserSourcePlatform",       name:"First User Source Platform",               desc:"פלטפורמת מקור הביקור הראשון" },
+      // First User CM360
+      { api:"firstUserCm360CampaignName",    name:"First User CM360 Campaign Name",           desc:"קמפיין CM360 של הביקור הראשון" },
+      // First User DV360
+      { api:"firstUserDv360CampaignName",    name:"First User DV360 Campaign Name",           desc:"קמפיין DV360 של הביקור הראשון" },
+      // First User Google Ads
+      { api:"firstUserGoogleAdsCampaignName",name:"First User Google Ads Campaign Name",      desc:"קמפיין Google Ads של הביקור הראשון" },
+      { api:"firstUserGoogleAdsCampaignType",name:"First User Google Ads Campaign Type",      desc:"סוג קמפיין Google Ads של הביקור הראשון" },
+      { api:"firstUserGoogleAdsAdGroupName", name:"First User Google Ads Ad Group Name",      desc:"קבוצת מודעות Google Ads של הביקור הראשון" },
+      { api:"firstUserGoogleAdsKeyword",     name:"First User Google Ads Keyword",            desc:"מילת מפתח Google Ads של הביקור הראשון" },
+      // First User SA360
+      { api:"firstUserSa360CampaignName",    name:"First User SA360 Campaign Name",           desc:"קמפיין SA360 של הביקור הראשון" },
+      // First User Manual
+      { api:"firstUserManualCampaignName",   name:"First User Manual Campaign Name",          desc:"utm_campaign של הביקור הראשון" },
+      { api:"firstUserManualMedium",         name:"First User Manual Medium",                 desc:"utm_medium של הביקור הראשון" },
+      { api:"firstUserManualSource",         name:"First User Manual Source",                 desc:"utm_source של הביקור הראשון" },
+      { api:"firstUserManualTerm",           name:"First User Manual Term",                   desc:"utm_term של הביקור הראשון" },
+    ]
+  },
+  {
+    cat: "משתמש (User)",
+    emoji: "👤",
+    items: [
+      { api:"audienceName",                  name:"Audience Name",                            desc:"שם הקהל שהמשתמש שייך אליו" },
+      { api:"newVsReturning",                name:"New / Established",                        desc:"האם המשתמש חדש (ביקור ראשון) או חוזר" },
+      { api:"signedInWithUserId",            name:"Signed In With User ID",                   desc:"האם נשלח User ID מותאם — yes/no" },
+    ]
+  },
+  {
+    cat: "חיי משתמש (User Lifetime)",
+    emoji: "⏳",
+    items: [
+      { api:"firstSessionDate",              name:"First Visit Date",                         desc:"תאריך הביקור הראשון של המשתמש" },
+      { api:"firstPurchaseDate",             name:"First Purchase Date",                      desc:"תאריך הרכישה הראשונה של המשתמש" },
+      { api:"lastActiveDate",                name:"Last Active Date",                         desc:"תאריך הפעילות האחרונה של המשתמש" },
+      { api:"lastAudienceName",              name:"Last Audience Name",                       desc:"הקהל האחרון שהמשתמש שויך אליו" },
+      { api:"lastPlatform",                  name:"Last Platform",                            desc:"הפלטפורמה האחרונה ממנה פעל המשתמש" },
+      { api:"lastPurchaseDate",              name:"Last Purchase Date",                       desc:"תאריך הרכישה האחרונה של המשתמש" },
+    ]
+  },
+  {
+    cat: "וידאו (Video)",
+    emoji: "🎬",
+    items: [
+      { api:"videoProvider",                 name:"Video Provider",                           desc:"ספק הסרטון — youtube וכד'" },
+      { api:"videoTitle",                    name:"Video Title",                              desc:"כותרת הסרטון שנצפה" },
+      { api:"videoUrl",                      name:"Video URL",                                desc:"כתובת ה-URL של הסרטון" },
+    ]
+  },
+];
+
+// ══════════════════════════════════════════════════════════════════════
+// ACCORDION RENDER ENGINE
+// ══════════════════════════════════════════════════════════════════════
+function buildAccordion(groups, containerId, searchTerm) {
+  const container = document.getElementById(containerId);
+  const term = (searchTerm || "").toLowerCase().trim();
+  let totalShown = 0;
+
+  container.innerHTML = groups.map((g, gi) => {
+    const visible = g.items.filter(item => {
+      if (!term) return true;
+      return item.api.toLowerCase().includes(term) ||
+             item.name.toLowerCase().includes(term) ||
+             item.desc.includes(term);
+    });
+    if (!visible.length) return "";
+    totalShown += visible.length;
+    const isOpen = !term ? gi === 0 : true; // open first by default, all when searching
+
+    const itemsHtml = visible.map(item => `
+      <div class="ref-item">
+        <div class="ref-item-api">
+          ${item.api}
+          <button class="ref-copy-btn" onclick="refCopy('${item.api}',this)" title="העתק שם API">⧉</button>
+        </div>
+        <div class="ref-item-name">${item.name}</div>
+        <div class="ref-item-desc">${item.desc}</div>
+      </div>`).join("");
+
+    return `
+      <div class="acc-group${isOpen ? " open" : ""}" id="acc-${containerId}-${gi}">
+        <div class="acc-header" onclick="toggleAcc('acc-${containerId}-${gi}')">
+          <span>${g.emoji}</span>
+          <span class="acc-title">${g.cat}</span>
+          <span class="acc-count">${visible.length}</span>
+          <span class="acc-arrow">▼</span>
+        </div>
+        <div class="acc-body">
+          <div class="ref-grid">${itemsHtml}</div>
+        </div>
+      </div>`;
+  }).join("");
+
+  return totalShown;
+}
+
+function toggleAcc(id) {
+  document.getElementById(id).classList.toggle("open");
+}
+
+function refCopy(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add("copied");
+    btn.textContent = "✓";
+    setTimeout(() => { btn.classList.remove("copied"); btn.textContent = "⧉"; }, 1500);
+  });
+}
+
+// Metrics tab
+let metricsSearchTerm = "";
+function renderMetrics() {
+  const shown = buildAccordion(allMetricGroups, "metricsAccordion", metricsSearchTerm);
+  document.getElementById("metricsShownCount").textContent = shown;
+}
+
+// Dims tab
+let allDimsSearchTerm = "";
+function renderAllDims() {
+  const shown = buildAccordion(allDimGroups, "allDimsAccordion", allDimsSearchTerm);
+  document.getElementById("allDimsShownCount").textContent = shown;
+}
+
+document.getElementById("metricsSearch").addEventListener("input", e => {
+  metricsSearchTerm = e.target.value;
+  renderMetrics();
+});
+document.getElementById("allDimsSearch").addEventListener("input", e => {
+  allDimsSearchTerm = e.target.value;
+  renderAllDims();
+});
+
+renderMetrics();
+renderAllDims();
+
+// ══════════════════════════════════════════════════════════════════════
+// TAB SWITCHING
+// ══════════════════════════════════════════════════════════════════════
+const TAB_SECTIONS = {
+  events:      "eventsSection",
+  dims:        "dimsSection",
+  allmetrics:  "allMetricsSection",
+  alldims:     "allDimsSection",
+  simulator:   "simulatorSection",
+  attribution: "attributionSection",
+};
+
+document.querySelectorAll(".ptab-main").forEach(btn => {
+  btn.addEventListener("click", e => {
+    const tabName = e.target.dataset.tab;
+    document.querySelectorAll(".ptab-main").forEach(b => b.classList.remove("active"));
+    e.target.classList.add("active");
+    Object.entries(TAB_SECTIONS).forEach(([tab, sectionId]) => {
+      document.getElementById(sectionId).style.display = tab === tabName ? "" : "none";
+    });
+  });
+});
+
+// ══════════════════════════════════════════════════════════════════════
+// SIMULATOR LOGIC
+// ══════════════════════════════════════════════════════════════════════
+let simulatorData = {
+  totalEventsFired: 0,
+  conversions: 0,
+  revenue: 0,
+  sessionDuration: 0,
+  eventsLog: []
+};
+
+const eventValues = {
+  ecommerce: {
+    view_item: { name: "view_item", desc: "צפייה בפרטי מוצר", value: 0, conversion: false },
+    add_to_cart: { name: "add_to_cart", desc: "הוספה לעגלה", value: 0, conversion: false },
+    purchase: { name: "purchase", desc: "רכישה", value: Math.random() * 200 + 20, conversion: true },
+    login: { name: "login", desc: "התחברות", value: 0, conversion: false },
+    page_view: { name: "page_view", desc: "צפייה בעמוד", value: 0, conversion: false }
+  },
+  leadgen: {
+    generate_lead: { name: "generate_lead", desc: "יצירת לידים", value: 0, conversion: true },
+    login: { name: "login", desc: "התחברות", value: 0, conversion: false },
+    page_view: { name: "page_view", desc: "צפייה בעמוד", value: 0, conversion: false }
+  },
+  games: {
+    purchase: { name: "purchase", desc: "רכישה", value: Math.random() * 15 + 3, conversion: true },
+    login: { name: "login", desc: "התחברות", value: 0, conversion: false },
+    page_view: { name: "page_view", desc: "צפייה בעמוד", value: 0, conversion: false }
+  },
+  media: {
+    page_view: { name: "page_view", desc: "צפייה בעמוד", value: 0, conversion: false },
+    login: { name: "login", desc: "התחברות", value: 0, conversion: false }
+  },
+  saas: {
+    generate_lead: { name: "generate_lead", desc: "יצירת לידים", value: 0, conversion: true },
+    login: { name: "login", desc: "התחברות", value: 0, conversion: false },
+    page_view: { name: "page_view", desc: "צפייה בעמוד", value: 0, conversion: false }
+  }
+};
+
+// Update event options when industry changes
+function updateEventOptions() {
+  const industry = document.getElementById("industrySelect").value;
+  const eventSelect = document.getElementById("eventSelect");
+  const events = Object.values(eventValues[industry]);
+
+  eventSelect.innerHTML = events.map(e =>
+    `<option value="${e.name}">${e.name} - ${e.desc}</option>`
+  ).join("");
+}
+
+document.getElementById("industrySelect").addEventListener("change", updateEventOptions);
+
+// Initialize event options on page load
+updateEventOptions();
+
+document.getElementById("fireEventBtn").addEventListener("click", () => {
+  const industry = document.getElementById("industrySelect").value;
+  const eventType = document.getElementById("eventSelect").value;
+  const eventData = eventValues[industry][eventType];
+
+  const timestamp = new Date().toLocaleTimeString("he-IL");
+  const logEntry = {
+    time: timestamp,
+    event: eventType,
+    industry: industry,
+    value: eventData.value,
+    isConversion: eventData.conversion
+  };
+
+  simulatorData.totalEventsFired++;
+  simulatorData.sessionDuration += Math.random() * 10 + 2;
+
+  if (eventData.conversion) {
+    simulatorData.conversions++;
+    simulatorData.revenue += eventData.value;
+  }
+
+  simulatorData.eventsLog.unshift(logEntry);
+  if (simulatorData.eventsLog.length > 50) {
+    simulatorData.eventsLog.pop();
+  }
+
+  updateDashboard();
+  animateMetric("totalEventsFired");
+});
+
+document.getElementById("clearDataBtn").addEventListener("click", () => {
+  simulatorData = {
+    totalEventsFired: 0,
+    conversions: 0,
+    revenue: 0,
+    sessionDuration: 0,
+    eventsLog: []
+  };
+  updateDashboard();
+});
+
+function updateDashboard() {
+  document.getElementById("totalEventsFired").textContent = simulatorData.totalEventsFired;
+  document.getElementById("conversionCount").textContent = simulatorData.conversions;
+  document.getElementById("estRevenue").textContent = "$" + simulatorData.revenue.toFixed(2);
+  document.getElementById("avgSessionDuration").textContent = Math.floor(simulatorData.sessionDuration / Math.max(1, simulatorData.totalEventsFired)) + "s";
+
+  const logContainer = document.getElementById("eventsLog");
+  if (simulatorData.eventsLog.length === 0) {
+    logContainer.innerHTML = '<div class="log-empty">אנו מחכים ל-Events...</div>';
+  } else {
+    logContainer.innerHTML = simulatorData.eventsLog.map((log, i) => `
+      <div class="log-entry">
+        <span class="log-entry-time">${log.time}</span>
+        <span class="log-entry-event">${log.event}</span>
+        <span class="log-entry-badge">${log.isConversion ? "✓ Conversion" : "Event"}</span>
+      </div>
+    `).join("");
+  }
+}
+
+function animateMetric(id) {
+  const el = document.getElementById(id);
+  el.style.transform = "scale(1.1)";
+  setTimeout(() => {
+    el.style.transform = "scale(1)";
+  }, 200);
+}
+
+updateDashboard();
+
+// ══════════════════════════════════════════════════════════════════════
+// ATTRIBUTION SIMULATOR
+// ══════════════════════════════════════════════════════════════════════
+const CHANNELS = [
+  { id:"paid_search",      label:"Paid Search (Google Ads)", emoji:"🔍", color:"#3b82f6" },
+  { id:"organic",          label:"Organic Search",           emoji:"🌿", color:"#10b981" },
+  { id:"email",            label:"Email",                    emoji:"📧", color:"#8b5cf6" },
+  { id:"paid_social",      label:"Paid Social (Meta)",       emoji:"📱", color:"#1d4ed8" },
+  { id:"organic_social",   label:"Organic Social",           emoji:"💬", color:"#ec4899" },
+  { id:"direct",           label:"Direct",                   emoji:"🔗", color:"#64748b" },
+  { id:"display",          label:"Display",                  emoji:"🖼",  color:"#f59e0b" },
+  { id:"referral",         label:"Referral",                 emoji:"↗",  color:"#06b6d4" },
+];
+
+const ATTR_MODELS = [
+  {
+    id:"lastClick", label:"Last Click",
+    desc:"100% קרדיט לנקודת המגע האחרונה לפני ההמרה. הפשוט ביותר — מניח שמה שסגר הוא מה שחשוב.",
+    verdict:"ברירת מחדל של GA4 לפני 2023. מטעה לבמפיינים ארוכי טווח."
+  },
+  {
+    id:"firstClick", label:"First Click",
+    desc:"100% קרדיט לערוץ שהביא את המשתמש בפעם הראשונה. מתמקד ב-Awareness.",
+    verdict:"שימושי לקמפיינים של Top of Funnel. מתעלם ממה שסגר את העסקה."
+  },
+  {
+    id:"linear", label:"Linear",
+    desc:"חלוקה שווה בין כל נקודות המגע — כל ערוץ קיבל קרדיט זהה ללא קשר לתזמון.",
+    verdict:"הוגן אבל לא מציאותי — לא כל ערוץ תרם באותה מידה."
+  },
+  {
+    id:"timeDecay", label:"Time Decay",
+    desc:"ערוצים קרובים יותר להמרה מקבלים יותר קרדיט. מבוסס על Half-life של 7 ימים.",
+    verdict:"מתאים לסייקלי מכירה קצרים. מעניש ערוצי Awareness."
+  },
+  {
+    id:"positionBased", label:"Position-Based",
+    desc:"40% לראשון + 40% לאחרון + 20% מחולק בין האמצע. מכבד גם פתיחה וגם סגירה.",
+    verdict:"מאוזן ופופולרי. מתאים לעסקים שמשקיעים גם ב-Awareness וגם ב-Conversion."
+  },
+  {
+    id:"dataDriven", label:"Data-Driven ✶",
+    desc:"קרוב ל-GA4: שילוב Time Decay + חיזוק לנקודה הראשונה והאחרונה. ✶ לא האלגוריתם המדויק של Google — קירוב חינוכי.",
+    verdict:"ב-GA4 האמיתי זה ML model שדורש מינימום נתונים. כאן זו סימולציה."
+  },
+];
+
+let attrTouchpoints = [
+  { id:1, channel:"paid_search",    days:30, campaign:"Summer_Sale" },
+  { id:2, channel:"organic",        days:14, campaign:"" },
+  { id:3, channel:"email",          days:3,  campaign:"Newsletter" },
+  { id:4, channel:"direct",         days:0,  campaign:"" },
+];
+let nextTpId = 5;
+
+function getCh(id) { return CHANNELS.find(c => c.id === id) || CHANNELS[0]; }
+
+function renderTouchpoints() {
+  const list = document.getElementById("touchpointsList");
+  list.innerHTML = attrTouchpoints.map((tp, i) => {
+    const opts = CHANNELS.map(c =>
+      `<option value="${c.id}"${c.id === tp.channel ? " selected" : ""}>${c.emoji} ${c.label}</option>`
+    ).join("");
+    return `
+      <div class="touchpoint-row">
+        <div class="tp-num">${i + 1}</div>
+        <div class="tp-channel">
+          <select onchange="updateTp(${tp.id},'channel',this.value)">${opts}</select>
+        </div>
+        <div class="tp-days">
+          <input type="number" min="0" max="365" value="${tp.days}"
+            placeholder="ימים לפני"
+            onchange="updateTp(${tp.id},'days',+this.value)">
+        </div>
+        <div class="tp-campaign">
+          <input type="text" value="${tp.campaign}" placeholder="קמפיין (אופציונלי)"
+            oninput="updateTp(${tp.id},'campaign',this.value)">
+        </div>
+        <button class="tp-delete" onclick="deleteTp(${tp.id})"
+          ${attrTouchpoints.length <= 1 ? "disabled style='opacity:.4;cursor:default'" : ""}>×</button>
+      </div>`;
+  }).join("");
+  renderTimeline();
+}
+
+function updateTp(id, key, val) {
+  const tp = attrTouchpoints.find(t => t.id === id);
+  if (tp) { tp[key] = val; renderTimeline(); }
+}
+
+function deleteTp(id) {
+  if (attrTouchpoints.length <= 1) return;
+  attrTouchpoints = attrTouchpoints.filter(t => t.id !== id);
+  renderTouchpoints();
+}
+
+function addTp() {
+  if (attrTouchpoints.length >= 8) return;
+  attrTouchpoints.push({ id: nextTpId++, channel:"organic", days:7, campaign:"" });
+  renderTouchpoints();
+}
+
+function renderTimeline() {
+  const viz = document.getElementById("timelineViz");
+  const sorted = [...attrTouchpoints].sort((a, b) => b.days - a.days);
+  let html = "";
+  sorted.forEach((tp, i) => {
+    const ch = getCh(tp.channel);
+    html += `
+      <div class="tl-node">
+        <div class="tl-dot" style="background:${ch.color}">${ch.emoji}</div>
+        <div class="tl-label">${ch.label.split(" ")[0]}</div>
+        <div class="tl-days">${tp.days === 0 ? "היום" : "לפני " + tp.days + " ימים"}</div>
+      </div>`;
+    if (i < sorted.length - 1) {
+      const toColor = getCh(sorted[i + 1].channel).color;
+      html += `<div class="tl-line" style="--from:${ch.color};--to:${toColor}"></div>`;
+    }
+  });
+  html += `
+    <div class="tl-line" style="--from:#94a3b8;--to:#059669"></div>
+    <div class="tl-conversion">
+      <div class="tl-conv-dot">🎯</div>
+      <div class="tl-conv-label">המרה</div>
+    </div>`;
+  viz.innerHTML = html;
+}
+
+// ── Attribution calculation ────────────────────────────────────────
+function attrLastClick(tps, v)  { const r={}; tps.forEach(t=>r[t.id]=0); r[tps[tps.length-1].id]=v; return r; }
+function attrFirstClick(tps, v) { const r={}; tps.forEach(t=>r[t.id]=0); r[tps[0].id]=v; return r; }
+function attrLinear(tps, v)     { const s=v/tps.length; const r={}; tps.forEach(t=>r[t.id]=s); return r; }
+
+function attrTimeDecay(tps, v) {
+  const w = tps.map(t => Math.pow(2, -(t.days / 7)));
+  const tot = w.reduce((a,b)=>a+b, 0);
+  const r = {};
+  tps.forEach((t,i) => r[t.id] = (w[i]/tot)*v);
+  return r;
+}
+
+function attrPosition(tps, v) {
+  const r = {}; tps.forEach(t=>r[t.id]=0);
+  if (tps.length === 1) { r[tps[0].id] = v; }
+  else if (tps.length === 2) { r[tps[0].id]=v*0.5; r[tps[1].id]=v*0.5; }
+  else {
+    r[tps[0].id] = v*0.4;
+    r[tps[tps.length-1].id] = v*0.4;
+    const mid = (v*0.2)/(tps.length-2);
+    for (let i=1; i<tps.length-1; i++) r[tps[i].id] = mid;
+  }
+  return r;
+}
+
+function attrDataDriven(tps, v) {
+  const td = tps.map(t => Math.pow(2, -(t.days/7)));
+  const pos = tps.map((_,i) => i===0 ? 1.3 : i===tps.length-1 ? 1.4 : 0.9);
+  const combined = tps.map((_,i) => td[i]*pos[i]);
+  const tot = combined.reduce((a,b)=>a+b, 0);
+  const r = {};
+  tps.forEach((t,i) => r[t.id] = (combined[i]/tot)*v);
+  return r;
+}
+
+function calcAttribution() {
+  const value = parseFloat(document.getElementById("conversionValue").value) || 500;
+  const tps = [...attrTouchpoints].sort((a,b) => b.days - a.days);
+
+  const results = {
+    lastClick:    attrLastClick(tps, value),
+    firstClick:   attrFirstClick(tps, value),
+    linear:       attrLinear(tps, value),
+    timeDecay:    attrTimeDecay(tps, value),
+    positionBased:attrPosition(tps, value),
+    dataDriven:   attrDataDriven(tps, value),
+  };
+
+  // TABLE
+  const thead = document.getElementById("attrTableHead");
+  thead.innerHTML = `<tr><th>מודל</th>${tps.map(tp=>{
+    const ch=getCh(tp.channel);
+    return `<th><span style="color:${ch.color}">${ch.emoji}</span> ${ch.label.split(" ")[0]}${tp.campaign ? `<br><small style="font-weight:400;text-transform:none">${tp.campaign}</small>` : ""}</th>`;
+  }).join("")}</tr>`;
+
+  const tbody = document.getElementById("attrTableBody");
+  tbody.innerHTML = ATTR_MODELS.map(model => {
+    const row = results[model.id];
+    return `<tr>
+      <td>${model.label}</td>
+      ${tps.map(tp => {
+        const ch = getCh(tp.channel);
+        const v  = row[tp.id] || 0;
+        const pct = ((v/value)*100).toFixed(0);
+        return `<td>
+          <div class="cell-val">₪${v.toFixed(0)}</div>
+          <div class="cell-pct">${pct}%</div>
+          <div class="cell-bar" style="width:${pct}%;background:${ch.color}"></div>
+        </td>`;
+      }).join("")}
+    </tr>`;
+  }).join("");
+
+  // CHARTS
+  document.getElementById("chartsGrid").innerHTML = ATTR_MODELS.map(model => {
+    const row = results[model.id];
+    const segs = tps.map(tp => {
+      const ch  = getCh(tp.channel);
+      const v   = row[tp.id] || 0;
+      const pct = ((v/value)*100).toFixed(1);
+      return { ch, v, pct };
+    });
+    return `
+      <div class="chart-row">
+        <div class="chart-model-label">${model.label}</div>
+        <div class="chart-bars">
+          ${segs.map(s => s.pct > 0 ? `<div class="chart-segment"
+              style="width:${s.pct}%;background:${s.ch.color}"
+              title="${s.ch.label}: ₪${s.v.toFixed(0)} (${s.pct}%)"
+            >${+s.pct > 9 ? s.pct+"%" : ""}</div>` : "").join("")}
+        </div>
+        <div class="chart-total">₪${value}</div>
+      </div>`;
+  }).join("");
+
+  // MODEL CARDS
+  document.getElementById("modelCards").innerHTML = ATTR_MODELS.map(m => `
+    <div class="model-card">
+      <h4>${m.label}</h4>
+      <p>${m.desc}</p>
+      <div class="verdict">▸ ${m.verdict}</div>
+    </div>`).join("");
+
+  const resultsEl = document.getElementById("attrResults");
+  resultsEl.style.display = "";
+  resultsEl.scrollIntoView({ behavior:"smooth", block:"start" });
+}
+
+document.getElementById("addTouchpointBtn").addEventListener("click", addTp);
+document.getElementById("calcAttrBtn").addEventListener("click", calcAttribution);
+
+renderTouchpoints();
+
+</script>
+</body>
+</html>

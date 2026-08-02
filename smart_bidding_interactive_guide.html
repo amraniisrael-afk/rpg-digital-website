@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>מניחוש לניהול: מדריך אינטראקטיבי ל‑Smart Bidding</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']]
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --panel: #ffffff;
+      --panel-soft: #f0f4fa;
+      --text: #111827;
+      --muted: #5b6472;
+      --border: #d9e2ef;
+      --brand: #2563eb;
+      --brand-dark: #1e40af;
+      --accent: #0f766e;
+      --warning: #b45309;
+      --danger: #b91c1c;
+      --ok: #15803d;
+      --shadow: 0 18px 45px rgba(15, 23, 42, .09);
+      --radius: 22px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --sans: "Segoe UI", Arial, "Noto Sans Hebrew", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      background:
+        radial-gradient(circle at top right, rgba(37, 99, 235, .12), transparent 34rem),
+        radial-gradient(circle at top left, rgba(15, 118, 110, .10), transparent 32rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+    }
+
+    a { color: var(--brand); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 310px minmax(0, 1fr);
+      gap: 24px;
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    aside {
+      position: sticky;
+      top: 18px;
+      align-self: start;
+      background: rgba(255,255,255,.88);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      max-height: calc(100vh - 36px);
+      overflow: auto;
+    }
+
+    .brand-mini {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 14px;
+    }
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--brand), var(--accent));
+      color: #fff;
+      font-weight: 900;
+      box-shadow: 0 12px 24px rgba(37,99,235,.22);
+    }
+    .brand-mini strong { display: block; line-height: 1.2; }
+    .brand-mini span { color: var(--muted); font-size: 13px; }
+
+    .search {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 13px;
+      font-size: 15px;
+      outline: none;
+      background: #fff;
+      margin: 6px 0 12px;
+    }
+    .search:focus { border-color: var(--brand); box-shadow: 0 0 0 4px rgba(37,99,235,.12); }
+
+    nav a {
+      display: block;
+      padding: 9px 10px;
+      border-radius: 12px;
+      color: #243041;
+      font-size: 14px;
+      margin: 2px 0;
+    }
+    nav a:hover, nav a.active {
+      background: #edf4ff;
+      color: var(--brand-dark);
+      text-decoration: none;
+    }
+
+    main { min-width: 0; }
+
+    .hero {
+      background: linear-gradient(135deg, #07132f, #0f2a4b 55%, #0f766e);
+      color: white;
+      border-radius: 30px;
+      padding: 48px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -60px -100px auto;
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.11);
+    }
+    .hero h1 {
+      margin: 0 0 12px;
+      font-size: clamp(36px, 5vw, 64px);
+      line-height: 1.06;
+      letter-spacing: -1.5px;
+    }
+    .hero p {
+      max-width: 850px;
+      font-size: 19px;
+      margin: 0 0 24px;
+      color: rgba(255,255,255,.88);
+    }
+    .badges { display: flex; flex-wrap: wrap; gap: 10px; }
+    .badge {
+      display: inline-flex;
+      gap: 7px;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.13);
+      border: 1px solid rgba(255,255,255,.22);
+      color: rgba(255,255,255,.94);
+      font-size: 14px;
+    }
+
+    section {
+      margin-top: 22px;
+      background: rgba(255,255,255,.92);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 30px;
+    }
+
+    section h2 {
+      margin: 0 0 14px;
+      font-size: clamp(26px, 3vw, 38px);
+      line-height: 1.18;
+      letter-spacing: -.6px;
+    }
+    h3 {
+      margin: 28px 0 10px;
+      font-size: 24px;
+      line-height: 1.25;
+    }
+    h4 {
+      margin: 20px 0 8px;
+      font-size: 19px;
+    }
+    .lead {
+      color: var(--muted);
+      font-size: 18px;
+      max-width: 980px;
+    }
+    .small { font-size: 14px; color: var(--muted); }
+    .muted { color: var(--muted); }
+    .divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 20px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, .045);
+    }
+    .card.soft { background: var(--panel-soft); }
+    .card h3, .card h4 { margin-top: 0; }
+    .card-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      background: #eaf2ff;
+      color: var(--brand-dark);
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .callout {
+      border-radius: 22px;
+      border: 1px solid var(--border);
+      padding: 18px 20px;
+      background: #f8fafc;
+      margin: 18px 0;
+    }
+    .callout strong { color: #0f172a; }
+    .callout.info { background: #eff6ff; border-color: #bfdbfe; }
+    .callout.warn { background: #fffbeb; border-color: #fde68a; }
+    .callout.ok { background: #f0fdf4; border-color: #bbf7d0; }
+    .callout.danger { background: #fef2f2; border-color: #fecaca; }
+
+    .formula {
+      direction: ltr;
+      text-align: center;
+      padding: 18px;
+      margin: 16px 0;
+      background: #0b1220;
+      color: white;
+      border-radius: 20px;
+      overflow-x: auto;
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .formula .note {
+      direction: rtl;
+      text-align: right;
+      color: rgba(255,255,255,.68);
+      font-size: 13px;
+      margin-top: 12px;
+    }
+    code, .mono {
+      font-family: var(--mono);
+      direction: ltr;
+      unicode-bidi: plaintext;
+      background: #eef2f7;
+      padding: 2px 6px;
+      border-radius: 8px;
+      font-size: .94em;
+    }
+
+    .accordion {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      margin: 12px 0;
+      overflow: hidden;
+      background: white;
+    }
+    .accordion button {
+      width: 100%;
+      border: 0;
+      background: #fff;
+      text-align: right;
+      font: inherit;
+      font-weight: 800;
+      padding: 16px 18px;
+      cursor: pointer;
+      color: #111827;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .accordion button::after {
+      content: "+";
+      font-weight: 900;
+      font-size: 22px;
+      color: var(--brand);
+    }
+    .accordion.open button::after { content: "−"; }
+    .accordion-content {
+      display: none;
+      padding: 0 18px 18px;
+      border-top: 1px solid var(--border);
+      background: #fbfdff;
+    }
+    .accordion.open .accordion-content { display: block; }
+
+    ul.clean {
+      margin: 10px 0;
+      padding-right: 20px;
+    }
+    ul.clean li { margin: 7px 0; }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0;
+    }
+    .pill {
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 16px 0;
+    }
+    .tab-btn {
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 999px;
+      padding: 9px 14px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .tab-btn.active {
+      background: var(--brand);
+      color: white;
+      border-color: var(--brand);
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .calc {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+      gap: 18px;
+      align-items: start;
+      margin-top: 12px;
+    }
+    .calc-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 18px;
+    }
+    label {
+      display: block;
+      color: #374151;
+      font-weight: 700;
+      margin: 10px 0 5px;
+    }
+    input[type="number"], select {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      font-size: 16px;
+      background: white;
+      outline: none;
+    }
+    input[type="number"]:focus, select:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 4px rgba(37,99,235,.12);
+    }
+    .result {
+      background: #081225;
+      color: white;
+      border-radius: 20px;
+      padding: 18px;
+      min-height: 120px;
+    }
+    .result strong {
+      display: block;
+      font-size: 32px;
+      margin: 8px 0;
+      color: #a7f3d0;
+    }
+
+    .table-wrap { overflow-x: auto; margin: 14px 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+    }
+    th, td {
+      border-bottom: 1px solid var(--border);
+      padding: 12px 14px;
+      vertical-align: top;
+      text-align: right;
+    }
+    th { background: #f1f5f9; color: #0f172a; }
+    tr:last-child td { border-bottom: 0; }
+
+    .quiz-card {
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 22px;
+      padding: 18px;
+      margin: 12px 0;
+    }
+    .quiz-card button {
+      border: 0;
+      background: var(--brand);
+      color: white;
+      border-radius: 14px;
+      padding: 9px 12px;
+      cursor: pointer;
+      font-weight: 800;
+      margin-top: 8px;
+    }
+    .answer {
+      display: none;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 14px;
+      padding: 12px;
+      margin-top: 10px;
+    }
+
+    .checklist label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-weight: 500;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 11px 12px;
+      margin: 8px 0;
+      cursor: pointer;
+    }
+    .checklist input { margin-top: 6px; }
+    .progress-line {
+      height: 10px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 12px 0 0;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--brand), var(--accent));
+      transition: width .25s ease;
+    }
+
+    .print-btn {
+      position: fixed;
+      left: 24px;
+      bottom: 24px;
+      z-index: 10;
+      background: #0f172a;
+      color: white;
+      border: 0;
+      padding: 13px 16px;
+      border-radius: 999px;
+      font-weight: 900;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+    }
+
+    .chapter-tag {
+      color: var(--brand-dark);
+      font-weight: 900;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    mark {
+      background: #fef08a;
+      color: inherit;
+      border-radius: 4px;
+      padding: 0 2px;
+    }
+
+    .hidden-by-search { display: none !important; }
+
+    @media (max-width: 1050px) {
+      .shell { grid-template-columns: 1fr; padding: 14px; }
+      aside { position: static; max-height: none; }
+      .grid.two, .grid.three, .grid.four, .calc { grid-template-columns: 1fr; }
+      .hero { padding: 32px 24px; }
+      section { padding: 22px; }
+      .print-btn { position: static; margin: 16px 0; width: 100%; }
+    }
+
+    @media print {
+      body { background: white; }
+      aside, .print-btn, .search, .tabs { display: none !important; }
+      .shell { display: block; max-width: none; padding: 0; }
+      section, .hero { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+      .accordion-content, .tab-panel { display: block !important; }
+      .accordion button::after { content: ""; }
+    }
+  </style>
+</head>
+<body>
+  <button class="print-btn" onclick="window.print()">הדפסה / שמירה ל‑PDF</button>
+
+  <div class="shell">
+    <aside>
+      <div class="brand-mini">
+        <div class="logo">SB</div>
+        <div>
+          <strong>Smart Bidding</strong>
+          <span>מדריך אינטראקטיבי מקצועי</span>
+        </div>
+      </div>
+      <input class="search" id="searchInput" placeholder="חיפוש במדריך..." />
+      <nav id="sideNav">
+        <a href="#intro">פתיחה ושימוש</a>
+        <a href="#chapter1">1. מכרז, Auction-Time ו‑Ad Rank</a>
+        <a href="#chapter2">2. Quality Score</a>
+        <a href="#chapter3">3. שכבת החיזוי והנוסחאות</a>
+        <a href="#chapter4">4. אסטרטגיות Smart Bidding</a>
+        <a href="#chapter5">5. סיגנלים, קונטקסט ו‑Broad Match</a>
+        <a href="#chapter6">6. מתודולוגיית עבודה</a>
+        <a href="#chapter7">7. קייס סטאדי איקומרס</a>
+        <a href="#tools">כלים אינטראקטיביים</a>
+        <a href="#checklists">צ׳קליסטים</a>
+        <a href="#quiz">בדיקת הבנה</a>
+        <a href="#glossary">מילון מונחים</a>
+        <a href="#sources">מקורות ובקרת איכות</a>
+      </nav>
+    </aside>
+
+    <main>
+      <header class="hero" id="intro">
+        <h1>מניחוש לניהול:<br>הספר המעשי ל‑Smart Bidding</h1>
+        <p>
+          גרסה ערוכה, מנוקה ומדויקת של המדריך המקורי. הקובץ נבנה מחדש כ‑HTML אינטראקטיבי:
+          פחות טקסט שבור, יותר הבנה, נוסחאות תקינות, דוגמאות חישוביות, צ׳קליסטים וכלי תרגול.
+        </p>
+        <div class="badges">
+          <span class="badge">✓ נוסחאות נקיות ומוסברות</span>
+          <span class="badge">✓ מבוסס על עקרונות Google Ads הרשמיים</span>
+          <span class="badge">✓ מתאים ללמידה ולשימוש בסוכנות</span>
+          <span class="badge">✓ RTL עברית מלאה</span>
+        </div>
+      </header>
+
+      <section data-searchable>
+        <h2>איך להשתמש במדריך</h2>
+        <p class="lead">
+          המטרה של הקובץ היא לא לגרום לך “להאמין באלגוריתם”, אלא לתת לך שפה מקצועית לעבוד איתו:
+          להבין מה Google Ads מנסה לחזות, איפה מנהל הקמפיינים כן שולט, ואיך לא שוברים את המודל עם החלטות אימפולסיביות.
+        </p>
+        <div class="grid three">
+          <div class="card">
+            <div class="card-icon">1</div>
+            <h3>לימוד יסודות</h3>
+            <p>קרא את פרקים 1–3 ברצף. שם נמצאת השפה: מכרז, איכות, pCVR, pValue ופונקציית מטרה.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">2</div>
+            <h3>יישום בקמפיינים</h3>
+            <p>עבור לפרקים 4–6. שם נמצאות ההחלטות: איזו אסטרטגיה לבחור, מתי לשנות יעד, ואיך לנהל Learning מול Drift.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">3</div>
+            <h3>בדיקה עצמית</h3>
+            <p>השתמש במחשבונים, בצ׳קליסטים ובשאלות בסוף. זה החלק שהופך הבנה תיאורטית להרגל עבודה.</p>
+          </div>
+        </div>
+
+        <div class="callout warn">
+          <strong>כללי דיוק חשובים:</strong>
+          הנוסחאות במדריך הן מודלים קונספטואליים ללמידה, לא נוסחאות פנימיות רשמיות של Google. 
+          הן עוזרות לחשוב נכון על הבידינג, אבל Google אינה מפרסמת את כל מנגנון החישוב המדויק.
+        </div>
+      </section>
+
+      <section id="chapter1" data-searchable>
+        <div class="chapter-tag">פרק 1</div>
+        <h2>מנגנון המכרז: Auction-Time Bidding ו‑Ad Rank</h2>
+        <p class="lead">
+          Smart Bidding הוא קודם כול מערכת החלטה בזמן אמת. בכל מכרז Google מעריכה מחדש את הסיכוי והערך של החשיפה/הקליק,
+          ואז קובעת ביד שמתאים להקשר הספציפי.
+        </p>
+
+        <div class="callout info">
+          <strong>דיוק מקצועי:</strong>
+          לא נכון לומר ש”אין ביד קבוע ב‑Google Ads בכלל”. Manual CPC עדיין קיים בחלק מהקמפיינים.
+          הניסוח המדויק הוא: <strong>ב‑Smart Bidding אין ביד קבוע במובן הישן; הביד מותאם בכל מכרז.</strong>
+        </div>
+
+        <h3>1.1 מהו Auction-Time Bidding?</h3>
+        <p>
+          Auction-Time Bidding הוא הרגע שבו, לאחר שמשתמש מבצע חיפוש או נכנס להזדמנות הצגה רלוונטית,
+          Google מעריכה את ההקשר ומחליטה איזה ביד להגיש. ההחלטה מתרחשת לפני שהמודעה מוצגת.
+        </p>
+
+        <div class="grid three">
+          <div class="card soft">
+            <h4>לפני המכרז</h4>
+            <p>הגדרות הקמפיין: תקציב, אסטרטגיית בידינג, יעדים, המרות, קהלים, נכסים ומבנה.</p>
+          </div>
+          <div class="card soft">
+            <h4>בזמן המכרז</h4>
+            <p>המערכת בוחנת Query, מכשיר, מיקום, שעה, קהל, דף נחיתה, תחרות, ערך צפוי ועוד.</p>
+          </div>
+          <div class="card soft">
+            <h4>אחרי המכרז</h4>
+            <p>נוצרים נתוני חשיפה, קליק, עלות, המרה וערך. הנתונים חוזרים למודל ומשפיעים על למידה עתידית.</p>
+          </div>
+        </div>
+
+        <h3>1.2 Ad Rank — לא רק Bid × Quality Score</h3>
+        <p>
+          הטעות הנפוצה היא לחשוב ש‑Ad Rank הוא מכפלה פשוטה של ביד כפול ציון איכות.
+          בפועל, Ad Rank הוא סט של ערכים שמשמש לקביעת כשירות ההצגה והמיקום היחסי של המודעה.
+        </p>
+
+        <div class="formula">
+          \[
+          AdRank \approx f(Bid,\ AdQuality,\ Thresholds,\ Competition,\ Context,\ Assets)
+          \]
+          <div class="note">
+            נוסחה קונספטואלית: מטרתה להסביר את הרכיבים, לא לשחזר את החישוב הפנימי של Google.
+          </div>
+        </div>
+
+        <div class="accordion open">
+          <button>ששת הצירים המרכזיים שמשפיעים על Ad Rank</button>
+          <div class="accordion-content">
+            <ul class="clean">
+              <li><strong>הביד:</strong> כמה המערכת מוכנה לשלם בהקשר מסוים.</li>
+              <li><strong>איכות המודעה והדף:</strong> רלוונטיות, Expected CTR וחוויית דף נחיתה.</li>
+              <li><strong>Ad Rank Thresholds:</strong> ספים מינימליים להצגה, למיקום ולנכסים.</li>
+              <li><strong>תחרותיות המכרז:</strong> כמה קרובים המתחרים אליך מבחינת Ad Rank.</li>
+              <li><strong>הקשר החיפוש:</strong> מכשיר, מיקום, שעה, שאילתה, כוונה, קהל ועוד.</li>
+              <li><strong>השפעת נכסים ופורמטים:</strong> Assets כמו sitelinks, callouts, images ועוד.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>1.3 Actual CPC — כמה משלמים בפועל?</h3>
+        <p>
+          ברוב המקרים לא משלמים את הביד המקסימלי שהמערכת הייתה מוכנה להגיש.
+          התשלום בפועל מושפע מהסכום המינימלי הנדרש כדי לעבור את הספים ואת המתחרים הרלוונטיים,
+          יחד עם איכות המודעה והקשר המכרז.
+        </p>
+
+        <div class="formula">
+          \[
+          Actual\ CPC \approx \frac{AdRank_{below}}{Your\ AdQuality} + \epsilon
+          \]
+          <div class="note">
+            מודל מנטלי בלבד. במציאות החישוב כולל ספים, תחרות, הקשר ונכסים, ולכן לא מדובר במכרז Second-Price קלאסי ופשוט.
+          </div>
+        </div>
+
+        <div class="callout ok">
+          <strong>משמעות ניהולית:</strong>
+          שיפור איכות לא רק “מעלה ציון”. הוא עשוי להפחית CPC נדרש, להגדיל כשירות למכרזים,
+          ולתת ל‑Smart Bidding מרחב פעולה רחב יותר בלי לשבור יעדים.
+        </div>
+      </section>
+
+      <section id="chapter2" data-searchable>
+        <div class="chapter-tag">פרק 2</div>
+        <h2>Quality Score — סיגנל דיאגנוסטי, לא KPI</h2>
+        <p class="lead">
+          Quality Score הוא כלי אבחוני. הוא עוזר לזהות בעיות איכות, אבל הוא אינו יעד עסקי בפני עצמו
+          ואינו המספר הישיר שנכנס למכרז בזמן אמת.
+        </p>
+
+        <div class="callout danger">
+          <strong>תיקון חשוב לקובץ המקורי:</strong>
+          ציון QS שמופיע בממשק 1–10 אינו הקלט הישיר של המכרז. במכרז Google משתמשת בהערכות איכות בזמן אמת ובהקשר:
+          רלוונטיות, Expected CTR, חוויית דף, הקשר החיפוש וסיגנלים נוספים.
+        </div>
+
+        <h3>2.1 שלושת רכיבי האיכות</h3>
+        <div class="grid three">
+          <div class="card">
+            <h3>Expected CTR</h3>
+            <p>הערכת הסיכוי שמשתמש יקליק על המודעה בהקשר נתון. זה לא ה‑CTR ההיסטורי הפשוט בדוח.</p>
+            <div class="formula">\[
+              eCTR \approx P(Click \mid Query, Ad, Context)
+            \]</div>
+          </div>
+          <div class="card">
+            <h3>Ad Relevance</h3>
+            <p>התאמה סמנטית בין השאילתה, כוונת המשתמש והמסר במודעה. לא מספיק “לדחוף מילת מפתח לכותרת”.</p>
+            <div class="formula">\[
+              Relevance \approx sim(Query,\ AdText,\ Intent)
+            \]</div>
+          </div>
+          <div class="card">
+            <h3>Landing Page Experience</h3>
+            <p>האם דף הנחיתה עונה להבטחה של המודעה: מהירות, מובייל, יציבות, התאמת מסר ויכולת המרה.</p>
+            <div class="formula">\[
+              LPX = Technical\ Fit + Intent\ Fit
+            \]</div>
+          </div>
+        </div>
+
+        <h3>2.2 למה לא עושים אופטימיזציה ל‑QS כמספר?</h3>
+        <p>
+          אפשר להעלות CTR עם כותרת “מגרה” שמביאה קליקים לא מתאימים. זה עשוי לשפר מדד מערכת אחד,
+          אבל לפגוע ב‑CVR, ב‑pCVR ובאיכות הדאטה שהמודל לומד ממנה.
+        </p>
+
+        <div class="accordion">
+          <button>מה כן עושים במקום לרדוף אחרי QS?</button>
+          <div class="accordion-content">
+            <ul class="clean">
+              <li><strong>ל‑Expected CTR:</strong> מחדדים הצעת ערך, התאמה לכוונה ונכסי מודעה.</li>
+              <li><strong>ל‑Ad Relevance:</strong> בונים קבוצות לפי Theme/Intent ולא רק לפי מילות מפתח.</li>
+              <li><strong>ל‑Landing Page Experience:</strong> מתקנים מהירות, מובייל, טפסים, Message Match ו‑UX של המרה.</li>
+              <li><strong>לביצועים עסקיים:</strong> מודדים CPA, ROAS, Profit, איכות ליד ושיעור סגירה.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>2.3 האינטראקציה בין איכות ל‑Smart Bidding</h3>
+        <p>
+          Smart Bidding לא “מחליף” איכות. הוא נשען עליה. איכות נמוכה מייקרת את הכניסה למכרז,
+          מפחיתה כשירות, ולעיתים פוגעת בהתנהגות המשתמש — מה שמוריד גם pCVR.
+        </p>
+
+        <div class="grid two">
+          <div class="card soft">
+            <h4>מסלול ישיר</h4>
+            <p>איכות גבוהה → Ad Rank חזק יותר → CPC נדרש נמוך יותר → קל יותר לעמוד ביעדים.</p>
+          </div>
+          <div class="card soft">
+            <h4>מסלול עקיף</h4>
+            <p>מסר ודף טובים יותר → יותר משתמשים ממירים → pCVR עולה → האלגוריתם יכול להציע ביד גבוה יותר במכרזים טובים.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="chapter3" data-searchable>
+        <div class="chapter-tag">פרק 3</div>
+        <h2>שכבת החיזוי: המתמטיקה שמאחורי Smart Bidding</h2>
+        <p class="lead">
+          Smart Bidding מנסה לפתור בעיית אופטימיזציה תחת אי־ודאות:
+          האם תהיה המרה? מה יהיה הערך שלה? כמה נכון לשלם ביחס לתקציב וליעד?
+        </p>
+
+        <h3>3.1 Predicted Conversion Rate — pCVR</h3>
+        <p>
+          pCVR הוא הסתברות להמרה בהינתן הקשר. הוא לא ה‑CVR ההיסטורי בדוחות,
+          אלא חיזוי קדימה עבור מכרז/משתמש/שאילתה/הקשר מסוימים.
+        </p>
+        <div class="formula">
+          \[
+          pCVR(x)=P(Y=1 \mid X=x)
+          \]
+          <div class="note">
+            \(X\) הוא וקטור הסיגנלים בזמן המכרז; \(Y=1\) פירושו שהתרחשה המרה.
+          </div>
+        </div>
+        <div class="formula">
+          \[
+          CVR_{reported}=\frac{Conversions}{Clicks}
+          \]
+          <div class="note">
+            זהו יחס היסטורי ממוצע. הוא יכול להסתיר פיזור עצום בין מכרזים שונים.
+          </div>
+        </div>
+
+        <h3>3.2 Predicted Conversion Value — pValue</h3>
+        <p>
+          כשיש ערכי המרה, המערכת לא שואלת רק “האם תהיה המרה”, אלא גם “כמה היא צפויה להיות שווה”.
+          לכן קליק עם pCVR נמוך יכול עדיין להיות אטרקטיבי אם ערך ההמרה הצפוי גבוה.
+        </p>
+        <div class="formula">
+          \[
+          pValue(x)=pCVR(x)\times E[V \mid X=x,\ Y=1]
+          \]
+          <div class="note">
+            ערך צפוי לקליק = הסתברות המרה × ערך ממוצע צפוי אם תתרחש המרה.
+          </div>
+        </div>
+
+        <h3>3.3 פונקציית המטרה והאילוצים</h3>
+        <p>
+          האלגוריתם אינו “מחפש קליקים זולים”. הוא מנסה למקסם תוצאה צפויה תחת אילוצים:
+          תקציב, יעד CPA, יעד ROAS, פייסינג לאורך היום, לאג המרות ותנודתיות שוק.
+        </p>
+
+        <div class="formula">
+          \[
+          Expected\ Utility(b \mid x)=E[Value-Cost \mid b,x]
+          \]
+        </div>
+
+        <div class="grid two">
+          <div class="card">
+            <h3>קירוב ל‑tCPA</h3>
+            <p>ככל שההסתברות להמרה גבוהה יותר, ניתן להצדיק ביד גבוה יותר ועדיין לשמור על CPA ממוצע.</p>
+            <div class="formula">\[
+              Bid_{max}(x) \approx pCVR(x)\times tCPA
+            \]</div>
+          </div>
+          <div class="card">
+            <h3>קירוב ל‑tROAS</h3>
+            <p>ככל שהערך הצפוי גבוה יותר, ניתן לשלם יותר — אך יעד ROAS גבוה מקטין את הביד המותר.</p>
+            <div class="formula">\[
+              Bid_{max}(x) \approx \frac{pValue(x)}{tROAS}
+            \]</div>
+          </div>
+        </div>
+
+        <h3>3.4 Target מול Label</h3>
+        <p>
+          זו אחת הנקודות החשובות בכל המדריך: האלגוריתם לא רואה את “האמת העסקית” שלך.
+          הוא רואה את מה שאתה שולח לו כ‑Conversion או Value.
+        </p>
+        <div class="callout warn">
+          אם ה‑Label שלך הוא ליד לא איכותי, המודל ימקסם לידים לא איכותיים.
+          אם הערך שנשלח הוא Revenue אבל הרווחיות האמיתית משתנה לפי מוצר, המודל עשוי למקסם הכנסה ולא רווח.
+        </div>
+
+        <h3>3.5 Calibration — כיול</h3>
+        <p>
+          חיזוי טוב אינו רק דירוג נכון של משתמשים. Smart Bidding צריך הסתברויות מכוילות.
+          אם המודל מדרג נכון אבל חושב ש‑20% מהמכרזים ימירו כשבפועל רק 5% ממירים, הבידים יהיו אגרסיביים מדי.
+        </p>
+      </section>
+
+      <section id="chapter4" data-searchable>
+        <div class="chapter-tag">פרק 4</div>
+        <h2>ארבע אסטרטגיות Smart Bidding — איך הן באמת מתנהגות</h2>
+        <p class="lead">
+          בחירת אסטרטגיה אינה שאלה של “מה הכי מתקדם”, אלא של מצב הדאטה, סוג המטרה, יציבות המדידה והיכולת של העסק להגדיר ערך אמיתי.
+        </p>
+
+        <div class="callout info">
+          בממשק Search מודרני, Target CPA ו‑Target ROAS מופיעים לעיתים כיעדים אופציונליים בתוך Maximize Conversions / Maximize Conversion Value.
+          מבחינת התנהגות, Maximize Conversions עם Target CPA מתנהג כמו tCPA; Maximize Conversion Value עם Target ROAS מתנהג כמו tROAS.
+        </div>
+
+        <div class="tabs" data-tabs="strategyTabs">
+          <button class="tab-btn active" data-tab="maxconv">Maximize Conversions</button>
+          <button class="tab-btn" data-tab="maxvalue">Maximize Conversion Value</button>
+          <button class="tab-btn" data-tab="tcpa">Target CPA</button>
+          <button class="tab-btn" data-tab="troas">Target ROAS</button>
+        </div>
+
+        <div id="maxconv" class="tab-panel active">
+          <div class="card">
+            <h3>4.1 Maximize Conversions</h3>
+            <p>
+              אסטרטגיית נפח. המערכת מנסה להשיג כמה שיותר המרות במסגרת התקציב.
+              בלי Target CPA היא עשויה לנסות לנצל את התקציב במלואו.
+            </p>
+            <div class="formula">\[
+              \max \sum_i E[Y_i]\quad s.t.\quad \sum_i E[Cost_i]\le Budget
+            \]</div>
+            <ul class="clean">
+              <li><strong>מתאים ל:</strong> קמפיין חדש, הצעה חדשה, Cold Start, צורך בבניית נפח.</li>
+              <li><strong>סיכון:</strong> אם אירוע ההמרה חלש, המודל ימקסם פעולה לא עסקית.</li>
+              <li><strong>ניהול:</strong> להגדיר המרה ראשית נקייה, לתת 7–14 ימים, לא לנתח יום בודד.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="maxvalue" class="tab-panel">
+          <div class="card">
+            <h3>4.2 Maximize Conversion Value</h3>
+            <p>
+              אסטרטגיית ערך. המערכת מנסה להשיג כמה שיותר ערך המרה במסגרת התקציב.
+              בלי Target ROAS היא עשויה להוציא את התקציב גם אם היעילות אינה ברמת ROAS שרצית.
+            </p>
+            <div class="formula">\[
+              \max \sum_i E[V_i]\quad s.t.\quad \sum_i E[Cost_i]\le Budget
+            \]</div>
+            <ul class="clean">
+              <li><strong>מתאים ל:</strong> איקומרס או לידים עם ערך שונה לכל המרה.</li>
+              <li><strong>סיכון:</strong> Value שגוי, כפול, חסר או לא רווחי יגרום למודל למקסם רעש.</li>
+              <li><strong>ניהול:</strong> לבדוק מטבע, דדופליקציה, ערכי 0, מוצרים חריגים ומרווח גולמי.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="tcpa" class="tab-panel">
+          <div class="card">
+            <h3>4.3 Target CPA</h3>
+            <p>
+              מנסה להשיג כמה שיותר המרות סביב עלות ממוצעת להמרה שהוגדרה.
+              היעד הוא אילוץ סטטיסטי, לא מחיר קבוע לכל המרה.
+            </p>
+            <div class="formula">\[
+              \max \sum_i E[Y_i]\quad s.t.\quad
+              \frac{\sum_i E[Cost_i]}{\sum_i E[Y_i]}\le tCPA
+            \]</div>
+            <ul class="clean">
+              <li><strong>מתאים ל:</strong> קמפיינים עם המרה אחידה יחסית ויעד CPA עסקי ברור.</li>
+              <li><strong>סיכון:</strong> יעד נמוך מדי גורם ל‑Auction Choking — פחות חשיפות, פחות קליקים ופחות נפח.</li>
+              <li><strong>ניהול:</strong> שינויי יעד הדרגתיים של כ‑10%–20%, עם חלון בדיקה מספק.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="troas" class="tab-panel">
+          <div class="card">
+            <h3>4.4 Target ROAS</h3>
+            <p>
+              מנסה להשיג כמה שיותר ערך המרה ביחס ROAS ממוצע שהוגדר.
+              זו אסטרטגיה חזקה אך רגישה מאוד לאיכות ערכי ההמרה.
+            </p>
+            <div class="formula">\[
+              \max \sum_i E[V_i]\quad s.t.\quad
+              \frac{\sum_i E[V_i]}{\sum_i E[Cost_i]}\ge tROAS
+            \]</div>
+            <ul class="clean">
+              <li><strong>מתאים ל:</strong> איקומרס עם ערכים אמינים ונפח מספק.</li>
+              <li><strong>סיכון:</strong> ROAS מדווח יכול להיראות טוב בזמן שהרווחיות העסקית חלשה.</li>
+              <li><strong>ניהול:</strong> לחשב Break-even ROAS לפי Contribution Margin ולא לפי תחושת בטן.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>4.5 איך לבחור אסטרטגיה?</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>מצב החשבון</th>
+                <th>אסטרטגיה עדיפה</th>
+                <th>למה</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>מעט המרות, קמפיין חדש, אין דאטה יציב</td>
+                <td>Maximize Conversions</td>
+                <td>צריך קודם לייצר דגימות וללמד את המודל מהי המרה אמיתית.</td>
+              </tr>
+              <tr>
+                <td>יש רכישות וערכי רכישה אמינים</td>
+                <td>Maximize Conversion Value</td>
+                <td>המודל יכול להתחיל להבדיל בין המרות זולות לבין המרות בעלות ערך.</td>
+              </tr>
+              <tr>
+                <td>יש יעד עלות לליד או פעולה אחידה יחסית</td>
+                <td>Target CPA</td>
+                <td>היעד מתרגם את המטרה העסקית לאילוץ יעילות.</td>
+              </tr>
+              <tr>
+                <td>יש ערך שונה לכל רכישה ורווחיות ברורה</td>
+                <td>Target ROAS</td>
+                <td>המודל יכול להקצות תקציב לפי ערך צפוי ולשמור על יחס החזר.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="chapter5" data-searchable>
+        <div class="chapter-tag">פרק 5</div>
+        <h2>סיגנלים קונטקסטואליים, Broad Match וסינון דרך ביד</h2>
+        <p class="lead">
+          היתרון של Smart Bidding הוא לא שהוא “יודע יותר טוב ממך” באופן כללי,
+          אלא שהוא מסוגל לשקלל בזמן אמת כמות סיגנלים שאדם לא יכול לחשב ידנית.
+        </p>
+
+        <h3>5.1 סוגי סיגנלים</h3>
+        <div class="grid three">
+          <div class="card">
+            <h3>Intent Signals</h3>
+            <p>שאילתה, ניסוח, מילים מסחריות, מחיר, השוואה, דחיפות, מותג, קטגוריה, עומק כוונה.</p>
+          </div>
+          <div class="card">
+            <h3>User Signals</h3>
+            <p>משתמש חוזר, קהלי רימרקטינג, התנהגות קודמת, דמוגרפיה הסתברותית, In-market ו‑Affinity.</p>
+          </div>
+          <div class="card">
+            <h3>Environment Signals</h3>
+            <p>מכשיר, מערכת הפעלה, מיקום, שעה, שפה, דפדפן, רשת, עונתיות ותחרותיות.</p>
+          </div>
+        </div>
+
+        <h3>5.2 למה אדם לא יכול לחקות את המערכת ידנית?</h3>
+        <p>
+          גם אם מנהל קמפיינים יודע שמובייל ממיר פחות מדסקטופ, הוא בדרך כלל לא יכול לחשב ידנית את הצירוף:
+          מובייל + משתמש חוזר + שאילתה טרנזקציונית + שעה מסוימת + מוצר מסוים + תחרות חזקה + דף נחיתה ספציפי.
+          Smart Bidding בונה החלטה ברמת הצירוף, לא רק ברמת ממוצעים.
+        </p>
+
+        <h3>5.3 Broad Match + Smart Bidding</h3>
+        <p>
+          Broad Match מרחיב את מרחב השאילתות. Smart Bidding אמור לסנן את המרחב הזה דרך בידים:
+          לעלות בביד כשיש סבירות/ערך גבוהים, ולהוריד או כמעט לא להשתתף כשיש סבירות נמוכה.
+        </p>
+
+        <div class="callout info">
+          <strong>דיוק ניסוח:</strong>
+          לא נכון לטעון ש‑Broad Match “עובד רק” עם Smart Bidding. הניסוח המקצועי יותר:
+          Broad Match בדרך כלל בטוח ואפקטיבי יותר כשהוא מחובר ל‑Smart Bidding ולמדידה איכותית.
+        </div>
+
+        <div class="accordion">
+          <button>מתי Broad Match מסוכן גם עם Smart Bidding?</button>
+          <div class="accordion-content">
+            <ul class="clean">
+              <li>כאשר Conversion Tracking לא נקי או מודד אירוע קל מדי.</li>
+              <li>כאשר אין מספיק Negatives לשאילתות לא רלוונטיות ברורות.</li>
+              <li>כאשר דפי נחיתה לא מכסים את טווח הכוונות שה‑Broad מביא.</li>
+              <li>כאשר התקציב קטן מדי והמערכת לא מקבלת מספיק דגימות.</li>
+              <li>כאשר יש פיצול יתר שמונע למידה ברמת Theme.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>5.4 תפקיד ההחרגות בעולם אלגוריתמי</h3>
+        <p>
+          Negatives לא אמורות להחליף את האלגוריתם, אלא להגן עליו מאזורים שבהם אין ערך עסקי:
+          חיפושים מידעיים לא רלוונטיים, כוונה חינמית, שירותים שלא נמכרים, קהל לא מתאים או שאילתות שגורמות ללמידה שגויה.
+        </p>
+      </section>
+
+      <section id="chapter6" data-searchable>
+        <div class="chapter-tag">פרק 6</div>
+        <h2>מתודולוגיית עבודה נכונה עם אלגוריתם</h2>
+        <p class="lead">
+          Smart Bidding דורש משמעת תפעולית. המערכת יכולה להיות חזקה מאוד, אבל רק אם הדאטה, המבנה, התקציב וקצב השינויים מאפשרים למודל ללמוד.
+        </p>
+
+        <h3>6.1 איכות דאטה</h3>
+        <p>
+          הכלל הראשון: האלגוריתם ממקסם את מה שאתה מודד. לכן Conversion Tracking אינו עניין טכני שולי,
+          אלא מקור האמת שעליו נשענת כל החלטת ביד.
+        </p>
+
+        <div class="grid two">
+          <div class="card">
+            <h3>מה חייב להיות נקי?</h3>
+            <ul class="clean">
+              <li>אירועי המרה ראשיים ומשניים.</li>
+              <li>דדופליקציה בין GTM, GA4, Google Ads ו‑Server-side.</li>
+              <li>ערכי רכישה, מטבע, מס, משלוח והחזרים.</li>
+              <li>חלונות המרה ולאג המרות.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>מה קורה כשזה שבור?</h3>
+            <ul class="clean">
+              <li>pCVR נלמד על אירועים לא נכונים.</li>
+              <li>pValue הופך לרעש.</li>
+              <li>tROAS רודף אחרי ערכים מנופחים.</li>
+              <li>המודל נראה “לא יציב”, אבל הבעיה היא ה‑Labels.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>6.2 מבנה חשבון כגורם סטטיסטי</h3>
+        <p>
+          מבנה “יפה” מדי עלול לפגוע בביצועים אם הוא מפצל את הדאטה ליותר מדי תאים קטנים.
+          המודל צריך דגימות. לכן מבנה נכון הוא לא רק ארכיטקטורת קמפיינים, אלא גאומטריה של סיגנלים.
+        </p>
+
+        <div class="callout ok">
+          <strong>עיקרון עבודה:</strong>
+          מפצלים רק כשיש סיבה עסקית/תפעולית אמיתית: תקציב נפרד, יעד שונה, שוק שונה, מרווח שונה,
+          או צורך בשליטה שלא ניתן לפתור ברמת נכסים/קהלים/דוחות.
+        </div>
+
+        <h3>6.3 Learning Phase מול Model Drift</h3>
+        <div class="grid two">
+          <div class="card">
+            <h3>Learning Phase</h3>
+            <p>המודל מסתגל אחרי שינוי משמעותי: אסטרטגיה, יעד, תקציב, המרות, מבנה או קריאייטיב מהותי.</p>
+            <p><strong>התנהגות:</strong> תנודתיות זמנית, חיפוש מרחב חדש, פחות יציבות.</p>
+          </div>
+          <div class="card">
+            <h3>Model Drift</h3>
+            <p>המציאות השתנתה: תחרות, עונתיות, אתר, מוצר, מחיר, מלאי, קהל או איכות לידים.</p>
+            <p><strong>התנהגות:</strong> שחיקה שאינה נפתרת רק בהמתנה.</p>
+          </div>
+        </div>
+
+        <h3>6.4 כללי שינוי</h3>
+        <ul class="clean">
+          <li><strong>שינוי אחד משמעותי בכל פעם:</strong> אחרת לא ניתן לדעת מה השפיע.</li>
+          <li><strong>יעדים בהדרגה:</strong> בדרך כלל 10%–20% בכל שינוי, בהתאם לנפח.</li>
+          <li><strong>תקציב:</strong> שינוי תקציב משנה פייסינג, לא רק “נותן עוד כסף”.</li>
+          <li><strong>קריאייטיב:</strong> לא להחליף הכול בבת אחת אם רוצים ללמוד מה עבד.</li>
+          <li><strong>חלונות החלטה:</strong> להסתכל על 7–14 ימים לפחות, ולעיתים יותר כשיש לאג המרות.</li>
+        </ul>
+
+        <h3>6.5 שגרת עבודה בסוכנות</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>תדירות</th>
+                <th>מה בודקים</th>
+                <th>מה לא עושים</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>יומי</td>
+                <td>חריגות: מעקב המרות, תקציב, נפילות אתר, Spend לא צפוי.</td>
+                <td>לא משנים יעד בגלל יום אחד חלש.</td>
+              </tr>
+              <tr>
+                <td>שבועי</td>
+                <td>מגמות CPA/ROAS, שאילתות, נכסים, איכות לידים, שינויי תמהיל.</td>
+                <td>לא מפרשים רעש ככיוון אסטרטגי.</td>
+              </tr>
+              <tr>
+                <td>דו־שבועי/חודשי</td>
+                <td>אסטרטגיה, מבנה, תקציבים, יעדים, Unit Economics.</td>
+                <td>לא מחליפים אסטרטגיה בלי אבחון מקור הבעיה.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="chapter7" data-searchable>
+        <div class="chapter-tag">פרק 7</div>
+        <h2>קייס סטאדי: מאיקומרס לא רווחי למערכת Value-Based</h2>
+        <p class="lead">
+          זהו קייס לימודי שמדגים את הרצף הנכון: קודם מתקנים מדידה, אחר כך בונים נפח,
+          ורק אז מפעילים יעד ROAS מחושב לפי כלכלת יחידה.
+        </p>
+
+        <div class="callout warn">
+          הביטוי “ROAS שלילי” אינו מדויק מתמטית — ROAS לא נהיה שלילי. הכוונה הנכונה:
+          ROAS נמוך מנקודת האיזון ולכן הפרסום הפסדי לאחר עלות מוצר/תרומה.
+        </div>
+
+        <h3>7.1 נקודת פתיחה</h3>
+        <ul class="clean">
+          <li>מדידת רכישות לא נקייה: כפילויות, ערכים חסרים, מטבע/ערך לא עקביים.</li>
+          <li>קמפיין שנראה כאילו מביא Revenue, אבל בפועל לא מכסה את עלות הפרסום לפי מרווח תרומה.</li>
+          <li>אסטרטגיה שרדפה אחרי דאטה לא מספיק אמין.</li>
+        </ul>
+
+        <h3>7.2 סדר הפעולות</h3>
+        <div class="grid three">
+          <div class="card">
+            <h3>1. תיקון מקור האמת</h3>
+            <p>דדופליקציה, ערכים, מטבע, Purchase נקי, Primary Conversion ברור.</p>
+          </div>
+          <div class="card">
+            <h3>2. פתרון Cold Start</h3>
+            <p>Maximize Conversions לתקופה מוגבלת כדי לייצר דגימות רכישה אמיתיות.</p>
+          </div>
+          <div class="card">
+            <h3>3. מעבר ל‑tROAS</h3>
+            <p>יעד ראשוני לפי Break-even ROAS, לא לפי רצון “להיראות טוב”.</p>
+          </div>
+        </div>
+
+        <h3>7.3 מספרים מהקייס</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>שלב</th>
+                <th>Spend</th>
+                <th>Conversions</th>
+                <th>CPA</th>
+                <th>ROAS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>לפני תיקון</td>
+                <td>₪20,000</td>
+                <td>250</td>
+                <td>₪80</td>
+                <td>2.0</td>
+              </tr>
+              <tr>
+                <td>אחרי Maximize Conversions</td>
+                <td>₪25,000</td>
+                <td>420</td>
+                <td>₪59.5</td>
+                <td>3.33</td>
+              </tr>
+              <tr>
+                <td>אחרי tROAS 330%→380%</td>
+                <td>₪30,000</td>
+                <td>510</td>
+                <td>₪58.8</td>
+                <td>5.1</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>7.4 חישוב רווחיות משוער</h3>
+        <p>אם מרווח התרומה הוא 32%, נקודת האיזון היא:</p>
+        <div class="formula">
+          \[
+          BreakEven\ ROAS=\frac{1}{Contribution\ Margin}=\frac{1}{0.32}=3.125=312.5\%
+          \]
+        </div>
+        <p>לאחר השיפור:</p>
+        <div class="formula">
+          \[
+          Revenue=5.1\times 30{,}000=153{,}000
+          \]
+          \[
+          Contribution=0.32\times 153{,}000=48{,}960
+          \]
+          \[
+          Estimated\ Ad\ Profit=48{,}960-30{,}000=18{,}960
+          \]
+        </div>
+
+        <div class="callout ok">
+          <strong>הלקח:</strong>
+          לא “מצאנו כפתור קסם”. יצרנו תנאים שבהם Smart Bidding יכול ללמוד יעד נכון:
+          דאטה נקי, מספיק דגימות, מעבר הדרגתי ל‑Value-based bidding ויעד שמבוסס על כלכלת יחידה.
+        </div>
+      </section>
+
+      <section id="tools" data-searchable>
+        <h2>כלים אינטראקטיביים</h2>
+        <p class="lead">הכלים הבאים לא מחליפים את Google Ads, אבל הם עוזרים לפתח אינטואיציה נכונה לגבי בידים ויעדים.</p>
+
+        <h3>מחשבון tCPA — ביד קונספטואלי</h3>
+        <div class="calc">
+          <div class="calc-box">
+            <label for="pcvrTcpa">pCVR משוער באחוזים</label>
+            <input type="number" id="pcvrTcpa" value="5" step="0.1" min="0" />
+            <label for="targetCpa">Target CPA בש״ח</label>
+            <input type="number" id="targetCpa" value="60" step="1" min="0" />
+          </div>
+          <div class="result">
+            <span>ביד תקרתי קונספטואלי:</span>
+            <strong id="tcpaResult">₪3.00</strong>
+            <span class="small">חישוב: pCVR × tCPA. לא נוסחה רשמית של Google.</span>
+          </div>
+        </div>
+
+        <h3>מחשבון tROAS — ערך צפוי וביד</h3>
+        <div class="calc">
+          <div class="calc-box">
+            <label for="pcvrTroas">pCVR משוער באחוזים</label>
+            <input type="number" id="pcvrTroas" value="3" step="0.1" min="0" />
+            <label for="avgValue">ערך ממוצע אם יש המרה</label>
+            <input type="number" id="avgValue" value="500" step="10" min="0" />
+            <label for="targetRoas">Target ROAS כמכפיל, לדוגמה 4 = 400%</label>
+            <input type="number" id="targetRoas" value="4" step="0.1" min="0.1" />
+          </div>
+          <div class="result">
+            <span>pValue משוער:</span>
+            <strong id="pvalueResult">₪15.00</strong>
+            <span>ביד תקרתי קונספטואלי:</span>
+            <strong id="troasResult">₪3.75</strong>
+          </div>
+        </div>
+
+        <h3>מחשבון Break-even ROAS</h3>
+        <div class="calc">
+          <div class="calc-box">
+            <label for="margin">Contribution Margin באחוזים</label>
+            <input type="number" id="margin" value="32" step="1" min="1" max="100" />
+          </div>
+          <div class="result">
+            <span>ROAS איזון:</span>
+            <strong id="beResult">312.5%</strong>
+            <span class="small">חישוב: 1 / מרווח תרומה. מעל זה מתחיל מרחב רווחיות לפני הוצאות קבועות.</span>
+          </div>
+        </div>
+
+        <h3>בורר אסטרטגיה מהיר</h3>
+        <div class="calc">
+          <div class="calc-box">
+            <label for="objective">מה המטרה המרכזית?</label>
+            <select id="objective">
+              <option value="volume">להגדיל נפח המרות</option>
+              <option value="value">להגדיל ערך רכישות</option>
+              <option value="cpa">לשמור על CPA</option>
+              <option value="roas">לשמור על ROAS/רווחיות</option>
+            </select>
+            <label for="dataQuality">איכות הדאטה</label>
+            <select id="dataQuality">
+              <option value="low">נמוכה / לא בטוח שהמדידה נקייה</option>
+              <option value="mid">סבירה</option>
+              <option value="high">גבוהה ונבדקה</option>
+            </select>
+            <label for="valueTracking">יש ערכי המרה אמינים?</label>
+            <select id="valueTracking">
+              <option value="no">לא</option>
+              <option value="yes">כן</option>
+            </select>
+          </div>
+          <div class="result">
+            <span>המלצה לימודית:</span>
+            <strong id="strategyResult">Maximize Conversions</strong>
+            <span id="strategyReason" class="small">נתוני מדידה לא מושלמים → קודם לבנות בסיס ולתקן Tracking.</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="checklists" data-searchable>
+        <h2>צ׳קליסטים תפעוליים</h2>
+        <p class="lead">סמן סעיפים כדי לבדוק מוכנות לפני שינוי אסטרטגיה או יעד.</p>
+
+        <div class="grid two">
+          <div class="card checklist" data-checklist>
+            <h3>לפני הפעלת Smart Bidding</h3>
+            <label><input type="checkbox"> Conversion Tracking פעיל ונבדק בפועל.</label>
+            <label><input type="checkbox"> יש Primary Conversion שמייצג הצלחה עסקית אמיתית.</label>
+            <label><input type="checkbox"> אין כפילות בין GA4 / Google Ads / GTM / Server-side.</label>
+            <label><input type="checkbox"> ערכי המרה ומטבע נשלחים בצורה עקבית.</label>
+            <label><input type="checkbox"> התקציב מאפשר מספיק דגימות ביחס ל‑CPA/ROAS הרצוי.</label>
+            <div class="progress-line"><div class="progress-fill"></div></div>
+          </div>
+
+          <div class="card checklist" data-checklist>
+            <h3>לפני מעבר ל‑tROAS</h3>
+            <label><input type="checkbox"> ערכי רכישה קיימים לפחות בכיסוי גבוה.</label>
+            <label><input type="checkbox"> אין רכישות כפולות או ערכים מנופחים.</label>
+            <label><input type="checkbox"> חושב Break-even ROAS לפי מרווח תרומה.</label>
+            <label><input type="checkbox"> היעד הראשוני אינו אגרסיבי מדי ביחס למציאות.</label>
+            <label><input type="checkbox"> נבדק לאג המרות לפני הסקת מסקנות.</label>
+            <div class="progress-line"><div class="progress-fill"></div></div>
+          </div>
+        </div>
+
+        <div class="card checklist" data-checklist>
+          <h3>לפני שינוי יעד/תקציב</h3>
+          <label><input type="checkbox"> נבדקו לפחות 7–14 ימים, או חלון ארוך יותר במקרה של לאג המרות.</label>
+          <label><input type="checkbox"> לא בוצעו במקביל שינויים גדולים בקריאייטיב/דף/Tracking.</label>
+          <label><input type="checkbox"> ברור האם מדובר ב‑Learning Phase או ב‑Model Drift.</label>
+          <label><input type="checkbox"> השינוי מתון: בדרך כלל 10%–20%, אלא אם יש סיבה חריגה.</label>
+          <label><input type="checkbox"> יש היפותזה ברורה למה השינוי אמור לשפר את העסק.</label>
+          <div class="progress-line"><div class="progress-fill"></div></div>
+        </div>
+      </section>
+
+      <section id="quiz" data-searchable>
+        <h2>בדיקת הבנה</h2>
+        <div class="quiz-card">
+          <strong>1. האם Quality Score 1–10 נכנס ישירות למכרז?</strong>
+          <br><button onclick="toggleAnswer(this)">הצג תשובה</button>
+          <div class="answer">לא. הוא כלי דיאגנוסטי. במכרז Google משתמשת בהערכות איכות בזמן אמת ובהקשר.</div>
+        </div>
+        <div class="quiz-card">
+          <strong>2. למה הורדת tCPA יכולה להוריד נפח?</strong>
+          <br><button onclick="toggleAnswer(this)">הצג תשובה</button>
+          <div class="answer">כי היעד הופך מכרזים רבים לבלתי כדאיים: אם CPC נדרש גבוה מהביד שהיעד מאפשר, המערכת תשתתף פחות.</div>
+        </div>
+        <div class="quiz-card">
+          <strong>3. מה ההבדל בין Maximize Conversion Value ל‑tROAS?</strong>
+          <br><button onclick="toggleAnswer(this)">הצג תשובה</button>
+          <div class="answer">Max Value בלי יעד מנסה למקסם ערך במסגרת התקציב. tROAS מוסיף אילוץ החזר, ולכן יכול לצמצם נפח.</div>
+        </div>
+        <div class="quiz-card">
+          <strong>4. למה Revenue אינו בהכרח Profit?</strong>
+          <br><button onclick="toggleAnswer(this)">הצג תשובה</button>
+          <div class="answer">כי מוצרים שונים יכולים להיות בעלי מרווחים שונים. אם שולחים Revenue בלבד, המודל עלול להעדיף הכנסה גבוהה אך רווחיות נמוכה.</div>
+        </div>
+        <div class="quiz-card">
+          <strong>5. מתי Broad Match מסוכן?</strong>
+          <br><button onclick="toggleAnswer(this)">הצג תשובה</button>
+          <div class="answer">כאשר המדידה חלשה, ההמרה לא מייצגת ערך, אין החרגות בסיסיות, או שהדפים לא מכסים את טווח הכוונות.</div>
+        </div>
+      </section>
+
+      <section id="glossary" data-searchable>
+        <h2>מילון מונחים קצר</h2>
+        <div class="grid two">
+          <div class="card"><h3>pCVR</h3><p>Predicted Conversion Rate — הסתברות חזויה להמרה בהקשר נתון.</p></div>
+          <div class="card"><h3>pValue</h3><p>Predicted Conversion Value — ערך המרה צפוי לקליק/מכרז.</p></div>
+          <div class="card"><h3>Ad Rank</h3><p>סט ערכים שקובע כשירות להצגה ומיקום יחסי במכרז.</p></div>
+          <div class="card"><h3>Ad Rank Thresholds</h3><p>ספים דינמיים שצריך לעבור כדי להיות כשיר להצגה או למיקום מסוים.</p></div>
+          <div class="card"><h3>Label</h3><p>האירוע או הערך שהמודל רואה בפועל, למשל Purchase או Lead.</p></div>
+          <div class="card"><h3>Target</h3><p>המטרה העסקית האמיתית: רווח, לקוח איכותי, הכנסה, שיעור סגירה.</p></div>
+          <div class="card"><h3>Learning Phase</h3><p>תקופת הסתגלות לאחר שינוי משמעותי בפוליסת הבידינג או במבנה.</p></div>
+          <div class="card"><h3>Model Drift</h3><p>שינוי במציאות השוק/אתר/מוצר/קהל שגורם למודל שכבר למד לעבוד פחות טוב.</p></div>
+        </div>
+      </section>
+
+      <section id="sources" data-searchable>
+        <h2>מקורות ובקרת איכות</h2>
+        <p>
+          המדריך נערך מחדש על בסיס הקובץ המקורי שסופק, ונבדק מול עמודי Google Ads Help רשמיים.
+          נוסחאות החיזוי והבידינג נשמרו ככלי לימודי בלבד, עם הבהרה שאינן נוסחאות רשמיות של Google.
+        </p>
+        <div class="grid two">
+          <div class="card">
+            <h3>מקורות רשמיים מומלצים לקריאה</h3>
+            <ul class="clean">
+              <li><a href="https://support.google.com/google-ads/answer/7065882" target="_blank">Google Ads Help — About Smart Bidding</a></li>
+              <li><a href="https://support.google.com/google-ads/answer/1722122" target="_blank">Google Ads Help — About Ad Rank</a></li>
+              <li><a href="https://support.google.com/google-ads/answer/156066" target="_blank">Google Ads Help — About ad quality</a></li>
+              <li><a href="https://support.google.com/google-ads/answer/2979071" target="_blank">Google Ads Help — About automated bidding</a></li>
+              <li><a href="https://support.google.com/google-ads/answer/7381968" target="_blank">Google Ads Help — Maximize conversions bidding</a></li>
+              <li><a href="https://support.google.com/google-ads/answer/7684216" target="_blank">Google Ads Help — Maximize conversion value bidding</a></li>
+              <li><a href="https://support.google.com/google-ads/answer/10195720" target="_blank">Google Ads Help — Broad match with Smart Bidding</a></li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>תיקונים שבוצעו ביחס לקובץ המקורי</h3>
+            <ul class="clean">
+              <li>נוקו נוסחאות משוכפלות ושבורות.</li>
+              <li>הובהר ש‑QS הוא דיאגנוסטי ולא קלט ישיר של המכרז.</li>
+              <li>הובהר ש‑Manual CPC עדיין קיים, אך אינו עקרון העבודה של Smart Bidding.</li>
+              <li>Second-Price הוצג כמודל מנטלי ולא כתיאור מלא של המכרז המודרני.</li>
+              <li>Broad Match נוסח בצורה זהירה יותר: משתלב היטב עם Smart Bidding, אך אינו “עובד רק” כך.</li>
+              <li>פרק 7 מוספר ותוקן, כולל חישובי Break-even ורווחיות.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    function fmtILS(n) {
+      if (!isFinite(n)) return "—";
+      return "₪" + n.toLocaleString("he-IL", { maximumFractionDigits: 2, minimumFractionDigits: 2 });
+    }
+
+    function updateCalcs() {
+      const pcvrTcpa = (Number(document.getElementById("pcvrTcpa").value) || 0) / 100;
+      const targetCpa = Number(document.getElementById("targetCpa").value) || 0;
+      document.getElementById("tcpaResult").textContent = fmtILS(pcvrTcpa * targetCpa);
+
+      const pcvrTroas = (Number(document.getElementById("pcvrTroas").value) || 0) / 100;
+      const avgValue = Number(document.getElementById("avgValue").value) || 0;
+      const targetRoas = Number(document.getElementById("targetRoas").value) || 1;
+      const pvalue = pcvrTroas * avgValue;
+      document.getElementById("pvalueResult").textContent = fmtILS(pvalue);
+      document.getElementById("troasResult").textContent = fmtILS(pvalue / targetRoas);
+
+      const margin = (Number(document.getElementById("margin").value) || 1) / 100;
+      document.getElementById("beResult").textContent = ((1 / margin) * 100).toLocaleString("he-IL", { maximumFractionDigits: 1 }) + "%";
+    }
+
+    function updateStrategy() {
+      const objective = document.getElementById("objective").value;
+      const dataQuality = document.getElementById("dataQuality").value;
+      const valueTracking = document.getElementById("valueTracking").value;
+      let result = "Maximize Conversions";
+      let reason = "קודם לייצר דגימות ולבסס Tracking לפני שמקשיחים יעד.";
+
+      if (dataQuality === "low") {
+        result = "לא להתחיל מהקשחת יעד — לתקן מדידה ואז Maximize Conversions";
+        reason = "מדידה חלשה גורמת למודל ללמוד Labels שגויים.";
+      } else if (objective === "value" && valueTracking === "yes") {
+        result = "Maximize Conversion Value";
+        reason = "יש ערכים אמינים, ולכן אפשר ללמד את המודל להעדיף ערך ולא רק כמות.";
+      } else if (objective === "cpa" && dataQuality !== "low") {
+        result = "Maximize Conversions עם Target CPA";
+        reason = "יש יעד עלות, אך כדאי לוודא שהיעד ריאלי ולא חונק את המכרזים.";
+      } else if (objective === "roas" && valueTracking === "yes" && dataQuality === "high") {
+        result = "Maximize Conversion Value עם Target ROAS";
+        reason = "יש ערכי המרה ואיכות דאטה גבוהה, לכן אפשר לעבוד עם אילוץ ROAS.";
+      } else if (objective === "roas" && valueTracking === "no") {
+        result = "לא לעבור ל‑tROAS עדיין";
+        reason = "בלי ערכי המרה אמינים, tROAS ממקסם רעש ולא רווח.";
+      }
+
+      document.getElementById("strategyResult").textContent = result;
+      document.getElementById("strategyReason").textContent = reason;
+    }
+
+    document.querySelectorAll(".accordion button").forEach(btn => {
+      btn.addEventListener("click", () => btn.parentElement.classList.toggle("open"));
+    });
+
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.tab;
+        const wrapper = btn.closest("section");
+        wrapper.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        wrapper.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+        btn.classList.add("active");
+        wrapper.querySelector("#" + id).classList.add("active");
+      });
+    });
+
+    function toggleAnswer(btn) {
+      const answer = btn.parentElement.querySelector(".answer");
+      answer.style.display = answer.style.display === "block" ? "none" : "block";
+    }
+
+    function updateChecklist(card) {
+      const inputs = Array.from(card.querySelectorAll("input[type=checkbox]"));
+      const checked = inputs.filter(i => i.checked).length;
+      const pct = inputs.length ? (checked / inputs.length) * 100 : 0;
+      card.querySelector(".progress-fill").style.width = pct + "%";
+    }
+
+    document.querySelectorAll("[data-checklist]").forEach(card => {
+      card.querySelectorAll("input").forEach(input => input.addEventListener("change", () => updateChecklist(card)));
+      updateChecklist(card);
+    });
+
+    ["pcvrTcpa", "targetCpa", "pcvrTroas", "avgValue", "targetRoas", "margin"].forEach(id => {
+      document.getElementById(id).addEventListener("input", updateCalcs);
+    });
+    ["objective", "dataQuality", "valueTracking"].forEach(id => {
+      document.getElementById(id).addEventListener("change", updateStrategy);
+    });
+    updateCalcs();
+    updateStrategy();
+
+    const searchInput = document.getElementById("searchInput");
+    searchInput.addEventListener("input", () => {
+      const q = searchInput.value.trim().toLowerCase();
+      document.querySelectorAll("[data-searchable]").forEach(el => {
+        el.classList.toggle("hidden-by-search", q && !el.textContent.toLowerCase().includes(q));
+      });
+    });
+
+    const sections = Array.from(document.querySelectorAll("section[id], header[id]"));
+    const navLinks = Array.from(document.querySelectorAll("nav a"));
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + entry.target.id));
+        }
+      });
+    }, { rootMargin: "-40% 0px -55% 0px", threshold: 0 });
+    sections.forEach(s => obs.observe(s));
+  </script>
+</body>
+</html>

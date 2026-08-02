@@ -1,0 +1,2059 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Marketing Audiences — 132 קהלים</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Heebo', 'Segoe UI', Arial, sans-serif;
+    background: #F1F5F9;
+    color: #1E293B;
+    direction: rtl;
+  }
+
+  /* ── HEADER ── */
+  .page-header {
+    background: #fff;
+    padding: 22px 40px 18px;
+    border-bottom: 1px solid #E2E8F0;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .page-header-left { display: flex; flex-direction: column; gap: 4px; }
+  .page-header h1 {
+    font-size: 22px;
+    font-weight: 900;
+    color: #1E293B;
+    letter-spacing: -0.5px;
+  }
+  .page-header p { color: #94A3B8; font-size: 13px; font-weight: 500; }
+  .badge-count {
+    display: inline-flex;
+    align-items: center;
+    background: #1E293B;
+    color: #FFC20E;
+    font-size: 13px;
+    font-weight: 800;
+    padding: 4px 14px;
+    border-radius: 20px;
+    flex-shrink: 0;
+  }
+
+  /* ── CONTROLS ── */
+  .controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 14px 40px;
+    background: #fff;
+    border-bottom: 1px solid #E2E8F0;
+  }
+  .controls input[type="text"] {
+    flex: 1;
+    min-width: 220px;
+    padding: 9px 14px;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    color: #1E293B;
+    font-size: 13px;
+    font-family: 'Heebo', sans-serif;
+    outline: none;
+    direction: rtl;
+    transition: border-color 0.15s;
+  }
+  .controls input[type="text"]:focus { border-color: #94A3B8; background: #fff; }
+  .controls input[type="text"]::placeholder { color: #CBD5E1; }
+
+  select {
+    padding: 9px 12px;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    color: #475569;
+    font-size: 13px;
+    font-family: 'Heebo', sans-serif;
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+    direction: rtl;
+    transition: border-color 0.15s;
+  }
+  select:focus { border-color: #94A3B8; }
+
+  .btn-export {
+    padding: 9px 18px;
+    background: #1E293B;
+    color: #FFC20E;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 800;
+    font-family: 'Heebo', sans-serif;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+  }
+  .btn-export:hover { background: #0F172A; }
+
+  .result-count {
+    color: #94A3B8;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* ── TABLE WRAPPER ── */
+  .table-wrap {
+    overflow-x: auto;
+    padding: 24px 40px 60px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    min-width: 1100px;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    border: 1px solid #E2E8F0;
+  }
+
+  /* ── STICKY HEADER ── */
+  thead th {
+    position: sticky;
+    top: 0;
+    background: #F1F5F9;
+    color: #64748B;
+    font-weight: 800;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 12px 14px;
+    border-bottom: 2px solid #CBD5E1;
+    border-left: 1px solid #E2E8F0;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    z-index: 10;
+    font-family: 'Heebo', sans-serif;
+  }
+  thead th:first-child { border-left: none; }
+  thead th:hover { color: #1E293B; background: #E8EDF4; }
+  thead th .sort-arrow { opacity: 0.3; margin-right: 4px; font-size: 10px; }
+  thead th.sorted .sort-arrow { opacity: 1; }
+
+  /* ── CATEGORY SEPARATOR ── */
+  tr.category-row td {
+    background: #EEF2F7;
+    color: #334155;
+    font-weight: 900;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    padding: 10px 16px;
+    border-top: 2px solid #CBD5E1;
+    border-bottom: 2px solid #CBD5E1;
+  }
+
+  /* ── DATA ROWS ── */
+  tbody tr.data-row {
+    border-bottom: 1px solid #E2E8F0;
+    transition: background 0.12s;
+  }
+  tbody tr.data-row:hover { background: #F8FAFF; }
+  tbody tr.data-row.hidden { display: none; }
+
+  /* zebra striping */
+  tbody tr.data-row:nth-child(even) { background: #FAFBFD; }
+  tbody tr.data-row:nth-child(even):hover { background: #F0F4FF; }
+
+  td {
+    padding: 11px 14px;
+    vertical-align: middle;
+    color: #475569;
+    border-left: 1px solid #E2E8F0;
+  }
+  td:first-child { border-left: none; }
+
+  td:nth-child(2) { font-weight: 700; color: #1E293B; }
+
+  /* row index */
+  .row-num {
+    color: #CBD5E1;
+    font-size: 11px;
+    font-weight: 600;
+    min-width: 32px;
+    text-align: center;
+  }
+
+  /* ── AUDIENCE TYPE BADGES ── */
+  .type-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .type-Website      { background: #EBF3FF; color: #2563EB; }
+  .type-Ecommerce    { background: #EAFBF5; color: #059669; }
+  .type-SaaS         { background: #F3EEFF; color: #7C3AED; }
+  .type-Lead         { background: #FFF4ED; color: #EA580C; }
+  .type-B2B          { background: #E0F7FA; color: #0891B2; }
+  .type-Intent       { background: #FEFCE8; color: #CA8A04; }
+  .type-Retargeting  { background: #FFF0F6; color: #DB2777; }
+  .type-Psychographic{ background: #F5F0FF; color: #6D28D9; }
+  .type-Lookalike    { background: #E6FAF5; color: #0D9488; }
+  .type-Seasonal     { background: #FFFBEB; color: #D97706; }
+  .type-Combination  { background: #F0FDF4; color: #15803D; }
+  .type-Niche        { background: #FFF7ED; color: #C2410C; }
+  .type-YouTube      { background: #FEF2F2; color: #DC2626; }
+  .type-Search       { background: #EFF6FF; color: #1D4ED8; }
+  .type-Conversion   { background: #F0FDF4; color: #16A34A; }
+  .type-CRM          { background: #FAF5FF; color: #9333EA; }
+  .type-App          { background: #EFF6FF; color: #3B82F6; }
+
+  /* ── INTENT LEVEL BADGES ── */
+  .intent-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .intent-Low      { background: #F1F5F9; color: #94A3B8; }
+  .intent-Medium   { background: #EBF3FF; color: #3B82F6; }
+  .intent-High     { background: #FFF8E0; color: #D97706; }
+  .intent-VeryHigh { background: #FEF2F2; color: #DC2626; }
+  .intent-Customer { background: #EAFBF5; color: #059669; }
+
+  /* ── DURATION ── */
+  .duration {
+    font-weight: 800;
+    color: #1E293B;
+    font-size: 13px;
+  }
+  .duration span { font-size: 10px; color: #94A3B8; font-weight: 500; margin-right: 2px; }
+
+  /* ── CHANNELS ── */
+  .channel-tag {
+    display: inline-block;
+    background: #F1F5F9;
+    border: 1px solid #E2E8F0;
+    color: #64748B;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 5px;
+    margin: 2px 2px 2px 0;
+    white-space: nowrap;
+  }
+
+  /* ── EXCLUDE NOTES ── */
+  .exclude-note {
+    font-size: 11px;
+    font-weight: 600;
+    color: #EF4444;
+  }
+  .exclude-none { color: #CBD5E1; font-size: 13px; font-weight: 400; }
+
+  /* ── NO RESULTS ── */
+  #no-results {
+    display: none;
+    text-align: center;
+    padding: 60px;
+    color: #94A3B8;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: #F1F5F9; }
+  ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-header-left">
+    <h1>🎯 Digital Marketing Audiences</h1>
+    <p>E-commerce · SaaS · Lead Gen · B2B — קהלים לקמפיינים</p>
+  </div>
+  <span class="badge-count" id="total-shown">132</span>
+</div>
+
+<div class="controls">
+  <input type="text" id="search-input" placeholder="🔍  חיפוש לפי שם, הגדרה, שימוש..." oninput="filterTable()" />
+  <select id="filter-type" onchange="filterTable()">
+    <option value="">כל הסוגים</option>
+    <option value="Website">Website</option>
+    <option value="Ecommerce">Ecommerce</option>
+    <option value="SaaS">SaaS</option>
+    <option value="Lead">Lead Gen</option>
+    <option value="B2B">B2B</option>
+    <option value="YouTube">YouTube</option>
+    <option value="Search">Search</option>
+    <option value="Lookalike">Lookalike</option>
+    <option value="Conversion">Conversion</option>
+  </select>
+  <select id="filter-intent" onchange="filterTable()">
+    <option value="">כל רמות Intent</option>
+    <option value="Low">Low</option>
+    <option value="Medium">Medium</option>
+    <option value="High">High</option>
+    <option value="VeryHigh">Very High</option>
+    <option value="Customer">Customer</option>
+  </select>
+  <button class="btn-export" onclick="exportCSV()">⬇ ייצוא CSV</button>
+  <span class="result-count" id="result-count">מציג 132 מתוך 132</span>
+</div>
+
+<div class="table-wrap">
+<table id="audiences-table">
+  <thead>
+    <tr>
+      <th class="row-num" onclick="sortTable(0)">#<span class="sort-arrow">↕</span></th>
+      <th onclick="sortTable(1)">Audience Name <span class="sort-arrow">↕</span></th>
+      <th onclick="sortTable(2)">Audience Type <span class="sort-arrow">↕</span></th>
+      <th onclick="sortTable(3)">Definition / Rules <span class="sort-arrow">↕</span></th>
+      <th onclick="sortTable(4)">Duration <span class="sort-arrow">↕</span></th>
+      <th onclick="sortTable(5)">Intent Level <span class="sort-arrow">↕</span></th>
+      <th onclick="sortTable(6)">Primary Use Case <span class="sort-arrow">↕</span></th>
+      <th onclick="sortTable(7)">Channels Used <span class="sort-arrow">↕</span></th>
+      <th onclick="sortTable(8)">Exclude From Notes <span class="sort-arrow">↕</span></th>
+    </tr>
+  </thead>
+  <tbody id="table-body">
+
+    <!-- ════════════════════════════════════════════════ -->
+    <tr class="category-row"><td colspan="9">🛒 E-COMMERCE — רטרגטינג בסיסי (1–10)</td></tr>
+
+    <tr class="data-row" data-type="Website" data-intent="VeryHigh">
+      <td class="row-num">1</td>
+      <td>נטשי עגלה — 72 שעות</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>URL contains /cart + no purchase event within 72h</td>
+      <td><span class="duration">14 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>Abandoned cart campaigns</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">YouTube</span><span class="channel-tag">Email</span></td>
+      <td class="exclude-note">Exclude purchasers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Ecommerce" data-intent="Customer">
+      <td class="row-num">2</td>
+      <td>קונים חד-פעמיים — 90 יום</td>
+      <td><span class="type-badge type-Ecommerce">Ecommerce</span></td>
+      <td>Purchase count = 1, last purchase ~90 days ago</td>
+      <td><span class="duration">180 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Customer">Customer</span></td>
+      <td>Retention / Win-back</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Email</span><span class="channel-tag">PMax</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="High">
+      <td class="row-num">3</td>
+      <td>מחפשי קטגוריה — ללא רכישה</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>URL contains /category, 3+ product views, no purchase</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Category remarketing</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">YouTube</span></td>
+      <td class="exclude-note">Exclude purchasers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Ecommerce" data-intent="Customer">
+      <td class="row-num">4</td>
+      <td>קונה אקססורי — ללא המוצר הראשי</td>
+      <td><span class="type-badge type-Ecommerce">Ecommerce</span></td>
+      <td>Purchased accessory SKU, not main product SKU</td>
+      <td><span class="duration">180 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Customer">Customer</span></td>
+      <td>Cross-sell main product</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">PMax</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="VeryHigh">
+      <td class="row-num">5</td>
+      <td>קוד הנחה ננטש</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>Coupon code applied in cart, no completed purchase</td>
+      <td><span class="duration">14 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>Coupon recovery</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Email</span></td>
+      <td class="exclude-note">Exclude purchasers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Ecommerce" data-intent="Customer">
+      <td class="row-num">6</td>
+      <td>לקוחות VIP — 3+ רכישות</td>
+      <td><span class="type-badge type-Ecommerce">Ecommerce</span></td>
+      <td>Purchase event count >= 3 in lifetime</td>
+      <td><span class="duration">180 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Customer">Customer</span></td>
+      <td>Retention · Lookalike seed</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Email</span></td>
+      <td class="exclude-note">Exclude from prospecting</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="High">
+      <td class="row-num">7</td>
+      <td>Wishlist ללא רכישה</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>AddToWishlist event fired, no purchase event</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Wishlist recovery</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">YouTube</span></td>
+      <td class="exclude-note">Exclude purchasers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Ecommerce" data-intent="Medium">
+      <td class="row-num">8</td>
+      <td>קונים עונתיים בלבד</td>
+      <td><span class="type-badge type-Ecommerce">Ecommerce</span></td>
+      <td>All purchases occurred only during sale / holiday periods</td>
+      <td><span class="duration">365 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Convert to year-round buyer</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Email</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="High">
+      <td class="row-num">9</td>
+      <td>צופי סרטוני מוצר</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>Video play event on product page (on-site video)</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Video retargeting</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">YouTube</span></td>
+      <td class="exclude-note">Exclude purchasers</td>
+    </tr>
+
+    <tr class="data-row" data-type="CRM" data-intent="Customer">
+      <td class="row-num">10</td>
+      <td>לקוחות שפתחו טיקט תמיכה</td>
+      <td><span class="type-badge type-CRM">CRM</span></td>
+      <td>Support ticket created in last 90 days</td>
+      <td><span class="duration">90 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Customer">Customer</span></td>
+      <td>Retention / Churn prevention</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Email</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <tr class="category-row"><td colspan="9">💻 SAAS — Funnel (11–20)</td></tr>
+
+    <tr class="data-row" data-type="SaaS" data-intent="VeryHigh">
+      <td class="row-num">11</td>
+      <td>טריאל שלא שדרג — יום 7</td>
+      <td><span class="type-badge type-SaaS">SaaS</span></td>
+      <td>Trial started, no upgrade event after 7 days</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>Trial → paid conversion</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Search</span><span class="channel-tag">Email</span></td>
+      <td class="exclude-note">Exclude paying users</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="VeryHigh">
+      <td class="row-num">12</td>
+      <td>גולשי דף תמחור — ללא המרה</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>URL contains /pricing, no conversion fired</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>Bottom-funnel remarketing</td>
+      <td><span class="channel-tag">Search</span><span class="channel-tag">Display</span><span class="channel-tag">YouTube</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="Search" data-intent="VeryHigh">
+      <td class="row-num">13</td>
+      <td>מחפשי "אלטרנטיבה ל-[מתחרה]"</td>
+      <td><span class="type-badge type-Search">Search Intent</span></td>
+      <td>Search query: "alternative to [competitor]" / "[competitor] vs"</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>Competitor conquest</td>
+      <td><span class="channel-tag">Search</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="VeryHigh">
+      <td class="row-num">14</td>
+      <td>הגיעו מ-G2 / Capterra</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>UTM source = g2.com or capterra.com</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>B2B purchase intent</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Search</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="Lead" data-intent="High">
+      <td class="row-num">15</td>
+      <td>הורידו Whitepaper טכני</td>
+      <td><span class="type-badge type-Lead">Lead Gen</span></td>
+      <td>PDF/eBook download event fired</td>
+      <td><span class="duration">90 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Lead nurturing</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">LinkedIn</span><span class="channel-tag">Email</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="CRM" data-intent="Medium">
+      <td class="row-num">16</td>
+      <td>ביטלו מנוי לפני 6 חודשים</td>
+      <td><span class="type-badge type-CRM">CRM</span></td>
+      <td>Subscription cancellation event ~180 days ago</td>
+      <td><span class="duration">180 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Win-back campaign</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Email</span></td>
+      <td class="exclude-note">Exclude active subscribers</td>
+    </tr>
+
+    <tr class="data-row" data-type="SaaS" data-intent="Medium">
+      <td class="row-num">17</td>
+      <td>השתמשו בפיצ'ר אחד בלבד</td>
+      <td><span class="type-badge type-SaaS">SaaS</span></td>
+      <td>Feature usage count = 1 out of available features</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Feature adoption / upsell</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">In-app</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="SaaS" data-intent="High">
+      <td class="row-num">18</td>
+      <td>Onboarding נעצר באמצע</td>
+      <td><span class="type-badge type-SaaS">SaaS</span></td>
+      <td>Onboarding step completed < 50%, no return in 48h</td>
+      <td><span class="duration">14 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Activation recovery</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Email</span></td>
+      <td class="exclude-note">Exclude completed onboarding</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="VeryHigh">
+      <td class="row-num">19</td>
+      <td>מבקרי דמו וידאו — ללא שיחה</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>Demo video viewed, no calendar booking event</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>Sales qualified push</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">LinkedIn</span></td>
+      <td class="exclude-note">Exclude booked demos</td>
+    </tr>
+
+    <tr class="data-row" data-type="CRM" data-intent="Low">
+      <td class="row-num">20</td>
+      <td>נרשמו לניוזלטר — אפס פתיחות</td>
+      <td><span class="type-badge type-CRM">CRM</span></td>
+      <td>Email subscriber, 0 open events in last 90 days</td>
+      <td><span class="duration">90 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Low">Low</span></td>
+      <td>Re-engagement — different channel</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Meta</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <tr class="category-row"><td colspan="9">📋 LEAD GEN — כוונת רכישה (21–30)</td></tr>
+
+    <tr class="data-row" data-type="Website" data-intent="High">
+      <td class="row-num">21</td>
+      <td>קראו 3+ מאמרים על נושא אחד</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>Blog category page views >= 3 in same topic cluster</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Content → lead conversion</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">YouTube</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="YouTube" data-intent="High">
+      <td class="row-num">22</td>
+      <td>צפו ב-75%+ מוובינר</td>
+      <td><span class="type-badge type-YouTube">YouTube</span></td>
+      <td>Webinar video viewed 75%+</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Warm webinar follow-up</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Email</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="Lead" data-intent="High">
+      <td class="row-num">23</td>
+      <td>הורידו מדריך חינמי</td>
+      <td><span class="type-badge type-Lead">Lead Gen</span></td>
+      <td>Lead magnet download, email captured</td>
+      <td><span class="duration">90 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Lead nurturing → next step</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Email</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Search" data-intent="VeryHigh">
+      <td class="row-num">24</td>
+      <td>חיפשו "כמה עולה [שירות]"</td>
+      <td><span class="type-badge type-Search">Search</span></td>
+      <td>Query includes: price / cost / how much / תעריף</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>Bottom-funnel — price intent</td>
+      <td><span class="channel-tag">Search</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="VeryHigh">
+      <td class="row-num">25</td>
+      <td>ביקרו ב"אודות" + "צור קשר" יחד</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>URL = /about AND /contact both visited in same session</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>High-intent evaluation stage</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Search</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="CRM" data-intent="High">
+      <td class="row-num">26</td>
+      <td>פתחו 3+ מיילים ברצף</td>
+      <td><span class="type-badge type-CRM">CRM</span></td>
+      <td>Email open events >= 3 in drip sequence</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Email → ad bridge</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Meta</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="VeryHigh">
+      <td class="row-num">27</td>
+      <td>ביקרו בדף תמחור פעמיים+</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>/pricing page visits >= 2 (separate sessions)</td>
+      <td><span class="duration">14 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>Price reconsideration push</td>
+      <td><span class="channel-tag">Search</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="High">
+      <td class="row-num">28</td>
+      <td>קראו Testimonials / ביקורות</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>URL contains /reviews, /testimonials, or /case-studies</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Social proof seekers</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">YouTube</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="CRM" data-intent="VeryHigh">
+      <td class="row-num">29</td>
+      <td>מילאו טופס יצירת קשר — לא התקשרו</td>
+      <td><span class="type-badge type-CRM">CRM</span></td>
+      <td>Form submitted, no inbound call in CRM within 48h</td>
+      <td><span class="duration">14 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>Lead follow-up recovery</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Search</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Search" data-intent="VeryHigh">
+      <td class="row-num">30</td>
+      <td>הגיעו מ-Branded Search של מתחרה</td>
+      <td><span class="type-badge type-Search">Search</span></td>
+      <td>Organic/paid click via competitor branded keyword</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>Competitor conquest</td>
+      <td><span class="channel-tag">Search</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <tr class="category-row"><td colspan="9">👥 B2B — פרופיל מדויק (31–40)</td></tr>
+
+    <tr class="data-row" data-type="B2B" data-intent="High">
+      <td class="row-num">31</td>
+      <td>מנהלי שיווק בחברות B2B</td>
+      <td><span class="type-badge type-B2B">B2B</span></td>
+      <td>Job title: Marketing Manager/Director, B2B industry</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>B2B marketing tools</td>
+      <td><span class="channel-tag">LinkedIn</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="B2B" data-intent="High">
+      <td class="row-num">32</td>
+      <td>CTOs בחברות טכנולוגיה 50–200</td>
+      <td><span class="type-badge type-B2B">B2B</span></td>
+      <td>Title: CTO/VP Engineering, company size 50–200, tech industry</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Technical decision maker</td>
+      <td><span class="channel-tag">LinkedIn</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="B2B" data-intent="Medium">
+      <td class="row-num">33</td>
+      <td>HR Managers בחברות בצמיחה</td>
+      <td><span class="type-badge type-B2B">B2B</span></td>
+      <td>Title: HR Manager, company headcount grew 20%+ YoY</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>HR / recruiting tools</td>
+      <td><span class="channel-tag">LinkedIn</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="B2B" data-intent="High">
+      <td class="row-num">34</td>
+      <td>אנשי מכירות מחפשי כלי פרודוקטיביות</td>
+      <td><span class="type-badge type-B2B">B2B</span></td>
+      <td>Title: Sales/AE/BDR + search intent for productivity tools</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Sales productivity tools</td>
+      <td><span class="channel-tag">LinkedIn</span><span class="channel-tag">Search</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="B2B" data-intent="High">
+      <td class="row-num">35</td>
+      <td>יזמים 25–40 עם חברה מאוחדת</td>
+      <td><span class="type-badge type-B2B">B2B</span></td>
+      <td>Title: Founder/CEO, age 25–40, company registered within 5 years</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>SMB / startup tools</td>
+      <td><span class="channel-tag">LinkedIn</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="B2B" data-intent="High">
+      <td class="row-num">36</td>
+      <td>ביקרו בדוכן בכנס (Event List)</td>
+      <td><span class="type-badge type-B2B">B2B</span></td>
+      <td>Uploaded event attendee list (CRM / badge scan)</td>
+      <td><span class="duration">90 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Warm B2B follow-up</td>
+      <td><span class="channel-tag">LinkedIn</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="B2B" data-intent="High">
+      <td class="row-num">37</td>
+      <td>מנויי ניוזלטרים תעשייתיים</td>
+      <td><span class="type-badge type-B2B">B2B</span></td>
+      <td>Subscriber list from industry newsletter (custom audience upload)</td>
+      <td><span class="duration">90 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Industry-specific targeting</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">LinkedIn</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="B2B" data-intent="High">
+      <td class="row-num">38</td>
+      <td>CFOs בחברות SaaS</td>
+      <td><span class="type-badge type-B2B">B2B</span></td>
+      <td>Title: CFO/VP Finance, industry: SaaS / software</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Finance / budget decision maker</td>
+      <td><span class="channel-tag">LinkedIn</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="B2B" data-intent="Medium">
+      <td class="row-num">39</td>
+      <td>מנהלי פרויקטים (PM)</td>
+      <td><span class="type-badge type-B2B">B2B</span></td>
+      <td>Title: Product Manager / Project Manager, mid-size company</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Project / PM tools</td>
+      <td><span class="channel-tag">LinkedIn</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="B2B" data-intent="High">
+      <td class="row-num">40</td>
+      <td>חברות שפרסמו משרות טכנולוגיה</td>
+      <td><span class="type-badge type-B2B">B2B</span></td>
+      <td>Company posted tech job opening in last 30 days (LinkedIn signal)</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Growth signal — scale tools</td>
+      <td><span class="channel-tag">LinkedIn</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <tr class="category-row"><td colspan="9">🎯 INTENT — אירועי חיים ותזמון (41–50)</td></tr>
+
+    <tr class="data-row" data-type="Intent" data-intent="Medium">
+      <td class="row-num">41</td>
+      <td>עברו עיר לאחרונה</td>
+      <td><span class="type-badge type-Intent">Intent</span></td>
+      <td>Life event: recently moved (Meta signal)</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Relocation products / services</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Meta</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Intent" data-intent="Medium">
+      <td class="row-num">42</td>
+      <td>התחתנו ב-12 חודשים האחרונים</td>
+      <td><span class="type-badge type-Intent">Intent</span></td>
+      <td>Life event: newly married (Meta signal)</td>
+      <td><span class="duration">180 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Wedding / newlywed products</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Meta</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Intent" data-intent="High">
+      <td class="row-num">43</td>
+      <td>פתחו עסק חדש לאחרונה</td>
+      <td><span class="type-badge type-Intent">Intent</span></td>
+      <td>New business registration signal / LinkedIn company age < 1y</td>
+      <td><span class="duration">90 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Business tools / services</td>
+      <td><span class="channel-tag">LinkedIn</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Intent" data-intent="Medium">
+      <td class="row-num">44</td>
+      <td>סיימו לימודים אקדמאיים</td>
+      <td><span class="type-badge type-Intent">Intent</span></td>
+      <td>Life event: college / university graduation (Meta signal)</td>
+      <td><span class="duration">90 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Career / first job products</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Meta</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Intent" data-intent="Medium">
+      <td class="row-num">45</td>
+      <td>הורים לילדים 0–3</td>
+      <td><span class="type-badge type-Intent">Intent</span></td>
+      <td>Parent of infant/toddler interest (Meta parental signal)</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Baby products / family services</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Meta</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Intent" data-intent="Medium">
+      <td class="row-num">46</td>
+      <td>קנו רכב חדש ב-6 חודשים</td>
+      <td><span class="type-badge type-Intent">Intent</span></td>
+      <td>Life event: new vehicle purchase (Meta / in-market signal)</td>
+      <td><span class="duration">180 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Auto accessories / insurance</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Meta</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Intent" data-intent="High">
+      <td class="row-num">47</td>
+      <td>גייסו השקעה (Seed / Series A)</td>
+      <td><span class="type-badge type-Intent">Intent</span></td>
+      <td>Funding announcement via Crunchbase / LinkedIn signal</td>
+      <td><span class="duration">90 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Scale tools for funded startups</td>
+      <td><span class="channel-tag">LinkedIn</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Search" data-intent="Medium">
+      <td class="row-num">48</td>
+      <td>מחפשים "איך לחסוך כסף"</td>
+      <td><span class="type-badge type-Search">Search</span></td>
+      <td>Query intent: save money / budget / חסכון / תקציב</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Cost-saving / value products</td>
+      <td><span class="channel-tag">Search</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Intent" data-intent="Medium">
+      <td class="row-num">49</td>
+      <td>מחפשים בית חדש</td>
+      <td><span class="type-badge type-Intent">Intent</span></td>
+      <td>In-market: real estate / housing (Meta / Google signal)</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Home / moving products</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Meta</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Search" data-intent="Medium">
+      <td class="row-num">50</td>
+      <td>חיפשו "סיכום שנה" / "מה ללמוד"</td>
+      <td><span class="type-badge type-Search">Search</span></td>
+      <td>Year-end / aspirational queries: learn, improve, goals 2025</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Self-improvement / courses</td>
+      <td><span class="channel-tag">Search</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <tr class="category-row"><td colspan="9">🔄 RETARGETING מתקדם (51–60)</td></tr>
+
+    <tr class="data-row" data-type="Website" data-intent="Medium">
+      <td class="row-num">51</td>
+      <td>Organic לא-המיר</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>Source = organic search, no conversion event fired</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>SEO traffic retargeting</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">YouTube</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="Retargeting" data-intent="Low">
+      <td class="row-num">52</td>
+      <td>ראו מודעה 3+ פעמים — לא לחצו</td>
+      <td><span class="type-badge type-Retargeting">Retargeting</span></td>
+      <td>Ad frequency >= 3, zero clicks — creative fatigue signal</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Low">Low</span></td>
+      <td>Creative refresh targeting</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Meta</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="VeryHigh">
+      <td class="row-num">53</td>
+      <td>ביקרו ב-LP יותר מ-3 פעמים</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>Landing page visits >= 3 across separate sessions</td>
+      <td><span class="duration">14 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>Objection handling ads</td>
+      <td><span class="channel-tag">Search</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="Retargeting" data-intent="High">
+      <td class="row-num">54</td>
+      <td>Cross-device: מובייל → דסקטופ</td>
+      <td><span class="type-badge type-Retargeting">Retargeting</span></td>
+      <td>First visit mobile, purchase on desktop — bridge both devices</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Cross-device conversion bridge</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Search</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="Ecommerce" data-intent="Customer">
+      <td class="row-num">55</td>
+      <td>קנו מוצר A — לא מוצר B</td>
+      <td><span class="type-badge type-Ecommerce">Ecommerce</span></td>
+      <td>Purchased SKU/category A, never purchased SKU/category B</td>
+      <td><span class="duration">180 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Customer">Customer</span></td>
+      <td>Cross-sell campaign</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">PMax</span></td>
+      <td class="exclude-note">Exclude Product B buyers</td>
+    </tr>
+
+    <tr class="data-row" data-type="CRM" data-intent="Customer">
+      <td class="row-num">56</td>
+      <td>הפנו לקוחות — לא פרמיום</td>
+      <td><span class="type-badge type-CRM">CRM</span></td>
+      <td>Made a referral, but on free/basic plan themselves</td>
+      <td><span class="duration">180 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Customer">Customer</span></td>
+      <td>Referrer upgrade to premium</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Email</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="VeryHigh">
+      <td class="row-num">57</td>
+      <td>צפו בדמו וידאו — לא קבעו שיחה</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>Demo video played (>50%), no Calendly/booking event</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>Sales qualified → push to call</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">LinkedIn</span></td>
+      <td class="exclude-note">Exclude booked demos</td>
+    </tr>
+
+    <tr class="data-row" data-type="CRM" data-intent="VeryHigh">
+      <td class="row-num">58</td>
+      <td>Multi-touch: 3 מיילים + ביקור אתר</td>
+      <td><span class="type-badge type-CRM">CRM</span></td>
+      <td>3 email opens + site visit in same 30-day window</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>Sales-ready lead targeting</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">LinkedIn</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="High">
+      <td class="row-num">59</td>
+      <td>הגיעו מ-Podcast / UTM ייחודי</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>UTM source = podcast / specific tracked URL</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Warm podcast audience</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Meta</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="VeryHigh">
+      <td class="row-num">60</td>
+      <td>Wishlist + חזרו לאתר פעם שנייה</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>AddToWishlist event + return visit (session 2+), no purchase</td>
+      <td><span class="duration">14 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>High-intent purchase trigger</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Search</span></td>
+      <td class="exclude-note">Exclude purchasers</td>
+    </tr>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <tr class="category-row"><td colspan="9">🧠 PSYCHOGRAPHIC — ערכים וגישות (61–70)</td></tr>
+
+    <tr class="data-row" data-type="Interest" data-intent="Medium">
+      <td class="row-num">61</td>
+      <td>Early Adopters</td>
+      <td><span class="type-badge type-Psychographic">Psychographic</span></td>
+      <td>Interest: beta products, tech launches, early access seekers</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>New product launch campaigns</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">YouTube</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Interest" data-intent="High">
+      <td class="row-num">62</td>
+      <td>קונים פרמיום בקטגוריה</td>
+      <td><span class="type-badge type-Psychographic">Psychographic</span></td>
+      <td>Affinity: premium / luxury brand in product category</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Premium tier upsell</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">YouTube</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Interest" data-intent="Medium">
+      <td class="row-num">63</td>
+      <td>כותבי ביקורות אקטיביים</td>
+      <td><span class="type-badge type-Psychographic">Psychographic</span></td>
+      <td>User behavior: posts reviews on Google / Amazon / App Store</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Community building / UGC</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Meta</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Interest" data-intent="High">
+      <td class="row-num">64</td>
+      <td>חברי Facebook Groups מקצועיים</td>
+      <td><span class="type-badge type-Psychographic">Psychographic</span></td>
+      <td>Member of industry-specific Facebook Group</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>B2B / community targeting</td>
+      <td><span class="channel-tag">Meta</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Search" data-intent="Medium">
+      <td class="row-num">65</td>
+      <td>מחפשי DIY לפני פנייה למקצוענים</td>
+      <td><span class="type-badge type-Psychographic">Psychographic</span></td>
+      <td>Query pattern: "how to do X myself" before service search</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Easy-to-use product pitch</td>
+      <td><span class="channel-tag">Search</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Interest" data-intent="High">
+      <td class="row-num">66</td>
+      <td>Multi-tool Users</td>
+      <td><span class="type-badge type-Psychographic">Psychographic</span></td>
+      <td>Subscribed to 3+ similar SaaS tools (intent data signal)</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Consolidation pitch — "one tool"</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">LinkedIn</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Interest" data-intent="Low">
+      <td class="row-num">67</td>
+      <td>Coupon Hunters</td>
+      <td><span class="type-badge type-Psychographic">Psychographic</span></td>
+      <td>Behavior: always searches coupon code before checkout</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Low">Low</span></td>
+      <td>Value / non-discount offer test</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Meta</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="App" data-intent="Medium">
+      <td class="row-num">68</td>
+      <td>App Downloaders שלא מפעילים</td>
+      <td><span class="type-badge type-App">App</span></td>
+      <td>App install event, no first_open or session event</td>
+      <td><span class="duration">7 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>App activation campaigns</td>
+      <td><span class="channel-tag">App</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Interest" data-intent="Medium">
+      <td class="row-num">69</td>
+      <td>עוקבים אחרי Influencers בתחום</td>
+      <td><span class="type-badge type-Psychographic">Psychographic</span></td>
+      <td>Follower of niche industry influencers (Meta interest targeting)</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Social proof campaigns</td>
+      <td><span class="channel-tag">Meta</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Interest" data-intent="High">
+      <td class="row-num">70</td>
+      <td>אנשים ב-Reddit / Discord Niche</td>
+      <td><span class="type-badge type-Psychographic">Psychographic</span></td>
+      <td>UTM source = Reddit/Discord community link or interest targeting</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Niche community intent targeting</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Reddit</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <tr class="category-row"><td colspan="9">🤖 LOOKALIKE — מהלקוחות הטובים (71–80)</td></tr>
+
+    <tr class="data-row" data-type="Lookalike" data-intent="Medium">
+      <td class="row-num">71</td>
+      <td>LAL של קונים 3+ פעמים</td>
+      <td><span class="type-badge type-Lookalike">Lookalike</span></td>
+      <td>Source: VIP customer list (3+ purchases) → 1–3% LAL</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>High-LTV prospecting</td>
+      <td><span class="channel-tag">Meta</span><span class="channel-tag">Display</span><span class="channel-tag">PMax</span></td>
+      <td class="exclude-note">Exclude existing customers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Lookalike" data-intent="Medium">
+      <td class="row-num">72</td>
+      <td>LAL של משתמשי פרמיום</td>
+      <td><span class="type-badge type-Lookalike">Lookalike</span></td>
+      <td>Source: premium / paid subscribers list</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Premium tier prospecting</td>
+      <td><span class="channel-tag">Meta</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-note">Exclude existing subscribers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Lookalike" data-intent="Medium">
+      <td class="row-num">73</td>
+      <td>LAL של צופי 95% סרטון</td>
+      <td><span class="type-badge type-Lookalike">Lookalike</span></td>
+      <td>Source: YouTube / Meta 95% video view audience</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Engaged content prospecting</td>
+      <td><span class="channel-tag">YouTube</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-note">Exclude existing customers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Lookalike" data-intent="Medium">
+      <td class="row-num">74</td>
+      <td>LAL של Referrers</td>
+      <td><span class="type-badge type-Lookalike">Lookalike</span></td>
+      <td>Source: customers who referred others (referral program data)</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Word-of-mouth expansion</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Meta</span></td>
+      <td class="exclude-note">Exclude existing customers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Lookalike" data-intent="High">
+      <td class="row-num">75</td>
+      <td>LAL של LTV גבוה — 12 חודשים</td>
+      <td><span class="type-badge type-Lookalike">Lookalike</span></td>
+      <td>Source: top 10% LTV customers from last 12 months</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>High-value customer acquisition</td>
+      <td><span class="channel-tag">Meta</span><span class="channel-tag">Display</span><span class="channel-tag">PMax</span></td>
+      <td class="exclude-note">Exclude existing customers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Lookalike" data-intent="High">
+      <td class="row-num">76</td>
+      <td>LAL של ממירי טריאל → מנוי</td>
+      <td><span class="type-badge type-Lookalike">Lookalike</span></td>
+      <td>Source: users who converted from free trial to paid</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>SaaS trial prospecting</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Search</span></td>
+      <td class="exclude-note">Exclude existing users</td>
+    </tr>
+
+    <tr class="data-row" data-type="Lookalike" data-intent="Medium">
+      <td class="row-num">77</td>
+      <td>LAL של Email Clickers</td>
+      <td><span class="type-badge type-Lookalike">Lookalike</span></td>
+      <td>Source: email subscribers who click CTAs regularly</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Action-oriented prospecting</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Meta</span></td>
+      <td class="exclude-note">Exclude existing subscribers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Lookalike" data-intent="Medium">
+      <td class="row-num">78</td>
+      <td>LAL של לקוחות ממועדפות גיאוגרפית</td>
+      <td><span class="type-badge type-Lookalike">Lookalike</span></td>
+      <td>Source: best-performing city/region customer list</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Geo expansion</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Meta</span></td>
+      <td class="exclude-note">Exclude existing customers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Lookalike" data-intent="High">
+      <td class="row-num">79</td>
+      <td>LAL של אנשי תעשייה ספציפית</td>
+      <td><span class="type-badge type-Lookalike">Lookalike</span></td>
+      <td>Source: B2B customer list by industry → LinkedIn LAL</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>B2B vertical expansion</td>
+      <td><span class="channel-tag">LinkedIn</span></td>
+      <td class="exclude-note">Exclude existing customers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Lookalike" data-intent="Medium">
+      <td class="row-num">80</td>
+      <td>LAL של משתמשי Mobile בלבד</td>
+      <td><span class="type-badge type-Lookalike">Lookalike</span></td>
+      <td>Source: mobile-only app converters list</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>App / mobile prospecting</td>
+      <td><span class="channel-tag">App</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-note">Exclude existing users</td>
+    </tr>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <tr class="category-row"><td colspan="9">📅 SEASONAL / TIMING (81–85)</td></tr>
+
+    <tr class="data-row" data-type="Seasonal" data-intent="High">
+      <td class="row-num">81</td>
+      <td>מחפשי מתנות — 2 שבועות לפני חג</td>
+      <td><span class="type-badge type-Seasonal">Seasonal</span></td>
+      <td>Search intent: gift / present / מתנה, 14 days pre-holiday</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Pre-holiday gift campaigns</td>
+      <td><span class="channel-tag">Search</span><span class="channel-tag">Display</span><span class="channel-tag">PMax</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Seasonal" data-intent="Medium">
+      <td class="row-num">82</td>
+      <td>ינואר — פתיחת שנה חדשה</td>
+      <td><span class="type-badge type-Seasonal">Seasonal</span></td>
+      <td>New year resolution queries: goals, habits, plan, improve</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>January aspirational campaigns</td>
+      <td><span class="channel-tag">Search</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Seasonal" data-intent="High">
+      <td class="row-num">83</td>
+      <td>Q4 B2B — תקציבים פגים</td>
+      <td><span class="type-badge type-Seasonal">Seasonal</span></td>
+      <td>B2B companies in Q4, budget exhaustion signal (LinkedIn + intent)</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Year-end B2B spend push</td>
+      <td><span class="channel-tag">LinkedIn</span><span class="channel-tag">Search</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Seasonal" data-intent="Medium">
+      <td class="row-num">84</td>
+      <td>Q1 — עסקים מחפשים שיפורים</td>
+      <td><span class="type-badge type-Seasonal">Seasonal</span></td>
+      <td>Business improvement queries in January–March</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>New year business tools</td>
+      <td><span class="channel-tag">Search</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Seasonal" data-intent="Medium">
+      <td class="row-num">85</td>
+      <td>ימי 10–11 לחודש (אחרי משכורת)</td>
+      <td><span class="type-badge type-Seasonal">Seasonal</span></td>
+      <td>Custom schedule: ad spend peaks days 10–11 of each month</td>
+      <td><span class="duration">7 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Post-payday impulse window</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Meta</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <tr class="category-row"><td colspan="9">🔗 COMBINATION AUDIENCES — AND Logic (86–90)</td></tr>
+
+    <tr class="data-row" data-type="Combination" data-intent="VeryHigh">
+      <td class="row-num">86</td>
+      <td>דף תמחור AND תחום ספציפי</td>
+      <td><span class="type-badge type-Combination">Combination</span></td>
+      <td>Pixel: pricing page visit + LinkedIn industry filter layered</td>
+      <td><span class="duration">14 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>B2B super-targeted remarketing</td>
+      <td><span class="channel-tag">LinkedIn</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="Combination" data-intent="VeryHigh">
+      <td class="row-num">87</td>
+      <td>צפה בוובינר AND פתח 2+ מיילים</td>
+      <td><span class="type-badge type-Combination">Combination</span></td>
+      <td>Webinar attended + 2 email clicks — multi-touch engaged</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>Multi-touch SQL targeting</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Email</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="Combination" data-intent="VeryHigh">
+      <td class="row-num">88</td>
+      <td>הוריד eBook AND ביקר בדף שירות</td>
+      <td><span class="type-badge type-Combination">Combination</span></td>
+      <td>Lead magnet download + service/product page visit (same user)</td>
+      <td><span class="duration">14 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>Intent + interest combined push</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">LinkedIn</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="Combination" data-intent="High">
+      <td class="row-num">89</td>
+      <td>Retargeted AND דמוגרפיה רלוונטית בלבד</td>
+      <td><span class="type-badge type-Combination">Combination</span></td>
+      <td>Pixel retargeting list filtered by ICP demographics</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Filtered retargeting — reduce waste</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">LinkedIn</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="Combination" data-intent="VeryHigh">
+      <td class="row-num">90</td>
+      <td>ביקר 3+ פעמים AND לא ממיר</td>
+      <td><span class="type-badge type-Combination">Combination</span></td>
+      <td>Site visit count >= 3 across sessions, zero conversion events</td>
+      <td><span class="duration">14 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>Objection-specific ad creative</td>
+      <td><span class="channel-tag">Search</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <tr class="category-row"><td colspan="9">💡 CREATIVE / NICHE (91–100)</td></tr>
+
+    <tr class="data-row" data-type="YouTube" data-intent="High">
+      <td class="row-num">91</td>
+      <td>צפו בסרטון YouTube של מתחרה</td>
+      <td><span class="type-badge type-YouTube">YouTube</span></td>
+      <td>Viewer of competitor's YouTube channel / specific video</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Competitor conquest via YouTube</td>
+      <td><span class="channel-tag">YouTube</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Niche" data-intent="High">
+      <td class="row-num">92</td>
+      <td>Geo-fence — רדיוס ממיקום ספציפי</td>
+      <td><span class="type-badge type-Niche">Niche</span></td>
+      <td>Physical location radius: conference, competitor store, campus</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Local / event-based targeting</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Search</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Search" data-intent="Medium">
+      <td class="row-num">93</td>
+      <td>Job Seekers — מחפשי עבודה</td>
+      <td><span class="type-badge type-Search">Search</span></td>
+      <td>Search intent: job / vacancy / קורות חיים / משרה</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>HR platforms / career tools</td>
+      <td><span class="channel-tag">Search</span><span class="channel-tag">Display</span><span class="channel-tag">LinkedIn</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Niche" data-intent="Medium">
+      <td class="row-num">94</td>
+      <td>בעלי חיות מחמד</td>
+      <td><span class="type-badge type-Niche">Niche</span></td>
+      <td>Interest: pet owner (dog/cat/exotic) — Meta audience</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Pet products / services</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Meta</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Niche" data-intent="Medium">
+      <td class="row-num">95</td>
+      <td>ספורטאים חובבים</td>
+      <td><span class="type-badge type-Niche">Niche</span></td>
+      <td>Interest: recreational fitness, gym, running, cycling</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Sports / fitness products</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Meta</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Niche" data-intent="Medium">
+      <td class="row-num">96</td>
+      <td>Freelancers / עצמאיים</td>
+      <td><span class="type-badge type-Niche">Niche</span></td>
+      <td>Employment: self-employed / freelancer (LinkedIn + Meta)</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Freelance tools / finance / insurance</td>
+      <td><span class="channel-tag">LinkedIn</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Niche" data-intent="High">
+      <td class="row-num">97</td>
+      <td>עוקבי Instagram של מתחרים</td>
+      <td><span class="type-badge type-Niche">Niche</span></td>
+      <td>Follower of competitor's Instagram account (Meta interest)</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Competitor conquest via social</td>
+      <td><span class="channel-tag">Meta</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Ecommerce" data-intent="VeryHigh">
+      <td class="row-num">98</td>
+      <td>Engaged Shoppers בפייסבוק</td>
+      <td><span class="type-badge type-Ecommerce">Ecommerce</span></td>
+      <td>Clicked "Buy Now" / "Shop Now" on any Facebook ad in 30 days</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>Bottom-funnel ecommerce</td>
+      <td><span class="channel-tag">Meta</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-note">Exclude purchasers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Niche" data-intent="High">
+      <td class="row-num">99</td>
+      <td>הכנסה גבוהה + שירותי יוקרה</td>
+      <td><span class="type-badge type-Niche">Niche</span></td>
+      <td>High income bracket + luxury brand affinity signal</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Premium / luxury products</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Meta</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="High">
+      <td class="row-num">100</td>
+      <td>גולשים מ-Slack / Discord Community</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>UTM source = slack / discord community shared link</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Community-sourced warm traffic</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Meta</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <tr class="category-row"><td colspan="9">🛍️ E-COMMERCE — רטרגטינג מתקדם (101–120)</td></tr>
+
+    <tr class="data-row" data-type="Website" data-intent="VeryHigh">
+      <td class="row-num">101</td>
+      <td>עצרו ב-Checkout — שלב המשלוח</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>Checkout started, abandoned at shipping cost step</td>
+      <td><span class="duration">14 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>Shipping objection — free shipping ad</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Email</span></td>
+      <td class="exclude-note">Exclude purchasers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="High">
+      <td class="row-num">102</td>
+      <td>הסירו מוצר מהעגלה (לא נטשו)</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>remove_from_cart event fired — active decision to remove</td>
+      <td><span class="duration">14 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Active decliner — address the objection</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Meta</span></td>
+      <td class="exclude-note">Exclude purchasers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Ecommerce" data-intent="Customer">
+      <td class="row-num">103</td>
+      <td>החזירו מוצר בעבר</td>
+      <td><span class="type-badge type-Ecommerce">Ecommerce</span></td>
+      <td>Return / refund event in last 180 days</td>
+      <td><span class="duration">180 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Customer">Customer</span></td>
+      <td>Win-back with improved offer</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Email</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="High">
+      <td class="row-num">104</td>
+      <td>קוראי ביקורות בלבד</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>Reviews/ratings page viewed, no add-to-cart event</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Trust-building — social proof ads</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">YouTube</span></td>
+      <td class="exclude-note">Exclude purchasers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Ecommerce" data-intent="Customer">
+      <td class="row-num">105</td>
+      <td>קונים רק בסייל — תמיד</td>
+      <td><span class="type-badge type-Ecommerce">Ecommerce</span></td>
+      <td>100% of purchases made during sale/discount periods</td>
+      <td><span class="duration">180 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Customer">Customer</span></td>
+      <td>Break price anchor — value messaging</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Email</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="High">
+      <td class="row-num">106</td>
+      <td>ביקרו בדף Out of Stock</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>Landed on out-of-stock product page, no alternative purchase</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Back in stock notification</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Email</span></td>
+      <td class="exclude-note">Exclude purchasers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="VeryHigh">
+      <td class="row-num">107</td>
+      <td>נרשמו ל-Back in Stock</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>Explicitly subscribed to back-in-stock notification</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>Explicit demand — first to notify</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Email</span></td>
+      <td class="exclude-note">Exclude purchasers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Ecommerce" data-intent="Customer">
+      <td class="row-num">108</td>
+      <td>קוני מוצרים מתכלים — מחזור חידוש</td>
+      <td><span class="type-badge type-Ecommerce">Ecommerce</span></td>
+      <td>Consumable purchased 30–60 days ago (avg usage cycle)</td>
+      <td><span class="duration">180 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Customer">Customer</span></td>
+      <td>Replenishment — reorder campaign</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Email</span><span class="channel-tag">PMax</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Ecommerce" data-intent="Customer">
+      <td class="row-num">109</td>
+      <td>Low AOV — רכישה ראשונה קטנה</td>
+      <td><span class="type-badge type-Ecommerce">Ecommerce</span></td>
+      <td>First purchase value below average order threshold</td>
+      <td><span class="duration">180 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Customer">Customer</span></td>
+      <td>Upsell / bundle upgrade</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Email</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Ecommerce" data-intent="Customer">
+      <td class="row-num">110</td>
+      <td>Gift Buyers — שלחו לכתובת אחרת</td>
+      <td><span class="type-badge type-Ecommerce">Ecommerce</span></td>
+      <td>Shipping address differs from billing address</td>
+      <td><span class="duration">180 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Customer">Customer</span></td>
+      <td>Gift occasion targeting</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Meta</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="High">
+      <td class="row-num">111</td>
+      <td>שימשו בחיפוש פנימי באתר</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>Internal site search event fired — knows what they want</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Specific product intent — dynamic ads</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Search</span></td>
+      <td class="exclude-note">Exclude purchasers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="High">
+      <td class="row-num">112</td>
+      <td>גלשו ב-Size Guide / מדריך מידות</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>Size guide / fit chart page visited — product-specific intent</td>
+      <td><span class="duration">14 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Near-purchase fashion/apparel</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Meta</span></td>
+      <td class="exclude-note">Exclude purchasers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="High">
+      <td class="row-num">113</td>
+      <td>ביקרו בדף מדיניות החזרות לפני קנייה</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>Returns policy page visited before any purchase event</td>
+      <td><span class="duration">14 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Trust seekers — guarantee ad</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">YouTube</span></td>
+      <td class="exclude-note">Exclude purchasers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="High">
+      <td class="row-num">114</td>
+      <td>הגיעו מ-TikTok / Instagram Shop</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>UTM source = tiktok_shop / instagram_shop, no purchase</td>
+      <td><span class="duration">14 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Social commerce recovery</td>
+      <td><span class="channel-tag">Meta</span><span class="channel-tag">TikTok</span></td>
+      <td class="exclude-note">Exclude purchasers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Ecommerce" data-intent="Customer">
+      <td class="row-num">115</td>
+      <td>קנו Bundle קטן — לא הגדול</td>
+      <td><span class="type-badge type-Ecommerce">Ecommerce</span></td>
+      <td>Purchased small bundle SKU, not medium/large bundle</td>
+      <td><span class="duration">180 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Customer">Customer</span></td>
+      <td>Bundle upgrade offer</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Email</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="App" data-intent="High">
+      <td class="row-num">116</td>
+      <td>גולשי אפליקציה ללא רכישה</td>
+      <td><span class="type-badge type-App">App</span></td>
+      <td>App session recorded, no in-app purchase event</td>
+      <td><span class="duration">14 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>App conversion push</td>
+      <td><span class="channel-tag">App</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-note">Exclude purchasers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="High">
+      <td class="row-num">117</td>
+      <td>10+ דקות באתר — אפס רכישה</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>Session duration > 600 seconds, no purchase or form event</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Deep interest — remove friction</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Search</span></td>
+      <td class="exclude-note">Exclude purchasers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Ecommerce" data-intent="Customer">
+      <td class="row-num">118</td>
+      <td>קונים ב-BNPL / תשלומים</td>
+      <td><span class="type-badge type-Ecommerce">Ecommerce</span></td>
+      <td>Payment method: BNPL / installments used at checkout</td>
+      <td><span class="duration">180 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Customer">Customer</span></td>
+      <td>Price-sensitive upsell</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Email</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="VeryHigh">
+      <td class="row-num">119</td>
+      <td>השתמשו בפילטרים מתקדמים</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>Used 2+ product filters (color, size, price range) — no purchase</td>
+      <td><span class="duration">14 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>Specific product intent — dynamic ads</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Search</span></td>
+      <td class="exclude-note">Exclude purchasers</td>
+    </tr>
+
+    <tr class="data-row" data-type="CRM" data-intent="High">
+      <td class="row-num">120</td>
+      <td>פתחו SMS שיווקי ולא לחצו</td>
+      <td><span class="type-badge type-CRM">CRM</span></td>
+      <td>SMS opened (read receipt), no click-through event</td>
+      <td><span class="duration">14 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>SMS non-converter — different channel</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">Email</span></td>
+      <td class="exclude-none">—</td>
+    </tr>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <tr class="category-row"><td colspan="9">📊 מהטבלה — קהלי בסיס ו-RLSA (121–132)</td></tr>
+
+    <tr class="data-row" data-type="Website" data-intent="Low">
+      <td class="row-num">121</td>
+      <td>All Visitors — 30D</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>All website visitors in last 30 days</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Low">Low</span></td>
+      <td>Display awareness · PMax signals</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">YouTube</span><span class="channel-tag">PMax</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="Low">
+      <td class="row-num">122</td>
+      <td>All Visitors — 90D</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>All website visitors in last 90 days</td>
+      <td><span class="duration">90 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Low">Low</span></td>
+      <td>Broad display awareness</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">YouTube</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="Low">
+      <td class="row-num">123</td>
+      <td>Homepage Visitors</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>URL equals / or /homepage — top funnel entry</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Low">Low</span></td>
+      <td>Top funnel remarketing</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">YouTube</span></td>
+      <td class="exclude-note">Exclude product/pricing visitors</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="Medium">
+      <td class="row-num">124</td>
+      <td>Engaged Visitors (60s+ / 2+ עמודים)</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>Time on site > 60 seconds OR viewed 2+ pages</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Mid-funnel remarketing</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">YouTube</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="VeryHigh">
+      <td class="row-num">125</td>
+      <td>Checkout Started (URL /checkout)</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>URL contains /checkout — initiated checkout flow</td>
+      <td><span class="duration">14 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>Checkout abandonment</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">YouTube</span></td>
+      <td class="exclude-note">Exclude purchasers</td>
+    </tr>
+
+    <tr class="data-row" data-type="Website" data-intent="Medium">
+      <td class="row-num">126</td>
+      <td>Non-Converters</td>
+      <td><span class="type-badge type-Website">Website</span></td>
+      <td>All visitors EXCEPT those who fired a conversion event</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Core remarketing logic</td>
+      <td><span class="channel-tag">Display</span><span class="channel-tag">YouTube</span><span class="channel-tag">Search</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="Conversion" data-intent="Customer">
+      <td class="row-num">127</td>
+      <td>Thank You Page Visitors</td>
+      <td><span class="type-badge type-Conversion">Conversion</span></td>
+      <td>URL contains /thank-you — confirmed conversion</td>
+      <td><span class="duration">180 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Customer">Customer</span></td>
+      <td>Conversion validation · upsell base</td>
+      <td><span class="channel-tag">None</span></td>
+      <td class="exclude-note">Exclude from prospecting</td>
+    </tr>
+
+    <tr class="data-row" data-type="Conversion" data-intent="Customer">
+      <td class="row-num">128</td>
+      <td>All Converters</td>
+      <td><span class="type-badge type-Conversion">Conversion</span></td>
+      <td>Primary conversion event fired (purchase / lead / sign-up)</td>
+      <td><span class="duration">180 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Customer">Customer</span></td>
+      <td>Exclusion · upsell campaigns</td>
+      <td><span class="channel-tag">Search</span><span class="channel-tag">PMax</span></td>
+      <td class="exclude-note">Exclude from prospecting</td>
+    </tr>
+
+    <tr class="data-row" data-type="YouTube" data-intent="Low">
+      <td class="row-num">129</td>
+      <td>YouTube Viewers — Any</td>
+      <td><span class="type-badge type-YouTube">YouTube</span></td>
+      <td>Viewed any video on YouTube channel</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Low">Low</span></td>
+      <td>Warm traffic pool</td>
+      <td><span class="channel-tag">YouTube</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="YouTube" data-intent="Medium">
+      <td class="row-num">130</td>
+      <td>YouTube Viewers — 50%</td>
+      <td><span class="type-badge type-YouTube">YouTube</span></td>
+      <td>Viewed 50%+ of video on YouTube channel</td>
+      <td><span class="duration">30 <span>days</span></span></td>
+      <td><span class="intent-badge intent-Medium">Medium</span></td>
+      <td>Mid-funnel remarketing</td>
+      <td><span class="channel-tag">YouTube</span><span class="channel-tag">Display</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="Search" data-intent="High">
+      <td class="row-num">131</td>
+      <td>RLSA — All Visitors</td>
+      <td><span class="type-badge type-Search">Search</span></td>
+      <td>Past site visitors who search again on Google</td>
+      <td><span class="duration">180 <span>days</span></span></td>
+      <td><span class="intent-badge intent-High">High</span></td>
+      <td>Higher bids in Search campaigns</td>
+      <td><span class="channel-tag">Search</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+    <tr class="data-row" data-type="Search" data-intent="VeryHigh">
+      <td class="row-num">132</td>
+      <td>RLSA — Pricing Visitors</td>
+      <td><span class="type-badge type-Search">Search</span></td>
+      <td>Pricing page visitors who return to search on Google</td>
+      <td><span class="duration">180 <span>days</span></span></td>
+      <td><span class="intent-badge intent-VeryHigh">Very High</span></td>
+      <td>Aggressive bid adjustment in Search</td>
+      <td><span class="channel-tag">Search</span></td>
+      <td class="exclude-note">Exclude converters</td>
+    </tr>
+
+  </tbody>
+</table>
+<div id="no-results">😕 לא נמצאו קהלים תואמים — נסה חיפוש אחר</div>
+</div>
+
+<script>
+  let sortDir = {};
+
+  function filterTable() {
+    const search = document.getElementById('search-input').value.toLowerCase();
+    const typeFilter = document.getElementById('filter-type').value;
+    const intentFilter = document.getElementById('filter-intent').value;
+    const rows = document.querySelectorAll('tbody tr.data-row');
+    let visible = 0;
+
+    rows.forEach(row => {
+      const text = row.textContent.toLowerCase();
+      const type = row.dataset.type || '';
+      const intent = row.dataset.intent || '';
+
+      const matchSearch = !search || text.includes(search);
+      const matchType = !typeFilter || type.includes(typeFilter);
+      const matchIntent = !intentFilter || intent === intentFilter;
+
+      if (matchSearch && matchType && matchIntent) {
+        row.classList.remove('hidden');
+        visible++;
+      } else {
+        row.classList.add('hidden');
+      }
+    });
+
+    const categoryRows = document.querySelectorAll('tbody tr.category-row');
+    categoryRows.forEach(catRow => {
+      let next = catRow.nextElementSibling;
+      let hasVisible = false;
+      while (next && !next.classList.contains('category-row')) {
+        if (!next.classList.contains('hidden')) hasVisible = true;
+        next = next.nextElementSibling;
+      }
+      catRow.style.display = hasVisible ? '' : 'none';
+    });
+
+    document.getElementById('result-count').textContent = `מציג ${visible} מתוך 132`;
+    document.getElementById('total-shown').textContent = visible;
+    document.getElementById('no-results').style.display = visible === 0 ? 'block' : 'none';
+  }
+
+  function sortTable(colIndex) {
+    const tbody = document.getElementById('table-body');
+    const rows = Array.from(tbody.querySelectorAll('tr.data-row'));
+    const dir = (sortDir[colIndex] === 'asc') ? 'desc' : 'asc';
+    sortDir = {};
+    sortDir[colIndex] = dir;
+
+    document.querySelectorAll('thead th').forEach(th => th.classList.remove('sorted'));
+    document.querySelectorAll('thead th')[colIndex].classList.add('sorted');
+
+    rows.sort((a, b) => {
+      const aVal = a.cells[colIndex] ? a.cells[colIndex].textContent.trim() : '';
+      const bVal = b.cells[colIndex] ? b.cells[colIndex].textContent.trim() : '';
+      if (!isNaN(aVal) && !isNaN(bVal)) {
+        return dir === 'asc' ? Number(aVal) - Number(bVal) : Number(bVal) - Number(aVal);
+      }
+      return dir === 'asc' ? aVal.localeCompare(bVal, 'he') : bVal.localeCompare(aVal, 'he');
+    });
+
+    const catRows = Array.from(tbody.querySelectorAll('tr.category-row'));
+    catRows.forEach(r => tbody.appendChild(r));
+    rows.forEach(r => tbody.appendChild(r));
+    filterTable();
+  }
+
+  function exportCSV() {
+    const headers = ['#','Audience Name','Audience Type','Definition / Rules','Duration (days)','Intent Level','Primary Use Case','Channels Used','Exclude From Notes'];
+    const rows = document.querySelectorAll('tbody tr.data-row:not(.hidden)');
+    let csv = '﻿' + headers.join(',') + '\n';
+
+    rows.forEach(row => {
+      const cells = Array.from(row.cells).map(cell =>
+        '"' + cell.textContent.trim().replace(/"/g, '""').replace(/\n/g, ' ') + '"'
+      );
+      csv += cells.join(',') + '\n';
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'digital_marketing_audiences.csv';
+    link.click();
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facebook Ads — אבחון מדדים</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #07070f;
+    color: #fff;
+    min-height: 100vh;
+    direction: rtl;
+  }
+
+  header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-bottom: 1px solid #1e3a5f;
+    padding: 16px 40px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  header .logo {
+    width: 34px; height: 34px;
+    background: linear-gradient(135deg, #1877f2, #0d5bd1);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; flex-shrink: 0;
+  }
+  header h1 { font-size: 17px; font-weight: 700; color: #fff; }
+  header span { font-size: 12px; color: #64748b; margin-right: 4px; }
+
+  .container { max-width: 940px; margin: 0 auto; padding: 36px 24px; }
+
+  /* ── Step title ── */
+  .step-title { text-align: center; margin-bottom: 28px; }
+  .step-title h2 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+  .step-title p  { color: #64748b; font-size: 14px; }
+
+  /* ── Category tabs ── */
+  .cat-tabs {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 24px; justify-content: center;
+  }
+  .cat-tab {
+    padding: 7px 16px; border-radius: 20px;
+    border: 1px solid #1f2937; background: #111827;
+    color: #64748b; font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all .15s; white-space: nowrap;
+  }
+  .cat-tab:hover { border-color: #374151; color: #94a3b8; }
+  .cat-tab.active { background: #1e3a5f; border-color: #1877f2; color: #60a5fa; }
+  .cat-tab .pill {
+    display: inline-block; background: #1f2937;
+    color: #94a3b8; font-size: 10px; font-weight: 800;
+    padding: 1px 7px; border-radius: 10px; margin-right: 5px;
+  }
+  .cat-tab.active .pill { background: #0d3a6e; color: #60a5fa; }
+
+  /* ── Metric grid ── */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 14px;
+  }
+
+  .metric-card {
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 14px;
+    padding: 20px 16px;
+    cursor: pointer;
+    transition: all .2s;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .metric-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: var(--accent); opacity: 0; transition: opacity .2s;
+  }
+  .metric-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,.5); }
+  .metric-card:hover::before { opacity: .07; }
+  .metric-card.hidden { display: none; }
+
+  .metric-card .icon { font-size: 28px; margin-bottom: 10px; display: block; }
+  .metric-card .name { font-size: 18px; font-weight: 700; color: var(--accent); margin-bottom: 3px; }
+  .metric-card .desc { font-size: 11px; color: #64748b; line-height: 1.4; }
+
+  /* ── Questions ── */
+  .question-screen { animation: fadeIn .3s ease; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  .breadcrumb {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 28px; color: #64748b; font-size: 13px; flex-wrap: wrap;
+  }
+  .metric-badge {
+    padding: 4px 12px; border-radius: 20px; font-weight: 600; font-size: 13px;
+  }
+
+  .progress-bar {
+    height: 4px; background: #1f2937; border-radius: 99px;
+    margin-bottom: 36px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #1877f2, #6366f1);
+    border-radius: 99px; transition: width .4s ease;
+  }
+
+  .question-card {
+    background: #111827; border: 1px solid #1f2937;
+    border-radius: 18px; padding: 32px; margin-bottom: 16px;
+  }
+  .question-meta { font-size: 11px; color: #4b5563; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .check-metric {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #1f2937; border-radius: 8px;
+    padding: 5px 12px; margin-bottom: 14px;
+    font-size: 13px; color: #94a3b8;
+  }
+  .check-metric span { color: #f59e0b; font-weight: 600; }
+  .question-text { font-size: 19px; font-weight: 600; line-height: 1.5; margin-bottom: 24px; color: #f1f5f9; }
+  .answer-buttons { display: flex; gap: 10px; }
+  .btn {
+    flex: 1; padding: 14px; border-radius: 10px;
+    border: 2px solid transparent; font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: all .15s;
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+  }
+  .btn-yes { background: #1c2b1c; border-color: #16a34a; color: #4ade80; }
+  .btn-yes:hover { background: #16a34a; color: #fff; transform: scale(1.02); }
+  .btn-no  { background: #1c1e2b; border-color: #4f46e5; color: #818cf8; }
+  .btn-no:hover  { background: #4f46e5; color: #fff; transform: scale(1.02); }
+
+  /* ── Result ── */
+  .result-screen { animation: fadeIn .3s ease; }
+  .result-card { border-radius: 18px; overflow: hidden; margin-bottom: 16px; }
+  .result-header {
+    padding: 24px 28px 20px;
+    display: flex; align-items: flex-start; gap: 14px;
+  }
+  .result-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .result-card.diagnosis .result-header { background: #1c1410; border: 1px solid #7c2d12; }
+  .result-card.diagnosis .result-icon  { background: #7c2d12; }
+  .result-card.action .result-header   { background: #0f1c10; border: 1px solid #14532d; }
+  .result-card.action .result-icon     { background: #14532d; }
+  .result-label { font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .result-text  { font-size: 16px; font-weight: 600; color: #f1f5f9; line-height: 1.5; }
+  .result-type-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 11px; border-radius: 20px; font-size: 12px; font-weight: 600;
+    margin-top: 10px;
+  }
+  .badge-creative  { background: #3730a3; color: #a5b4fc; }
+  .badge-audience  { background: #713f12; color: #fde68a; }
+  .badge-landing   { background: #064e3b; color: #6ee7b7; }
+  .badge-product   { background: #4c1d95; color: #ddd6fe; }
+  .badge-technical { background: #1e3a5f; color: #93c5fd; }
+  .badge-funnel    { background: #5b2137; color: #fca5a5; }
+
+  .path-summary {
+    background: #111827; border: 1px solid #1f2937;
+    border-radius: 14px; padding: 18px 22px; margin-bottom: 16px;
+  }
+  .path-summary h4 { font-size: 11px; color: #4b5563; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .path-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 5px 0; border-bottom: 1px solid #1f2937; font-size: 13px;
+  }
+  .path-item:last-child { border-bottom: none; }
+  .path-item .q-text { color: #94a3b8; flex: 1; }
+  .path-item .a-badge { padding: 2px 9px; border-radius: 10px; font-weight: 600; font-size: 11px; }
+  .a-yes { background: #14532d; color: #4ade80; }
+  .a-no  { background: #1e1b4b; color: #818cf8; }
+
+  .btn-restart {
+    width: 100%; padding: 14px; border-radius: 10px;
+    background: #1f2937; border: 1px solid #374151;
+    color: #94a3b8; font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: all .15s;
+  }
+  .btn-restart:hover { background: #374151; color: #fff; }
+
+  .back-btn {
+    background: none; border: none; color: #64748b;
+    font-size: 13px; cursor: pointer; padding: 4px 0;
+    display: flex; align-items: center; gap: 6px; margin-bottom: 6px;
+  }
+  .back-btn:hover { color: #94a3b8; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">📊</div>
+  <div>
+    <h1>Facebook Ads — אבחון מדדים</h1>
+    <span>16 מדדים · בחר מה ירד וקבל אבחון שלב-שלב</span>
+  </div>
+</header>
+
+<div class="container">
+  <div id="app"></div>
+</div>
+
+<script>
+const CATS = [
+  { id: 'all',     label: 'הכל' },
+  { id: 'kpi',     label: 'KPIs ראשיים' },
+  { id: 'video',   label: 'וידאו' },
+  { id: 'funnel',  label: 'פאנל איקומרס' },
+  { id: 'leadgen', label: 'ליד ג\'ן' },
+  { id: 'fb',      label: 'פייסבוק Rankings' },
+];
+
+const TYPE_CFG = {
+  creative:  { label: 'קריאיטיב',     icon: '🎨', cls: 'badge-creative'  },
+  audience:  { label: 'קהל יעד',      icon: '👥', cls: 'badge-audience'  },
+  landing:   { label: 'לנדינג / אופר', icon: '🌐', cls: 'badge-landing'   },
+  product:   { label: 'מוצר / נתונים', icon: '📦', cls: 'badge-product'   },
+  technical: { label: 'טכני',          icon: '⚙️', cls: 'badge-technical' },
+  funnel:    { label: 'פאנל',          icon: '🛒', cls: 'badge-funnel'    },
+};
+
+const D = {
+  /* ─── KPI ─── */
+  ctr: {
+    label: 'CTR', icon: '🖱️', desc: 'שיעור קליקים ירד', color: '#1877f2', cat: 'kpi',
+    questions: [
+      { text: 'האם Frequency עלתה?', metric: 'Frequency',
+        yes: { diagnosis: 'שחיקת קריאיטיב — אותם אנשים רואים את המודעה יותר מדי פעמים.', action: 'העלה 2–3 קריאיטיבים חדשים עם זווית מסר שונה לחלוטין. פרסר את הקהל לקבוצות קטנות יותר.', type: 'creative' },
+        no: 1 },
+      { text: 'האם CPM עלה?', metric: 'CPM',
+        yes: { diagnosis: 'פייסבוק מציג לקהל פחות רלוונטי — המכרז מושך אנשים שפחות סביר שיקליקו.', action: 'הרחב קהל / החלף אינטרסים / נסה Broad עם אופטימיזציה ל-Conversions.', type: 'audience' },
+        no: 2 },
+      { text: 'האם Reach ירד?', metric: 'Reach',
+        yes: { diagnosis: 'הקהל מצטמצם — פייסבוק לא מוצא מספיק אנשים חדשים.', action: 'הגדל תקציב יומי ב-20% או הרחב את הגדרת הקהל.', type: 'audience' },
+        no:  { diagnosis: 'הקריאיטיב עצמו חלש — הקהל תקין אבל המסר לא גורם לקליק.', action: 'A/B לקריאיטיב: שנה hook, כותרת, CTA, פורמט (וידאו vs סטטי).', type: 'creative' } }
+    ]
+  },
+
+  cvr: {
+    label: 'CVR', icon: '🎯', desc: 'שיעור המרה ירד', color: '#10b981', cat: 'kpi',
+    questions: [
+      { text: 'האם הפער בין Link Clicks ל-Landing Page Views גדל?', metric: 'LPV vs Clicks',
+        yes: { diagnosis: 'בעיה טכנית — אנשים מקליקים אבל הדף לא נטען.', action: 'בדוק PageSpeed, שגיאות JS, בעיות מובייל. תקן לפני הכל.', type: 'technical' },
+        no: 1 },
+      { text: 'האם המסר במודעה תואם ללנדינג?', metric: 'Message Match',
+        yes: 2,
+        no:  { diagnosis: 'חוסר התאמה בין מודעה ללנדינג — הגולש מצפה למשהו אחר.', action: 'סנכרן: אם המודעה מבטיחה "50% הנחה" — זה צריך להיות ראשון בלנדינג.', type: 'landing' } },
+      { text: 'האם האופר/מחיר השתנה לאחרונה?', metric: 'Offer / Price',
+        yes: { diagnosis: 'שינוי האופר פגע בהמרה — הקהל פחות מגיב להצעה הנוכחית.', action: 'חזור לאופר הקודם זמנית. בצע A/B בין האופרים על תנועה חדשה.', type: 'product' },
+        no:  { diagnosis: 'הלנדינג לא משכנע — הכל תקין טכנית אבל ההצעה חלשה.', action: 'חזק social proof, הוסף ערבות/החזר, קצר את הדף, שנה CTA. A/B על אלמנט אחד בכל פעם.', type: 'landing' } }
+    ]
+  },
+
+  cpc: {
+    label: 'CPC', icon: '💸', desc: 'עלות לקליק עלתה', color: '#f59e0b', cat: 'kpi',
+    questions: [
+      { text: 'האם CTR ירד?', metric: 'CTR',
+        yes: { diagnosis: 'קריאיטיב חלש — אנשים רואים אבל לא מקליקים, ולכן כל קליק עולה יותר.', action: 'החלף את הקריאיטיב המוביל. בדוק איזה אד סט מגרר עלות גבוהה ועצור אותו.', type: 'creative' },
+        no: 1 },
+      { text: 'האם CPM עלה?', metric: 'CPM',
+        yes: { diagnosis: 'תחרות גבוהה במכרז — פייסבוק גובה יותר לכל חשיפה.', action: 'נסה קהל רחב יותר. בדוק עונתיות (חגים, ראש חודש). שנה שעות delivery.', type: 'audience' },
+        no:  { diagnosis: 'שינוי בהתפלגות פלייסמנט — פלייסמנט מסוים הפך יקר.', action: 'פרק לפי פלייסמנט ובדוק איזה הפך יקר. עצור פלייסמנטים גרועים.', type: 'audience' } }
+    ]
+  },
+
+  cpa: {
+    label: 'CPA', icon: '📈', desc: 'עלות לרכישה עלתה', color: '#ef4444', cat: 'kpi',
+    questions: [
+      { text: 'האם CPC עלה?', metric: 'CPC',
+        yes: { diagnosis: 'הבעיה לפני הלנדינג — כל קליק עולה יותר ומייקר את ה-CPA.', action: 'בדוק CTR ו-CPM. CTR ירד → קריאיטיב. CPM עלה → קהל.', type: 'creative' },
+        no: 1 },
+      { text: 'האם CVR ירד?', metric: 'CVR',
+        yes: { diagnosis: 'הבעיה בלנדינג — אנשים מגיעים אבל לא ממירים.', action: 'בדוק LPV vs Clicks, התאמת מסר, ואחר כך האופר.', type: 'landing' },
+        no:  { diagnosis: 'איכות הקהל ירדה — אנשים שמגיעים פחות מתאימים להצעה.', action: 'הוסף exclusions. צמצם לקהל Lookalike של רכישות בלבד.', type: 'audience' } }
+    ]
+  },
+
+  roas: {
+    label: 'ROAS', icon: '💰', desc: 'החזר פרסום ירד', color: '#8b5cf6', cat: 'kpi',
+    questions: [
+      { text: 'האם CPA עלה?', metric: 'CPA',
+        yes: { diagnosis: 'יותר כסף לכל רכישה — ה-ROAS יורד כי הוצאות עלו ביחס להכנסה.', action: 'בדוק CPC (קריאיטיב/קהל) ו-CVR (לנדינג/אופר). ראה אבחון CPA.', type: 'creative' },
+        no: 1 },
+      { text: 'האם AOV (ערך הזמנה ממוצע) ירד?', metric: 'AOV',
+        yes: { diagnosis: 'לקוחות קונים פחות — כל רכישה שווה פחות כסף.', action: 'הוסף upsell/cross-sell בלנדינג. צמצם לקהל LTV גבוה. בדוק אם מוצרים זולים מוכרים יותר.', type: 'product' },
+        no:  { diagnosis: 'בעיית Attribution — שינוי בחלון הדיווח או כפילות מדידה.', action: 'בדוק שחלון Attribution לא השתנה. השווה ל-Backend data. בדוק Pixel events.', type: 'technical' } }
+    ]
+  },
+
+  /* ─── VIDEO ─── */
+  hook: {
+    label: 'Hook Rate', icon: '⚡', desc: '% צפייה מעל 3 שניות ירד', color: '#06b6d4', cat: 'video',
+    questions: [
+      { text: 'האם Frequency עלתה?', metric: 'Frequency',
+        yes: { diagnosis: 'שחיקה — אותם אנשים ראו את הפתיחה כמה פעמים ולא מגיבים יותר.', action: 'צור קריאיטיב חדש עם 3 שניות פתיחה שונות לחלוטין. שנה רק את ה-hook.', type: 'creative' },
+        no: 1 },
+      { text: 'האם CPM עלה?', metric: 'CPM',
+        yes: { diagnosis: 'פייסבוק מציג לקהל פחות מתאים — הצופים הנוכחיים פחות רלוונטיים לתוכן.', action: 'שנה קהל יעד. נסה Broad עם אופטימיזציה ל-ThruPlay.', type: 'audience' },
+        no:  { diagnosis: 'ה-Hook עצמו חלש — הפתיחה לא מחטפת תשומת לב.', action: 'שנה רק את ה-3 שניות הראשונות: פתח בשאלה / מתח / דמות / טקסט מסקרן. אל תתחיל בלוגו.', type: 'creative' } }
+    ]
+  },
+
+  completion: {
+    label: 'Completion Rate', icon: '▶️', desc: '% צפייה עד הסוף ירד', color: '#f97316', cat: 'video',
+    questions: [
+      { text: 'האם Hook Rate גם ירד?', metric: 'Hook Rate',
+        yes: { diagnosis: 'הבעיה מהתחלה — אנשים לא עוברים את ה-3 שניות הראשונות.', action: 'טפל קודם ב-Hook Rate. ראה אבחון Hook Rate.', type: 'creative' },
+        no: 1 },
+      { text: 'האם הוידאו ארוך מ-60 שניות?', metric: 'Video Length',
+        yes: { diagnosis: 'הוידאו מאבד קשב באמצע — אנשים מתחילים אבל מפסיקים לפני הסוף.', action: 'קצר ל-30–45 שניות. הזז את ה-CTA לדקה הראשונה.', type: 'creative' },
+        no:  { diagnosis: 'התוכן באמצע חלש — הפתיחה טובה אבל הגוף לא שומר עניין.', action: 'הוסף pattern interrupt כל 10–15 שניות (חיתוך, טקסט, שינוי פרספקטיבה). הכנס CTA מוקדם יותר.', type: 'creative' } }
+    ]
+  },
+
+  /* ─── ECOMMERCE FUNNEL ─── */
+  lpv_rate: {
+    label: 'LPV Rate', icon: '🔗', desc: 'Landing Page View Rate ירד', color: '#22d3ee', cat: 'funnel',
+    questions: [
+      { text: 'האם מהירות הלנדינג ירדה (PageSpeed)?', metric: 'Page Speed',
+        yes: { diagnosis: 'הדף נטען לאט — גולשים עוזבים לפני שנספרים כ-LPV.', action: 'תקן PageSpeed: דחוס תמונות, הסר scripts כבדים, השתמש ב-CDN.', type: 'technical' },
+        no: 1 },
+      { text: 'האם שינית פלייסמנט לאחרונה?', metric: 'Placement',
+        yes: { diagnosis: 'פלייסמנטים כמו Reels ו-Stories יש להם Bounce Rate גבוה יותר מ-Feed.', action: 'בדוק LPV Rate לפי פלייסמנט. עצור פלייסמנטים עם LPV Rate נמוך מ-60%.', type: 'audience' },
+        no: 2 },
+      { text: 'האם ה-URL תקין (אין redirect שגוי)?', metric: 'URL / Redirect',
+        yes: { diagnosis: 'URL תקין אבל הלנדינג מאכזב מיידית — message mismatch חמור.', action: 'הבטח שהפתיחה של הלנדינג תואמת בדיוק למה שהבטחת במודעה.', type: 'landing' },
+        no:  { diagnosis: 'URL שבור — redirect loop או שגיאת 404.', action: 'תקן את ה-URL מיידית. בדוק שה-UTM parameters לא שוברים את הנתיב.', type: 'technical' } }
+    ]
+  },
+
+  atc_rate: {
+    label: 'ATC Rate', icon: '🛒', desc: 'Add to Cart Rate ירד', color: '#fb923c', cat: 'funnel',
+    questions: [
+      { text: 'האם מחיר המוצר עלה לאחרונה?', metric: 'Product Price',
+        yes: { diagnosis: 'Price sensitivity — גולשים רואים את המחיר ומהססים להוסיף לסל.', action: 'שקול Bundle, הנחה ראשונה, תשלומים (Buy Now Pay Later), או הדגש Value proposition.', type: 'product' },
+        no: 1 },
+      { text: 'האם תמונות/תיאור המוצר השתנו?', metric: 'Product Content',
+        yes: { diagnosis: 'Product presentation ירדה — הגרסה החדשה פחות משכנעת.', action: 'חזור לתמונות/תיאור הקודמים. A/B בין הגרסאות.', type: 'product' },
+        no: 2 },
+      { text: 'האם Reviews / Social Proof בדף המוצר ירד?', metric: 'Social Proof',
+        yes: { diagnosis: 'אמינות ירדה — גולשים לא בטוחים מספיק להוסיף לסל.', action: 'הוסף reviews, תגי trust (SSL, ביטחון תשלום), מספרי מכירות, badges.', type: 'landing' },
+        no:  { diagnosis: 'UX/Layout בעיה — כפתור ה-ATC לא בולט או לא נגיש.', action: 'A/B למיקום ה-ATC button. נסה sticky button. בדוק mobile UX ספציפית.', type: 'landing' } }
+    ]
+  },
+
+  checkout_rate: {
+    label: 'Checkout Rate', icon: '💳', desc: 'Initiate Checkout Rate ירד', color: '#a78bfa', cat: 'funnel',
+    questions: [
+      { text: 'האם עלות המשלוח גבוהה או נחשפת רק בעגלה?', metric: 'Shipping Cost',
+        yes: { diagnosis: '"Shipping shock" — גולשים רואים עלות משלוח בעגלה ועוזבים.', action: 'הוסף Free Shipping מסף. או הצג עלות משלוח בדף המוצר מוקדם יותר.', type: 'funnel' },
+        no: 1 },
+      { text: 'האם נדרשת הרשמה לפני Checkout?', metric: 'Registration Wall',
+        yes: { diagnosis: 'Friction — גולשים לא רוצים להירשם לפני קנייה.', action: 'הפעל Guest Checkout. הצע הרשמה רק לאחר הרכישה.', type: 'funnel' },
+        no: 2 },
+      { text: 'האם יש שגיאות טכניות בדף העגלה?', metric: 'Cart Page Errors',
+        yes: { diagnosis: 'Technical issue בדף העגלה — גולשים נתקעים ועוזבים.', action: 'בדוק JS errors, mobile compatibility, תאימות דפדפנים שונים.', type: 'technical' },
+        no:  { diagnosis: 'עגלה מסובכת מדי — יותר מדי שלבים או מידע נדרש.', action: 'פשט את ה-Cart page. הפחת שדות. הצג progress bar. הוסף trust badges ליד ה-CTA.', type: 'funnel' } }
+    ]
+  },
+
+  /* ─── LEAD GEN ─── */
+  cpl: {
+    label: 'CPL', icon: '📋', desc: 'עלות לליד עלתה', color: '#34d399', cat: 'leadgen',
+    questions: [
+      { text: 'האם CPC עלה?', metric: 'CPC',
+        yes: { diagnosis: 'בעיית קריאיטיב או קהל לפני הטופס — כל קליק עולה יותר.', action: 'בדוק CTR ו-CPM. CTR ירד → קריאיטיב. CPM עלה → קהל. ראה אבחון CPC.', type: 'creative' },
+        no: 1 },
+      { text: 'האם Form Completion Rate ירד?', metric: 'Form Completion',
+        yes: { diagnosis: 'הטופס ארוך/מסובך — אנשים פותחים אבל לא מסיימים.', action: 'קצר ל-2–3 שאלות הכרחיות. הסר שדות לא חיוניים. נסה Native Lead Form.', type: 'funnel' },
+        no: 2 },
+      { text: 'האם Sales מדווח על ירידה באיכות הלידים?', metric: 'Lead Quality',
+        yes: { diagnosis: 'הקהל לא מתאים — אנשים ממלאים אבל לא קונים.', action: 'הוסף שאלת qualifying בטופס. שנה targeting לקהל עם intent גבוה יותר.', type: 'audience' },
+        no:  { diagnosis: 'גורם חיצוני — בעיה בתהליך המכירה או בזמן תגובה.', action: 'בדוק עם Sales את זמן התגובה ללידים. ייתכן שהבעיה אחרי הטופס ולא לפניו.', type: 'product' } }
+    ]
+  },
+
+  /* ─── FACEBOOK SPECIFIC ─── */
+  cpm: {
+    label: 'CPM', icon: '💲', desc: 'עלות לאלף חשיפות עלתה', color: '#fbbf24', cat: 'fb',
+    questions: [
+      { text: 'האם זו תקופת שיא? (חגים, ימי מכירות, ראש חודש)', metric: 'Seasonality',
+        yes: { diagnosis: 'עונתיות — CPM גבוה זה נורמלי בתקופות שיא. כולם מתחרים על אותו קהל.', action: 'הגדל תקציב אם ה-ROAS עדיין מצדיק זאת, או עצור עד לאחרי התקופה ושמור תקציב.', type: 'audience' },
+        no: 1 },
+      { text: 'האם הקהל קטן (מתחת ל-500K)?', metric: 'Audience Size',
+        yes: { diagnosis: 'צוואר בקבוק — הקהל קטן מדי, פייסבוק נלחם על אותם אנשים שוב ושוב.', action: 'הרחב קהל ל-1M+. הוסף Lookalike Audiences. נסה Broad.', type: 'audience' },
+        no: 2 },
+      { text: 'האם CTR נמוך (מתחת ל-1%)?', metric: 'CTR',
+        yes: { diagnosis: 'פייסבוק מעניש קריאיטיב חלש ב-CPM גבוה — Quality Score נמוך.', action: 'שפר CTR: שנה hook, נסה פורמט אחר, שפר relevance לקהל. CPM יירד בעקבות CTR.', type: 'creative' },
+        no:  { diagnosis: 'עלייה כללית בשוק — תחרות גברה בתחום שלך.', action: 'נסה פלייסמנטים זולים יותר (Reels, Stories). בדוק Audience Network. שקול שינוי שעות delivery.', type: 'audience' } }
+    ]
+  },
+
+  frequency: {
+    label: 'Frequency', icon: '🔁', desc: 'Frequency גבוהה מדי', color: '#c084fc', cat: 'fb',
+    questions: [
+      { text: 'האם CTR ירד בצורה משמעותית?', metric: 'CTR',
+        yes: { diagnosis: 'שחיקה מתחילה לפגוע — אותם אנשים רואים ולא מגיבים יותר.', action: 'קריאיטיב חדש מיד. שנה זווית מסר לחלוטין. פרסר לקבוצות קהל קטנות יותר.', type: 'creative' },
+        no: 1 },
+      { text: 'האם הקהל קטן (מתחת ל-300K)?', metric: 'Audience Size',
+        yes: { diagnosis: 'Frequency גבוהה בגלל קהל קטן — לא ניתן להגיע לאנשים חדשים.', action: 'הרחב קהל. הוסף Lookalike 2–3%. נסה Broad + Conversion objective.', type: 'audience' },
+        no: 2 },
+      { text: 'האם CPA עלה יחד עם ה-Frequency?', metric: 'CPA',
+        yes: { diagnosis: 'Frequency גבוהה מייקרת את ה-CPA — שחיקה מוכחת בנתונים.', action: 'הגבל Frequency Cap ל-5–7 פר שבוע. החלף קריאיטיבים. הפסק אד סטים עם Freq>10.', type: 'creative' },
+        no:  { diagnosis: 'Frequency גבוהה אבל ביצועים תקינים — אין בעיה כרגע.', action: 'המשך לנטר. בדוק שוב בעוד שבוע. Frequency גבוהה לא תמיד בעיה אם ה-CPA תקין.', type: 'creative' } }
+    ]
+  },
+
+  quality_ranking: {
+    label: 'Quality Ranking', icon: '⭐', desc: 'דירוג איכות ירד — Below Average', color: '#f43f5e', cat: 'fb',
+    questions: [
+      { text: 'האם CTR ירד בקמפיין?', metric: 'CTR',
+        yes: { diagnosis: 'Expected CTR נמוך מהממוצע — פייסבוק מדרג נמוך כי הקריאיטיב לא מייצר קליקים.', action: 'שנה hook, כותרת, ו-CTA. הקריאיטיב צריך להיות רלוונטי יותר לקהל הספציפי הזה.', type: 'creative' },
+        no: 1 },
+      { text: 'האם CVR ירד?', metric: 'CVR',
+        yes: { diagnosis: 'חוויית פוסט-קליק חלשה — פייסבוק רואה שאנשים לא ממירים ומוריד את הדירוג.', action: 'שפר לנדינג: מהירות, message match, ו-CTA. CVR גבוה = Quality Ranking גבוה.', type: 'landing' },
+        no: 2 },
+      { text: 'האם Frequency עלתה?', metric: 'Frequency',
+        yes: { diagnosis: 'שחיקה — הקריאיטיב כבר לא רלוונטי לאותו קהל, פייסבוק מרגיש את זה.', action: 'קריאיטיב חדש לחלוטין. שנה גם קהל אם אפשר — רענון כפול.', type: 'creative' },
+        no:  { diagnosis: 'Ad Relevance נמוך — הקריאיטיב לא מתאים לקהל הספציפי הזה.', action: 'שנה קהל יעד. נסה לפצל לקהלים יותר ממוקדים עם קריאיטיב מותאם לכל אחד.', type: 'audience' } }
+    ]
+  },
+
+  engagement_ranking: {
+    label: 'Engagement Ranking', icon: '👍', desc: 'דירוג מעורבות ירד — Below Average', color: '#0ea5e9', cat: 'fb',
+    questions: [
+      { text: 'האם Frequency עלתה?', metric: 'Frequency',
+        yes: { diagnosis: 'שחיקה — אותם אנשים רואים את המודעה ולא מגיבים יותר.', action: 'קריאיטיב חדש עם emotional hook חזק יותר. שקול UGC/תוכן אנושי.', type: 'creative' },
+        no: 1 },
+      { text: 'האם Reactions / Comments / Shares ירדו?', metric: 'Organic Engagement',
+        yes: { diagnosis: 'הקריאיטיב לא מעורר תגובה — פחות שיתותי, פחות emotional.', action: 'עבור לתוכן יותר storytelling. שאל שאלה פתוחה. הצג תוצאות/before-after. UGC.', type: 'creative' },
+        no:  { diagnosis: 'הקהל לא מתאים לסוג התוכן — קריאיטיב טוב אבל לקהל הלא נכון.', action: 'בדוק relevance של הקהל לנושא. נסה קהל Lookalike מבוסס engagement קודם.', type: 'audience' } }
+    ]
+  },
+
+  conversion_ranking: {
+    label: 'Conversion Ranking', icon: '🏆', desc: 'דירוג המרה ירד — Below Average', color: '#84cc16', cat: 'fb',
+    questions: [
+      { text: 'האם CVR בפועל ירד?', metric: 'CVR Actual',
+        yes: { diagnosis: 'הדירוג משקף מציאות — ה-CVR שלך נמוך מהממוצע בתחום.', action: 'ראה אבחון CVR — לנדינג, message match, ואופר.', type: 'landing' },
+        no: 1 },
+      { text: 'האם שינית קהל לאחרונה?', metric: 'Audience Change',
+        yes: { diagnosis: 'הקהל החדש נוטה פחות לרכישה — הציפייה של פייסבוק לא מתממשת.', action: 'חזור לקהל הקודם. אם הקהל החדש נדרש — הוסף qualifying שכבות כמו Retargeting.', type: 'audience' },
+        no:  { diagnosis: 'הסטנדרט בתחום עלה — מתחרים שיפרו לנדינג ו-Offer.', action: 'שדרג אופר: הוסף בונוס, הנחה לזמן מוגבל, חיזוק social proof. A/B על ה-CTA הראשי.', type: 'product' } }
+    ]
+  }
+};
+
+let currentCat = 'all';
+let state = { screen: 'select', metric: null, step: 0, path: [] };
+
+function countByCat(catId) {
+  if (catId === 'all') return Object.keys(D).length;
+  return Object.values(D).filter(d => d.cat === catId).length;
+}
+
+function render() {
+  const app = document.getElementById('app');
+  if (state.screen === 'select') app.innerHTML = renderSelect();
+  else if (state.screen === 'question') app.innerHTML = renderQuestion();
+  else if (state.screen === 'result') app.innerHTML = renderResult();
+}
+
+function renderSelect() {
+  const tabs = CATS.map(c => `
+    <div class="cat-tab ${c.id === currentCat ? 'active' : ''}" onclick="setCat('${c.id}')">
+      <span class="pill">${countByCat(c.id)}</span>${c.label}
+    </div>
+  `).join('');
+
+  const cards = Object.entries(D).map(([key, d]) => {
+    const hidden = currentCat !== 'all' && d.cat !== currentCat ? 'hidden' : '';
+    return `
+      <div class="metric-card ${hidden}" style="--accent:${d.color}" onclick="selectMetric('${key}')">
+        <span class="icon">${d.icon}</span>
+        <div class="name">${d.label}</div>
+        <div class="desc">${d.desc}</div>
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div class="step-title">
+      <h2>איזה מדד ירד?</h2>
+      <p>בחר את המדד הבעייתי ותקבל אבחון שלב-שלב עם פעולה מיידית</p>
+    </div>
+    <div class="cat-tabs">${tabs}</div>
+    <div class="metrics-grid">${cards}</div>
+  `;
+}
+
+function renderQuestion() {
+  const d = D[state.metric];
+  const q = d.questions[state.step];
+  const total = d.questions.length;
+  const progress = (state.step / total) * 100;
+
+  return `
+    <div class="question-screen">
+      <button class="back-btn" onclick="goBack()">← חזרה</button>
+      <div class="breadcrumb">
+        <span>אבחון</span><span>›</span>
+        <span class="metric-badge" style="background:#1e3a5f;color:${d.color}">${d.label}</span>
+        <span>›</span>
+        <span>שאלה ${state.step + 1} מתוך ${total}</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width:${progress}%"></div>
+      </div>
+      <div class="question-card">
+        <div class="question-meta">שלב ${state.step + 1}</div>
+        <div class="check-metric">בדוק: <span>${q.metric}</span></div>
+        <div class="question-text">${q.text}</div>
+        <div class="answer-buttons">
+          <button class="btn btn-yes" onclick="answer(true)">✓ כן, עלה / ירד / קיים</button>
+          <button class="btn btn-no"  onclick="answer(false)">✗ לא, תקין</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderResult() {
+  const d = D[state.metric];
+  const tc = TYPE_CFG[state.result.type];
+  const pathHTML = state.path.map(p => `
+    <div class="path-item">
+      <span class="q-text">${p.q}</span>
+      <span class="a-badge ${p.a ? 'a-yes' : 'a-no'}">${p.a ? 'כן' : 'לא'}</span>
+    </div>
+  `).join('');
+
+  return `
+    <div class="result-screen">
+      <button class="back-btn" onclick="goBack()">← חזרה לשאלות</button>
+      <div class="breadcrumb">
+        <span class="metric-badge" style="background:#1e3a5f;color:${d.color}">${d.label}</span>
+        <span>›</span><span>תוצאת אבחון</span>
+      </div>
+
+      <div class="result-card diagnosis">
+        <div class="result-header">
+          <div class="result-icon">🔍</div>
+          <div>
+            <div class="result-label">האבחון</div>
+            <div class="result-text">${state.result.diagnosis}</div>
+            <span class="result-type-badge ${tc.cls}">${tc.icon} ${tc.label}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-card action">
+        <div class="result-header">
+          <div class="result-icon">⚡</div>
+          <div>
+            <div class="result-label">פעולה מיידית</div>
+            <div class="result-text">${state.result.action}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="path-summary">
+        <h4>מסלול האבחון</h4>
+        ${pathHTML}
+      </div>
+
+      <button class="btn-restart" onclick="restart()">← אבחן מדד אחר</button>
+    </div>
+  `;
+}
+
+function setCat(id) {
+  currentCat = id;
+  render();
+}
+
+function selectMetric(key) {
+  state = { screen: 'question', metric: key, step: 0, path: [] };
+  render();
+}
+
+function answer(yes) {
+  const d = D[state.metric];
+  const q = d.questions[state.step];
+  state.path.push({ q: q.text, a: yes });
+  const next = yes ? q.yes : q.no;
+  if (typeof next === 'number') { state.step = next; render(); }
+  else if (next && next.diagnosis) { state.screen = 'result'; state.result = next; render(); }
+}
+
+function goBack() {
+  if (state.screen === 'result') {
+    state.screen = 'question'; state.step = state.path.length - 1; state.path.pop();
+  } else if (state.screen === 'question' && state.step > 0) {
+    state.step--; state.path.pop();
+  } else { restart(); }
+  render();
+}
+
+function restart() {
+  state = { screen: 'select', metric: null, step: 0, path: [] };
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

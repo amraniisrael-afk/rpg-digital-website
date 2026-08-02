@@ -1,0 +1,1731 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ארכיטקטורת פיד מוצרים — מדריך מלא</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Heebo', Arial, sans-serif;
+      background: #f5f7fa;
+      color: #1a1a2e;
+      direction: rtl;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .page {
+      max-width: 860px;
+      margin: 0 auto;
+      background: white;
+      padding: 50px 60px 80px;
+    }
+
+    /* ── Doc Header ── */
+    .doc-header {
+      background: linear-gradient(135deg, #F29900 0%, #e07b00 50%, #c46800 100%);
+      color: #fff;
+      padding: 42px 50px;
+      border-radius: 14px;
+      margin-bottom: 44px;
+      position: relative;
+      overflow: hidden;
+    }
+    .doc-header::after {
+      content: '';
+      position: absolute;
+      top: -40px; left: -40px;
+      width: 220px; height: 220px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 50%;
+    }
+    .doc-header::before {
+      content: '';
+      position: absolute;
+      bottom: -60px; right: 50px;
+      width: 180px; height: 180px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 50%;
+    }
+    .doc-header h1 {
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+      position: relative;
+    }
+    .doc-header .subtitle {
+      font-size: 15px;
+      opacity: 0.85;
+      font-weight: 400;
+      position: relative;
+    }
+    .header-badges {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+      position: relative;
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 5px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* ── TOC ── */
+    .toc {
+      background: #fffbf0;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      padding: 22px 28px;
+      margin-bottom: 40px;
+    }
+    .toc h3 {
+      font-size: 13px;
+      font-weight: 800;
+      color: #92400e;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 20px;
+    }
+    .toc a {
+      font-size: 13px;
+      color: #b45309;
+      text-decoration: none;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .toc a:hover { text-decoration: underline; }
+    .toc a::before {
+      content: '◂';
+      font-size: 10px;
+      opacity: 0.5;
+    }
+
+    /* ── Section Block ── */
+    .section {
+      margin-bottom: 40px;
+      border: 1px solid #e8ecf0;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 26px;
+      color: #fff;
+      font-weight: 800;
+      font-size: 16px;
+    }
+    .section-header.orange { background: linear-gradient(135deg, #F29900, #e07b00); }
+    .section-header.dark   { background: linear-gradient(135deg, #1a1a2e, #2d2d4e); }
+    .section-header.blue   { background: linear-gradient(135deg, #1d4ed8, #2563eb); }
+    .section-header.green  { background: linear-gradient(135deg, #059669, #10b981); }
+    .section-header.purple { background: linear-gradient(135deg, #7c3aed, #8b5cf6); }
+    .section-header.red    { background: linear-gradient(135deg, #dc2626, #ef4444); }
+    .section-header.teal   { background: linear-gradient(135deg, #0891b2, #06b6d4); }
+    .section-header.gold   { background: linear-gradient(135deg, #f7971e, #ffd200); color: #1a1a2e; }
+
+    .section-num {
+      width: 34px; height: 34px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .section-header.gold .section-num { background: rgba(0,0,0,0.15); }
+
+    .section-body {
+      padding: 26px 30px;
+      background: white;
+    }
+
+    /* ── Intro Box ── */
+    .intro-box {
+      background: linear-gradient(135deg, #fffbf0, #fef3c7);
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      padding: 22px 26px;
+      margin-bottom: 24px;
+    }
+    .intro-box p { color: #374151; font-size: 14px; line-height: 1.8; }
+    .intro-box strong { color: #92400e; }
+
+    /* ── Explain Box (חדש) ── */
+    .explain-box {
+      background: #fafbff;
+      border: 1px solid #c7d2fe;
+      border-right: 4px solid #6366f1;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 14px 0;
+      font-size: 13.5px;
+      color: #312e81;
+      line-height: 1.8;
+    }
+    .explain-box strong { color: #4338ca; }
+    .explain-box .explain-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #6366f1;
+      margin-bottom: 6px;
+    }
+
+    /* ── Flow Diagram ── */
+    .flow {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin: 18px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: #334155;
+      line-height: 2;
+      direction: ltr;
+      text-align: left;
+      overflow-x: auto;
+    }
+
+    /* ── Code Block ── */
+    .code-block {
+      background: #0f172a;
+      border-radius: 10px;
+      padding: 22px 24px;
+      margin: 16px 0;
+      overflow-x: auto;
+      direction: ltr;
+      text-align: left;
+    }
+    .code-block .lang-tag {
+      font-size: 10px;
+      color: #64748b;
+      font-family: 'Courier New', monospace;
+      margin-bottom: 10px;
+      display: block;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .code-block pre {
+      font-family: 'Courier New', monospace;
+      font-size: 12.5px;
+      line-height: 1.75;
+      color: #e2e8f0;
+      white-space: pre;
+    }
+    .code-block .kw  { color: #93c5fd; }
+    .code-block .str { color: #86efac; }
+    .code-block .cmt { color: #64748b; font-style: italic; }
+    .code-block .tag { color: #fda4af; }
+    .code-block .attr{ color: #fcd34d; }
+    .code-block .num { color: #f0abfc; }
+
+    /* ── Table ── */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 13px;
+    }
+    .data-table th {
+      background: #f8fafc;
+      padding: 11px 14px;
+      text-align: right;
+      font-weight: 700;
+      color: #475569;
+      border-bottom: 2px solid #e2e8f0;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .data-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #f1f5f9;
+      color: #374151;
+      vertical-align: top;
+      line-height: 1.6;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover td { background: #fafbfc; }
+    .data-table code {
+      background: #f1f5f9;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: #0f172a;
+    }
+
+    /* ── Steps ── */
+    .steps { list-style: none; }
+    .steps li {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 18px;
+      align-items: flex-start;
+    }
+    .step-num {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: #fef3c7;
+      color: #b45309;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .step-num.blue   { background: #dbeafe; color: #1d4ed8; }
+    .step-num.green  { background: #d1fae5; color: #059669; }
+    .step-num.purple { background: #ede9fe; color: #7c3aed; }
+    .step-num.red    { background: #fee2e2; color: #dc2626; }
+
+    .step-content strong {
+      display: block;
+      font-weight: 700;
+      font-size: 14px;
+      color: #1a1a2e;
+      margin-bottom: 4px;
+    }
+    .step-content p, .step-content span {
+      color: #555;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    /* ── Callout Boxes ── */
+    .callout {
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 16px 0;
+      font-size: 13.5px;
+      line-height: 1.75;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .callout .icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+    .callout.info    { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
+    .callout.warning { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+    .callout.success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #065f46; }
+    .callout.danger  { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+
+    /* ── Label Grid ── */
+    .label-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .label-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px 18px;
+      background: #fafbfc;
+    }
+    .label-card .label-name {
+      font-size: 11px;
+      font-weight: 800;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      font-family: 'Courier New', monospace;
+    }
+    .label-card .label-vals {
+      font-size: 12px;
+      color: #374151;
+      line-height: 1.8;
+    }
+    .label-card .label-desc {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 6px;
+    }
+    .pill {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      margin: 2px 3px 2px 0;
+    }
+    .pill.green  { background: #d1fae5; color: #065f46; }
+    .pill.yellow { background: #fef9c3; color: #854d0e; }
+    .pill.red    { background: #fee2e2; color: #991b1b; }
+    .pill.blue   { background: #dbeafe; color: #1e40af; }
+    .pill.purple { background: #ede9fe; color: #5b21b6; }
+    .pill.gray   { background: #f1f5f9; color: #475569; }
+
+    /* ── Architecture Node Row ── */
+    .arch-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin: 16px 0;
+    }
+    .arch-box h4 {
+      font-size: 13px;
+      font-weight: 800;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+    .arch-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .arch-node-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .arch-node {
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 9px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #1a1a2e;
+      text-align: center;
+    }
+    .arch-node.orange { border-color: #F29900; color: #c46800; }
+    .arch-node.blue   { border-color: #3b82f6; color: #1d4ed8; }
+    .arch-node.green  { border-color: #10b981; color: #059669; }
+    .arch-node-desc {
+      font-size: 10.5px;
+      color: #94a3b8;
+      text-align: center;
+      max-width: 100px;
+      line-height: 1.4;
+    }
+    .arch-arrow {
+      color: #94a3b8;
+      font-size: 18px;
+      font-weight: 700;
+      padding-top: 8px;
+    }
+
+    /* ── Layer Breakdown ── */
+    .layer-list { list-style: none; margin: 16px 0; }
+    .layer-list li {
+      display: flex;
+      gap: 14px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      background: #fafbfc;
+      border: 1px solid #e8ecf0;
+      margin-bottom: 8px;
+      align-items: flex-start;
+    }
+    .layer-num {
+      width: 26px; height: 26px;
+      background: #e0e7ff;
+      color: #4338ca;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .layer-content strong {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #1a1a2e;
+      display: block;
+      margin-bottom: 3px;
+    }
+    .layer-content span {
+      font-size: 12.5px;
+      color: #555;
+      line-height: 1.65;
+    }
+
+    /* ── KPI Grid ── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .kpi-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px 14px;
+      text-align: center;
+      background: white;
+    }
+    .kpi-card .kpi-val {
+      font-size: 22px;
+      font-weight: 900;
+      color: #F29900;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .kpi-card .kpi-label {
+      font-size: 11px;
+      color: #64748b;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    /* ── Checklist ── */
+    .checklist { list-style: none; }
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 9px 0;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 13.5px;
+      color: #374151;
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li::before {
+      content: '✓';
+      width: 22px; height: 22px;
+      background: #d1fae5;
+      color: #059669;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── Campaign Blocks ── */
+    .campaign-block {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+    .campaign-block .camp-header {
+      padding: 12px 18px;
+      font-weight: 800;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .campaign-block .camp-body {
+      padding: 14px 18px;
+      background: white;
+      font-size: 13px;
+      color: #374151;
+      line-height: 1.8;
+    }
+    .camp-a { border-color: #10b981; }
+    .camp-a .camp-header { background: #ecfdf5; color: #065f46; }
+    .camp-b { border-color: #f59e0b; }
+    .camp-b .camp-header { background: #fffbeb; color: #92400e; }
+    .camp-c { border-color: #ef4444; }
+    .camp-c .camp-header { background: #fef2f2; color: #991b1b; }
+
+    /* ── H3 in body ── */
+    .section-body h3 {
+      font-size: 15px;
+      font-weight: 800;
+      color: #1a1a2e;
+      margin: 26px 0 12px;
+      padding-bottom: 7px;
+      border-bottom: 2px solid #f1f5f9;
+    }
+    .section-body h3:first-child { margin-top: 0; }
+
+    .section-body p {
+      color: #374151;
+      font-size: 14px;
+      line-height: 1.85;
+      margin-bottom: 12px;
+    }
+
+    /* ── Format comparison row ── */
+    .format-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0 22px;
+    }
+    .format-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px 18px;
+      background: #fafbfc;
+    }
+    .format-card .fc-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: #1a1a2e;
+      margin-bottom: 6px;
+    }
+    .format-card .fc-platform {
+      font-size: 11px;
+      color: #F29900;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .format-card p {
+      font-size: 12.5px !important;
+      color: #555 !important;
+      margin-bottom: 0 !important;
+    }
+
+    /* ── Footer ── */
+    .doc-footer {
+      margin-top: 50px;
+      padding: 24px 0 0;
+      border-top: 2px solid #f1f5f9;
+      text-align: center;
+      color: #94a3b8;
+      font-size: 12px;
+    }
+    .doc-footer strong { color: #F29900; }
+
+    @media (max-width: 640px) {
+      .page { padding: 24px 20px 50px; }
+      .toc-grid, .label-grid, .format-row { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ═══ HEADER ═══ -->
+  <div class="doc-header">
+    <h1>ארכיטקטורת פיד מוצרים</h1>
+    <div class="subtitle">מהבסיס עד ארכיטקטורה מתקדמת — עם הסברים, דוגמאות וקוד לכל שלב</div>
+    <div class="header-badges">
+      <span class="badge">Google Shopping</span>
+      <span class="badge">Meta Catalog</span>
+      <span class="badge">TikTok Feed</span>
+      <span class="badge">Merchant Center</span>
+    </div>
+  </div>
+
+  <!-- ═══ TOC ═══ -->
+  <div class="toc">
+    <h3>תוכן עניינים</h3>
+    <div class="toc-grid">
+      <a href="#sec1">מהו פיד מוצרים?</a>
+      <a href="#sec2">שדות חובה ורצויים</a>
+      <a href="#sec3">פורמטים — XML / JSON / CSV</a>
+      <a href="#sec4">ארכיטקטורה בסיסית ומתקדמת</a>
+      <a href="#sec5">טקסונומיה וקטגוריות גוגל</a>
+      <a href="#sec6">Custom Labels — הכלי הסודי</a>
+      <a href="#sec7">אופטימיזציית כותרות ותמונות</a>
+      <a href="#sec8">ניהול Variants</a>
+      <a href="#sec9">תדירות עדכון ו-Delta Feed</a>
+      <a href="#sec10">Content API — זמן אמת</a>
+      <a href="#sec11">Supplemental Feeds</a>
+      <a href="#sec12">דיאגנוסטיקה ושגיאות נפוצות</a>
+      <a href="#sec13">ארכיטקטורה לפי גודל חנות</a>
+      <a href="#sec14">מדדי הצלחה ומוניטורינג</a>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       1 — מה זה פיד
+  ════════════════════════════════════════════════ -->
+  <div class="section" id="sec1">
+    <div class="section-header orange">
+      <div class="section-num">1</div>
+      מהו פיד מוצרים?
+    </div>
+    <div class="section-body">
+      <div class="intro-box">
+        <p>פיד מוצרים הוא <strong>קובץ מובנה</strong> שמכיל את כל המידע על המוצרים שלך — מחיר, תמונה, כותרת, זמינות — ומועבר לפלטפורמות פרסום כדי שיוכלו להציג מודעות דינמיות. הפלטפורמה <strong>לא נכנסת לאתר שלך בזמן אמת</strong> — היא עובדת מהפיד בלבד. אם הפיד שגוי, המודעות שגויות.</p>
+      </div>
+
+      <p>ברגע שמשתמש מחפש "נעלי ריצה שחורות" בגוגל, גוגל לא "סורקת" את האתר שלך כדי למצוא מוצרים — היא מחפשת בפיד שהעלית מראש ל-Merchant Center. לכן <strong>הפיד הוא הבסיס לכל מה שקורה בקמפיינים של Shopping ו-DPA</strong>.</p>
+
+      <div class="flow">
+האתר שלך ──► פיד (XML/CSV/JSON) ──► Google Merchant Center ──► Google Shopping
+                                 ──► Meta Catalog             ──► DPA Ads
+                                 ──► TikTok Catalog           ──► TikTok Shopping
+                                 ──► Criteo / Pinterest       ──► Retargeting
+      </div>
+
+      <div class="callout warning">
+        <span class="icon">⚡</span>
+        <div><strong>חשוב להבין:</strong> שיפור בפיד (כותרות, תמונות, Custom Labels) משפיע ישירות על CTR, ROAS ועלות לקליק — לפעמים יותר מכל שינוי בהגדרות הקמפיין עצמו.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       2 — שדות
+  ════════════════════════════════════════════════ -->
+  <div class="section" id="sec2">
+    <div class="section-header dark">
+      <div class="section-num">2</div>
+      שדות חובה ושדות רצויים
+    </div>
+    <div class="section-body">
+      <p>כל מוצר בפיד הוא שורה נתונים עם שדות שמגדירים מה הוא, כמה הוא עולה ואיפה אפשר לקנות אותו. גוגל מחלקת אותם ל-<strong>חובה</strong> (ללא זה הפיד נדחה) ו-<strong>רצויים</strong> (שיפור ביצועים).</p>
+
+      <h3>שדות חובה — בלעדיהם הפיד נדחה</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>שדה</th>
+            <th>מה זה ולמה זה נדרש</th>
+            <th>דוגמה</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>id</code></td>
+            <td>מזהה ייחודי. גוגל ו-Meta עוקבות אחרי כל מוצר לפי ID זה — אם תשנה אותו, המוצר "נולד מחדש" ומאבד את ההיסטוריה שלו</td>
+            <td><code>SKU-1234</code></td>
+          </tr>
+          <tr>
+            <td><code>title</code></td>
+            <td>שם המוצר כפי שיופיע במודעה. אחד השדות הכי קריטיים ל-CTR — גוגל ממתחת מילות מפתח בתוצאות Shopping</td>
+            <td><code>נעלי ריצה Nike Air Max 270 שחור 42</code></td>
+          </tr>
+          <tr>
+            <td><code>description</code></td>
+            <td>תיאור מלא. לא תמיד מוצג למשתמש, אבל גוגל קוראת אותו להבנת הרלוונטיות של המוצר</td>
+            <td><code>נעליים עם כרית אוויר...</code></td>
+          </tr>
+          <tr>
+            <td><code>link</code></td>
+            <td>URL לדף המוצר — גוגל מבקרת בדף לאמת שהמחיר והזמינות תואמים לפיד</td>
+            <td><code>https://site.co.il/product/1234</code></td>
+          </tr>
+          <tr>
+            <td><code>image_link</code></td>
+            <td>URL לתמונה הראשית. זה מה שרואים תחילה — לוקח ריבועי שטח גדול ב-Shopping ומשפיע ישירות על CTR</td>
+            <td><code>https://cdn.site.co.il/1234.jpg</code></td>
+          </tr>
+          <tr>
+            <td><code>price</code></td>
+            <td>חייב להיות זהה למחיר בדף. גוגל בודקת — אי-התאמה = דחיית המוצר. פורמט: מספר + מרווח + מטבע</td>
+            <td><code>299.00 ILS</code></td>
+          </tr>
+          <tr>
+            <td><code>availability</code></td>
+            <td>ערכים מותרים בלבד: <code>in stock</code> / <code>out of stock</code> / <code>preorder</code>. לא "במלאי" בעברית</td>
+            <td><code>in stock</code></td>
+          </tr>
+          <tr>
+            <td><code>brand</code></td>
+            <td>שם המותג — עוזר לגוגל לסווג ולהתאים לחיפושים ברמת מותג</td>
+            <td><code>Nike</code></td>
+          </tr>
+          <tr>
+            <td><code>gtin</code></td>
+            <td>ברקוד בינלאומי (EAN/UPC/ISBN). עוזר לגוגל לזהות את המוצר בוודאות ולהתאים לחיפושים מדויקים. ללא GTIN — המוצר מקבל ציון נמוך יותר</td>
+            <td><code>5901234123457</code></td>
+          </tr>
+          <tr>
+            <td><code>google_product_category</code></td>
+            <td>קטגוריה מרשימת גוגל (6,000+ אפשרויות). ככל שמדויקת יותר — Impressions ממוקדים יותר. ראה סקשיין 5</td>
+            <td><code>Apparel &amp; Accessories > Shoes</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>שדות רצויים — משפרים ביצועים משמעותית</h3>
+      <p>שדות אלו לא חובה, אבל כל שדה שנוסיף נותן לגוגל יותר מידע — והיא יכולה להציג את המוצר למשתמשים יותר רלוונטיים.</p>
+      <div class="code-block">
+        <span class="lang-tag">xml — שדות מומלצים עם הסבר</span>
+        <pre><span class="cmt">&lt;!-- תמונה נוספת — גוגל תבחר אוטומטית מה להציג לפי placement --&gt;</span>
+<span class="tag">&lt;additional_image_link&gt;</span>https://cdn.site.co.il/1234-side.jpg<span class="tag">&lt;/additional_image_link&gt;</span>
+
+<span class="cmt">&lt;!-- מחיר מבצע — מוצג עם קו חוצה על המחיר המקורי: 199₪ ~~299₪~~ --&gt;</span>
+<span class="tag">&lt;sale_price&gt;</span>199.00 ILS<span class="tag">&lt;/sale_price&gt;</span>
+
+<span class="cmt">&lt;!-- תאריכי המבצע — תחילה/סוף בפורמט ISO 8601 עם אזור זמן --&gt;</span>
+<span class="tag">&lt;sale_price_effective_date&gt;</span>2026-06-01T00:00:00+03:00/2026-06-30T23:59:59+03:00<span class="tag">&lt;/sale_price_effective_date&gt;</span>
+
+<span class="cmt">&lt;!-- מצב: new / used / refurbished — ייתכן מסנן בחיפוש --&gt;</span>
+<span class="tag">&lt;condition&gt;</span>new<span class="tag">&lt;/condition&gt;</span>
+
+<span class="cmt">&lt;!-- צבע, מידה, מין, גיל — משפרים התאמה לחיפושים כמו "נעליים כחולות 42" --&gt;</span>
+<span class="tag">&lt;color&gt;</span>שחור<span class="tag">&lt;/color&gt;</span>
+<span class="tag">&lt;size&gt;</span>42<span class="tag">&lt;/size&gt;</span>
+<span class="tag">&lt;age_group&gt;</span>adult<span class="tag">&lt;/age_group&gt;</span>
+<span class="tag">&lt;gender&gt;</span>male<span class="tag">&lt;/gender&gt;</span>
+
+<span class="cmt">&lt;!-- Custom Labels — שדות שאתה ממלא כרצונך, לשימוש פנימי בקמפיינים (ראה סקשיין 6) --&gt;</span>
+<span class="tag">&lt;custom_label_0&gt;</span>high_margin<span class="tag">&lt;/custom_label_0&gt;</span>
+<span class="tag">&lt;custom_label_1&gt;</span>bestseller<span class="tag">&lt;/custom_label_1&gt;</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       3 — פורמטים
+  ════════════════════════════════════════════════ -->
+  <div class="section" id="sec3">
+    <div class="section-header blue">
+      <div class="section-num">3</div>
+      פורמטים — XML / JSON / CSV
+    </div>
+    <div class="section-body">
+      <p>הנתונים מועברים לפלטפורמות בפורמטים שונים. הבחירה תלויה בפלטפורמה ובגודל הפיד.</p>
+
+      <div class="format-row">
+        <div class="format-card">
+          <div class="fc-name">XML</div>
+          <div class="fc-platform">Google Shopping</div>
+          <p>הפורמט הרשמי של גוגל. מבוסס RSS 2.0 עם namespace מיוחד (g:). מתאים לפידים גדולים ומורכבים.</p>
+        </div>
+        <div class="format-card">
+          <div class="fc-name">JSON</div>
+          <div class="fc-platform">Meta / TikTok / Criteo</div>
+          <p>פורמט קל לעיבוד בצד ה-API. Meta מעדיפה אותו כי המערכות שלה "מדברות" JSON באופן טבעי.</p>
+        </div>
+        <div class="format-card">
+          <div class="fc-name">CSV</div>
+          <div class="fc-platform">כל הפלטפורמות</div>
+          <p>הפשוט ביותר — פתיח ב-Excel. מתאים לחנויות קטנות שמעדכנות ידנית. מגביל בנתונים מורכבים.</p>
+        </div>
+      </div>
+
+      <h3>XML — הפורמט הנפוץ ביותר ל-Google</h3>
+      <div class="explain-box">
+        <div class="explain-title">למה XML נראה ככה?</div>
+        השורה <code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;</code> אומרת לתוכנה שזה מסמך XML. ה-<code>xmlns:g</code> הוא "מרחב שמות" — כל שדה שמתחיל ב-<code>g:</code> הוא שדה גוגל ספציפי. ה-<code>&lt;rss&gt;</code> הוא מעטפת, ה-<code>&lt;channel&gt;</code> הוא הקטלוג, וכל <code>&lt;item&gt;</code> הוא מוצר.
+      </div>
+      <div class="code-block">
+        <span class="lang-tag">xml</span>
+        <pre><span class="cmt">&lt;!-- הצהרה על גרסה וקידוד תווים --&gt;</span>
+<span class="kw">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+
+<span class="cmt">&lt;!-- rss = מבנה RSS 2.0 | xmlns:g = namespace של גוגל --&gt;</span>
+<span class="tag">&lt;rss</span> <span class="attr">version</span>=<span class="str">"2.0"</span> <span class="attr">xmlns:g</span>=<span class="str">"http://base.google.com/ns/1.0"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;channel&gt;</span>  <span class="cmt">&lt;!-- הקטלוג כולו --&gt;</span>
+
+    <span class="tag">&lt;item&gt;</span>  <span class="cmt">&lt;!-- מוצר אחד --&gt;</span>
+      <span class="tag">&lt;g:id&gt;</span>SKU-1234<span class="tag">&lt;/g:id&gt;</span>
+      <span class="tag">&lt;g:title&gt;</span>נעלי ריצה Nike Air Max 270 - שחור 42<span class="tag">&lt;/g:title&gt;</span>
+      <span class="tag">&lt;g:price&gt;</span>599.00 ILS<span class="tag">&lt;/g:price&gt;</span>         <span class="cmt">&lt;!-- חובה: מספר + רווח + מטבע --&gt;</span>
+      <span class="tag">&lt;g:sale_price&gt;</span>399.00 ILS<span class="tag">&lt;/g:sale_price&gt;</span> <span class="cmt">&lt;!-- אופציונלי: מחיר מבצע --&gt;</span>
+      <span class="tag">&lt;g:availability&gt;</span>in stock<span class="tag">&lt;/g:availability&gt;</span>
+      <span class="tag">&lt;g:brand&gt;</span>Nike<span class="tag">&lt;/g:brand&gt;</span>
+      <span class="tag">&lt;g:gtin&gt;</span>0885178578574<span class="tag">&lt;/g:gtin&gt;</span>       <span class="cmt">&lt;!-- ברקוד EAN/UPC --&gt;</span>
+      <span class="tag">&lt;g:color&gt;</span>שחור<span class="tag">&lt;/g:color&gt;</span>
+      <span class="tag">&lt;g:size&gt;</span>42<span class="tag">&lt;/g:size&gt;</span>
+      <span class="tag">&lt;g:custom_label_0&gt;</span>sale<span class="tag">&lt;/g:custom_label_0&gt;</span>
+    <span class="tag">&lt;/item&gt;</span>
+
+    <span class="cmt">&lt;!-- מוצר נוסף מיד אחריו... --&gt;</span>
+
+  <span class="tag">&lt;/channel&gt;</span>
+<span class="tag">&lt;/rss&gt;</span></pre>
+      </div>
+
+      <h3>JSON — נפוץ ב-Meta ו-TikTok</h3>
+      <div class="explain-box">
+        <div class="explain-title">למה JSON ב-Meta ולא XML?</div>
+        Meta בנתה את מערכות ה-API שלה סביב JSON — זה הפורמט שהשרתים שלה "מדברים". ה-<code>"data": [...]</code> הוא מערך (רשימה) של מוצרים. כל מוצר הוא אובייקט עם מפתח-ערך, ה-keys זהים לשדות ב-XML אבל ללא הקידומת <code>g:</code>.
+      </div>
+      <div class="code-block">
+        <span class="lang-tag">json</span>
+        <pre>{
+  <span class="str">"data"</span>: [    <span class="cmt">// מערך של כל המוצרים</span>
+    {
+      <span class="str">"id"</span>: <span class="str">"SKU-1234"</span>,
+      <span class="str">"title"</span>: <span class="str">"נעלי ריצה Nike Air Max 270 - שחור 42"</span>,
+      <span class="str">"availability"</span>: <span class="str">"in stock"</span>,
+      <span class="str">"price"</span>: <span class="str">"599.00 ILS"</span>,
+      <span class="str">"sale_price"</span>: <span class="str">"399.00 ILS"</span>,
+      <span class="str">"link"</span>: <span class="str">"https://mystore.co.il/products/nike-air-max-270"</span>,
+      <span class="str">"image_link"</span>: <span class="str">"https://cdn.mystore.co.il/images/nike-1234.jpg"</span>,
+      <span class="str">"brand"</span>: <span class="str">"Nike"</span>,
+      <span class="str">"custom_label_0"</span>: <span class="str">"high_margin"</span>
+    },
+    {    <span class="cmt">// מוצר שני מיד אחרי</span>
+      <span class="str">"id"</span>: <span class="str">"SKU-1235"</span>,
+      ...
+    }
+  ]
+}</pre>
+      </div>
+
+      <h3>CSV — הכי פשוט, מתאים לחנויות קטנות</h3>
+      <div class="explain-box">
+        <div class="explain-title">מה זה CSV ואיך זה עובד?</div>
+        CSV = Comma Separated Values. שורה ראשונה = שמות העמודות (headers). כל שורה אחר כך = מוצר אחד. ערכים עם פסיקות בתוכם חייבים להיות בגרשיים — לכן "נעלי ריצה Nike..." בגרשיים. הכי קל לפתוח ולערוך ב-Excel.
+      </div>
+      <div class="code-block">
+        <span class="lang-tag">csv</span>
+        <pre><span class="cmt"># שורה 1 = headers (שמות השדות)</span>
+id,title,price,availability,brand,color,size,custom_label_0
+
+<span class="cmt"># שורה 2 = מוצר ראשון</span>
+SKU-1234,"נעלי ריצה Nike Air Max 270 - שחור 42","599.00 ILS","in stock","Nike","שחור","42","sale"
+
+<span class="cmt"># שורה 3 = מוצר שני</span>
+SKU-1235,"נעלי ריצה Nike Air Max 270 - לבן 41","599.00 ILS","in stock","Nike","לבן","41","regular"</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       4 — ארכיטקטורה
+  ════════════════════════════════════════════════ -->
+  <div class="section" id="sec4">
+    <div class="section-header green">
+      <div class="section-num">4</div>
+      ארכיטקטורה — בסיסית ומתקדמת
+    </div>
+    <div class="section-body">
+      <h3>ארכיטקטורה בסיסית — חנות קטנה (עד 5,000 מוצרים)</h3>
+      <p>ארבעה שלבים. כל שלב מעביר את הנתונים לשלב הבא:</p>
+
+      <div class="arch-box">
+        <div class="arch-row">
+          <div class="arch-node-wrap">
+            <div class="arch-node">מסד נתונים</div>
+            <div class="arch-node-desc">שם יושבים המוצרים: שמות, מחירים, מלאי, תמונות</div>
+          </div>
+          <div class="arch-arrow">──►</div>
+          <div class="arch-node-wrap">
+            <div class="arch-node orange">סקריפט PHP/Python</div>
+            <div class="arch-node-desc">קורא מה-DB, ממיר לפורמט XML תקני, מייצר את הקובץ</div>
+          </div>
+          <div class="arch-arrow">──►</div>
+          <div class="arch-node-wrap">
+            <div class="arch-node">feed.xml</div>
+            <div class="arch-node-desc">קובץ סטטי בשרת — גוגל מורידה אותו בתזמון קבוע</div>
+          </div>
+          <div class="arch-arrow">──►</div>
+          <div class="arch-node-wrap">
+            <div class="arch-node blue">Merchant Center</div>
+            <div class="arch-node-desc">מקבל, מאמת ומפיץ לקמפיינים</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="explain-box">
+        <div class="explain-title">מה הסקריפט PHP/Python עושה בדיוק?</div>
+        הסקריפט הוא ה<strong>"גשר"</strong> בין מסד הנתונים לבין הפורמט שגוגל מצפה לו. הוא:<br><br>
+        1. <strong>קורא</strong> מה-DB — שולף את כל המוצרים עם מחיר, זמינות, תמונה, קטגוריה<br>
+        2. <strong>ממיר</strong> — מחיר "299" הופך ל-"299.00 ILS", זמינות "1" הופכת ל-"in stock"<br>
+        3. <strong>מחשב</strong> — מרווח רווח, Custom Labels, האם המוצר במבצע<br>
+        4. <strong>כותב</strong> — מייצר קובץ XML תקני ושומר אותו בשרת<br><br>
+        הסקריפט רץ בתזמון (Cron Job) — למשל כל שעה — ומחדש את הקובץ. גוגל מורידה את הקובץ אוטומטית לפי לו"ז שהגדרת ב-Merchant Center.
+      </div>
+
+      <h3>דוגמה: סקריפט בסיסי שמייצר פיד XML</h3>
+      <div class="code-block">
+        <span class="lang-tag">python — feed generator</span>
+        <pre><span class="kw">import</span> xml.etree.ElementTree <span class="kw">as</span> ET
+<span class="kw">import</span> mysql.connector
+
+<span class="kw">def</span> generate_feed():
+    <span class="cmt"># שלב 1: שליפת מוצרים ממסד הנתונים</span>
+    db = mysql.connector.connect(host=<span class="str">"localhost"</span>, database=<span class="str">"shop"</span>)
+    cursor = db.cursor(dictionary=<span class="kw">True</span>)
+    cursor.execute(<span class="str">"""
+        SELECT id, name, price, cost_price, stock, image_url,
+               category, brand, gtin, color, size
+        FROM products
+        WHERE active = 1
+    """</span>)
+    products = cursor.fetchall()
+
+    <span class="cmt"># שלב 2: בניית מבנה XML</span>
+    rss = ET.Element(<span class="str">"rss"</span>, version=<span class="str">"2.0"</span>)
+    rss.set(<span class="str">"xmlns:g"</span>, <span class="str">"http://base.google.com/ns/1.0"</span>)
+    channel = ET.SubElement(rss, <span class="str">"channel"</span>)
+
+    <span class="kw">for</span> product <span class="kw">in</span> products:
+        item = ET.SubElement(channel, <span class="str">"item"</span>)
+
+        <span class="cmt"># שלב 3: המרת נתוני DB לפורמט של גוגל</span>
+        ET.SubElement(item, <span class="str">"g:id"</span>).text = str(product[<span class="str">"id"</span>])
+        ET.SubElement(item, <span class="str">"g:title"</span>).text = product[<span class="str">"name"</span>]
+
+        <span class="cmt"># המרת מספר לפורמט "299.00 ILS" שגוגל מצפה לו</span>
+        ET.SubElement(item, <span class="str">"g:price"</span>).text = <span class="str">f'{product["price"]:.2f} ILS'</span>
+
+        <span class="cmt"># המרת 1/0 מה-DB לטקסט שגוגל מבינה</span>
+        availability = <span class="str">"in stock"</span> <span class="kw">if</span> product[<span class="str">"stock"</span>] > <span class="num">0</span> <span class="kw">else</span> <span class="str">"out of stock"</span>
+        ET.SubElement(item, <span class="str">"g:availability"</span>).text = availability
+
+        <span class="cmt"># שלב 4: חישוב Custom Label לפי מרווח רווח</span>
+        margin = (product[<span class="str">"price"</span>] - product[<span class="str">"cost_price"</span>]) / product[<span class="str">"price"</span>]
+        label = <span class="str">"high_margin"</span> <span class="kw">if</span> margin >= <span class="num">0.4</span> <span class="kw">else</span> <span class="str">"low_margin"</span>
+        ET.SubElement(item, <span class="str">"g:custom_label_0"</span>).text = label
+
+    <span class="cmt"># שלב 5: שמירת הקובץ בשרת כדי שגוגל תוכל להוריד אותו</span>
+    tree = ET.ElementTree(rss)
+    tree.write(<span class="str">"/var/www/public/feed.xml"</span>, encoding=<span class="str">"UTF-8"</span>, xml_declaration=<span class="kw">True</span>)
+    print(<span class="str">f"פיד נוצר: {len(products)} מוצרים"</span>)
+
+generate_feed()</pre>
+      </div>
+
+      <h3>ארכיטקטורה מתקדמת — חנות גדולה / אגרסיבית</h3>
+      <p>כשיש עשרות אלפי מוצרים ומחירים משתנים תכופות, צריך שכבות נוספות:</p>
+
+      <div class="flow">
+┌──────────────────────────────────────────────────────┐
+│                 מקורות נתונים                        │
+│  ERP (מחירים, עלויות) + מחסן (מלאי) + Analytics     │
+└─────────────────────┬────────────────────────────────┘
+                      │ נתונים גולמיים, לא מוכנים
+                      ▼
+┌──────────────────────────────────────────────────────┐
+│           Feed Processing Layer (5 שלבים)           │
+│  1. Extraction   — שליפה ממקורות שונים              │
+│  2. Normalization — אחידות פורמט                    │
+│  3. Enrichment   — הוספת נתונים חסרים               │
+│  4. Validation   — בדיקת שגיאות לפני שליחה          │
+│  5. Segmentation — פיצול לפי Custom Labels          │
+└─────────────────────┬────────────────────────────────┘
+                      │ פיד מוכן ומאומת
+                      ▼
+┌──────────────────────────────────────────────────────┐
+│              Feed Distribution                      │
+│  Google Merchant Center (XML)                       │
+│  Meta Business Manager (JSON)                       │
+│  TikTok Catalog (CSV) / Criteo / Pinterest          │
+└──────────────────────────────────────────────────────┘
+      </div>
+
+      <h3>מה עושה כל שלב ב-Feed Processing Layer?</h3>
+      <ul class="layer-list">
+        <li>
+          <div class="layer-num">1</div>
+          <div class="layer-content">
+            <strong>Extraction — שליפה</strong>
+            <span>שולף נתונים ממקורות שונים: מחירים מה-ERP, מלאי ממערכת המחסן, ביצועים מ-GA4. הבעיה: כל מערכת "מדברת" פורמט שונה.</span>
+          </div>
+        </li>
+        <li>
+          <div class="layer-num">2</div>
+          <div class="layer-content">
+            <strong>Normalization — אחידות</strong>
+            <span>ממיר הכל לפורמט אחד. דוגמה: ERP שומר מחיר כ-<code>29900</code> (אגורות), הפיד צריך <code>299.00 ILS</code>. קטגוריה מה-DB: <code>"SHOES_MEN"</code> → Google Taxonomy: <code>"Apparel &amp; Accessories > Shoes"</code>.</span>
+          </div>
+        </li>
+        <li>
+          <div class="layer-num">3</div>
+          <div class="layer-content">
+            <strong>Enrichment — העשרה</strong>
+            <span>מוסיף נתונים שלא קיימים במסד הנתונים. למשל: חישוב Custom Labels לפי מרווח (נדרש מ-2 שדות), שליפת GTIN מ-API חיצוני, הוספת תמונת lifestyle לפי קטגוריה.</span>
+          </div>
+        </li>
+        <li>
+          <div class="layer-num">4</div>
+          <div class="layer-content">
+            <strong>Validation — אימות</strong>
+            <span>בודק שהפיד "בריא" לפני השליחה: האם כל מוצר יש לו כותרת? האם המחיר בפורמט נכון? האם יש מוצרים עם GTIN לא תקין? כל בעיה שנתפסת כאן לא הופכת לדחייה ב-Merchant Center.</span>
+          </div>
+        </li>
+        <li>
+          <div class="layer-num">5</div>
+          <div class="layer-content">
+            <strong>Segmentation — פיצול</strong>
+            <span>מחלק את המוצרים לקבוצות לפי Custom Labels (מרווח גבוה / נמוך / מבצע / מלאי נמוך). כך ניתן להפעיל אסטרטגיות בידינג שונות לכל קבוצה בקמפיין.</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       5 — טקסונומיה
+  ════════════════════════════════════════════════ -->
+  <div class="section" id="sec5">
+    <div class="section-header teal">
+      <div class="section-num">5</div>
+      טקסונומיה וקטגוריות גוגל
+    </div>
+    <div class="section-body">
+      <p>גוגל מתחזקת רשימה של <strong>~6,000 קטגוריות</strong> בהיררכיה. ככל שהקטגוריה ספציפית יותר, גוגל יודעת בדיוק מה אתה מוכר ומציגה את המוצר למשתמשים עם <strong>כוונת קנייה ספציפית</strong> יותר — וזה שווה CTR גבוה יותר.</p>
+
+      <div class="callout danger">
+        <span class="icon">✗</span>
+        <div>
+          <strong>רע:</strong> <code>google_product_category = "בגדים"</code><br>
+          <span style="font-size:12.5px;">גוגל לא יודעת אם זה גרביים, מעיל, או תחתונים. מציגה למגוון רחב ולא ממוקד.</span>
+        </div>
+      </div>
+      <div class="callout success">
+        <span class="icon">✓</span>
+        <div>
+          <strong>טוב:</strong> <code>Apparel &amp; Accessories > Clothing > Shirts &amp; Tops > T-Shirts</code><br>
+          <span style="font-size:12.5px;">גוגל יודעת שזה חולצת טי — מציגה למי שחיפש "חולצת טי" ספציפית, לא "בגד" כללי.</span>
+        </div>
+      </div>
+
+      <div class="explain-box">
+        <div class="explain-title">איך זה משפיע על הביצועים?</div>
+        גוגל משתמשת בקטגוריה גם לקביעת <strong>ה-benchmark</strong> — כמה המתחרים בתחום שלך משלמים. קטגוריה כללית = תחרות עם כולם. קטגוריה ספציפית = תחרות רק עם מתחרים ישירים שלך. בנוסף, Shopping ads מציגות לפי match בין החיפוש לקטגוריה.
+      </div>
+
+      <h3>מיפוי מומלץ לפי סוג מוצר</h3>
+      <table class="data-table">
+        <thead>
+          <tr><th>קטגוריה</th><th>מה לכלול בכותרת</th><th>דוגמה</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>אופנה</td><td>מותג + פריט + צבע + מידה</td><td><code>Nike Air Max 270 שחור מידה 42</code></td></tr>
+          <tr><td>אלקטרוניקה</td><td>מותג + מודל + מפרט מרכזי + צבע</td><td><code>Samsung Galaxy S24 256GB שחור</code></td></tr>
+          <tr><td>ריהוט</td><td>שם + חומר + מידה + צבע</td><td><code>ספה תלת-מושבית קטיפה 220 ס"מ אפור</code></td></tr>
+          <tr><td>מזון</td><td>מותג + שם + כמות/משקל</td><td><code>Heinz רוטב עגבניות 570 גרם</code></td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout info">
+        <span class="icon">💡</span>
+        <div><strong>Case Study:</strong> חנות שמכרה "גרביים לגברים" בקטגוריה כללית "Apparel" ראתה ROAS 2.1. אחרי שינוי ל-<code>Apparel &amp; Accessories > Clothing Accessories > Hosiery &amp; Socks > Socks</code> — ROAS עלה ל-<strong>4.8</strong>. אותו מוצר, אותו מחיר, אותן מודעות. רק הקטגוריה השתנתה.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       6 — Custom Labels
+  ════════════════════════════════════════════════ -->
+  <div class="section" id="sec6">
+    <div class="section-header gold">
+      <div class="section-num">6</div>
+      Custom Labels — הכלי הסודי לפיצול קמפיינים
+    </div>
+    <div class="section-body">
+      <p>Custom Labels הם <strong>5 שדות חופשיים</strong> (<code>custom_label_0</code> עד <code>custom_label_4</code>) שאתה ממלא כרצונך. הפלטפורמה לא עושה איתם כלום בעצמה — הם עבורך, כדי <strong>לפצל קמפיינים</strong> לפי כל לוגיקה עסקית שתבחר.</p>
+
+      <div class="explain-box">
+        <div class="explain-title">למה זה כל כך חשוב?</div>
+        בלי Custom Labels יש לך קמפיין אחד עם Target ROAS אחד לכל המוצרים. עם Custom Labels אתה יכול להפעיל <strong>Target ROAS שונה לכל קבוצת מוצרים</strong> — מוצרים עם מרווח גבוה מקבלים תקציב גדול, מוצרים עם מרווח נמוך מקבלים מינימום. זו הסיבה שחנויות מתקדמות מכות מתחרים עם אותו תקציב.
+      </div>
+
+      <div class="label-grid">
+        <div class="label-card">
+          <div class="label-name">custom_label_0</div>
+          <div class="label-vals">
+            <span class="pill green">high_margin</span>
+            <span class="pill yellow">medium_margin</span>
+            <span class="pill red">low_margin</span>
+          </div>
+          <div class="label-desc">מרווח רווח — (מחיר - עלות) / מחיר. בסיס להחלטת תקציב</div>
+        </div>
+        <div class="label-card">
+          <div class="label-name">custom_label_1</div>
+          <div class="label-vals">
+            <span class="pill green">bestseller</span>
+            <span class="pill blue">regular</span>
+            <span class="pill gray">slow_mover</span>
+          </div>
+          <div class="label-desc">ביצועי מכירות — יחידות שנמכרו ב-30 יום אחרון</div>
+        </div>
+        <div class="label-card">
+          <div class="label-name">custom_label_2</div>
+          <div class="label-vals">
+            <span class="pill yellow">summer</span>
+            <span class="pill blue">winter</span>
+            <span class="pill gray">all_season</span>
+          </div>
+          <div class="label-desc">עונתיות — להגביר תקציב בעונה הנכונה</div>
+        </div>
+        <div class="label-card">
+          <div class="label-name">custom_label_3</div>
+          <div class="label-vals">
+            <span class="pill red">low_stock</span>
+            <span class="pill green">plenty</span>
+            <span class="pill purple">clearance</span>
+          </div>
+          <div class="label-desc">מצב מלאי — לעצור מודעות לפני שהמוצר נגמר</div>
+        </div>
+      </div>
+
+      <h3>איך זה עובד בפועל בקמפיינים?</h3>
+
+      <div class="campaign-block camp-a">
+        <div class="camp-header">🚀 קמפיין A — המנצחים</div>
+        <div class="camp-body">
+          <strong>סינון:</strong> <code>custom_label_0=high_margin</code> + <code>custom_label_1=bestseller</code><br>
+          <strong>לוגיקה:</strong> מוצרים שמרוויחים טוב וגם נמכרים הרבה — תן להם כסף מקסימלי<br>
+          <strong>Target ROAS:</strong> 800% — משלם יותר על קליק כי הרווח הצפוי גבוה
+        </div>
+      </div>
+      <div class="campaign-block camp-b">
+        <div class="camp-header">🔄 קמפיין B — האטיים</div>
+        <div class="camp-body">
+          <strong>סינון:</strong> <code>custom_label_0=low_margin</code> + <code>custom_label_1=slow_mover</code><br>
+          <strong>לוגיקה:</strong> מרוויחים מעט ונמכרים לאט — תקציב מינימלי, רק לשמור על נוכחות<br>
+          <strong>Target ROAS:</strong> 200% — לא שווה להשקיע יותר
+        </div>
+      </div>
+      <div class="campaign-block camp-c">
+        <div class="camp-header">🏷 קמפיין C — פינוי מלאי</div>
+        <div class="camp-body">
+          <strong>סינון:</strong> <code>custom_label_3=clearance</code><br>
+          <strong>לוגיקה:</strong> מוצרים שרוצים לגמור — גם אם נפסיד קצת, עדיף מאחסון<br>
+          <strong>Target ROAS:</strong> 100% — פנה מלאי בכל מחיר
+        </div>
+      </div>
+
+      <h3>קוד לחישוב Custom Labels אוטומטי</h3>
+      <div class="code-block">
+        <span class="lang-tag">python — מחושב אוטומטית בסקריפט הפיד</span>
+        <pre><span class="kw">def</span> calculate_custom_labels(product: dict, sales_data: dict) -> dict:
+    <span class="cmt"># ── Label 0: מרווח רווח ──────────────────────────────────────────</span>
+    <span class="cmt"># (מחיר מכירה - מחיר עלות) / מחיר מכירה = אחוז מרווח</span>
+    cost  = product.get(<span class="str">"cost_price"</span>, <span class="num">0</span>)   <span class="cmt"># עלות: 150 ₪</span>
+    price = product.get(<span class="str">"price"</span>, <span class="num">0</span>)       <span class="cmt"># מחיר: 300 ₪</span>
+    margin = (price - cost) / price <span class="kw">if</span> price > <span class="num">0</span> <span class="kw">else</span> <span class="num">0</span>  <span class="cmt"># = 0.5 = 50%</span>
+
+    label_0 = (<span class="str">"high_margin"</span>   <span class="kw">if</span> margin >= <span class="num">0.4</span>   <span class="cmt"># מרווח 40%+</span>
+          <span class="kw">else</span> <span class="str">"medium_margin"</span> <span class="kw">if</span> margin >= <span class="num">0.2</span>   <span class="cmt"># מרווח 20-39%</span>
+          <span class="kw">else</span> <span class="str">"low_margin"</span>)               <span class="cmt"># מרווח מתחת ל-20%</span>
+
+    <span class="cmt"># ── Label 1: ביצועי מכירות (30 יום) ─────────────────────────────</span>
+    <span class="cmt"># sales_data הוא dict שמגיע מ-GA4/Analytics: {product_id: {units_30d: N}}</span>
+    units_sold = sales_data.get(product[<span class="str">"id"</span>], {}).get(<span class="str">"units_30d"</span>, <span class="num">0</span>)
+
+    label_1 = (<span class="str">"bestseller"</span>  <span class="kw">if</span> units_sold >= <span class="num">20</span>  <span class="cmt"># 20+ יחידות = מנצח</span>
+          <span class="kw">else</span> <span class="str">"regular"</span>    <span class="kw">if</span> units_sold >= <span class="num">5</span>   <span class="cmt"># 5-19 יחידות = סביר</span>
+          <span class="kw">else</span> <span class="str">"slow_mover"</span>)              <span class="cmt"># פחות מ-5 = עצלן</span>
+
+    <span class="cmt"># ── Label 3: מצב מלאי ────────────────────────────────────────────</span>
+    stock = product.get(<span class="str">"stock_quantity"</span>, <span class="num">0</span>)
+
+    label_3 = (<span class="str">"low_stock"</span>  <span class="kw">if</span> stock <= <span class="num">3</span>              <span class="cmt"># 3 יחידות אחרונות — האט</span>
+          <span class="kw">else</span> <span class="str">"clearance"</span> <span class="kw">if</span> product.get(<span class="str">"on_sale"</span>)   <span class="cmt"># במבצע ממאגר — פנה</span>
+          <span class="kw">else</span> <span class="str">"plenty"</span>)                            <span class="cmt"># מלאי תקין</span>
+
+    <span class="kw">return</span> {
+        <span class="str">"custom_label_0"</span>: label_0,
+        <span class="str">"custom_label_1"</span>: label_1,
+        <span class="str">"custom_label_3"</span>: label_3,
+    }</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       7 — כותרות ותמונות
+  ════════════════════════════════════════════════ -->
+  <div class="section" id="sec7">
+    <div class="section-header purple">
+      <div class="section-num">7</div>
+      אופטימיזציית כותרות ותמונות
+    </div>
+    <div class="section-body">
+      <h3>נוסחת הכותרת</h3>
+      <div class="intro-box">
+        <p style="font-size:15px;font-weight:700;color:#1a1a2e;">[מותג] + [שם מוצר] + [מאפיין קריטי 1] + [מאפיין קריטי 2] + [מאפיין קריטי 3]</p>
+      </div>
+
+      <div class="explain-box">
+        <div class="explain-title">למה הסדר חשוב?</div>
+        גוגל חותכת כותרות ב-<strong>70 תווים</strong> בחלק מה-placements. מה שבא ראשון — הכי חשוב. הסיבה לשים מותג ראשון: אנשים מחפשים "Nike Air Max" ולא "נעלי ריצה Nike". הסיבה לשים מאפייני מוצר (צבע, מידה): אלו הם ה<strong>long-tail keywords</strong> שמורידים עלות קליק ומעלים רלוונטיות.
+      </div>
+
+      <h3>דרישות תמונות לפי פלטפורמה</h3>
+      <table class="data-table">
+        <thead>
+          <tr><th>פלטפורמה</th><th>מינימום</th><th>מומלץ</th><th>פורמט</th><th>הערות</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Google Shopping</td><td>100×100px</td><td>800×800px+</td><td>JPG / PNG / WebP</td><td>רקע לבן מגדיל CTR</td></tr>
+          <tr><td>Meta DPA</td><td>500×500px</td><td>1200×1200px</td><td>JPG / PNG</td><td>ריבועי בלבד</td></tr>
+          <tr><td>TikTok</td><td>500×500px</td><td>800×800px+</td><td>JPG / PNG</td><td>ניתן גם וידאו</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout success">
+        <span class="icon">📸</span>
+        <div><strong>מדוע כמה תמונות?</strong> גוגל בוחרת <strong>אוטומטית</strong> איזו תמונה להציג לפי ה-placement ולפי המשתמש. בחיפוש — תמונה נקייה על רקע לבן עובדת טוב. ב-Display / Gmail — תמונת lifestyle (אדם משתמש במוצר) עובדת הרבה יותר טוב. מחקרי A/B מראים שיפור של <strong>15–40% ב-CTR</strong> כשמוסיפים תמונות lifestyle.</div>
+      </div>
+
+      <div class="code-block">
+        <span class="lang-tag">xml — הוסף עד 10 תמונות נוספות</span>
+        <pre><span class="cmt">&lt;!-- תמונה ראשית: נקייה, רקע לבן, ריבועית — לחיפוש Google Shopping --&gt;</span>
+<span class="tag">&lt;g:image_link&gt;</span>https://cdn.store.co.il/1234/main-white-bg.jpg<span class="tag">&lt;/g:image_link&gt;</span>
+
+<span class="cmt">&lt;!-- מזוויות שונות — גוגל תציג את הטובה ביותר לפי placement --&gt;</span>
+<span class="tag">&lt;g:additional_image_link&gt;</span>https://cdn.store.co.il/1234/side.jpg<span class="tag">&lt;/g:additional_image_link&gt;</span>
+<span class="tag">&lt;g:additional_image_link&gt;</span>https://cdn.store.co.il/1234/back.jpg<span class="tag">&lt;/g:additional_image_link&gt;</span>
+
+<span class="cmt">&lt;!-- lifestyle: אדם לובש את הנעל — עובד מצוין ב-Display / Gmail / Demand Gen --&gt;</span>
+<span class="tag">&lt;g:additional_image_link&gt;</span>https://cdn.store.co.il/1234/lifestyle-runner.jpg<span class="tag">&lt;/g:additional_image_link&gt;</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       8 — Variants
+  ════════════════════════════════════════════════ -->
+  <div class="section" id="sec8">
+    <div class="section-header orange">
+      <div class="section-num">8</div>
+      ניהול Variants — גרסאות מוצר
+    </div>
+    <div class="section-body">
+      <p>חולצה ב-5 צבעים ו-6 מידות = <strong>30 SKU שונים</strong> בפיד. הבעיה: גוגל צריכה לדעת שכולם "אותה חולצה" — רק גרסאות שלה. הפתרון: <code>item_group_id</code>.</p>
+
+      <div class="explain-box">
+        <div class="explain-title">מה זה item_group_id ולמה זה חשוב?</div>
+        <code>item_group_id</code> הוא מזהה משותף לכל הוריאנטים של אותו מוצר. גוגל משתמשת בו ל-2 דברים:<br><br>
+        1. <strong>Smart Display:</strong> מי שחיפש "נעלי Nike כחולות" יראה רק את הוריאנט הכחול — לא כל הצבעים<br>
+        2. <strong>החלטת ביצועים:</strong> גוגל מחשבת את ביצועי המוצר לפי הקבוצה, לא לפי כל SKU בנפרד — חישוב נכון יותר
+      </div>
+
+      <div class="code-block">
+        <span class="lang-tag">xml — item_group_id</span>
+        <pre><span class="cmt">&lt;!-- חולצה בצבע אדום, מידה M — ID ייחודי לוריאנט הספציפי --&gt;</span>
+<span class="tag">&lt;item&gt;</span>
+  <span class="tag">&lt;g:id&gt;</span>SHIRT-001-RED-M<span class="tag">&lt;/g:id&gt;</span>            <span class="cmt">&lt;!-- ייחודי לוריאנט זה --&gt;</span>
+  <span class="tag">&lt;g:item_group_id&gt;</span>SHIRT-001<span class="tag">&lt;/g:item_group_id&gt;</span>  <span class="cmt">&lt;!-- מחבר לכל הוריאנטים --&gt;</span>
+  <span class="tag">&lt;g:title&gt;</span>חולצת כותנה בייסיק - אדום M<span class="tag">&lt;/g:title&gt;</span>
+  <span class="tag">&lt;g:color&gt;</span>אדום<span class="tag">&lt;/g:color&gt;</span>
+  <span class="tag">&lt;g:size&gt;</span>M<span class="tag">&lt;/g:size&gt;</span>
+  <span class="tag">&lt;g:availability&gt;</span>in stock<span class="tag">&lt;/g:availability&gt;</span>
+<span class="tag">&lt;/item&gt;</span>
+
+<span class="cmt">&lt;!-- אותה חולצה, צבע כחול, מידה L — item_group_id זהה --&gt;</span>
+<span class="tag">&lt;item&gt;</span>
+  <span class="tag">&lt;g:id&gt;</span>SHIRT-001-BLUE-L<span class="tag">&lt;/g:id&gt;</span>
+  <span class="tag">&lt;g:item_group_id&gt;</span>SHIRT-001<span class="tag">&lt;/g:item_group_id&gt;</span>   <span class="cmt">&lt;!-- אותו group! --&gt;</span>
+  <span class="tag">&lt;g:color&gt;</span>כחול<span class="tag">&lt;/g:color&gt;</span>
+  <span class="tag">&lt;g:size&gt;</span>L<span class="tag">&lt;/g:size&gt;</span>
+  <span class="tag">&lt;g:availability&gt;</span>out of stock<span class="tag">&lt;/g:availability&gt;</span>  <span class="cmt">&lt;!-- גמר מלאי? כל הוריאנט נעצר --&gt;</span>
+<span class="tag">&lt;/item&gt;</span></pre>
+      </div>
+
+      <div class="callout info">
+        <span class="icon">💡</span>
+        <div>גוגל מציגה אוטומטית את הוריאנט הרלוונטי לכל משתמש — מי שחיפש "חולצה כחולה" יראה את <code>SHIRT-001-BLUE-L</code>, לא את הוריאנט האדום שהוא ראשון ברשימה.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       9 — תדירות עדכון
+  ════════════════════════════════════════════════ -->
+  <div class="section" id="sec9">
+    <div class="section-header dark">
+      <div class="section-num">9</div>
+      תדירות עדכון ו-Delta Feed
+    </div>
+    <div class="section-body">
+      <div class="callout danger">
+        <span class="icon">✗</span>
+        <div><strong>עדכון פעם ביום — למה זה בעיה:</strong> מוצר נגמר ב-11:00. המודעה ממשיכה לרוץ עד חצות. 100 משתמשים מגיעים לדף "אזל המלאי" — בזבוז תקציב, פגיעה בחוויית משתמש, ירידה בציון האיכות.</div>
+      </div>
+      <div class="callout success">
+        <span class="icon">✓</span>
+        <div><strong>עדכון כל שעה:</strong> מוצר נגמר ב-11:00. ב-12:00 הפיד מעודכן. הפלטפורמה מפסיקה להציג אותו. אפס בזבוז.</div>
+      </div>
+
+      <h3>3 שכבות עדכון — כל אחת למטרה אחרת</h3>
+      <ul class="steps">
+        <li>
+          <div class="step-num blue">1</div>
+          <div class="step-content">
+            <strong>Full Feed Refresh — פעם ביום</strong>
+            <p>מייצר פיד שלם עם כל המוצרים. תפקידו: לתפוס שינויים שלא זוהו ב-Delta — כותרות שהשתנו, תמונות, קטגוריות, תיאורים. רץ בשעות הלילה כשהאתר פחות עמוס.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num green">2</div>
+          <div class="step-content">
+            <strong>Delta Feed Update — כל שעה</strong>
+            <p>שולח <strong>רק</strong> את המוצרים שמחיר, זמינות או מלאי שלהם השתנו מהשעה הקודמת. קל לעיבוד ומהיר — במקום לשלוח 50,000 מוצרים, שולחים רק 20 שהשתנו.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num" style="background:#fee2e2;color:#dc2626">!</div>
+          <div class="step-content">
+            <strong>Content API — שינויים דחופים בזמן אמת</strong>
+            <p>כשלא אפשר לחכות אפילו שעה — מבצע שמתחיל עכשיו, מוצר שנגמר בבת אחת. עדכון ישיר ל-Merchant Center ללא המתנה לסריקת קובץ. ראה סקשיין 10.</p>
+          </div>
+        </li>
+      </ul>
+
+      <h3>Delta Feed — איך מזהים מה השתנה?</h3>
+      <div class="explain-box">
+        <div class="explain-title">מה זה hashlib.md5 ולמה זה פתרון גאוני?</div>
+        <strong>הבעיה:</strong> איך יודעים אם מוצר השתנה מהשעה הקודמת? לא רוצים להשוות שדה-שדה לכל 50,000 מוצרים.<br><br>
+        <strong>הפתרון — hash:</strong> md5 הוא <strong>פונקציה שמייצרת "טביעת אצבע" ייחודית</strong> לכל קבוצת נתונים. הנתונים <code>{"price": 299, "availability": "in stock"}</code> יניבו תמיד אותו hash: <code>a3f2b1...</code>. אם המחיר השתנה ל-199 — ה-hash ישתנה לחלוטין: <code>7d9c4e...</code>. <br><br>
+        כל שעה: מחשבים hash חדש ומשווים ל-hash הקודם. אם שונה → מוצר השתנה → שולחים אותו בלבד.
+      </div>
+      <div class="code-block">
+        <span class="lang-tag">python — זיהוי שינויים יעיל</span>
+        <pre><span class="kw">import</span> hashlib, json
+
+<span class="kw">def</span> generate_delta_feed(current_products: list, prev_hashes: dict) -> list:
+    <span class="str">"""מחזיר רק את המוצרים שהשתנו מהעדכון הקודם"""</span>
+    changed = []
+
+    <span class="kw">for</span> product <span class="kw">in</span> current_products:
+        <span class="cmt"># השדות שאכפת לנו מהם — מחיר, מבצע, זמינות, מלאי</span>
+        key_fields = {
+            <span class="str">"price"</span>:        product[<span class="str">"price"</span>],
+            <span class="str">"sale_price"</span>:   product.get(<span class="str">"sale_price"</span>),
+            <span class="str">"availability"</span>: product[<span class="str">"availability"</span>],
+            <span class="str">"stock"</span>:        product.get(<span class="str">"stock_quantity"</span>),
+        }
+        <span class="cmt"># יצירת טביעת אצבע ייחודית לנתונים הנוכחיים</span>
+        current_hash = hashlib.md5(
+            json.dumps(key_fields, sort_keys=<span class="kw">True</span>).encode()
+        ).hexdigest()  <span class="cmt"># → "a3f2b1c4d8..." (32 תווים)</span>
+
+        pid = product[<span class="str">"id"</span>]
+        <span class="cmt"># אם ה-hash שונה מהשמור — הנתונים השתנו</span>
+        <span class="kw">if</span> prev_hashes.get(pid) != current_hash:
+            changed.append(product)        <span class="cmt"># הוסף לרשימת השינויים</span>
+            prev_hashes[pid] = current_hash  <span class="cmt"># שמור את ה-hash החדש</span>
+
+    print(<span class="str">f"{len(changed)} מוצרים השתנו מתוך {len(current_products)}"</span>)
+    <span class="kw">return</span> changed  <span class="cmt"># → רק אלו שישלחו בפיד</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       10 — Content API
+  ════════════════════════════════════════════════ -->
+  <div class="section" id="sec10">
+    <div class="section-header blue">
+      <div class="section-num">10</div>
+      Content API — עדכון בזמן אמת
+    </div>
+    <div class="section-body">
+      <p>כשהשינוי דחוף מכדי לחכות לסריקה הבאה, <strong>Content API</strong> של Google מאפשר לשלוח עדכון <strong>ישירות</strong> ל-Merchant Center — מוצר אחד בכמה שניות.</p>
+
+      <div class="explain-box">
+        <div class="explain-title">מה זה service_account.json?</div>
+        כדי שהסקריפט שלך ידבר עם Merchant Center, גוגל צריכה לדעת שאתה מורשה. הפתרון: <strong>Service Account</strong> — "עובד ווירטואלי" שאתה יוצר ב-Google Cloud Console, מקצה לו הרשאות, ומוריד קובץ JSON עם "מפתח" מוצפן. הסקריפט מציג את הקובץ הזה לגוגל — וגוגל מאמינה שזה אתה.<br><br>
+        <strong>איך מקבלים אותו?</strong> Google Cloud Console → IAM & Admin → Service Accounts → Create → Download JSON.
+      </div>
+
+      <div class="code-block">
+        <span class="lang-tag">python — Content API, עדכון מוצר בודד בזמן אמת</span>
+        <pre><span class="kw">from</span> google.oauth2 <span class="kw">import</span> service_account
+<span class="kw">from</span> googleapiclient.discovery <span class="kw">import</span> build
+
+<span class="kw">def</span> update_product_realtime(merchant_id: str, product_id: str, updates: dict):
+    <span class="cmt"># אימות מול גוגל עם service_account.json (הקובץ שהורדת מ-Cloud Console)</span>
+    credentials = service_account.Credentials.from_service_account_file(
+        <span class="str">"service_account.json"</span>,
+        scopes=[<span class="str">"https://www.googleapis.com/auth/content"</span>]  <span class="cmt"># הרשאה ל-Merchant Content</span>
+    )
+    service = build(<span class="str">"content"</span>, <span class="str">"v2.1"</span>, credentials=credentials)
+
+    <span class="cmt"># שליפת הנתונים הנוכחיים של המוצר מ-Merchant Center</span>
+    <span class="cmt"># product_id בפורמט: online:שפה:מדינה:מזהה</span>
+    product = service.products().get(
+        merchantId=merchant_id,
+        productId=<span class="str">f"online:he:IL:{product_id}"</span>
+    ).execute()
+
+    <span class="cmt"># עדכון השדות הרלוונטיים בלבד (שאר השדות נשמרים)</span>
+    product.update(updates)
+
+    <span class="cmt"># שמירה חזרה ל-Merchant Center — נכנסת לתוקף תוך דקות</span>
+    result = service.products().update(
+        merchantId=merchant_id,
+        productId=<span class="str">f"online:he:IL:{product_id}"</span>,
+        body=product
+    ).execute()
+    <span class="kw">return</span> result
+
+<span class="cmt"># ── שימוש: מוצר נגמר — עדכן מיד ──────────────────────────</span>
+update_product_realtime(
+    merchant_id=<span class="str">"123456789"</span>,           <span class="cmt"># ה-ID של ה-Merchant Center שלך</span>
+    product_id=<span class="str">"SKU-1234"</span>,
+    updates={
+        <span class="str">"availability"</span>: <span class="str">"out of stock"</span>,
+        <span class="str">"price"</span>: {<span class="str">"value"</span>: <span class="str">"399.00"</span>, <span class="str">"currency"</span>: <span class="str">"ILS"</span>}
+    }
+)</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       11 — Supplemental Feeds
+  ════════════════════════════════════════════════ -->
+  <div class="section" id="sec11">
+    <div class="section-header green">
+      <div class="section-num">11</div>
+      Supplemental Feeds — ביוסטר לנתונים
+    </div>
+    <div class="section-body">
+      <p>כשהפיד הראשי מגיע ממקום שאין לך שליטה עליו (Shopify, ERP, מערכת ספק), Supplemental Feed מאפשר <strong>להוסיף או לדרוס שדות ספציפיים</strong> — בלי לגעת בפיד הראשי.</p>
+
+      <div class="explain-box">
+        <div class="explain-title">איך ה-override עובד בפועל?</div>
+        גוגל מחברת Primary + Supplemental לפי ה-<code>id</code>. כל שדה שמופיע ב-Supplemental <strong>מחליף</strong> את הערך מה-Primary. שדות שלא קיימים ב-Supplemental — נשארים כפי שהם. זה מאפשר לשלוט על Custom Labels, כותרות, תמונות — גם אם הפיד הראשי מגיע אוטומטית מ-Shopify.
+      </div>
+
+      <div class="flow">
+Primary Feed (אוטומטי מ-Shopify):    SKU-1234 | מחיר: 299 | זמינות: in stock
+                                               | custom_label_0 = (ריק — Shopify לא יודע את המרווח שלך)
+
+Supplemental Feed (שלך — Google Sheets):  SKU-1234 | custom_label_0 = "high_margin"
+                                                     | custom_label_1 = "bestseller"
+                                                     | title = "Nike Air Max 270 שחור מידה 42 — משלוח חינם"
+
+תוצאה ב-Merchant Center:            SKU-1234 | מחיר: 299 (Primary) | custom_label_0: "high_margin" (Supplemental ✓)
+      </div>
+
+      <h3>דוגמת Supplemental Feed ב-CSV</h3>
+      <p>הכי נוח לנהל ב-Google Sheets — גוגל סורקת אוטומטית לפי תזמון שתגדיר.</p>
+      <div class="code-block">
+        <span class="lang-tag">csv — supplemental feed (Google Sheets → Merchant Center)</span>
+        <pre><span class="cmt"># שדה חובה: id — לפי id גוגל מחברת לפיד הראשי</span>
+id,custom_label_0,custom_label_1,custom_label_2,custom_label_3
+
+SKU-1234,high_margin,bestseller,summer,plenty      <span class="cmt"># מרווח גבוה, מוכר טוב</span>
+SKU-1235,low_margin,slow_mover,all_season,clearance <span class="cmt"># מרווח נמוך, עצלן — פנה מלאי</span>
+SKU-1236,medium_margin,regular,winter,low_stock     <span class="cmt"># מלאי נמוך — האט קצת</span></pre>
+      </div>
+
+      <div class="callout info">
+        <span class="icon">🔧</span>
+        <div><strong>זרימת עבודה מומלצת:</strong> Python/Script → מחשב Custom Labels אוטומטית → כותב ל-Google Sheets → גוגל סורקת כל שעה. שינוי מדיניות? פותח את ה-Sheet ומעדכן.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       12 — דיאגנוסטיקה
+  ════════════════════════════════════════════════ -->
+  <div class="section" id="sec12">
+    <div class="section-header red">
+      <div class="section-num">12</div>
+      דיאגנוסטיקה — שגיאות נפוצות ופתרונות
+    </div>
+    <div class="section-body">
+      <h3>שגיאה 1: מחיר לא תואם — הסיבה #1 לדחיות</h3>
+      <div class="callout danger">
+        <span class="icon">✗</span>
+        <div>
+          <strong>"Price does not match the price on the landing page"</strong><br>
+          גוגל מבקרת בדף המוצר ובודקת שהמחיר בפיד = המחיר בדף. אי-התאמה → דחייה מיידית.
+        </div>
+      </div>
+
+      <table class="data-table">
+        <thead><tr><th>סיבה נפוצה</th><th>הבעיה</th><th>פתרון</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>מע"מ</td>
+            <td>פיד שולח 258.62 (ללא מע"מ), דף מציג 299 (עם מע"מ)</td>
+            <td>תמיד שלח מחיר כולל מע"מ בפיד</td>
+          </tr>
+          <tr>
+            <td>פורמט</td>
+            <td><code>₪299</code> או <code>299 ₪</code> — גוגל לא מזהה</td>
+            <td>תמיד: <code>299.00 ILS</code> (מספר + רווח + ISO)</td>
+          </tr>
+          <tr>
+            <td>מחיר מבצע</td>
+            <td>דף מציג 199 (מבצע) אבל פיד שולח 299 (מחיר רגיל)</td>
+            <td>הוסף <code>sale_price</code> בפיד כשיש מבצע</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>שגיאה 2: תמונות לא עומדות בדרישות</h3>
+      <p>הסקריפט הבא סורק את כל התמונות בפיד ומדווח על בעיות — לפני ששולחים לגוגל:</p>
+      <div class="code-block">
+        <span class="lang-tag">python — image validation (PIL = ספריית עיבוד תמונה בפייתון)</span>
+        <pre><span class="kw">from</span> PIL <span class="kw">import</span> Image     <span class="cmt"># PIL/Pillow: ספרייה לפתיחה ובדיקת קבצי תמונה</span>
+<span class="kw">import</span> requests           <span class="cmt"># להורדת התמונה מה-URL</span>
+<span class="kw">from</span> io <span class="kw">import</span> BytesIO   <span class="cmt"># לטעינת התמונה מהזיכרון (בלי לשמור לדיסק)</span>
+
+<span class="kw">def</span> validate_image(image_url: str) -> dict:
+    issues = []
+
+    <span class="cmt"># הורדת התמונה מה-URL</span>
+    response = requests.get(image_url, timeout=<span class="num">10</span>)
+    <span class="cmt"># פתיחה כאובייקט תמונה עם PIL</span>
+    img = Image.open(BytesIO(response.content))
+    width, height = img.size  <span class="cmt"># קבלת מימדים בפיקסלים</span>
+
+    <span class="cmt"># בדיקה 1: מינימום גוגל (100x100)</span>
+    <span class="kw">if</span> width < <span class="num">100</span> <span class="kw">or</span> height < <span class="num">100</span>:
+        issues.append(<span class="str">f"קטנה מדי: {width}x{height} (מינימום: 100x100)"</span>)
+
+    <span class="cmt"># בדיקה 2: מומלץ 800x800 לאיכות טובה</span>
+    <span class="kw">if</span> width < <span class="num">800</span> <span class="kw">or</span> height < <span class="num">800</span>:
+        issues.append(<span class="str">f"איכות נמוכה: {width}x{height} (מומלץ 800x800+)"</span>)
+
+    <span class="cmt"># בדיקה 3: יחס תצוגה קיצוני (תמונה מאוד ארוכה/רחבה)</span>
+    ratio = width / height
+    <span class="kw">if</span> ratio < <span class="num">0.5</span> <span class="kw">or</span> ratio > <span class="num">2.0</span>:
+        issues.append(<span class="str">f"יחס תצוגה לא תקין: {ratio:.2f} (מומלץ 1:1 עד 2:1)"</span>)
+
+    <span class="kw">return</span> {<span class="str">"url"</span>: image_url, <span class="str">"valid"</span>: len(issues) == <span class="num">0</span>, <span class="str">"issues"</span>: issues}
+
+<span class="cmt"># שימוש — סריקת כל הפיד:</span>
+<span class="kw">for</span> product <span class="kw">in</span> all_products:
+    result = validate_image(product[<span class="str">"image_link"</span>])
+    <span class="kw">if not</span> result[<span class="str">"valid"</span>]:
+        print(<span class="str">f"בעיה ב-{product['id']}: {result['issues']}"</span>)</pre>
+      </div>
+
+      <h3>שגיאה 3: GTIN שגוי</h3>
+      <div class="explain-box">
+        <div class="explain-title">איך עובד אימות GTIN?</div>
+        GTIN-13 (ברקוד EAN) לא רנדומלי — הספרה האחרונה היא "check digit" שמחושבת מ-12 הספרות הקודמות. אלגוריתם: כפל ב-1 וב-3 לחלופין → סיכום → (10 - סכום % 10). אם הספרה ה-13 לא תואמת — ה-GTIN שגוי.
+      </div>
+      <div class="code-block">
+        <span class="lang-tag">python — בדיקת תקינות EAN-13</span>
+        <pre><span class="kw">def</span> validate_gtin(gtin: str) -> bool:
+    <span class="str">"""בדיקת תקינות GTIN-13 (ברקוד EAN) לפי האלגוריתם הרשמי"""</span>
+    <span class="cmt"># ווידוא שזה בדיוק 13 ספרות</span>
+    <span class="kw">if not</span> gtin <span class="kw">or</span> len(gtin) != <span class="num">13</span> <span class="kw">or not</span> gtin.isdigit():
+        <span class="kw">return False</span>
+
+    <span class="cmt"># חישוב: כפל ב-1 (עמדות אי-זוגיות) וב-3 (עמדות זוגיות)</span>
+    total = sum(
+        int(gtin[i]) * (<span class="num">1</span> <span class="kw">if</span> i % <span class="num">2</span> == <span class="num">0</span> <span class="kw">else</span> <span class="num">3</span>)
+        <span class="kw">for</span> i <span class="kw">in</span> range(<span class="num">12</span>)
+    )
+    <span class="cmt"># חישוב ספרת הביקורת הצפויה</span>
+    expected_check = (<span class="num">10</span> - (total % <span class="num">10</span>)) % <span class="num">10</span>
+    <span class="cmt"># השוואה לספרה ה-13 בברקוד</span>
+    <span class="kw">return</span> expected_check == int(gtin[<span class="num">12</span>])
+
+validate_gtin(<span class="str">"5901234123457"</span>)  <span class="cmt"># True  — ברקוד תקין</span>
+validate_gtin(<span class="str">"1234567890123"</span>)  <span class="cmt"># False — ספרה 13 לא מסתדרת</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       13 — ארכיטקטורה לפי גודל
+  ════════════════════════════════════════════════ -->
+  <div class="section" id="sec13">
+    <div class="section-header teal">
+      <div class="section-num">13</div>
+      ארכיטקטורה לפי גודל חנות
+    </div>
+    <div class="section-body">
+      <ul class="steps">
+        <li>
+          <div class="step-num green">S</div>
+          <div class="step-content">
+            <strong>חנות קטנה — עד 1,000 מוצרים</strong>
+            <p>Shopify + Google &amp; YouTube App → Merchant Center אוטומטי. הכלי מייצר פיד ישירות מהחנות, בלי קוד. <br><strong>חסרון:</strong> אין שליטה על Custom Labels. <br><strong>שדרוג:</strong> Supplemental Feed מ-Google Sheets שאתה ממלא ידנית או עם סקריפט קטן.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num blue">M</div>
+          <div class="step-content">
+            <strong>חנות בינונית — 1,000–50,000 מוצרים</strong>
+            <p>Shopify/WooCommerce → <strong>Feed Tool</strong> (DataFeedWatch, Channable, GoDataFeed) → כל הפלטפורמות בבת אחת. <br>Feed Tool הוא שכבת ביניים שמאפשרת כללי עיבוד ללא קוד — "אם קטגוריה = נעליים אז כותרת = מותג + שם + צבע + מידה".</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num" style="background:#fee2e2;color:#dc2626">L</div>
+          <div class="step-content">
+            <strong>חנות גדולה — 50,000+ מוצרים</strong>
+            <p>
+              <strong>ERP</strong> (כמו SAP, Priority, NetSuite — מערכת ניהול עסקית שם יושב המלאי ה"אמיתי" והמחירים) + מחסן + CRM<br>
+              → <strong>Data Pipeline</strong> (Apache Kafka / AWS Kinesis — תשתית שמעבירה עשרות אלפי שינויים בשנייה, כמו "קו הרכבה" לנתונים)<br>
+              → <strong>Feed Processing Service</strong> (סקריפט Python/Node.js שמבצע את 5 השלבים: Extraction, Normalization, Enrichment, Validation, Segmentation)<br>
+              → Cloud Storage (GCS / S3 — שרת קבצים בענן שגוגל מורידה ממנו)<br>
+              → Content API (עדכון דחוף) + Full Refresh (יומי)
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       14 — מדדים ומוניטורינג
+  ════════════════════════════════════════════════ -->
+  <div class="section" id="sec14">
+    <div class="section-header gold">
+      <div class="section-num">14</div>
+      מדדי הצלחה ומוניטורינג
+    </div>
+    <div class="section-body">
+      <h3>KPIs לפיד בריא — מה בודקים ב-Merchant Center</h3>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <span class="kpi-val">95%+</span>
+          <div class="kpi-label">שיעור מוצרים מאושרים — כמה מהפיד פעיל במודעות</div>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-val">&lt;1%</span>
+          <div class="kpi-label">Disapproval Rate — כמה מוצרים נדחו ולא רצים</div>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-val">&lt;6h</span>
+          <div class="kpi-label">זמן מעדכון הפיד עד שהמוצר פעיל במודעות</div>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-val">80%+</span>
+          <div class="kpi-label">Coverage Rate — מוצרים שמקבלים impressions בפועל</div>
+        </div>
+      </div>
+
+      <div class="explain-box">
+        <div class="explain-title">מה ההבדל בין Disapproval Rate ל-Coverage Rate?</div>
+        <strong>Disapproval Rate</strong> = מוצרים שגוגל <em>דחתה</em> — פורמט שגוי, מחיר לא תואם, תמונה לא תקינה. אלה מוצרים שכלל לא יופיעו.<br><br>
+        <strong>Coverage Rate</strong> = מוצרים מאושרים שבפועל <em>מקבלים impressions</em>. אפשר שמוצר מאושר אבל לא מציג כי: תחרות גבוהה, מחיר גבוה מהשוק, ביקוש אפסי, או Bid נמוך מדי. Coverage נמוך = צריך לבדוק מחירים ואסטרטגיית בידינג.
+      </div>
+
+      <h3>Checklist פיד מנצח</h3>
+      <ul class="checklist">
+        <li>שדות חובה מלאים ותקינים — id, title, price, image_link, availability</li>
+        <li>GTIN נכון לכל מוצר שיש לו ברקוד (EAN/UPC)</li>
+        <li>google_product_category מדויק עד הרמה הכי עמוקה בהיררכיה</li>
+        <li>item_group_id לכל קבוצת וריאנטים (צבע, מידה)</li>
+        <li>Custom Labels מחושבים אוטומטית לפי מרווח, ביצועים ומלאי</li>
+        <li>כותרות בנויות לפי [מותג + שם + מאפיינים קריטיים] — החשוב ראשון</li>
+        <li>תמונה ראשית 800×800+ רקע לבן + תמונות lifestyle נוספות</li>
+        <li>מחיר תואם 100% למחיר בדף המוצר (כולל מע"מ, כולל מבצעים)</li>
+        <li>עדכון לפחות כל שעה לזמינות ומחיר — אפס בזבוז תקציב על OOS</li>
+        <li>Supplemental Feed לשדות שהפיד הראשי לא מכסה</li>
+        <li>מוניטורינג אוטומטי — התראה כשהאחוז מאושרים יורד מתחת ל-90%</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══ FOOTER ═══ -->
+  <div class="doc-footer">
+    <strong>RPG Digital</strong> — Knowledge Hub · ארכיטקטורת פיד מוצרים
+  </div>
+
+</div>
+</body>
+</html>

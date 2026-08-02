@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Creative Targeting Strategy — RPG Digital</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f1f5f9;color:#1e293b;min-height:100vh;direction:rtl;font-size:15px}
+
+/* Header */
+.header{background:#fff;border-bottom:2px solid #7c3aed;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;box-shadow:0 1px 6px rgba(0,0,0,0.07)}
+.header h1{font-size:1.5rem;font-weight:700;color:#1e293b}
+.header .sub{color:#64748b;font-size:0.85rem;margin-top:3px}
+.badge{background:#7c3aed;color:#fff;padding:4px 14px;border-radius:20px;font-size:0.78rem;font-weight:600}
+
+/* Tabs */
+.tabs{display:flex;background:#fff;border-bottom:2px solid #e2e8f0;padding:0 18px;gap:2px;overflow-x:auto}
+.tab-btn{padding:13px 20px;background:transparent;color:#64748b;border:none;border-bottom:3px solid transparent;cursor:pointer;font-size:0.92rem;font-weight:600;transition:all 0.2s;font-family:inherit;white-space:nowrap}
+.tab-btn:hover{color:#7c3aed}
+.tab-btn.active{color:#7c3aed;border-bottom-color:#7c3aed}
+.tab-sep{width:1px;background:#e2e8f0;margin:8px 6px;flex-shrink:0}
+
+/* Panel */
+.tab-panel{display:none;padding:20px}
+.tab-panel.active{display:block}
+
+/* Toolbar */
+.toolbar{display:flex;gap:8px;margin-bottom:16px;align-items:center;flex-wrap:wrap}
+.btn{padding:9px 18px;border:none;border-radius:8px;cursor:pointer;font-size:0.9rem;font-weight:600;transition:all 0.2s;font-family:inherit}
+.btn-primary{background:#7c3aed;color:#fff}
+.btn-primary:hover{background:#6d28d9}
+.btn-outline{background:#fff;color:#64748b;border:1.5px solid #cbd5e1}
+.btn-outline:hover{color:#7c3aed;border-color:#7c3aed}
+.btn-del{background:#fee2e2;color:#dc2626;padding:4px 10px;font-size:0.78rem;border:none;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:600}
+.btn-del:hover{background:#fca5a5}
+.rows-badge{background:#ede9fe;color:#7c3aed;padding:7px 14px;border-radius:8px;font-size:0.85rem;font-weight:600}
+.panel-desc{color:#64748b;font-size:0.85rem;margin-bottom:14px;background:#fff;border:1px solid #e2e8f0;border-right:3px solid #7c3aed;border-radius:8px;padding:9px 13px}
+
+/* Table */
+.table-wrapper{overflow-x:auto;border-radius:12px;border:1.5px solid #e2e8f0;max-height:calc(100vh - 250px);background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.05)}
+table{width:100%;border-collapse:collapse;font-size:0.9rem}
+thead th{background:#f8fafc;color:#7c3aed;padding:11px 10px;white-space:nowrap;font-weight:700;font-size:0.82rem;text-align:right;border-bottom:2px solid #e2e8f0;position:sticky;top:0;z-index:10}
+tbody tr{border-bottom:1px solid #f1f5f9}
+tbody tr:hover{background:#faf5ff}
+tbody td{padding:6px 6px;vertical-align:middle}
+.row-num{color:#94a3b8;font-size:0.8rem;text-align:center;padding:0 8px;min-width:32px}
+
+/* Inputs */
+select,input[type="text"],input[type="date"]{background:#fff;color:#1e293b;border:1.5px solid #cbd5e1;border-radius:7px;padding:6px 9px;font-size:0.88rem;font-family:inherit;width:100%;min-width:120px;max-width:190px;direction:rtl}
+select:focus,input[type="text"]:focus,input[type="date"]:focus{outline:none;border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,0.1)}
+select option{background:#fff;color:#1e293b}
+td.notes-cell input{max-width:160px}
+.ref-select{border-color:#a5b4fc;background:#eef2ff}
+
+/* Formula cell (auto Audience Name) */
+.formula-cell{background:#f5f3ff;border:1.5px dashed #c4b5fd;border-radius:7px;padding:6px 10px;font-size:0.84rem;font-weight:700;color:#6d28d9;min-width:170px;max-width:260px;direction:ltr;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.formula-cell.empty{color:#cbd5e1;font-weight:500;font-style:italic}
+
+/* Record cards (two-row layout — no horizontal scroll) */
+.rec-list{display:flex;flex-direction:column;gap:12px;max-height:calc(100vh - 250px);overflow-y:auto;padding:2px 4px 2px 2px}
+.rec-card{background:#fff;border:1.5px solid #e2e8f0;border-radius:12px;padding:12px 14px;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+.rec-card:hover{border-color:#ddd6fe}
+.rec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.rec-num{cursor:pointer;background:#ede9fe;color:#7c3aed;font-weight:700;font-size:0.82rem;padding:3px 13px;border-radius:20px;transition:background .15s}
+.rec-num:hover{background:#ddd6fe}
+.rec-row{display:flex;flex-wrap:wrap;gap:10px 12px}
+.rec-row + .rec-row{margin-top:12px;padding-top:12px;border-top:1px dashed #e2e8f0}
+.rec-field{display:flex;flex-direction:column;gap:4px;flex:1 1 155px;min-width:140px;max-width:230px}
+.rec-field.wide{flex:2 1 280px;max-width:480px}
+.rec-field > label{font-size:0.7rem;color:#94a3b8;font-weight:700;letter-spacing:0.02em;margin:0;display:flex;align-items:center;gap:3px}
+.rec-field select,.rec-field input{max-width:none;width:100%;min-width:0}
+.rec-field .combo-wrap,.rec-field .formula-wrap{width:100%;display:flex;gap:5px;align-items:center}
+.rec-field .combo-wrap input{width:100%}
+.multi-wrap{width:100%;display:flex;flex-direction:column;gap:6px}
+.multi-chips{display:flex;flex-wrap:wrap;gap:5px}
+.multi-chips:empty{display:none}
+.multi-chip{display:inline-flex;align-items:center;gap:5px;background:#ede9fe;color:#6d28d9;border-radius:14px;padding:3px 6px 3px 11px;font-size:0.78rem;font-weight:600;white-space:nowrap;max-width:100%}
+.multi-chip span{overflow:hidden;text-overflow:ellipsis}
+.multi-chip-rm{background:none;border:none;color:#a78bfa;cursor:pointer;font-size:0.8rem;padding:0;line-height:1;border-radius:50%;width:16px;height:16px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:inherit}
+.multi-chip-rm:hover{background:#c4b5fd;color:#fff}
+.multi-wrap input{width:100%}
+.field-info{cursor:pointer;color:#c4b5fd;font-size:0.72rem;font-weight:400;flex-shrink:0;background:none;border:none;padding:0;font-family:inherit}
+.field-info:hover{color:#7c3aed}
+.info-popover{position:fixed;z-index:1100;max-width:320px;background:#1e1b2e;color:#f1f5f9;font-size:0.82rem;line-height:1.55;padding:11px 14px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.25);direction:rtl}
+.formula-input{width:100%;background:#f5f3ff;border:1.5px solid #c4b5fd;border-radius:7px;padding:6px 9px;font-size:0.84rem;font-weight:700;color:#6d28d9;direction:ltr;text-align:left;font-family:'Segoe UI',Arial,sans-serif}
+.formula-input:focus{outline:none;border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,0.1)}
+.formula-input.empty{color:#94a3b8;font-weight:500}
+.formula-input.overridden{background:#fffbeb;border-color:#fbbf24;color:#b45309;border-style:dashed}
+.formula-reset{flex-shrink:0;background:#fef3c7;border:1.5px solid #fbbf24;color:#b45309;border-radius:6px;cursor:pointer;font-size:0.85rem;padding:5px 8px;line-height:1;font-family:inherit}
+.formula-reset:hover{background:#fde68a}
+
+/* Empty */
+.empty-state{text-align:center;padding:56px;color:#94a3b8}
+.empty-state .icon{font-size:2.2rem;margin-bottom:10px}
+
+/* DB Manager */
+.db-toolbar{display:flex;gap:8px;margin-bottom:16px;align-items:center;flex-wrap:wrap}
+.section-title{font-size:1rem;color:#7c3aed;font-weight:700;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #e2e8f0}
+.db-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.db-card{background:#fff;border:1.5px solid #e2e8f0;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+.db-card-header{background:#f8fafc;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e2e8f0}
+.db-card-header h3{font-size:0.82rem;color:#7c3aed;font-weight:700}
+.count-badge{background:#ede9fe;color:#7c3aed;padding:2px 9px;border-radius:12px;font-size:0.73rem;font-weight:600}
+.db-card-body{padding:11px 13px}
+.db-items{display:flex;flex-direction:column;gap:3px;max-height:180px;overflow-y:auto;margin-bottom:8px}
+.db-item{display:flex;align-items:center;justify-content:space-between;gap:5px;padding:5px 8px;border-radius:6px;background:#f8fafc}
+.db-item span{font-size:0.82rem;color:#374151;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.remove-val{background:none;border:none;color:#cbd5e1;cursor:pointer;font-size:1rem;padding:0 2px;line-height:1;flex-shrink:0}
+.remove-val:hover{color:#dc2626}
+.db-add-row{display:flex;gap:6px;margin-top:6px}
+.db-add-row input{flex:1;min-width:0;max-width:none}
+.db-add-row button{padding:6px 12px;background:#7c3aed;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.8rem;font-family:inherit;white-space:nowrap;font-weight:600}
+.db-add-row button:hover{background:#6d28d9}
+
+/* Config */
+.config-note{color:#64748b;font-size:0.85rem;margin-bottom:16px;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 13px;line-height:1.6}
+.config-prefix{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px;background:#fff;border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 18px}
+.config-prefix label{font-size:0.85rem;font-weight:700;color:#7c3aed}
+.config-prefix input{max-width:130px;background:#fef9c3;border-color:#fde047;font-weight:700}
+.prefix-preview{font-size:0.82rem;color:#64748b}
+.prefix-preview b{color:#6d28d9;direction:ltr;display:inline-block;font-family:'Segoe UI',monospace}
+.config-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+.config-card{background:#fff;border:1.5px solid #e2e8f0;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+.config-card h3{font-size:0.85rem;color:#7c3aed;font-weight:700;padding:11px 14px;background:#f8fafc;border-bottom:1px solid #e2e8f0}
+.code-table{width:100%;border-collapse:collapse}
+.code-table th{background:#fff;color:#94a3b8;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.05em;padding:8px 12px;text-align:right;border-bottom:1px solid #f1f5f9}
+.code-table td{padding:5px 10px}
+.code-table input{max-width:none;width:100%;background:#fef9c3;border-color:#fde047}
+.code-table .code-col{max-width:110px}
+.code-table .rm{width:34px;text-align:center}
+.code-add{padding:10px 14px}
+.code-add button{width:100%;padding:8px;background:#ede9fe;color:#7c3aed;border:1.5px dashed #c4b5fd;border-radius:8px;cursor:pointer;font-family:inherit;font-weight:600;font-size:0.82rem}
+.code-add button:hover{background:#ddd6fe}
+
+/* Clickable row number */
+.row-num-btn{cursor:pointer;color:#7c3aed !important;font-weight:700;border-radius:4px;padding:2px 6px;transition:background 0.15s}
+.row-num-btn:hover{background:#ede9fe}
+
+/* Column toggle */
+.col-toggle-wrap{position:relative}
+.col-panel{position:absolute;top:calc(100% + 6px);right:0;background:#fff;border:1.5px solid #e2e8f0;border-radius:12px;padding:10px 0;min-width:230px;max-height:70vh;overflow-y:auto;z-index:200;box-shadow:0 8px 30px rgba(0,0,0,0.12)}
+.col-panel-title{font-size:0.72rem;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;padding:4px 14px 8px;border-bottom:1px solid #f1f5f9;margin-bottom:6px}
+.col-check-item{display:flex;align-items:center;gap:8px;padding:6px 14px;cursor:pointer;transition:background 0.15s}
+.col-check-item:hover{background:#f8fafc}
+.col-check-item input[type="checkbox"]{accent-color:#7c3aed;width:14px;height:14px;cursor:pointer;flex-shrink:0;min-width:unset;max-width:unset}
+.col-check-item label{font-size:0.85rem;color:#374151;cursor:pointer;margin:0}
+.col-panel-footer{padding:8px 14px 2px;display:flex;gap:6px;position:sticky;bottom:0;background:#fff}
+.col-panel-footer button{flex:1;padding:6px;background:#fff;border:1.5px solid #cbd5e1;color:#64748b;border-radius:6px;cursor:pointer;font-size:0.78rem;font-family:inherit;font-weight:600}
+.col-panel-footer button:hover{border-color:#7c3aed;color:#7c3aed}
+
+/* Modal overlay */
+.modal-overlay{position:fixed;inset:0;background:rgba(15,17,35,0.55);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal-box{background:#fff;border:1.5px solid #e2e8f0;border-radius:16px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 25px 60px rgba(0,0,0,0.18)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1.5px solid #e2e8f0;position:sticky;top:0;background:#fff;z-index:1;border-radius:16px 16px 0 0}
+.modal-title{font-size:1rem;font-weight:700;color:#1e293b}
+.modal-close{background:none;border:none;color:#94a3b8;font-size:1.3rem;cursor:pointer;line-height:1;padding:3px 7px;border-radius:6px;transition:all 0.2s}
+.modal-close:hover{background:#f1f5f9;color:#1e293b}
+.modal-body{padding:18px 22px;display:flex;flex-direction:column;gap:12px}
+
+/* Brief card */
+.brief-hero{background:linear-gradient(135deg,#4c1d95 0%,#1e3a5f 100%);border-radius:12px;padding:18px 20px}
+.brief-account{font-size:1.2rem;font-weight:700;color:#fff;margin-bottom:10px}
+.brief-tags{display:flex;gap:6px;flex-wrap:wrap}
+.brief-tag{padding:4px 13px;border-radius:20px;font-size:0.75rem;font-weight:700}
+.tag-neutral{background:rgba(255,255,255,0.2);color:#fff}
+.tag-outline{background:transparent;color:#c4b5fd;border:1px solid #c4b5fd}
+.brief-section{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:13px 16px}
+.brief-sec-title{font-size:0.7rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #e2e8f0}
+.brief-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:7px}
+.brief-row:last-child{margin-bottom:0}
+.brief-lbl{font-size:0.75rem;color:#94a3b8;min-width:120px;flex-shrink:0;padding-top:2px;font-weight:600}
+.brief-val{font-size:0.88rem;color:#1e293b;font-weight:500;flex:1;line-height:1.4}
+.brief-val.empty{color:#cbd5e1;font-style:italic}
+.brief-copy-btn{width:100%;padding:10px;background:#ede9fe;border:1.5px solid #c4b5fd;color:#7c3aed;border-radius:9px;cursor:pointer;font-size:0.88rem;font-family:inherit;font-weight:700;transition:all 0.2s}
+.brief-copy-btn:hover{background:#ddd6fe}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:#f1f5f9}
+::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:#7c3aed}
+
+/* Flowchart Builder */
+.flow-wrap{display:flex;gap:14px;height:calc(100vh - 150px);min-height:460px}
+.flow-side{width:272px;flex-shrink:0;background:#fff;border:1.5px solid #e2e8f0;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:14px;overflow-y:auto;box-shadow:0 1px 4px rgba(0,0,0,0.05)}
+.flow-side h4{font-size:0.82rem;color:#7c3aed;font-weight:700;text-transform:uppercase;letter-spacing:0.05em}
+.flow-field{display:flex;flex-direction:column;gap:5px}
+.flow-field label{font-size:0.75rem;color:#64748b;font-weight:600}
+.flow-side select,.flow-side input[type="text"]{max-width:none;width:100%}
+.flow-swatches{display:flex;flex-wrap:wrap;gap:7px}
+.flow-swatch{width:27px;height:27px;border-radius:7px;cursor:pointer;border:2px solid transparent;transition:transform .12s;box-shadow:0 1px 3px rgba(0,0,0,0.15)}
+.flow-swatch:hover{transform:scale(1.13)}
+.flow-swatch.sel{border-color:#1e293b}
+.flow-add-btn{width:100%;padding:11px;background:#7c3aed;color:#fff;border:none;border-radius:9px;cursor:pointer;font-size:0.92rem;font-weight:700;font-family:inherit;transition:background .2s}
+.flow-add-btn:hover{background:#6d28d9}
+.flow-add-blank{background:#fff;color:#7c3aed;border:1.5px solid #c4b5fd}
+.flow-add-blank:hover{background:#f5f3ff}
+.flow-hint{font-size:0.74rem;color:#64748b;line-height:1.7;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:9px 11px}
+.flow-hint b{color:#7c3aed}
+.flow-divider{height:1px;background:#e2e8f0}
+.flow-canvas-wrap{flex:1;position:relative;background:#fafbff;border:1.5px solid #e2e8f0;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.05)}
+#flow-svg{width:100%;height:100%;display:block;cursor:grab;touch-action:none}
+#flow-svg.panning{cursor:grabbing}
+.flow-toolbar{position:absolute;top:12px;left:12px;display:flex;gap:6px;z-index:5;flex-wrap:wrap}
+.flow-tool{height:38px;min-width:38px;display:flex;align-items:center;justify-content:center;background:#fff;border:1.5px solid #e2e8f0;border-radius:9px;cursor:pointer;font-size:1rem;color:#475569;box-shadow:0 1px 4px rgba(0,0,0,0.08);transition:all .15s;font-family:inherit}
+.flow-tool:hover{border-color:#7c3aed;color:#7c3aed}
+.flow-tool.active{border-color:#7c3aed;color:#7c3aed;background:#f5f3ff}
+.flow-tool.wide{padding:0 13px;gap:5px;font-size:0.85rem;font-weight:600}
+.flow-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#cbd5e1;pointer-events:none;text-align:center;gap:8px}
+.flow-empty .ic{font-size:2.6rem}
+.flow-node{cursor:move}
+.flow-node text{user-select:none;pointer-events:none}
+.flow-handle{fill:#7c3aed;stroke:#fff;stroke-width:2;cursor:crosshair;opacity:0;transition:opacity .15s}
+.flow-node:hover .flow-handle,.flow-node.selected .flow-handle{opacity:1}
+.flow-del{cursor:pointer;opacity:0;transition:opacity .15s}
+.flow-node:hover .flow-del,.flow-node.selected .flow-del{opacity:1}
+.flow-resize{fill:#fff;stroke:#7c3aed;stroke-width:2;cursor:nwse-resize}
+.flow-edge{stroke:#94a3b8;stroke-width:2;fill:none;cursor:pointer}
+.flow-edge:hover{stroke:#7c3aed}
+.flow-edge.selected{stroke:#7c3aed;stroke-width:3}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>🎯 Creative Targeting Strategy</h1>
+    <div class="sub">תכנון קמפיינים היררכי — Audiences → Journeys → Campaigns → Ad Sets → Ads | נשמר אוטומטית</div>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <span class="badge">RPG Digital</span>
+    <button class="btn btn-outline" onclick="exportCSV()">⬇ Export CSV</button>
+  </div>
+</div>
+
+<div class="tabs" id="tabs"></div>
+
+<!-- Data sheet panels are generated by JS into #sheets-container -->
+<div id="sheets-container"></div>
+
+<!-- Config -->
+<div id="tab-config" class="tab-panel">
+  <div class="section-title">⚙ Config — קידוד לנוסחת שם הקהל</div>
+  <div class="config-note">טבלאות ההמרה לנוסחת שם הקהל. אפשר להוסיף שורות ולשנות שמות/קודים — נוסחת <b>Audience Name</b> תתעדכן לבד. תא צהוב = ניתן לעריכה.</div>
+  <div class="config-prefix">
+    <label>Account Prefix</label>
+    <input type="text" id="cfg-prefix" oninput="onPrefixChange()">
+    <div class="prefix-preview">תבנית שם הקהל: <b id="prefix-preview">RPG | FUNNEL | EVENT RECENCY | EXCL</b></div>
+  </div>
+  <div class="config-grid">
+    <div class="config-card">
+      <h3>Funnel → Code</h3>
+      <table class="code-table">
+        <thead><tr><th>Funnel</th><th class="code-col">Code</th><th class="rm"></th></tr></thead>
+        <tbody id="cfg-funnels"></tbody>
+      </table>
+      <div class="code-add"><button onclick="addConfigRow('funnels')">+ הוסף שורה</button></div>
+    </div>
+    <div class="config-card">
+      <h3>Event → Code</h3>
+      <table class="code-table">
+        <thead><tr><th>Event</th><th class="code-col">Code</th><th class="rm"></th></tr></thead>
+        <tbody id="cfg-events"></tbody>
+      </table>
+      <div class="code-add"><button onclick="addConfigRow('events')">+ הוסף שורה</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- Database Manager -->
+<div id="tab-db" class="tab-panel">
+  <div class="section-title">🗄 מנהל הדאטה בייס — הוסף או הסר ערכים מכל קטגוריה</div>
+  <div class="panel-desc">כאן מנוהלות כל רשימות הבחירה (הדרופדאונים) של כל הטבלאות. שינוי כאן משפיע על כל הגיליונות. הערה: <b>Funnel</b> ו-<b>Event</b> מנוהלים בטאב Config.</div>
+  <div class="db-toolbar">
+    <button class="btn btn-outline" onclick="resetDB()">↺ אפס לברירת מחדל</button>
+  </div>
+  <div class="db-grid" id="db-grid"></div>
+</div>
+
+<!-- Flowchart -->
+<div id="tab-flow" class="tab-panel">
+  <div class="flow-wrap">
+    <div class="flow-side">
+      <h4>🧩 בונה התרשים</h4>
+      <div class="flow-field">
+        <label>קטגוריה</label>
+        <select id="flow-cat" onchange="onFlowCat()"></select>
+      </div>
+      <div class="flow-field">
+        <label>ערך</label>
+        <select id="flow-val"></select>
+      </div>
+      <div class="flow-field">
+        <label>תיוג / היררכיה (אופציונלי)</label>
+        <input type="text" id="flow-tag" list="flow-tag-list" placeholder="ללא תיוג — או הקלד/בחר" oninput="onFlowTagInput()">
+        <datalist id="flow-tag-list">
+          <option value="AUDIENCE"></option>
+          <option value="JOURNEY"></option>
+          <option value="CAMPAIGN"></option>
+          <option value="AD SET"></option>
+          <option value="AD"></option>
+        </datalist>
+      </div>
+      <div class="flow-field">
+        <label>צבע האלמנט</label>
+        <div class="flow-swatches" id="flow-swatches"></div>
+      </div>
+      <button class="flow-add-btn" onclick="addFlowBlock()">➕ הוסף אלמנט לקנבס</button>
+      <button class="flow-add-btn flow-add-blank" onclick="addBlankBlock()">➕ הוסף אלמנט ריק</button>
+      <div class="flow-divider"></div>
+      <div class="flow-hint">
+        <b>הזזה:</b> גרור אלמנט (או כמה נבחרים יחד).<br>
+        <b>עריכה:</b> לחיצה כפולה על אלמנט לעריכת הטקסט.<br>
+        <b>הגדלה:</b> גרור את הריבוע ◢ בפינת אלמנט נבחר.<br>
+        <b>בחירה מרובה:</b> Shift+לחיצה, או ✋→⬚ וגרירת מסגרת. Ctrl+A לבחירת הכל.<br>
+        <b>חיבור:</b> גרור מהעיגול ● שבתחתית האלמנט אל אחר.<br>
+        <b>קנבס:</b> גרור רקע ריק להזזה • גלגלת לזום.<br>
+        <b>מחיקה:</b> בחר ולחץ Delete, או לחץ על ✕.
+      </div>
+    </div>
+    <div class="flow-canvas-wrap">
+      <div class="flow-toolbar">
+        <button class="flow-tool" id="flow-mode-btn" onclick="toggleFlowMode()" title="מצב: הזזת קנבס (לחץ למעבר לבחירה מרובה)">✋</button>
+        <button class="flow-tool" onclick="flowZoom(1.2)" title="הגדל">＋</button>
+        <button class="flow-tool" onclick="flowZoom(0.8)" title="הקטן">－</button>
+        <button class="flow-tool" onclick="flowFit()" title="התאם לתצוגה">⤢</button>
+        <button class="flow-tool wide" onclick="exportFlowPNG()" title="ייצוא תמונה">🖼 PNG</button>
+        <button class="flow-tool wide" onclick="clearFlow()" title="נקה הכל">🗑 נקה</button>
+      </div>
+      <svg id="flow-svg"></svg>
+      <div class="flow-empty" id="flow-empty">
+        <div class="ic">🗺️</div>
+        <div>בחר קטגוריה וערך מימין ולחץ "הוסף אלמנט"<br>כדי להתחיל לבנות אסטרטגיה ויזואלית</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Brief Modal -->
+<div class="modal-overlay" id="brief-modal" onclick="if(event.target===this)closeBrief()">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title">📋 Brief</span>
+      <button class="modal-close" onclick="closeBrief()">✕</button>
+    </div>
+    <div class="modal-body" id="brief-content"></div>
+  </div>
+</div>
+
+<!-- Field info popover (click on ⓘ) -->
+<div class="info-popover" id="info-popover" style="display:none"></div>
+
+<script>
+// ═════════════════════════════════════════════
+// DEFAULT DATABASE (dropdown value lists)
+// Existing Hub data preserved + Meta/Google unified
+// ═════════════════════════════════════════════
+function uniq(arr){ const seen=new Set(); const out=[]; arr.forEach(v=>{ if(!seen.has(v)){ seen.add(v); out.push(v); } }); return out; }
+
+function buildDefaultDB(){
+  const creativeStyle = [
+    "Unboxing (פתיחת קופסה)","Testimonial (עדות וידאו)","Founder Story (סיפור המייסד)",
+    "GRWM (התארגנו איתי)","BTS (מאחורי הקלעים)","ראיונות רחוב","Reaction Video (סרטון תגובה)",
+    "Day in the Life (יום בחיי...)","Employee POV (נקודת מבט עובד)","Product in the Wild",
+    "Pain Point Agitation","Before & After (לפני ואחרי)","Myth vs. Fact (מיתוס מול עובדה)",
+    "The Hack (הטריק)","Us vs. Them (אנחנו מול ההם)","Old Way / New Way",
+    "Checklist (צ'קליסט יתרונות)","Blind Taste/Test (מבחן עיוור)","Feature Callout",
+    "Product Demo (הדגמה נטו)","ASMR","Extreme Durability (מבחן ריסוק)","האנטומיה של המוצר",
+    "Macro Shots (צילומי תקריב)","3D CGI (הדמיית תלת־ממד)","How-To Tutorial (מדריך)",
+    "3 Reasons Why (שלוש סיבות למה)","Top 5 Mistakes (טעויות נפוצות)","Infographic (אינפוגרפיקה)",
+    "Listicle (רשימה ממוספרת)","Quiz Hook (חידון סקרנות)","Fun Fact (הידעתם?)",
+    "Comedy Skit (מערכון)","Meme Style (ממים)","The Epic Fail (הכישלון)",
+    "Pop Culture Ref (תרבות פופ)","Press Mentions (ציוני עיתונות)","Expert Review (סקירת מומחה)",
+    "Massive Numbers (כוח המספרים)","Trustpilot Overlay","Award Winner (פרסים)",
+    "Flash Sale (מבצע בזק)","The Bundle (מארזים)","Free Trial (ניסיון חינם)",
+    "Secret Code (קוד סודי)","Oddly Satisfying (מספק מוזר)","Stop Motion (סטופ מושן)",
+    "Time-Lapse (הילוך מהיר)","Aesthetic B-Roll","Kinetic Typography",
+    "Reply to Comment (תשובה לתגובה)","The Fake Podcast (פודקאסט מזויף)",
+    "Reverse Psychology (פסיכולוגיה הפוכה)","Packing an Order (אורזים הזמנה)",
+    "The Ultimate Tester (הנסיין)","WhatsApp Text Message (שיחת טקסט)","Red Flags / Green Flags",
+    "The Journey Timeline (ציר זמן התקדמות)","Partner Review (ביקורת בן/בת זוג)",
+    "Whiteboard Explainer (לוח מחיק)","Venn Diagram (דיאגרמת ון)",
+    "Hyper-Specific Callout (קריאת נישה)","Visual Restocking (חידוש מלאי)",
+    "The Flowchart (תרשים זרימה)","Split Screen / Subway Surfers Effect",
+    "Industry Secrets (סודות התעשייה)","This or That (זה או זה)","The Secret Menu (התפריט הסודי)",
+    "Pure POV (גוף ראשון)","Customer Support Skit (שירות לקוחות)",
+    "Trend Aggregation (טיקטוק הכריח אותי)","The Aha Moment (רגע התגלית)",
+    "Stock Warning (אזהרת מלאי)","Reverse Unboxing (אנבוקסינג הפוך)",
+    "The Price Breakdown (שקיפות מחיר)","The Replenishment Reminder (תזכורת חידוש מלאי)",
+    "The Cross-Sell Match (השידוך המושלם)","VIP Early Access (גישה מוקדמת)",
+    "The We Missed You Offer (התגעגענו)","Pro-User Hacks (טריק למתקדמים)",
+    "Subscription Upsell (שדרוג למנוי)","The Founder's Thank You (תודת המייסד)",
+    "You Asked, We Listened (ביקשתם, הקשבנו)","Live Demo / Live Shopping",
+    "Screen Recording Demo","Case Study / Customer Success Story",
+    "Founder FAQ / Ask Me Anything","Duet / Stitch Style","Search-Style Creative",
+    "Newsjacking / Timely Commentary","Challenge / Experiment Format"
+  ];
+  const segment = [
+    "Broad","Advantage+ Audience","Interest-Based Audience","Lookalike Audience",
+    "Customer List / CRM Audience","Website Visitors","Facebook and Instagram Engagers",
+    "Video Viewers","Lead Form Openers","Leads","Qualified Leads","Converted Leads",
+    "Product Viewers","Add to Cart Users","Initiate Checkout Users","Past Purchasers",
+    "Existing Customers","Repeat Customers","High-Value Customers","High LTV Customers",
+    "Recent Customers","Inactive Customers","Churned Customers","Win-Back Customers",
+    "App Users","Messaging Engagers"
+  ];
+  const tacticsMeta = [
+    "Social Proof Stacking","Sequential Remarketing","Cross-Sell Remarketing",
+    "Winback Remarketing","Scroll & Time-based Remarketing","Video Engagement Layers",
+    "Behavioral Segmentation","Micro-Moments","AARRR (Pirate Metrics)",
+    "Lifecycle Segmentation","CLV Tiers (Customer Lifetime Value)","Firmographic Segmentation",
+    "The Flywheel Model","Zero-Party Data Strategy","Dynamic Remarketing"
+  ];
+  const tacticsGoogle = ["RLSA – Remarketing Lists for Search Ad","Brand Defense Campaign","Dynamic Search Ads (DSA)"];
+  const angleMeta = [
+    "Functional","Emotional","Storytelling","Social Proof","Problem–Solution","Pain Point",
+    "Benefit-Led","Outcome-Led","Educational","Demonstration","Comparison","Before & After",
+    "Myth Busting","Objection Handling","Urgency / Scarcity","Offer-Led","Price / Value",
+    "Authority / Expert-Led","UGC / Testimonial","Lifestyle","Aspirational",
+    "Curiosity / Pattern Interrupt","Humor","Fear of Missing Out","City Related","Jobs-to-be-Done (JTBD)"
+  ];
+  const angleGoogle = [
+    "Functional / Feature-Led","Demonstration / How It Works","Comparison / Alternative",
+    "Reviews / Testimonials","City / Location-Led","Search Intent-Led"
+  ];
+  const cfMeta = [
+    "Single Image","Video","Carousel","Collection","Instant Experience",
+    "Dynamic Product Ad","Catalog Carousel","Catalog Collection","Reels Ad","Stories Ad",
+    "Slideshow","Playable Ad","Lead Form Ad","Click-to-Message Ad","Partnership Ads","Catalog Product Video"
+  ];
+  const cfGoogle = [
+    "Responsive Search Ad (RSA)","Search Ad with Image Assets","Responsive Display Ad",
+    "Uploaded Display Image Ad","HTML5 Display Ad","Single Image Ad (Demand Gen)",
+    "Carousel Image Ad (Demand Gen)","Video Ad – In-Stream","Video Ad – In-Feed",
+    "YouTube Shorts Ad","Product Feed Ad (Demand Gen)","Product Feed Video Ad (Demand Gen)",
+    "Dynamic Remarketing Ad","Shopping Product Listing Ad","Lead Form Asset",
+    "Message Asset (WhatsApp / SMS / Messenger)","Creator Partnership Boost / Co-Branded Ad","Playable App Ad"
+  ];
+  const resMeta = ["1:1 (1440×1440)","4:5 (1440×1800)","9:16 (1080×1920)"];
+  const resGoogle = [
+    "Landscape 1200×628","Square 1200×1200","Portrait 960×1200",
+    "Video 1080×1080 or 1080×1920","Headline up to 30 chars","Long headline up to 90 chars",
+    "Description up to 90 chars","Logo 1200×1200","Video 16:9 1920×1080",
+    "Video 1:1 1080×1080","Video 9:16 1080×1920"
+  ];
+  const bidMeta = ["Highest Volume","Cost Per Result Goal","ROAS Goal","Bid Cap"];
+  const bidGoogle = [
+    "Maximize Conversions","Target CPA (tCPA)","Maximize Conversion Value",
+    "Target ROAS (tROAS)","Maximize Clicks","Target CPC","Manual CPC",
+    "Target CPV","Maximum CPV","Viewable CPM (vCPM)","Target CPM","Target Impression Share"
+  ];
+  const attMeta = ["7-day click or 1-day view","7-day click","1-day click","1-day click or 1-day view","1-day engaged-view"];
+  const attGoogle = ["Data-driven attribution","Last-click attribution"];
+  const convWindow = [
+    "Click-through – 1 day","Click-through – 7 days","Click-through – 14 days",
+    "Click-through – 30 days","Click-through – 60 days","Click-through – 90 days",
+    "Engaged-view – 1 day","Engaged-view – 3 days","Engaged-view – 7 days",
+    "Engaged-view – 14 days","Engaged-view – 30 days",
+    "View-through – 1 day","View-through – 7 days","View-through – 14 days","View-through – 30 days"
+  ];
+  const exMeta = [
+    "Facebook and Instagram engagers","Video viewers","All website visitors",
+    "Lead form openers","Submitted leads","Add to Cart users","Initiate Checkout users",
+    "Converted / qualified leads","Past purchasers","Purchasers of the promoted product",
+    "Existing customers","Recent purchasers","Active customers","Inactive customers",
+    "Churned customers","Refunded or cancelled customers",
+    "Customers who completed the retention action","Customers already reactivated"
+  ];
+  const exGoogle = [
+    "YouTube Channel Engagers","YouTube Video Viewers","All Website Visitors",
+    "Website Lead Form Starters","Lead Form Submitters","Add-to-Cart Users",
+    "Begin Checkout Users","Qualified Leads","All Purchasers","Purchasers of the Promoted Product",
+    "Existing Customers","Recent Purchasers","Active Customers","Inactive Customers",
+    "Churned Customers","Refunded or Cancelled Customers",
+    "Customers Who Completed the Retention Action","Reactivated Customers"
+  ];
+  const usp = [
+    "Lowest Price","Best Value for Money","Premium Quality","Superior Performance",
+    "Fast Delivery","Free Shipping","Same-Day Delivery","Fast Service","24/7 Availability",
+    "Personal Service","Expert Support","Professional Expertise","Proven Results",
+    "Guaranteed Results","Money-Back Guarantee","Warranty","Long-Term Warranty",
+    "No Commitment","Flexible Payment Terms","Easy Setup","Easy to Use","Time Saving",
+    "Cost Saving","All-in-One Solution","Customization","Exclusive Offer","Limited Availability",
+    "Best-Selling Product","Trusted Brand","Local / Israeli Business","Eco-Friendly",
+    "Advanced Technology","Safety / Reliability","Durability","Convenience","Large Selection",
+    "Tailored Solution","Free Consultation","Free Trial","No Setup Fee","No Hidden Costs"
+  ];
+
+  const angleHe = ["תזכורת","הסרת חסמים","כאב","תועלת","סושיאל פרוף","דחיפות","השלמה לרכישה","דחיפה עם תמריץ","חיזוק אמון"];
+  const creativeStyleHe = ["UGC","קטלוג נקי","קטלוג + באדג'","גרפי סטודיו","לייפסטייל","סטודיו"];
+  return {
+    // ── Strict enums ──
+    "Platform": ["Meta","Google","Email/SMS","TikTok","Multi"],
+    "Status": ["Active","In Build","Paused","Planned"],
+    "Priority": ["1","2","3","4","5"],
+    "Gender": ["All","M","F"],
+    "Campaign Objective": ["Awareness","Traffic","Engagement","Leads","App Promotion","Sales"],
+    // ── Combo suggestion lists (dropdown + free typing) ──
+    "Age": ["18-24","25-34","35-44","45-54","55-64","65+","18-65+","25-54","25-65+","All"],
+    "Recency": ["3D","7D","14D","30D","60D","90D","180D","3-14D","4-7D","4-14D","8-14D","30-60D","90-180D"],
+    "Frequency": ["—","1","1+","2+","3+"],
+    "Step": ["1","2","3","4","5"],
+    "Data Source": ["Pixel","CRM","Engagement","Catalog","Pixel + CRM","CRM + Catalog","CAPI","GA4","App Activity","Lead Forms","Offline Events"],
+    "Creative Type": ["וידאו UGC","קטלוג DPA","קרוסלה קטגוריות","קרוסלה משלימים","DPA + סושיאל פרוף","DPA + אוברליי","DPA + אוברליי הנחה","DPA + אוברליי הנחה + טיימר","קטלוג מסונן","סטטי ביקורות / UGC","אימייל + באנר סטטי","וידאו","סטטי","קרוסלה","קולקשן"],
+    "Placement": ["Advantage+","Manual: Feed, Stories, Reels","Manual: Feed","Facebook Feed","Instagram Feed","Stories","Reels","Marketplace","Audience Network","Messenger","Explore","Search Network","Display Network","YouTube","Gmail","Discover","PMax (All)"],
+    "Offer": ["בלי אופר","משלוח חינם","10% הנחה","5%","משלוח חינם / 5%","הנחה ראשונה","מתנה לרכישה"],
+    "CTA": ["Shop Now","Learn More","Sign Up","Get Offer","Book Now","Contact Us","Download","Subscribe","Apply Now","Get Quote","Send Message","Order Now","Watch More","Get Directions","Call Now"],
+    "Performance Goal": ["Maximize Conversions","Maximize Conversion Value","Maximize Leads","Maximize Value","Maximize Link Clicks","Maximize Landing Page Views","Maximize Reach","Maximize Impressions","Maximize ThruPlays","Maximize Calls","Maximize Messaging Conversations"],
+    "Bid Strategy": uniq(["Highest Volume","Cost Cap","Cost Per Result Goal","ROAS Goal","Bid Cap","Lowest Cost","Minimum ROAS"].concat(bidGoogle)),
+    "Tactics / Goal": uniq(["ASC","Advantage+ Shopping","Manual CBO","Manual ABO","CBO","ABO","Manual"].concat(tacticsMeta).concat(tacticsGoogle)),
+    "Attribution": uniq(["7d click","7d click / 1d view","1d click","1d view","1d click / 1d view","7d click / 1d engaged-view"].concat(attMeta).concat(attGoogle).concat(convWindow)),
+    // ── Preserved Hub data (Meta/Google unified) + Hebrew ──
+    "Segment": segment,
+    "Angle": uniq(angleHe.concat(angleMeta).concat(angleGoogle)),
+    "Creative Style": uniq(creativeStyleHe.concat(creativeStyle)),
+    "Creative Format": uniq(["DPA","DPA + אוברליי","וידאו","סטטי","קרוסלה","קולקשן"].concat(cfMeta).concat(cfGoogle)),
+    "Resolution": uniq(["1:1","4:5","9:16","16:9"].concat(resMeta).concat(resGoogle)),
+    "USP / Proposal": usp,
+    "Exclusion": uniq(exMeta.concat(exGoogle))
+  };
+}
+const DEFAULT_DB = buildDefaultDB();
+
+// Config code tables (drive the Audience Name formula)
+const DEFAULT_CONFIG = {
+  prefix: "RPG",
+  funnels: [
+    {name:"TOF - Low", code:"TOF"},
+    {name:"MOF - Medium", code:"MOF"},
+    {name:"BOF - High", code:"BOF"},
+    {name:"First Time Buyer", code:"FTB"},
+    {name:"Retention / Upsale", code:"RET"},
+    {name:"Winback", code:"WIN"}
+  ],
+  events: [
+    {name:"ViewContent", code:"VC"},
+    {name:"AddToCart", code:"ATC"},
+    {name:"InitiateCheckout", code:"ICHCK"},
+    {name:"Purchase", code:"PUR"},
+    {name:"PageView", code:"PV"},
+    {name:"Lead", code:"LEAD"},
+    {name:"Search", code:"SRC"},
+    {name:"CompleteRegistration", code:"REG"},
+    {name:"Engagement", code:"ENG"}
+  ]
+};
+
+// ═════════════════════════════════════════════
+// SHEET / COLUMN DEFINITIONS  (Excel order)
+// type: text | date | select(db) | ref | formula
+// ═════════════════════════════════════════════
+const SHEETS = {
+  audiences: { title:"Audiences", icon:"🎯", tabLabel:"קהלים",
+    desc:"בניית קהלים. עמודת Audience Name מחושבת אוטומטית לפי Config (Prefix | קוד משפך | קוד איוונט + ריסנסי | קוד החרגות) — וניתנת לדריסה ידנית.",
+    cols:[
+      {key:"funnel",        label:"Funnel",           db:"Funnel", note:`השלב במשפך שאליו שייך הקהל. קובע את הצבע ואת היגיון ההחרגות — כל שלב מחריג את השלב שמתחתיו.`},
+      {key:"segment",       label:"Segment",          type:"combo", db:"Segment", note:`השם האנושי-תיאורי של תת-הקבוצה (למשל: נוטשי עגלה 0-3 ימים). כדי שהלוח יישאר קריא גם עם 20+ שורות.`},
+      {key:"platform",      label:"Platform",         db:"Platform", note:`איפה הקהל קיים טכנית: מטא / גוגל / אימייל. אותה כוונה = קהל שונה בכל פלטפורמה.`},
+      {key:"dataSource",    label:"Data Source",      type:"combo", db:"Data Source", note:`מקור הדאטה: פיקסל / CRM / אנגייג׳מנט / קטלוג. קריטי לריטנשן ווינבק שחייבים דאטת לקוחות ולא פיקסל. · 🔧 GTM: הפיקסל מוטמע כתג בסיס (Meta Pixel) בטריגר All Pages; כל האיוונטים נורים כתגים נפרדים מעליו.`},
+      {key:"event",         label:"Event | Action",   type:"combo", db:"Event", note:`האיוונט הטכני שמגדיר את הקהל (ViewContent, AddToCart, Purchase). · 🔧 GTM: תג נפרד לכל איוונט על אירוע dataLayer; חובה פרמטרים content_ids, content_type, value, currency (בלעדיהם DPA לא יעבוד). איוונט מותאם (Purchase מזרן) = Custom Event לפי content_category.`},
+      {key:"recency",       label:"Recency",          type:"combo", db:"Recency", note:`חלון הזמן של הקהל (3D, 14D, 30-60D). יחד עם האיוונט — ההגדרה הטכנית המלאה. · 🔧 GTM: החלון מוגדר במטא (Retention); GTM דואג שהאיוונט יירה בזמן אמת. טווח 4-14D = Include 14D + Exclude 3D.`},
+      {key:"frequency",     label:"Frequency",        type:"combo", db:"Frequency", note:`תדירות מינימלית של האיוונט (1+, 2+). מבדל מתעניינים חמים מקרירים. · 🔧 GTM: מוגדר במטא (Refine by > Frequency), אך תלוי בכך שהאיוונט נורה על כל התרחשות (לא Once per page).`},
+      {key:"exclusions",    label:"Exclusions",       type:"multi", db:"Exclusion", note:`מי מוחרג מהקהל. העמודה הכי חשובה — מונעת חפיפה וקניבליזציה בין שלבי המשפך. · 🔧 GTM: כל שרשרת ההחרגות נשענת על Purchase אמין שנורה פעם אחת בלבד (טריגר עם Transaction ID).`},
+      {key:"exclusionCode", label:"Exclusion Code",   type:"text", note:`הקיצור של ההחרגות לשם הקהל (exIC3 exPUR30). ממלאים ידנית — הנוסחה ב-Audience Name מושכת מכאן. Exclusions נשאר התיאור המלא.`},
+      {key:"audienceName",  label:"Audience Name",    type:"formula", formula:"audienceName", note:`נבנה אוטומטית: פריפיקס (Config) | קוד משפך | קוד איוונט + ריסנסי | קוד החרגות. למלא Funnel/Event/Recency/Exclusion Code והשם ייבנה לבד. אפשר לדרוס ידנית.`},
+      {key:"value",         label:"Value",            type:"text", note:`ה-M של ERFM — הערך הכספי (שווי עגלה, LTV, AOV, טייר). יחד עם Event(E), Recency(R), Frequency(F) — ERFM מלא. · 🔧 GTM: פילוח לפי שווי רק אם האיוונט נושא value+currency.`},
+      {key:"message",       label:"Message | Angle",  type:"text", note:`המסר המרכזי לקהל. Begin Checkout ב-72ש׳ מקבל מסר שונה מ-Product Viewers.`},
+      {key:"creativeType",  label:"Creative Type",    type:"combo", db:"Creative Type", note:`סוג הנכס המתאים לשלב: וידאו UGC ל-TOF, קטלוג DPA ל-MOF/BOF, קטלוג מסונן לריטנשן.`},
+      {key:"feedAdj",       label:"Feed Adjustments", type:"text", note:`התאמות בפיד/קטלוג לקהל: סינון סטים, מוצרים משלימים, אוברלייז.`},
+      {key:"kpi",           label:"KPI | Target",     type:"text", note:`המדד שלפיו שופטים את השלב. TOF ב-CPM/CTR, BOF ברואס — בלי זה תהרוג את הטופ.`},
+      {key:"priority",      label:"Priority",         db:"Priority", note:`סדר עדיפות להקמה (1 = ראשון). כשמשתמשים בשני סגמנטים — מי גובר.`},
+      {key:"status",        label:"Status",           db:"Status", note:`מצב הקהל: פעיל / בבנייה / מושהה / מתוכנן. הופך את הלוח למסמך עבודה חי.`},
+      {key:"notes",         label:"Notes",            type:"text", note:`הערות חופשיות.`}
+    ]},
+  journeys: { title:"Journeys", icon:"🛤", tabLabel:"מסעות",
+    desc:"מסעות לקוח — נתיב עם שלבים (שורה פר שלב). Audience Name (ref) נשלף מגיליון Audiences — לא מגדירים כאן קהל מחדש.",
+    cols:[
+      {key:"journeyName",  label:"Journey Name",         type:"text", note:`שם המסע. כמה שורות עם אותו שם = שלבים של אותו מסע (שורה פר שלב).`},
+      {key:"funnel",       label:"Funnel",               db:"Funnel", note:`השלב במשפך שבו המסע פועל.`},
+      {key:"platform",     label:"Platform",             db:"Platform", note:`הפלטפורמה שבה המסע רץ.`},
+      {key:"audienceRef",  label:"Audience Name (ref)",  type:"ref", ref:"audiences", note:`רפרנס לשם הקהל המדויק מגיליון 1. לא מגדירים כאן קהל מחדש — כל עובדה חיה במקום אחד.`},
+      {key:"entryTrigger", label:"Entry Trigger",        type:"text", note:`מה מכניס משתמש למסע (למשל: AddToCart ללא רכישה).`},
+      {key:"step",         label:"Step #",               type:"combo", db:"Step", note:`מספר השלב ברצף המסע (1, 2, 3...).`},
+      {key:"timing",       label:"Timing (from entry)",  type:"text", note:`תזמון השלב מרגע הכניסה (0-24 שעות...). הממד שאין לקהל — רצף וזמן.`},
+      {key:"message",      label:"Message | Angle",      type:"text", note:`המסר של השלב הספציפי. מתקדם עם הזמן: תזכורת ← התנגדויות ← אופר.`},
+      {key:"creative",     label:"Creative",             type:"combo", db:"Creative Type", note:`הנכס של השלב הזה. כל שלב מקבל קריאייטיב משלו.`},
+      {key:"offer",        label:"Offer",                type:"combo", db:"Offer", note:`התמריץ, אם יש. אופר רק בשלב האחרון כדי לא לחנך את הקהל לחכות להנחה.`},
+      {key:"landing",      label:"Landing Destination",  type:"text", note:`לאן מפנים: דף מוצר / קטגוריה / עגלה.`},
+      {key:"exitCond",     label:"Exit Condition",       type:"text", note:`מה מוציא מהמסע (Purchase = יציאה מיידית). הצד השני של ההחרגות.`},
+      {key:"handoff",      label:"Handoff (next)",       type:"text", note:`מה קורה בסוף השלב/המסע: מעבר לשלב הבא או לקהל אחר במשפך.`},
+      {key:"kpi",          label:"KPI | Target",         type:"text", note:`המדד להצלחת המסע.`},
+      {key:"status",       label:"Status",               db:"Status", note:`מצב המסע: פעיל / בבנייה / מושהה / מתוכנן.`},
+      {key:"notes",        label:"Notes",                type:"text", note:`הערות חופשיות.`}
+    ]},
+  campaigns: { title:"Campaigns", icon:"📣", tabLabel:"קמפיינים",
+    desc:"רמת הקמפיין — יעד, אסטרטגיית הצעה, תקציב וייחוס. החלטות ברמת קמפיין בלבד.",
+    cols:[
+      {key:"accountName",  label:"Account Name",        type:"text", note:`שם החשבון/הלקוח. מאפשר לנהל כמה לקוחות באותו קובץ ולסנן.`},
+      {key:"campaignName", label:"Campaign Name",       type:"text", note:`שם הקמפיין לפי קונבנציה. המפתח שמקשר לגיליון האדסטים.`},
+      {key:"funnel",       label:"Funnel Stage",        db:"Funnel", note:`השלב במשפך שהקמפיין משרת. הקמפיין הוא הביטוי התפעולי של השלב.`},
+      {key:"objective",    label:"Campaign Objective",  db:"Campaign Objective", note:`האובג'קטיב בפלטפורמה (Sales, Leads, Traffic...). החלטה ברמת קמפיין בלבד.`},
+      {key:"bidStrategy",  label:"Bid Strategy",        type:"combo", db:"Bid Strategy", note:`אסטרטגיית ביד: Highest Volume / Cost Cap / ROAS Goal. משפיעה על כל האדסטים מתחת.`},
+      {key:"tactics",      label:"Tactics / Goal",      type:"combo", db:"Tactics / Goal", note:`הטקטיקה: ASC / Manual / CBO. הגישה התפעולית של הקמפיין.`},
+      {key:"budget",       label:"Budget",              type:"text", note:`תקציב יומי/כולל ורמתו (CBO קמפיין / ABO אדסט).`},
+      {key:"attribution",  label:"Attribution",         type:"combo", db:"Attribution", note:`חלון ייחוס (7d click / 1d view). חייב להיות אחיד בהשוואות.`},
+      {key:"startDate",    label:"Start Date",          type:"date", note:`תאריך עלייה מתוכנן.`},
+      {key:"status",       label:"Status",              db:"Status", note:`מצב הקמפיין: פעיל / בבנייה / מושהה / מתוכנן.`},
+      {key:"notes",        label:"Notes",               type:"text", note:`הערות חופשיות.`}
+    ]},
+  adsets: { title:"Ad Sets", icon:"🎚", tabLabel:"סטים",
+    desc:"רמת ה-Ad Set — קישור לקמפיין ולקהל, טירגוט, מיקום ותקציב (ABO). ההחרגות משקפות את הקהל בגיליון 1.",
+    cols:[
+      {key:"campaignRef",  label:"Campaign Name (ref)", type:"ref", ref:"campaigns", note:`רפרנס לשם הקמפיין מגיליון 3. מקשר את האדסט לקמפיין האב.`},
+      {key:"adSetName",    label:"Ad Set Name",         type:"text", note:`שם האדסט לפי קונבנציה. המפתח שמקשר לגיליון המודעות.`},
+      {key:"audienceRef",  label:"Audience Name (ref)", type:"ref", ref:"audiences", note:`רפרנס לשם הקהל מגיליון 1. משבצים קהל מהמפה — לא מגדירים מחדש.`},
+      {key:"exclusion",    label:"Exclusion",           type:"multi", db:"Exclusion", note:`החרגות ברמת האדסט. אמור לשקף את החרגות הקהל בגיליון 1 + נוספות אם צריך.`},
+      {key:"age",          label:"Age",                 type:"combo", db:"Age", note:`טווח גילאים.`},
+      {key:"gender",       label:"Gender",              db:"Gender", note:`מגדר: All / M / F.`},
+      {key:"placement",    label:"Placement",           type:"combo", db:"Placement", note:`מיקומים: Advantage+ / Manual (פירוט).`},
+      {key:"perfGoal",     label:"Performance Goal",    type:"combo", db:"Performance Goal", note:`יעד האופטימיזציה (Maximize Conversions/Value). החלטה ברמת אדסט.`},
+      {key:"budget",       label:"Budget (ABO)",        type:"text", note:`תקציב האדסט — רק אם הקמפיין ABO. ב-CBO להשאיר ריק.`},
+      {key:"status",       label:"Status",              db:"Status", note:`מצב האדסט.`},
+      {key:"notes",        label:"Notes",               type:"text", note:`הערות חופשיות.`}
+    ]},
+  ads: { title:"Ads", icon:"🎬", tabLabel:"מודעות",
+    desc:"רמת המודעה — זווית, USP, פורמט/סגנון קריאייטיב, קופי ו-CTA.",
+    cols:[
+      {key:"adSetRef",       label:"Ad Set Name (ref)",  type:"ref", ref:"adsets", note:`רפרנס לשם האדסט מגיליון 4. מקשר את המודעה לאדסט האב.`},
+      {key:"adName",         label:"Ad Name",            type:"text", note:`שם המודעה לפי קונבנציה — מומלץ לקודד את האנגל והפורמט בשם.`},
+      {key:"angle",          label:"Angle",              type:"combo", db:"Angle", note:`זווית המסר של המודעה (כאב, תועלת, סושיאל פרוף, דחיפות...).`},
+      {key:"usp",            label:"USP / Proposal",     type:"combo", db:"USP / Proposal", note:`הצעת הערך המרכזית שהמודעה מדגישה.`},
+      {key:"creativeFormat", label:"Creative Format",    type:"combo", db:"Creative Format", note:`הפורמט: וידאו / סטטי / קרוסלה / DPA / קולקשן.`},
+      {key:"creativeStyle",  label:"Creative Style",     type:"combo", db:"Creative Style", note:`הסגנון: UGC / סטודיו / לייפסטייל / גרפי...`},
+      {key:"resolution",     label:"Resolution",         type:"combo", db:"Resolution", note:`רזולוציה/יחס: 1:1, 4:5, 9:16. קובע לאילו פלייסמנטים הנכס מתאים.`},
+      {key:"copy",           label:"Copy (Primary Text)",type:"text", note:`הטקסט הראשי של המודעה או רפרנס למסמך הקופי.`},
+      {key:"headline",       label:"Headline",           type:"text", note:`כותרת המודעה.`},
+      {key:"cta",            label:"CTA",                type:"combo", db:"CTA", note:`כפתור הקריאה לפעולה (Shop Now, Learn More...).`},
+      {key:"landingUrl",     label:"Landing URL",        type:"text", note:`כתובת הנחיתה + פרמטרי UTM.`},
+      {key:"status",         label:"Status",             db:"Status", note:`מצב המודעה.`},
+      {key:"notes",          label:"הערות",              type:"text", note:`הערות חופשיות.`}
+    ]}
+};
+const DATA_SHEETS = ["audiences","journeys","campaigns","adsets","ads"];
+
+// Two-row split per sheet: first N columns => top row, rest => bottom row
+const SHEET_ROW_SPLIT = { audiences:10, journeys:7, campaigns:6, adsets:6, ads:7 };
+// Columns that get extra width (long free text)
+const WIDE_KEYS = new Set(["notes","copy","headline","landing","landingUrl","kpi","message","segment","exclusions","exclusion","entryTrigger","exitCond","handoff","feedAdj","usp"]);
+
+// Categories shown in the Flowchart palette (order)
+const FLOW_CATS = ["Platform","Funnel","Event","Segment","Recency","Data Source","Angle","Creative Type","Creative Style","Creative Format","Resolution","USP / Proposal","Exclusion","Campaign Objective","Bid Strategy","Tactics / Goal","Attribution","Performance Goal","Placement","Age","Gender","CTA","Priority","Status"];
+
+// ═════════════════════════════════════════════
+// STATE
+// ═════════════════════════════════════════════
+let db = {};
+let config = {};
+let sheets = {};
+let colVis = {};
+let customCols = {};
+let currentTab = "audiences";
+
+// custom (user-added) fields are appended after the built-in columns of a sheet
+function allColsFor(sheetKey){ return SHEETS[sheetKey].cols.concat(customCols[sheetKey]||[]); }
+function defaultVis(sheetKey){ const o={}; allColsFor(sheetKey).forEach(c=>o[c.key]=true); return o; }
+
+function loadState(){
+  try{
+    const sDb = localStorage.getItem("rpg_cts_db_v3");
+    db = sDb ? JSON.parse(sDb) : JSON.parse(JSON.stringify(DEFAULT_DB));
+    const sCfg = localStorage.getItem("rpg_cts_config_v3");
+    config = sCfg ? JSON.parse(sCfg) : JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+    const sSheets = localStorage.getItem("rpg_cts_sheets_v3");
+    sheets = sSheets ? JSON.parse(sSheets) : {};
+    const sVis = localStorage.getItem("rpg_cts_vis_v3");
+    colVis = sVis ? JSON.parse(sVis) : {};
+    const sCustom = localStorage.getItem("rpg_cts_customcols_v3");
+    customCols = sCustom ? JSON.parse(sCustom) : {};
+  }catch(e){
+    db = JSON.parse(JSON.stringify(DEFAULT_DB));
+    config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+    sheets = {}; colVis = {}; customCols = {};
+  }
+  DATA_SHEETS.forEach(k=>{
+    if(!Array.isArray(sheets[k])) sheets[k]=[];
+    if(!Array.isArray(customCols[k])) customCols[k]=[];
+    if(!colVis[k]) colVis[k]=defaultVis(k);
+  });
+}
+function saveDB(){ localStorage.setItem("rpg_cts_db_v3", JSON.stringify(db)); }
+function saveConfig(){ localStorage.setItem("rpg_cts_config_v3", JSON.stringify(config)); }
+function saveSheets(){ localStorage.setItem("rpg_cts_sheets_v3", JSON.stringify(sheets)); }
+function saveVis(){ localStorage.setItem("rpg_cts_vis_v3", JSON.stringify(colVis)); }
+function saveCustomCols(){ localStorage.setItem("rpg_cts_customcols_v3", JSON.stringify(customCols)); }
+
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
+
+// ── options resolution (Funnel/Event derive from Config) ──
+function optionsFor(dbKey){
+  if(dbKey==="Funnel") return config.funnels.map(f=>f.name).filter(Boolean);
+  if(dbKey==="Event")  return config.events.map(e=>e.name).filter(Boolean);
+  return db[dbKey] || [];
+}
+function codeFor(list,name){ const f=(list||[]).find(x=>x.name===name); return f ? f.code : ""; }
+
+// ── Audience Name formula (mirrors the Excel formula) ──
+function computeAudienceName(row){
+  if(!row || !row.event) return "";
+  const prefix = (config.prefix||"RPG").trim();
+  const fcode = codeFor(config.funnels,row.funnel) || row.funnel || "";
+  const ecode = codeFor(config.events,row.event) || row.event || "";
+  let s = prefix + " | " + fcode + " | " + ecode;
+  if(row.recency) s += " " + row.recency;
+  if(row.exclusionCode) s += " | " + row.exclusionCode;
+  return s.trim();
+}
+function computeCell(sheetKey,row,col){
+  if(col.type==="formula"){
+    if(row[col.key]) return row[col.key];               // manual override
+    if(col.formula==="audienceName") return computeAudienceName(row);
+    return "";
+  }
+  if(col.type==="multi"){
+    const v = row[col.key];
+    return Array.isArray(v) ? v.join("; ") : (v || "");
+  }
+  return row[col.key] || "";
+}
+
+// ── ref options (values from another sheet) ──
+function refOptions(refSheet){
+  if(refSheet==="audiences") return (sheets.audiences||[]).map(r=>r.audienceName || computeAudienceName(r)).filter(Boolean);
+  if(refSheet==="campaigns") return (sheets.campaigns||[]).map(r=>r.campaignName).filter(Boolean);
+  if(refSheet==="adsets")    return (sheets.adsets||[]).map(r=>r.adSetName).filter(Boolean);
+  return [];
+}
+
+// ═════════════════════════════════════════════
+// TABS
+// ═════════════════════════════════════════════
+function buildTabs(){
+  const tabsEl = document.getElementById("tabs");
+  let html = "";
+  DATA_SHEETS.forEach((k,i)=>{
+    const s = SHEETS[k];
+    html += `<button class="tab-btn${i===0?' active':''}" data-tab="${k}" onclick="switchTab('${k}')">${s.icon} ${i+1}. ${s.title}</button>`;
+  });
+  html += `<div class="tab-sep"></div>`;
+  html += `<button class="tab-btn" data-tab="config" onclick="switchTab('config')">⚙ Config</button>`;
+  html += `<button class="tab-btn" data-tab="db" onclick="switchTab('db')">🗄 Database</button>`;
+  html += `<button class="tab-btn" data-tab="flow" onclick="switchTab('flow')">🗺 Flowchart</button>`;
+  tabsEl.innerHTML = html;
+}
+function buildSheetPanels(){
+  const cont = document.getElementById("sheets-container");
+  let html = "";
+  DATA_SHEETS.forEach((k,i)=>{
+    const s = SHEETS[k];
+    html += `<div id="tab-${k}" class="tab-panel${i===0?' active':''}">
+      <div class="panel-desc">${s.desc}</div>
+      <div class="toolbar">
+        <button class="btn btn-primary" onclick="addRow('${k}')">+ הוסף שורה</button>
+        <div class="rows-badge" id="${k}-count">0 שורות</div>
+        <div class="col-toggle-wrap">
+          <button class="btn btn-outline" id="col-btn-${k}" onclick="openColPanel('${k}')">⚙ עמודות</button>
+          <div class="col-panel" id="col-panel-${k}" style="display:none"></div>
+        </div>
+        <button class="btn btn-outline" onclick="addCustomField('${k}')">+ שדה מותאם אישית</button>
+        <button class="btn btn-outline" onclick="clearSheet('${k}')">🗑 נקה הכל</button>
+      </div>
+      <div class="rec-list" id="${k}-body"></div>
+    </div>`;
+  });
+  cont.innerHTML = html;
+}
+function switchTab(tab){
+  currentTab = tab;
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.toggle("active", b.dataset.tab===tab));
+  document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
+  const panel = document.getElementById("tab-"+tab);
+  if(panel) panel.classList.add("active");
+  if(DATA_SHEETS.includes(tab)) renderRows(tab);   // refresh refs/formulas
+  else if(tab==="config") renderConfig();
+  else if(tab==="db") renderDB();
+  else if(tab==="flow") initFlow();
+}
+
+// ═════════════════════════════════════════════
+// COLUMN TOGGLE
+// ═════════════════════════════════════════════
+function visibleCols(sheetKey){ return allColsFor(sheetKey).filter(c=>colVis[sheetKey][c.key]!==false); }
+function openColPanel(sheetKey){
+  const panel = document.getElementById("col-panel-"+sheetKey);
+  if(panel.style.display!=="none"){ panel.style.display="none"; return; }
+  renderColPanel(sheetKey);
+  panel.style.display = "block";
+}
+function renderColPanel(sheetKey){
+  const panel = document.getElementById("col-panel-"+sheetKey);
+  let html = '<div class="col-panel-title">עמודות — לפי סדר הטבלה</div>';
+  allColsFor(sheetKey).forEach(c=>{
+    const checked = colVis[sheetKey][c.key]!==false ? "checked" : "";
+    html += `<label class="col-check-item"><input type="checkbox" ${checked} onchange="toggleCol('${sheetKey}','${c.key}',this.checked)"><label>${esc(c.label)}${c.custom?' 🔧':''}</label>${c.custom?`<button class="remove-val" title="מחק שדה מותאם אישית" onclick="event.preventDefault();event.stopPropagation();removeCustomField('${sheetKey}','${c.key}')">✕</button>`:""}</label>`;
+  });
+  html += `<div class="col-panel-footer"><button onclick="setAllCols('${sheetKey}',true)">הכל</button><button onclick="setAllCols('${sheetKey}',false)">מינימום</button></div>`;
+  panel.innerHTML = html;
+}
+function toggleCol(sheetKey,key,checked){ colVis[sheetKey][key]=checked; saveVis(); buildTable(sheetKey); }
+function setAllCols(sheetKey,show){
+  allColsFor(sheetKey).forEach(c=>{ colVis[sheetKey][c.key]=show; });
+  saveVis(); buildTable(sheetKey);
+  document.getElementById("col-panel-"+sheetKey).style.display="none";
+}
+function addCustomField(sheetKey){
+  const label = prompt("שם השדה החדש (יתווסף כשדה טקסט חופשי בסוף הכרטיס):");
+  if(!label || !label.trim()) return;
+  const trimmed = label.trim();
+  const key = "custom_" + Date.now().toString(36);
+  customCols[sheetKey].push({key, label:trimmed, type:"text", custom:true});
+  colVis[sheetKey][key] = true;
+  saveCustomCols(); saveVis();
+  renderRows(sheetKey);
+}
+function removeCustomField(sheetKey,key){
+  if(!confirm("למחוק את השדה המותאם אישית? הנתונים שהוזנו בו בכל השורות יימחקו.")) return;
+  customCols[sheetKey] = customCols[sheetKey].filter(c=>c.key!==key);
+  delete colVis[sheetKey][key];
+  (sheets[sheetKey]||[]).forEach(r=>{ delete r[key]; });
+  saveCustomCols(); saveVis(); saveSheets();
+  renderRows(sheetKey);
+  renderColPanel(sheetKey);
+}
+document.addEventListener("click", e=>{
+  DATA_SHEETS.forEach(k=>{
+    const panel=document.getElementById("col-panel-"+k);
+    const btn=document.getElementById("col-btn-"+k);
+    if(panel && btn && !panel.contains(e.target) && !btn.contains(e.target)) panel.style.display="none";
+  });
+  if(infoPopoverAnchor && !e.target.closest(".field-info") && e.target.id!=="info-popover") closeInfoPopover();
+});
+document.addEventListener("scroll", ()=>{ if(infoPopoverAnchor) closeInfoPopover(); }, true);
+
+// ═════════════════════════════════════════════
+// FIELD INFO POPOVER (click on ⓘ)
+// ═════════════════════════════════════════════
+let infoPopoverAnchor = null;
+function toggleInfoPopover(anchorEl, text){
+  if(infoPopoverAnchor === anchorEl){ closeInfoPopover(); return; }
+  const pop = document.getElementById("info-popover");
+  pop.textContent = text;
+  pop.style.display = "block";
+  infoPopoverAnchor = anchorEl;
+  const r = anchorEl.getBoundingClientRect();
+  const pw = pop.offsetWidth, ph = pop.offsetHeight;
+  let left = r.right - pw;
+  if(left < 8) left = 8;
+  if(left + pw > window.innerWidth - 8) left = window.innerWidth - pw - 8;
+  let top = r.bottom + 6;
+  if(top + ph > window.innerHeight - 8) top = r.top - ph - 6;
+  pop.style.left = left + "px";
+  pop.style.top = top + "px";
+}
+function closeInfoPopover(){
+  document.getElementById("info-popover").style.display = "none";
+  infoPopoverAnchor = null;
+}
+
+// ═════════════════════════════════════════════
+// TABLE RENDER
+// ═════════════════════════════════════════════
+function buildTable(sheetKey){ renderRows(sheetKey); }
+
+function buildControl(sheetKey,row,idx,col,hasFormula){
+  // ── Auto formula (editable / overridable) ──
+  if(col.type==="formula"){
+    const auto = (col.formula==="audienceName") ? computeAudienceName(row) : "";
+    const override = row[col.key] || "";
+    const wrap = document.createElement("div");
+    wrap.className = "formula-wrap";
+    const inp = document.createElement("input");
+    inp.type = "text";
+    inp.className = "formula-input" + (override ? " overridden" : (auto ? "" : " empty"));
+    inp.value = override || auto;
+    inp.placeholder = auto || "יחושב לאחר בחירת Event";
+    inp.title = override ? ("✍ דריסה ידנית · אוטומטי: " + (auto||"—")) : (auto ? ("אוטומטי: " + auto) : "יחושב לאחר בחירת Event");
+    inp.addEventListener("change", ()=>{
+      const v = inp.value.trim();
+      if(!v || v === computeAudienceName(row)) delete sheets[sheetKey][idx][col.key];
+      else sheets[sheetKey][idx][col.key] = v;
+      saveSheets(); renderRows(sheetKey);
+    });
+    wrap.appendChild(inp);
+    if(override){
+      const rb = document.createElement("button");
+      rb.className = "formula-reset"; rb.textContent = "↺"; rb.title = "חזרה לאוטומטי";
+      rb.onclick = ()=>{ delete sheets[sheetKey][idx][col.key]; saveSheets(); renderRows(sheetKey); };
+      wrap.appendChild(rb);
+    }
+    return wrap;
+  }
+  // ── Plain text / date ──
+  if(col.type==="text" || col.type==="date"){
+    const inp = document.createElement("input");
+    inp.type = col.type==="date" ? "date" : "text";
+    inp.value = row[col.key] || "";
+    if(col.type!=="date") inp.placeholder = col.label;
+    inp.addEventListener("change", ()=>{ sheets[sheetKey][idx][col.key]=inp.value; saveSheets(); if(hasFormula) renderRows(sheetKey); });
+    return inp;
+  }
+  // ── Multi (tag chips — several values in one field) ──
+  if(col.type==="multi"){
+    let vals = row[col.key];
+    if(typeof vals === "string") vals = vals ? [vals] : [];
+    if(!Array.isArray(vals)) vals = [];
+    const wrap = document.createElement("div");
+    wrap.className = "multi-wrap";
+    const chipsEl = document.createElement("div");
+    chipsEl.className = "multi-chips";
+    const inp = document.createElement("input");
+    inp.type = "text";
+    inp.placeholder = col.label + " — הקלד ו-Enter";
+    const listId = `dl_${sheetKey}_${col.key}_${idx}`;
+    inp.setAttribute("list", listId);
+    const dl = document.createElement("datalist");
+    dl.id = listId;
+    function refreshOptions(){
+      const opts = (col.db ? optionsFor(col.db) : (col.list || [])).filter(o=>!vals.includes(o));
+      dl.innerHTML = opts.map(o=>`<option value="${esc(o)}"></option>`).join("");
+    }
+    function renderChips(){
+      chipsEl.innerHTML = "";
+      vals.forEach((v,i)=>{
+        const chip = document.createElement("span");
+        chip.className = "multi-chip";
+        const txt = document.createElement("span");
+        txt.textContent = v;
+        const rm = document.createElement("button");
+        rm.type = "button"; rm.className = "multi-chip-rm"; rm.title = "הסר"; rm.textContent = "✕";
+        rm.addEventListener("click", ()=>{
+          vals.splice(i,1);
+          sheets[sheetKey][idx][col.key] = vals.slice();
+          saveSheets(); renderChips(); refreshOptions();
+          if(hasFormula) renderRows(sheetKey);
+        });
+        chip.appendChild(txt); chip.appendChild(rm);
+        chipsEl.appendChild(chip);
+      });
+    }
+    function addCurrentVal(){
+      const v = inp.value.trim();
+      if(!v) return;
+      if(!vals.includes(v)) vals.push(v);
+      sheets[sheetKey][idx][col.key] = vals.slice();
+      saveSheets(); inp.value = ""; renderChips(); refreshOptions();
+      if(hasFormula) renderRows(sheetKey);
+    }
+    inp.addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); addCurrentVal(); } });
+    inp.addEventListener("change", addCurrentVal);
+    renderChips(); refreshOptions();
+    wrap.appendChild(chipsEl); wrap.appendChild(inp); wrap.appendChild(dl);
+    return wrap;
+  }
+  // ── Combo (datalist suggestions + free typing) ──
+  if(col.type==="combo"){
+    const wrap = document.createElement("div");
+    wrap.className = "combo-wrap";
+    const inp = document.createElement("input");
+    inp.type = "text";
+    inp.value = row[col.key] || "";
+    inp.placeholder = col.label;
+    const listId = `dl_${sheetKey}_${col.key}_${idx}`;
+    inp.setAttribute("list", listId);
+    const dl = document.createElement("datalist");
+    dl.id = listId;
+    const opts = col.db ? optionsFor(col.db) : (col.list || []);
+    dl.innerHTML = opts.map(o=>`<option value="${esc(o)}"></option>`).join("");
+    inp.addEventListener("change", ()=>{ sheets[sheetKey][idx][col.key]=inp.value; saveSheets(); if(hasFormula) renderRows(sheetKey); });
+    wrap.appendChild(inp); wrap.appendChild(dl);
+    return wrap;
+  }
+  // ── Ref (strict select from another sheet) ──
+  if(col.type==="ref"){
+    const sel = document.createElement("select");
+    sel.className = "ref-select";
+    const opts = refOptions(col.ref);
+    const cur = row[col.key] || "";
+    const all = opts.slice();
+    if(cur && !all.includes(cur)) all.unshift(cur);
+    sel.innerHTML = '<option value="">— בחר —</option>' +
+      all.map(o=>`<option value="${esc(o)}"${o===cur?" selected":""}>${esc(o)}</option>`).join("");
+    sel.addEventListener("change", ()=>{ sheets[sheetKey][idx][col.key]=sel.value; saveSheets(); });
+    return sel;
+  }
+  // ── Strict select (enum) ──
+  const sel = document.createElement("select");
+  const opts = optionsFor(col.db);
+  const cur = row[col.key] || "";
+  const all = opts.slice();
+  if(cur && !all.includes(cur)) all.unshift(cur);
+  sel.innerHTML = '<option value="">— בחר —</option>' +
+    all.map(o=>`<option value="${esc(o)}"${o===cur?" selected":""}>${esc(o)}</option>`).join("");
+  sel.addEventListener("change", ()=>{ sheets[sheetKey][idx][col.key]=sel.value; saveSheets(); if(hasFormula) renderRows(sheetKey); });
+  return sel;
+}
+
+function renderRows(sheetKey){
+  const cols = visibleCols(sheetKey);
+  const body = document.getElementById(sheetKey+"-body");
+  const countEl = document.getElementById(sheetKey+"-count");
+  if(!body) return;
+  body.innerHTML = "";
+  const rows = sheets[sheetKey];
+  if(!rows.length){
+    body.innerHTML = `<div class="empty-state"><div class="icon">📋</div><div>לחץ "+ הוסף שורה" כדי להתחיל</div></div>`;
+    if(countEl) countEl.textContent = "0 שורות";
+    return;
+  }
+  const allCols = allColsFor(sheetKey);
+  const split = SHEET_ROW_SPLIT[sheetKey] || allCols.length;
+  const hasFormula = allCols.some(c=>c.type==="formula");
+  rows.forEach((row,idx)=>{
+    const card = document.createElement("div");
+    card.className = "rec-card";
+
+    const head = document.createElement("div");
+    head.className = "rec-head";
+    const numSpan = document.createElement("span");
+    numSpan.className = "rec-num";
+    numSpan.textContent = "#" + (idx+1);
+    numSpan.title = "לחץ לכרטיס סיכום";
+    numSpan.onclick = ()=>showBrief(sheetKey,idx);
+    const delBtn = document.createElement("button");
+    delBtn.className = "btn-del";
+    delBtn.textContent = "✕ מחק";
+    delBtn.onclick = ()=>{ sheets[sheetKey].splice(idx,1); saveSheets(); renderRows(sheetKey); };
+    head.appendChild(numSpan);
+    head.appendChild(delBtn);
+    card.appendChild(head);
+
+    [0,1].forEach(g=>{
+      const groupCols = cols.filter(c=>{
+        const oi = allCols.indexOf(c);
+        return g===0 ? oi < split : oi >= split;
+      });
+      if(!groupCols.length) return;
+      const rowEl = document.createElement("div");
+      rowEl.className = "rec-row";
+      groupCols.forEach(col=>{
+        const field = document.createElement("div");
+        field.className = "rec-field" + (WIDE_KEYS.has(col.key) ? " wide" : "");
+        const lbl = document.createElement("label");
+        lbl.textContent = col.label;
+        if(col.note){
+          const info = document.createElement("button");
+          info.type = "button";
+          info.className = "field-info";
+          info.textContent = "ⓘ";
+          info.title = col.note;
+          info.addEventListener("click", e=>{ e.stopPropagation(); toggleInfoPopover(info, col.note); });
+          lbl.appendChild(document.createTextNode(" "));
+          lbl.appendChild(info);
+        }
+        field.appendChild(lbl);
+        field.appendChild(buildControl(sheetKey,row,idx,col,hasFormula));
+        rowEl.appendChild(field);
+      });
+      card.appendChild(rowEl);
+    });
+    body.appendChild(card);
+  });
+  if(countEl) countEl.textContent = `${rows.length} שורות`;
+}
+function addRow(sheetKey){
+  sheets[sheetKey].push({});
+  saveSheets(); renderRows(sheetKey);
+  const wrapper = document.querySelector(`#tab-${sheetKey} .rec-list`);
+  if(wrapper) wrapper.scrollTop = wrapper.scrollHeight;
+}
+function clearSheet(sheetKey){
+  if(!confirm("למחוק את כל השורות בגיליון זה?")) return;
+  sheets[sheetKey]=[]; saveSheets(); renderRows(sheetKey);
+}
+
+// ═════════════════════════════════════════════
+// CONFIG
+// ═════════════════════════════════════════════
+function renderConfig(){
+  document.getElementById("cfg-prefix").value = config.prefix || "";
+  updatePrefixPreview();
+  ["funnels","events"].forEach(type=>{
+    const tb = document.getElementById("cfg-"+type);
+    tb.innerHTML = "";
+    config[type].forEach((row,idx)=>{
+      const tr = document.createElement("tr");
+      tr.innerHTML =
+        `<td><input type="text" value="${esc(row.name)}" oninput="onConfigEdit('${type}',${idx},'name',this.value)"></td>
+         <td class="code-col"><input type="text" value="${esc(row.code)}" oninput="onConfigEdit('${type}',${idx},'code',this.value)"></td>
+         <td class="rm"><button class="btn-del" onclick="removeConfigRow('${type}',${idx})">✕</button></td>`;
+      tb.appendChild(tr);
+    });
+  });
+}
+function onConfigEdit(type,idx,field,val){ config[type][idx][field]=val; saveConfig(); }
+function addConfigRow(type){ config[type].push({name:"",code:""}); saveConfig(); renderConfig(); }
+function removeConfigRow(type,idx){
+  if(!confirm("למחוק שורה זו? (עשוי להשפיע על נוסחת שם הקהל)")) return;
+  config[type].splice(idx,1); saveConfig(); renderConfig();
+}
+function onPrefixChange(){ config.prefix = document.getElementById("cfg-prefix").value; saveConfig(); updatePrefixPreview(); }
+function updatePrefixPreview(){
+  document.getElementById("prefix-preview").textContent = (config.prefix||"RPG") + " | FUNNEL | EVENT RECENCY | EXCL";
+}
+
+// ═════════════════════════════════════════════
+// DATABASE MANAGER
+// ═════════════════════════════════════════════
+function keyId(catKey){ return catKey.replace(/[^a-zA-Z0-9א-ת]/g,"_"); }
+function renderDB(){
+  const grid = document.getElementById("db-grid");
+  grid.innerHTML = "";
+  Object.keys(db).forEach(catKey=>{
+    const vals = db[catKey];
+    const kid = keyId(catKey);
+    const card = document.createElement("div");
+    card.className = "db-card";
+    card.innerHTML = `
+      <div class="db-card-header"><h3>${catKey}</h3><span class="count-badge">${vals.length}</span></div>
+      <div class="db-card-body">
+        <div class="db-items" id="dbi-${kid}">
+          ${vals.map(v=>`<div class="db-item"><span title="${esc(v)}">${esc(v)}</span>
+            <button class="remove-val" onclick="removeVal(${JSON.stringify(catKey)},${JSON.stringify(v)})">×</button></div>`).join("")}
+        </div>
+        <div class="db-add-row">
+          <input type="text" id="dbin-${kid}" placeholder="הוסף ערך..." onkeydown="if(event.key==='Enter')addVal(${JSON.stringify(catKey)})">
+          <button onclick="addVal(${JSON.stringify(catKey)})">+ הוסף</button>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+function addVal(catKey){
+  const inp = document.getElementById("dbin-"+keyId(catKey));
+  const val = inp.value.trim();
+  if(!val) return;
+  if(db[catKey].includes(val)){ alert("הערך כבר קיים"); return; }
+  db[catKey].push(val); saveDB(); inp.value=""; renderDB();
+}
+function removeVal(catKey,val){
+  if(!confirm(`למחוק "${val}"?`)) return;
+  db[catKey]=db[catKey].filter(v=>v!==val); saveDB(); renderDB();
+}
+function resetDB(){
+  if(!confirm("לאפס את כל הדאטה בייס לברירת המחדל? הנתונים שהוספת יימחקו.")) return;
+  db = JSON.parse(JSON.stringify(DEFAULT_DB)); saveDB(); renderDB();
+}
+
+// ═════════════════════════════════════════════
+// EXPORT CSV (current sheet)
+// ═════════════════════════════════════════════
+function exportCSV(){
+  const sheetKey = DATA_SHEETS.includes(currentTab) ? currentTab : "audiences";
+  const cols = SHEETS[sheetKey].cols;
+  const rows = sheets[sheetKey];
+  const header = cols.map(c=>`"${c.label}"`).join(",");
+  const body = rows.map(r=>
+    cols.map(c=>{
+      const v = computeCell(sheetKey,r,c);
+      return `"${String(v).replace(/"/g,'""')}"`;
+    }).join(",")
+  ).join("\n");
+  const blob = new Blob(["﻿"+header+"\n"+body], {type:"text/csv;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `cts-${sheetKey}-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+
+// ═════════════════════════════════════════════
+// BRIEF CARD (generic, per row)
+// ═════════════════════════════════════════════
+function showBrief(sheetKey,idx){
+  const s = SHEETS[sheetKey];
+  const row = sheets[sheetKey][idx];
+  const title = row.campaignName || row.adSetName || row.adName || row.journeyName || computeAudienceName(row) || (s.title+" #"+(idx+1));
+  let html = `<div class="brief-hero">
+    <div class="brief-account">${esc(title)}</div>
+    <div class="brief-tags">
+      <span class="brief-tag tag-neutral">${s.icon} ${s.title}</span>
+      ${row.status?`<span class="brief-tag tag-outline">${esc(row.status)}</span>`:""}
+    </div>
+  </div>`;
+  html += `<div class="brief-section"><div class="brief-sec-title">📄 ${s.title} — פרטים</div>`;
+  s.cols.forEach(col=>{
+    const val = computeCell(sheetKey,row,col);
+    html += `<div class="brief-row"><span class="brief-lbl">${col.label}</span><span class="brief-val${val?"":" empty"}">${val?esc(val):"—"}</span></div>`;
+  });
+  html += `</div>`;
+  html += `<button class="brief-copy-btn" onclick="copyBrief('${sheetKey}',${idx})">📋 העתק לקליפבורד</button>`;
+  document.getElementById("brief-content").innerHTML = html;
+  document.getElementById("brief-modal").classList.add("open");
+}
+function closeBrief(){ document.getElementById("brief-modal").classList.remove("open"); }
+function copyBrief(sheetKey,idx){
+  const s = SHEETS[sheetKey];
+  const row = sheets[sheetKey][idx];
+  const lines = [`📋 ${s.title.toUpperCase()} BRIEF`, "═".repeat(32)];
+  s.cols.forEach(col=>{ const v=computeCell(sheetKey,row,col); lines.push(`${col.label}: ${v||"—"}`); });
+  navigator.clipboard.writeText(lines.join("\n")).then(()=>{
+    const btn = document.querySelector(".brief-copy-btn");
+    btn.textContent = "✓ הועתק בהצלחה!";
+    setTimeout(()=>{ btn.textContent="📋 העתק לקליפבורד"; }, 2000);
+  });
+}
+
+// ═════════════════════════════════════════════
+// FLOWCHART BUILDER
+// ═════════════════════════════════════════════
+const SVGNS = "http://www.w3.org/2000/svg";
+const FLOW_COLORS = ["#7c3aed","#2563eb","#0891b2","#059669","#d97706","#dc2626","#db2777","#475569"];
+let flow = { nodes:[], edges:[], view:{x:60,y:60,scale:1}, seq:0 };
+let flowColor = FLOW_COLORS[0];
+let flowSel = { nodes:new Set(), edge:null };
+let flowMode = "pan";
+let flowInited = false;
+
+function isNodeSel(id){ return flowSel.nodes.has(id); }
+function isEdgeSel(id){ return flowSel.edge===id; }
+function clearSel(){ flowSel.nodes.clear(); flowSel.edge=null; }
+function ndims(n){ const s=n.scale||1; return {x:n.x,y:n.y,w:n.w*s,h:n.h*s}; }
+function nodeTransform(n){ const s=n.scale||1; return `translate(${n.x},${n.y})`+(s!==1?` scale(${s})`:""); }
+function syncPaletteToSel(){
+  if(flowSel.nodes.size===1){
+    const n = flow.nodes.find(x=>x.id===[...flowSel.nodes][0]);
+    if(n){ flowColor=n.color; buildFlowSwatches(); const t=document.getElementById("flow-tag"); if(t) t.value=n.tag||""; }
+  }
+}
+function selectSingleNode(id){ clearSel(); flowSel.nodes.add(id); syncPaletteToSel(); renderFlowNodes(); renderFlowEdges(); }
+function toggleNodeSel(id){ if(flowSel.nodes.has(id)) flowSel.nodes.delete(id); else flowSel.nodes.add(id); flowSel.edge=null; syncPaletteToSel(); renderFlowNodes(); renderFlowEdges(); }
+function selectEdge(id){ clearSel(); flowSel.edge=id; renderFlowNodes(); renderFlowEdges(); }
+function selectAllNodes(){ clearSel(); flow.nodes.forEach(n=>flowSel.nodes.add(n.id)); syncPaletteToSel(); renderFlowNodes(); renderFlowEdges(); }
+function clearSelection(){ clearSel(); renderFlowNodes(); renderFlowEdges(); }
+function toggleFlowMode(){
+  flowMode = flowMode==="pan" ? "select" : "pan";
+  const btn=document.getElementById("flow-mode-btn"); const svg=document.getElementById("flow-svg");
+  if(flowMode==="select"){ btn.textContent="⬚"; btn.classList.add("active"); btn.title="מצב: בחירה מרובה (לחץ למעבר להזזת קנבס)"; svg.style.cursor="crosshair"; }
+  else{ btn.textContent="✋"; btn.classList.remove("active"); btn.title="מצב: הזזת קנבס (לחץ למעבר לבחירה מרובה)"; svg.style.cursor=""; }
+}
+function initFlow(){
+  buildFlowPalette(); buildFlowSwatches();
+  if(!flowInited){ setupFlowSvg(); loadFlow(); flowInited=true; }
+  renderFlow();
+}
+function saveFlow(){ localStorage.setItem("rpg_cts_flow_v3", JSON.stringify({nodes:flow.nodes,edges:flow.edges,view:flow.view,seq:flow.seq})); }
+function loadFlow(){
+  try{ const s=localStorage.getItem("rpg_cts_flow_v3");
+    if(s){ const d=JSON.parse(s); flow.nodes=d.nodes||[]; flow.edges=d.edges||[]; flow.view=d.view||{x:60,y:60,scale:1}; flow.seq=d.seq||flow.nodes.length; }
+  }catch(e){}
+}
+function buildFlowPalette(){
+  const cat = document.getElementById("flow-cat");
+  cat.innerHTML = FLOW_CATS.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");
+  onFlowCat();
+}
+function onFlowCat(){
+  const dbKey = document.getElementById("flow-cat").value;
+  const val = document.getElementById("flow-val");
+  const opts = optionsFor(dbKey);
+  val.innerHTML = opts.map(o=>`<option value="${esc(o)}">${esc(o)}</option>`).join("");
+}
+function buildFlowSwatches(){
+  const wrap = document.getElementById("flow-swatches");
+  wrap.innerHTML = "";
+  FLOW_COLORS.forEach(c=>{
+    const b = document.createElement("div");
+    b.className = "flow-swatch"+(c===flowColor?" sel":"");
+    b.style.background = c; b.title = c;
+    b.onclick = ()=>{
+      flowColor=c;
+      wrap.querySelectorAll(".flow-swatch").forEach(s=>s.classList.remove("sel"));
+      b.classList.add("sel");
+      if(flowSel.nodes.size){ flow.nodes.forEach(n=>{ if(flowSel.nodes.has(n.id)) n.color=c; }); saveFlow(); renderFlowNodes(); }
+    };
+    wrap.appendChild(b);
+  });
+}
+function setupFlowSvg(){
+  const svg = document.getElementById("flow-svg");
+  svg.innerHTML = `<defs>
+    <marker id="flow-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"></path></marker>
+    <pattern id="flow-grid" width="26" height="26" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r="1.5" fill="#e2e8f0"></circle></pattern>
+  </defs>
+  <g id="flow-viewport">
+    <rect id="flow-bg" x="-12000" y="-12000" width="24000" height="24000" fill="url(#flow-grid)"></rect>
+    <g id="flow-edges"></g><g id="flow-nodes"></g>
+  </g>`;
+  svg.addEventListener("pointerdown", onFlowBgDown);
+  svg.addEventListener("wheel", onFlowWheel, {passive:false});
+}
+function applyView(){ document.getElementById("flow-viewport").setAttribute("transform", `translate(${flow.view.x},${flow.view.y}) scale(${flow.view.scale})`); }
+function flowToWorld(cx,cy){ const r=document.getElementById("flow-svg").getBoundingClientRect(); return {x:(cx-r.left-flow.view.x)/flow.view.scale, y:(cy-r.top-flow.view.y)/flow.view.scale}; }
+function onFlowBgDown(e){
+  if(e.target.closest(".flow-node")||e.target.closest(".flow-edge")) return;
+  if(flowMode==="select"||e.shiftKey){ startFlowMarquee(e); return; }
+  clearSelection();
+  const svg=document.getElementById("flow-svg"); svg.classList.add("panning");
+  const start={cx:e.clientX,cy:e.clientY,vx:flow.view.x,vy:flow.view.y};
+  const move=ev=>{ flow.view.x=start.vx+(ev.clientX-start.cx); flow.view.y=start.vy+(ev.clientY-start.cy); applyView(); };
+  const up=()=>{ svg.classList.remove("panning"); saveFlow(); window.removeEventListener("pointermove",move); window.removeEventListener("pointerup",up); };
+  window.addEventListener("pointermove",move); window.addEventListener("pointerup",up);
+}
+function startFlowMarquee(e){
+  const additive=e.shiftKey; if(!additive) clearSel();
+  const startW=flowToWorld(e.clientX,e.clientY); const base=new Set(flowSel.nodes);
+  const vp=document.getElementById("flow-viewport");
+  const box=document.createElementNS(SVGNS,"rect");
+  box.setAttribute("fill","rgba(124,58,237,0.10)"); box.setAttribute("stroke","#7c3aed");
+  box.setAttribute("stroke-width",1/flow.view.scale); box.setAttribute("stroke-dasharray",`${4/flow.view.scale} ${3/flow.view.scale}`);
+  vp.appendChild(box);
+  const move=ev=>{
+    const w=flowToWorld(ev.clientX,ev.clientY);
+    const x=Math.min(startW.x,w.x), y=Math.min(startW.y,w.y);
+    const ww=Math.abs(w.x-startW.x), hh=Math.abs(w.y-startW.y);
+    box.setAttribute("x",x); box.setAttribute("y",y); box.setAttribute("width",ww); box.setAttribute("height",hh);
+    const sel=new Set(base);
+    flow.nodes.forEach(n=>{ const d=ndims(n); if(d.x<x+ww&&d.x+d.w>x&&d.y<y+hh&&d.y+d.h>y) sel.add(n.id); });
+    flowSel.nodes=sel; flowSel.edge=null; renderFlowNodes();
+  };
+  const up=()=>{ box.remove(); syncPaletteToSel(); renderFlowNodes(); window.removeEventListener("pointermove",move); window.removeEventListener("pointerup",up); };
+  window.addEventListener("pointermove",move); window.addEventListener("pointerup",up);
+}
+function onFlowWheel(e){
+  e.preventDefault();
+  const r=document.getElementById("flow-svg").getBoundingClientRect();
+  const mx=e.clientX-r.left, my=e.clientY-r.top;
+  const wx=(mx-flow.view.x)/flow.view.scale, wy=(my-flow.view.y)/flow.view.scale;
+  const s=clampScale(flow.view.scale*(e.deltaY<0?1.12:1/1.12));
+  flow.view.scale=s; flow.view.x=mx-wx*s; flow.view.y=my-wy*s; applyView(); saveFlow();
+}
+function flowZoom(factor){
+  const r=document.getElementById("flow-svg").getBoundingClientRect();
+  const mx=r.width/2, my=r.height/2;
+  const wx=(mx-flow.view.x)/flow.view.scale, wy=(my-flow.view.y)/flow.view.scale;
+  const s=clampScale(flow.view.scale*factor);
+  flow.view.scale=s; flow.view.x=mx-wx*s; flow.view.y=my-wy*s; applyView(); saveFlow();
+}
+function clampScale(s){ return Math.max(0.25,Math.min(2.5,s)); }
+function addFlowBlock(){
+  const catSel=document.getElementById("flow-cat");
+  const cat = catSel.selectedIndex>=0 ? catSel.options[catSel.selectedIndex].text : catSel.value;
+  const val = document.getElementById("flow-val").value;
+  if(!cat||!val) return;
+  const tag = document.getElementById("flow-tag").value.trim();
+  const r=document.getElementById("flow-svg").getBoundingClientRect();
+  const c=flowToWorld(r.left+r.width/2, r.top+r.height/2);
+  const off=(flow.seq%6)*26; flow.seq++;
+  flow.nodes.push({id:"n"+flow.seq+"_"+Date.now().toString(36), cat, val, tag, color:flowColor, x:Math.round(c.x-90+off), y:Math.round(c.y-30+off), w:180, h:60});
+  clearSel(); saveFlow(); renderFlow();
+}
+function addBlankBlock(){
+  const tag=document.getElementById("flow-tag").value.trim();
+  const r=document.getElementById("flow-svg").getBoundingClientRect();
+  const c=flowToWorld(r.left+r.width/2, r.top+r.height/2);
+  const off=(flow.seq%6)*26; flow.seq++;
+  const node={id:"n"+flow.seq+"_"+Date.now().toString(36), cat:"", val:"טקסט חדש", tag, color:flowColor, x:Math.round(c.x-70+off), y:Math.round(c.y-22+off), w:140, h:44};
+  flow.nodes.push(node); clearSel(); saveFlow(); renderFlow(); editFlowNodeText(node.id);
+}
+function editFlowNodeText(id){
+  const n=flow.nodes.find(x=>x.id===id); if(!n) return;
+  const t=prompt("טקסט האלמנט:", n.val||""); if(t===null) return;
+  n.val=t.trim(); saveFlow(); renderFlowNodes();
+}
+function deleteFlowNode(id){
+  flow.nodes=flow.nodes.filter(n=>n.id!==id);
+  flow.edges=flow.edges.filter(e=>e.from!==id&&e.to!==id);
+  flowSel.nodes.delete(id); saveFlow(); renderFlow();
+}
+function addFlowEdge(from,to){
+  if(flow.edges.some(e=>e.from===from&&e.to===to)) return;
+  flow.edges.push({id:"e"+Date.now().toString(36), from, to}); saveFlow(); renderFlowEdges();
+}
+function clearFlow(){
+  if(!flow.nodes.length&&!flow.edges.length) return;
+  if(!confirm("לנקות את כל התרשים?")) return;
+  flow.nodes=[]; flow.edges=[]; flow.seq=0; clearSel(); saveFlow(); renderFlow();
+}
+function deleteSelection(){
+  if(flowSel.nodes.size){ const ids=new Set(flowSel.nodes); flow.nodes=flow.nodes.filter(n=>!ids.has(n.id)); flow.edges=flow.edges.filter(e=>!ids.has(e.from)&&!ids.has(e.to)); }
+  if(flowSel.edge) flow.edges=flow.edges.filter(e=>e.id!==flowSel.edge);
+  clearSel(); saveFlow(); renderFlow();
+}
+function onFlowTagInput(){
+  if(!flowSel.nodes.size) return;
+  const v=document.getElementById("flow-tag").value.trim();
+  flow.nodes.forEach(n=>{ if(flowSel.nodes.has(n.id)) n.tag=v; }); saveFlow(); renderFlowNodes();
+}
+function renderFlow(){ applyView(); document.getElementById("flow-empty").style.display=flow.nodes.length?"none":"flex"; renderFlowNodes(); renderFlowEdges(); }
+function wrapText(str,max){
+  const words=String(str).split(/\s+/); const lines=[]; let cur="";
+  words.forEach(w=>{ if((cur+" "+w).trim().length>max&&cur){ lines.push(cur); cur=w; } else cur=(cur+" "+w).trim(); });
+  if(cur) lines.push(cur);
+  return lines.length?lines:[String(str)];
+}
+function contrastColor(hex){
+  const c=hex.replace("#",""); const r=parseInt(c.substr(0,2),16),g=parseInt(c.substr(2,2),16),b=parseInt(c.substr(4,2),16);
+  return (0.299*r+0.587*g+0.114*b)/255>0.62?"#1e293b":"#ffffff";
+}
+function renderFlowNodes(){
+  const g=document.getElementById("flow-nodes"); if(!g) return; g.innerHTML="";
+  flow.nodes.forEach(node=>{
+    const isSel=isNodeSel(node.id); const isSole=isSel&&flowSel.nodes.size===1;
+    const el=document.createElementNS(SVGNS,"g");
+    el.setAttribute("class","flow-node"+(isSel?" selected":"")); el.setAttribute("transform",nodeTransform(node)); el.dataset.id=node.id;
+    const txt=contrastColor(node.color);
+    const rect=document.createElementNS(SVGNS,"rect");
+    rect.setAttribute("rx","11"); rect.setAttribute("ry","11"); rect.setAttribute("fill",node.color);
+    rect.setAttribute("stroke",isSel?"#1e293b":"rgba(0,0,0,0.10)"); rect.setAttribute("stroke-width",isSel?"2.5":"1");
+    el.appendChild(rect);
+    const hasCat=!!(node.cat&&node.cat.trim()); const valStartY=hasCat?40:26;
+    let cat=null;
+    if(hasCat){
+      cat=document.createElementNS(SVGNS,"text");
+      cat.setAttribute("x","0"); cat.setAttribute("y","20"); cat.setAttribute("font-family","Segoe UI, Arial, sans-serif");
+      cat.setAttribute("font-size","10"); cat.setAttribute("font-weight","700"); cat.setAttribute("letter-spacing","0.5");
+      cat.setAttribute("fill",txt); cat.setAttribute("text-anchor","middle"); cat.style.unicodeBidi="plaintext";
+      cat.textContent=node.cat.toUpperCase(); el.appendChild(cat);
+    }
+    const val=document.createElementNS(SVGNS,"text");
+    val.setAttribute("font-family","Segoe UI, Arial, sans-serif"); val.setAttribute("font-size","14"); val.setAttribute("font-weight","700");
+    val.setAttribute("fill",txt); val.setAttribute("text-anchor","middle"); val.style.unicodeBidi="plaintext";
+    const lines=wrapText(node.val||"—",26);
+    lines.forEach((ln,i)=>{ const ts=document.createElementNS(SVGNS,"tspan"); ts.setAttribute("x","0"); ts.setAttribute("y",valStartY+i*18); ts.textContent=ln; val.appendChild(ts); });
+    el.appendChild(val);
+    g.appendChild(el);
+    let bw=150; try{ bw=Math.max(cat?cat.getBBox().width:0, val.getBBox().width); }catch(e){}
+    const w=Math.max(120,Math.round(bw)+28); const h=(hasCat?24:10)+lines.length*18+12;
+    node.w=w; node.h=h; rect.setAttribute("width",w); rect.setAttribute("height",h);
+    if(cat) cat.setAttribute("x",w/2);
+    Array.from(val.querySelectorAll("tspan")).forEach(ts=>ts.setAttribute("x",w/2));
+    if(node.tag){
+      const tg=document.createElementNS(SVGNS,"g"); tg.setAttribute("class","flow-tag");
+      const tr=document.createElementNS(SVGNS,"rect");
+      tr.setAttribute("rx","6"); tr.setAttribute("ry","6"); tr.setAttribute("y","-24"); tr.setAttribute("height","19"); tr.setAttribute("fill","#0f172a");
+      const tt=document.createElementNS(SVGNS,"text");
+      tt.setAttribute("x","11"); tt.setAttribute("y","-10.5"); tt.setAttribute("font-family","Segoe UI, Arial, sans-serif");
+      tt.setAttribute("font-size","9.5"); tt.setAttribute("font-weight","800"); tt.setAttribute("letter-spacing","0.7");
+      tt.setAttribute("fill","#ffffff"); tt.setAttribute("text-anchor","start"); tt.style.direction="ltr";
+      tt.textContent=node.tag.toUpperCase(); tg.appendChild(tr); tg.appendChild(tt); el.appendChild(tg);
+      let tw=46; try{ tw=tt.getBBox().width; }catch(e){}
+      tr.setAttribute("x","3"); tr.setAttribute("width",Math.round(tw)+16);
+    }
+    const handle=document.createElementNS(SVGNS,"circle");
+    handle.setAttribute("class","flow-handle no-export"); handle.setAttribute("cx",w/2); handle.setAttribute("cy",h); handle.setAttribute("r","7"); el.appendChild(handle);
+    const del=document.createElementNS(SVGNS,"g"); del.setAttribute("class","flow-del no-export"); del.setAttribute("transform",`translate(${w-2},-2)`);
+    const dc=document.createElementNS(SVGNS,"circle"); dc.setAttribute("r","9"); dc.setAttribute("fill","#dc2626");
+    const dx=document.createElementNS(SVGNS,"text"); dx.setAttribute("text-anchor","middle"); dx.setAttribute("y","4"); dx.setAttribute("font-size","12"); dx.setAttribute("fill","#fff"); dx.setAttribute("font-family","Arial"); dx.textContent="✕";
+    del.appendChild(dc); del.appendChild(dx); el.appendChild(del);
+    if(isSole){
+      const rz=document.createElementNS(SVGNS,"rect"); rz.setAttribute("class","flow-resize no-export");
+      rz.setAttribute("x",w-6); rz.setAttribute("y",h-6); rz.setAttribute("width","12"); rz.setAttribute("height","12"); rz.setAttribute("rx","3");
+      rz.addEventListener("pointerdown",ev=>onFlowResizeDown(ev,node)); el.appendChild(rz);
+    }
+    el.addEventListener("pointerdown",ev=>onFlowNodeDown(ev,node));
+    el.addEventListener("dblclick",ev=>{ ev.stopPropagation(); editFlowNodeText(node.id); });
+    handle.addEventListener("pointerdown",ev=>onFlowHandleDown(ev,node));
+    del.addEventListener("pointerdown",ev=>ev.stopPropagation());
+    del.addEventListener("click",ev=>{ ev.stopPropagation(); deleteFlowNode(node.id); });
+  });
+}
+function borderPoint(n,toward){
+  const cx=n.x+n.w/2, cy=n.y+n.h/2; const dx=toward.x-cx, dy=toward.y-cy;
+  if(dx===0&&dy===0) return {x:cx,y:cy};
+  const sx=dx===0?Infinity:(n.w/2)/Math.abs(dx); const sy=dy===0?Infinity:(n.h/2)/Math.abs(dy);
+  const t=Math.min(sx,sy); return {x:cx+dx*t, y:cy+dy*t};
+}
+function renderFlowEdges(){
+  const g=document.getElementById("flow-edges"); if(!g) return; g.innerHTML="";
+  flow.edges.forEach(edge=>{
+    const a=flow.nodes.find(n=>n.id===edge.from), b=flow.nodes.find(n=>n.id===edge.to);
+    if(!a||!b) return;
+    const da=ndims(a), db2=ndims(b);
+    const ac={x:da.x+da.w/2,y:da.y+da.h/2}, bc={x:db2.x+db2.w/2,y:db2.y+db2.h/2};
+    const p1=borderPoint(da,bc), p2=borderPoint(db2,ac);
+    const isSel=isEdgeSel(edge.id);
+    const path=document.createElementNS(SVGNS,"path");
+    path.setAttribute("class","flow-edge"+(isSel?" selected":""));
+    path.setAttribute("d",`M${p1.x},${p1.y} L${p2.x},${p2.y}`);
+    path.setAttribute("stroke",isSel?"#7c3aed":"#94a3b8"); path.setAttribute("stroke-width",isSel?"3":"2");
+    path.setAttribute("fill","none"); path.setAttribute("marker-end","url(#flow-arrow)");
+    path.addEventListener("pointerdown",ev=>{ ev.stopPropagation(); selectEdge(edge.id); });
+    g.appendChild(path);
+  });
+}
+function onFlowNodeDown(e,node){
+  if(e.target.closest(".flow-handle")||e.target.closest(".flow-del")||e.target.closest(".flow-resize")) return;
+  e.stopPropagation();
+  if(e.shiftKey){ toggleNodeSel(node.id); return; }
+  if(!isNodeSel(node.id)) selectSingleNode(node.id);
+  const ids=[...flowSel.nodes]; const start=flowToWorld(e.clientX,e.clientY); const orig={};
+  ids.forEach(id=>{ const n=flow.nodes.find(x=>x.id===id); orig[id]={x:n.x,y:n.y}; });
+  const move=ev=>{
+    const w=flowToWorld(ev.clientX,ev.clientY); const dx=w.x-start.x, dy=w.y-start.y;
+    ids.forEach(id=>{ const n=flow.nodes.find(x=>x.id===id); n.x=Math.round(orig[id].x+dx); n.y=Math.round(orig[id].y+dy);
+      const gg=document.querySelector(`.flow-node[data-id="${id}"]`); if(gg) gg.setAttribute("transform",nodeTransform(n)); });
+    renderFlowEdges();
+  };
+  const up=()=>{ saveFlow(); window.removeEventListener("pointermove",move); window.removeEventListener("pointerup",up); };
+  window.addEventListener("pointermove",move); window.addEventListener("pointerup",up);
+}
+function onFlowResizeDown(e,node){
+  e.stopPropagation();
+  const move=ev=>{ const w=flowToWorld(ev.clientX,ev.clientY); let s=Math.max((w.x-node.x)/node.w,(w.y-node.y)/node.h); s=Math.max(0.6,Math.min(3.5,s)); node.scale=s;
+    const gg=document.querySelector(`.flow-node[data-id="${node.id}"]`); if(gg) gg.setAttribute("transform",nodeTransform(node)); renderFlowEdges(); };
+  const up=()=>{ saveFlow(); renderFlowNodes(); window.removeEventListener("pointermove",move); window.removeEventListener("pointerup",up); };
+  window.addEventListener("pointermove",move); window.addEventListener("pointerup",up);
+}
+function onFlowHandleDown(e,node){
+  e.stopPropagation();
+  const edges=document.getElementById("flow-edges");
+  const temp=document.createElementNS(SVGNS,"path");
+  temp.setAttribute("class","flow-edge"); temp.setAttribute("stroke","#7c3aed"); temp.setAttribute("stroke-width","2"); temp.setAttribute("fill","none");
+  temp.setAttribute("stroke-dasharray","5 4"); temp.setAttribute("marker-end","url(#flow-arrow)"); edges.appendChild(temp);
+  const nd=ndims(node); const start={x:nd.x+nd.w/2, y:nd.y+nd.h};
+  const move=ev=>{ const w=flowToWorld(ev.clientX,ev.clientY); temp.setAttribute("d",`M${start.x},${start.y} L${w.x},${w.y}`); };
+  const up=ev=>{ temp.remove(); const el=document.elementFromPoint(ev.clientX,ev.clientY); const targetG=el&&el.closest(".flow-node");
+    if(targetG&&targetG.dataset.id&&targetG.dataset.id!==node.id) addFlowEdge(node.id,targetG.dataset.id);
+    window.removeEventListener("pointermove",move); window.removeEventListener("pointerup",up); };
+  window.addEventListener("pointermove",move); window.addEventListener("pointerup",up);
+}
+function flowBounds(pad){
+  let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+  flow.nodes.forEach(n=>{ const d=ndims(n); minX=Math.min(minX,d.x); minY=Math.min(minY,d.y); maxX=Math.max(maxX,d.x+d.w); maxY=Math.max(maxY,d.y+d.h); });
+  return {minX:minX-pad,minY:minY-pad,maxX:maxX+pad,maxY:maxY+pad};
+}
+function flowFit(){
+  if(!flow.nodes.length){ flow.view={x:60,y:60,scale:1}; applyView(); saveFlow(); return; }
+  const b=flowBounds(60); const r=document.getElementById("flow-svg").getBoundingClientRect();
+  const w=b.maxX-b.minX, h=b.maxY-b.minY; const s=Math.max(0.25,Math.min(r.width/w,r.height/h,1.5));
+  flow.view.scale=s; flow.view.x=(r.width-w*s)/2-b.minX*s; flow.view.y=(r.height-h*s)/2-b.minY*s; applyView(); saveFlow();
+}
+function exportFlowPNG(){
+  if(!flow.nodes.length){ alert("אין אלמנטים לייצוא"); return; }
+  const prevNodes=new Set(flowSel.nodes), prevEdge=flowSel.edge; clearSel(); renderFlowNodes(); renderFlowEdges();
+  const b=flowBounds(40); const W=b.maxX-b.minX, H=b.maxY-b.minY;
+  const out=document.createElementNS(SVGNS,"svg");
+  out.setAttribute("xmlns",SVGNS); out.setAttribute("width",W); out.setAttribute("height",H); out.setAttribute("viewBox",`${b.minX} ${b.minY} ${W} ${H}`);
+  const defs=document.createElementNS(SVGNS,"defs");
+  const marker=document.createElementNS(SVGNS,"marker");
+  marker.setAttribute("id","flow-arrow"); marker.setAttribute("viewBox","0 0 10 10"); marker.setAttribute("refX","9"); marker.setAttribute("refY","5");
+  marker.setAttribute("markerWidth","7"); marker.setAttribute("markerHeight","7"); marker.setAttribute("orient","auto-start-reverse");
+  const mp=document.createElementNS(SVGNS,"path"); mp.setAttribute("d","M0,0 L10,5 L0,10 z"); mp.setAttribute("fill","#94a3b8");
+  marker.appendChild(mp); defs.appendChild(marker); out.appendChild(defs);
+  const bg=document.createElementNS(SVGNS,"rect"); bg.setAttribute("x",b.minX); bg.setAttribute("y",b.minY); bg.setAttribute("width",W); bg.setAttribute("height",H); bg.setAttribute("fill","#ffffff"); out.appendChild(bg);
+  const edges=document.getElementById("flow-edges").cloneNode(true); const nodes=document.getElementById("flow-nodes").cloneNode(true);
+  [edges,nodes].forEach(gr=>gr.querySelectorAll(".no-export").forEach(x=>x.remove()));
+  out.appendChild(edges); out.appendChild(nodes);
+  const svgStr=new XMLSerializer().serializeToString(out);
+  const url="data:image/svg+xml;base64,"+btoa(unescape(encodeURIComponent(svgStr)));
+  const img=new Image();
+  img.onload=()=>{ const scale=2; const cv=document.createElement("canvas"); cv.width=W*scale; cv.height=H*scale;
+    const ctx=cv.getContext("2d"); ctx.scale(scale,scale); ctx.drawImage(img,0,0);
+    cv.toBlob(blob=>{ const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="flowchart-"+new Date().toISOString().slice(0,10)+".png"; a.click(); });
+    flowSel.nodes=prevNodes; flowSel.edge=prevEdge; renderFlow();
+  };
+  img.onerror=()=>{ alert("שגיאה בייצוא התמונה"); flowSel.nodes=prevNodes; flowSel.edge=prevEdge; renderFlow(); };
+  img.src=url;
+}
+document.addEventListener("keydown", e=>{
+  if(currentTab!=="flow") return;
+  const tag=(document.activeElement&&document.activeElement.tagName)||"";
+  if(tag==="INPUT"||tag==="SELECT"||tag==="TEXTAREA") return;
+  if((e.key==="Delete"||e.key==="Backspace")&&(flowSel.nodes.size||flowSel.edge)){ deleteSelection(); e.preventDefault(); }
+  else if((e.ctrlKey||e.metaKey)&&(e.key==="a"||e.key==="A")){ selectAllNodes(); e.preventDefault(); }
+  else if(e.key==="Escape"){ clearSelection(); }
+});
+
+// ═════════════════════════════════════════════
+// INIT
+// ═════════════════════════════════════════════
+loadState();
+buildTabs();
+buildSheetPanels();
+DATA_SHEETS.forEach(k=>buildTable(k));
+</script>
+</body>
+</html>

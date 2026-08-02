@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>מדריך: TOP 50 → Merchant → PMAX</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Heebo', Arial, sans-serif;
+      background: #f5f7fa;
+      color: #1a1a2e;
+      direction: rtl;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .page {
+      max-width: 820px;
+      margin: 0 auto;
+      background: white;
+      padding: 50px 60px;
+    }
+
+    /* Header */
+    .doc-header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      color: white;
+      padding: 40px 50px;
+      border-radius: 12px;
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .doc-header::after {
+      content: '';
+      position: absolute;
+      top: -30px; left: -30px;
+      width: 180px; height: 180px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 50%;
+    }
+    .doc-header h1 {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+    .doc-header .subtitle {
+      font-size: 14px;
+      opacity: 0.7;
+      font-weight: 300;
+    }
+    .doc-header .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      margin-top: 14px;
+    }
+
+    /* Section */
+    .section {
+      margin-bottom: 40px;
+      border: 1px solid #e8ecf0;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 24px;
+      color: white;
+      font-weight: 700;
+      font-size: 16px;
+    }
+    .section-header .num {
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .analytics .section-header { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .merchant  .section-header { background: linear-gradient(135deg, #11998e, #38ef7d); }
+    .pmax      .section-header { background: linear-gradient(135deg, #f7971e, #ffd200); color: #1a1a2e; }
+    .pmax      .section-header .num { background: rgba(0,0,0,0.15); }
+
+    .section-body {
+      padding: 24px 28px;
+      background: white;
+    }
+
+    /* Steps */
+    .steps { list-style: none; }
+    .steps li {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 16px;
+      align-items: flex-start;
+    }
+    .step-num {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .analytics .step-num { background: #ede9fe; color: #7c3aed; }
+    .merchant  .step-num { background: #d1fae5; color: #059669; }
+    .pmax      .step-num { background: #fef3c7; color: #b45309; }
+
+    .step-content strong {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 3px;
+      font-size: 14px;
+    }
+    .step-content span {
+      color: #555;
+      font-size: 13px;
+    }
+
+    /* Code block */
+    .code-block {
+      background: #1e1e2e;
+      color: #cdd6f4;
+      padding: 14px 18px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      direction: ltr;
+      text-align: left;
+      margin: 14px 0;
+      line-height: 1.8;
+    }
+    .code-block .comment { color: #6c7086; }
+    .code-block .key { color: #89b4fa; }
+    .code-block .val { color: #a6e3a1; }
+
+    /* Note box */
+    .note {
+      background: #f0f9ff;
+      border-right: 4px solid #38bdf8;
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 16px 0;
+      font-size: 13px;
+      color: #0369a1;
+    }
+    .note.warning {
+      background: #fffbeb;
+      border-color: #f59e0b;
+      color: #92400e;
+    }
+    .note.success {
+      background: #f0fdf4;
+      border-color: #22c55e;
+      color: #166534;
+    }
+
+    /* Best practices grid */
+    .bp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 6px;
+    }
+    .bp-card {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .bp-card .bp-title {
+      font-weight: 700;
+      font-size: 13px;
+      color: #92400e;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .bp-card ul {
+      padding-right: 16px;
+      font-size: 12.5px;
+      color: #555;
+      line-height: 1.9;
+    }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px dashed #e0e0e0;
+      margin: 20px 0;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      color: #aaa;
+      font-size: 12px;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+
+    /* Print */
+    @media print {
+      body { background: white; }
+      .page { padding: 30px 40px; }
+      .section { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="doc-header">
+    <h1>TOP 50 מוצרים → Merchant Center → PMAX</h1>
+    <div class="subtitle">מדריך עבודה — עדכון Custom Label ויצירת Asset Group ממוקד</div>
+    <div class="badge">RPG Digital</div>
+  </div>
+
+  <!-- SECTION 1: Analytics -->
+  <div class="section analytics">
+    <div class="section-header">
+      <div class="num">1</div>
+      Google Analytics — שליפת 50 המוצרים הנמכרים ביותר
+    </div>
+    <div class="section-body">
+      <ul class="steps">
+        <li>
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <strong>כנס ל-Google Analytics 4</strong>
+            <span>Reports → Monetization → Ecommerce purchases</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <strong>הגדר טווח תאריכים</strong>
+            <span>בחר את התקופה הרלוונטית (מומלץ: 90 ימים אחרונים)</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <strong>מיין לפי Items purchased</strong>
+            <span>לחץ על העמודה כדי למיין מהגבוה לנמוך</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <strong>הצג 50 שורות</strong>
+            <span>בתחתית הטבלה שנה Rows per page ל-50</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <strong>ייצא ל-Google Sheets / CSV</strong>
+            <span>לחץ על אייקון ה-Export בפינה הימנית למעלה של הטבלה</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">6</div>
+          <div class="step-content">
+            <strong>הכן את הקובץ הסופי</strong>
+            <span>השאר רק שתי עמודות: <strong>id</strong> ו-<strong>custom_label_4</strong> — הוסף ידנית את הערך <strong>Top_50</strong> לכל שורה</span>
+          </div>
+        </li>
+      </ul>
+
+      <div class="code-block">
+        <span class="comment"># מבנה הקובץ הסופי</span><br>
+        <span class="key">id</span>	<span class="val">custom_label_4</span><br>
+        <span class="key">7220</span>	<span class="val">Top_50</span><br>
+        <span class="key">27025</span>	<span class="val">Top_50</span><br>
+        <span class="key">24639</span>	<span class="val">Top_50</span>
+      </div>
+
+      <div class="note warning">
+        ה-Item ID באנלטיקס חייב להיות זהה בדיוק ל-Product ID במרצ'נט סנטר. בדוק מוצר אחד לפני העלאה.
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: Merchant -->
+  <div class="section merchant">
+    <div class="section-header">
+      <div class="num">2</div>
+      Google Merchant Center — עדכון Custom Label דרך Supplemental Feed
+    </div>
+    <div class="section-body">
+      <ul class="steps">
+        <li>
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <strong>המר את הקובץ ל-TSV</strong>
+            <span>Google Sheets → File → Download → Tab-separated values (.tsv)<br>שים לב: מרצ'נט לא מקבל CSV רגיל</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <strong>Products → Data sources → Supplemental sources → Add supplemental source</strong>
+            <span>בחר: File → Upload a file from your computer</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <strong>העלה את קובץ ה-TSV</strong>
+            <span>סמן "Upload as test" לבדיקה ראשונה לפני הפעלה אמיתית</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <strong>בחר Primary source</strong>
+            <span>בחר את ה-XML הראשי שלך מהרשימה</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <strong>וודא תוצאות תקינות</strong>
+            <span>Matched products = 50 | Attribute names = All recognized | No issues found</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">6</div>
+          <div class="step-content">
+            <strong>לחץ "Apply update"</strong>
+            <span>הלייבל יתעדכן על כל 50 המוצרים תוך מספר דקות</span>
+          </div>
+        </li>
+      </ul>
+
+      <div class="note success">
+        לעדכון עתידי: לחץ Update באותו supplemental feed והעלה קובץ TSV חדש — אין צורך ליצור feed חדש.
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: Google Ads PMAX -->
+  <div class="section pmax">
+    <div class="section-header">
+      <div class="num">3</div>
+      Google Ads — PMAX Best Practices לקמפיין Top 50
+    </div>
+    <div class="section-body">
+
+      <ul class="steps" style="margin-bottom:20px;">
+        <li>
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <strong>יצירת Asset Group ממוקד</strong>
+            <span>בקמפיין PMAX → Asset Groups → Listing Groups → סנן לפי Custom label 4 = Top_50</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <strong>הפרד בין Top 50 לשאר המוצרים</strong>
+            <span>צור Asset Group נפרד לשאר ("Everything else") עם תקציב/bid שונה</span>
+          </div>
+        </li>
+      </ul>
+
+      <hr class="divider">
+
+      <div style="font-weight:700; margin-bottom:14px; font-size:14px;">Best Practices לניהול הקמפיין</div>
+
+      <div class="bp-grid">
+        <div class="bp-card">
+          <div class="bp-title">תקציב ו-Bidding</div>
+          <ul>
+            <li>השתמש ב-Maximize conversion value</li>
+            <li>הגדר tROAS רק לאחר 30-50 המרות</li>
+            <li>אל תשנה bid strategy בשבועיים הראשונים</li>
+            <li>תקציב יומי מינימום: x3 מה-CPA הממוצע</li>
+          </ul>
+        </div>
+        <div class="bp-card">
+          <div class="bp-title">Assets — תמונות וטקסטים</div>
+          <ul>
+            <li>מינימום 3-5 תמונות בכל פורמט (1:1, 4:1, 1.91:1)</li>
+            <li>15 כותרות + 5 תיאורים שונים</li>
+            <li>הוסף לפחות סרטון אחד (YouTube)</li>
+            <li>שמות מוצרים ספציפיים בכותרות</li>
+          </ul>
+        </div>
+        <div class="bp-card">
+          <div class="bp-title">Audience Signals</div>
+          <ul>
+            <li>הוסף רשימת לקוחות קיימים (Customer Match)</li>
+            <li>רשימת Cart Abandoners מ-GA4</li>
+            <li>In-market segments רלוונטיים לקטגוריה</li>
+            <li>Remarketing מהאתר (30/60/90 יום)</li>
+          </ul>
+        </div>
+        <div class="bp-card">
+          <div class="bp-title">מעקב וניטור</div>
+          <ul>
+            <li>בדוק Insights בכל שבוע (לא לנגוע בהגדרות)</li>
+            <li>עקוב אחרי Asset performance (Low/Good/Best)</li>
+            <li>החלף assets עם דירוג Low לאחר 2 שבועות</li>
+            <li>בדוק Search themes שגוגל מוסיף אוטומטית</li>
+          </ul>
+        </div>
+        <div class="bp-card">
+          <div class="bp-title">מה לא לעשות</div>
+          <ul>
+            <li>לא לשנות תקציב יותר מ-20% בכל פעם</li>
+            <li>לא לעצור קמפיין ולהפעיל מחדש — מאפס למידה</li>
+            <li>לא ליצור יותר מדי Asset Groups (5-10 מקסימום)</li>
+            <li>לא לבדוק Search Terms בתדירות גבוהה מדי</li>
+          </ul>
+        </div>
+        <div class="bp-card">
+          <div class="bp-title">אופטימיזציה שוטפת</div>
+          <ul>
+            <li>עדכן את רשימת Top 50 כל חודש מ-GA4</li>
+            <li>הוסף Custom Label נוסף לעונתיות / מבצעים</li>
+            <li>בדוק Product level performance דרך Merchant</li>
+            <li>השתמש ב-Supplemental Feed לעדכונים קבועים</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="note" style="margin-top:20px;">
+        <strong>טיפ:</strong> PMAX צריך לפחות 6 שבועות learning period לפני שמוציאים מסקנות. אל תשנה הגדרות משמעותיות בתקופה הזו.
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">
+    RPG Digital &nbsp;|&nbsp; נוצר: אפריל 2026 &nbsp;|&nbsp; לשמירה כ-PDF: Ctrl+P → Save as PDF
+  </div>
+
+</div>
+</body>
+</html>

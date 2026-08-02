@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מחולל פרומפט — דוח ביצועים Meta</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Heebo', sans-serif;
+    background: #f4f7f9;
+    color: #334155;
+    line-height: 1.6;
+  }
+  .page { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  h1 {
+    font-size: 28px; font-weight: 800; color: #003764;
+    margin-bottom: 6px;
+  }
+  .subtitle { color: #64748b; font-size: 15px; margin-bottom: 36px; }
+
+  .card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .card-title {
+    font-size: 16px; font-weight: 800; color: #003764;
+    margin-bottom: 20px; padding-bottom: 12px;
+    border-bottom: 2px solid #FFC20E;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .card-title .num {
+    background: #003764; color: #FFC20E;
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 900; flex-shrink: 0;
+  }
+
+  .grid { display: grid; gap: 16px; }
+  .grid.cols2 { grid-template-columns: 1fr 1fr; }
+  .grid.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  label { font-size: 13px; font-weight: 700; color: #475569; }
+  input, textarea, select {
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: 'Heebo', sans-serif;
+    font-size: 14px;
+    color: #1e293b;
+    background: #f8fafc;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+  input:focus, textarea:focus, select:focus { border-color: #009EDB; background: #fff; }
+  textarea { resize: vertical; min-height: 90px; }
+
+  .camp-block {
+    background: #f8fafc; border: 1px solid #e2e8f0;
+    border-radius: 12px; padding: 20px; margin-bottom: 16px;
+  }
+  .camp-block-title {
+    font-size: 14px; font-weight: 800; color: #003764; margin-bottom: 16px;
+  }
+
+  .add-btn {
+    background: none; border: 2px dashed #cbd5e1; color: #64748b;
+    border-radius: 10px; padding: 12px; width: 100%;
+    cursor: pointer; font-family: 'Heebo', sans-serif;
+    font-size: 14px; font-weight: 700;
+    transition: all 0.2s;
+  }
+  .add-btn:hover { border-color: #009EDB; color: #009EDB; background: #f0f9ff; }
+
+  .remove-btn {
+    background: none; border: none; color: #ef4444;
+    cursor: pointer; font-size: 13px; font-weight: 700;
+    float: left; padding: 0;
+  }
+  .remove-btn:hover { text-decoration: underline; }
+
+  .generate-btn {
+    width: 100%; padding: 18px;
+    background: #003764; color: #FFC20E;
+    border: none; border-radius: 12px;
+    font-family: 'Heebo', sans-serif;
+    font-size: 18px; font-weight: 800;
+    cursor: pointer; margin-top: 8px;
+    transition: background 0.2s;
+  }
+  .generate-btn:hover { background: #004d8a; }
+
+  /* OUTPUT */
+  #output-section { display: none; margin-top: 32px; }
+  #output-section .card-title { border-bottom-color: #10b981; }
+
+  #prompt-output {
+    width: 100%; min-height: 300px; font-family: monospace;
+    font-size: 13px; background: #0f172a; color: #e2e8f0;
+    border: none; border-radius: 10px; padding: 20px;
+    line-height: 1.7; direction: ltr; text-align: left;
+  }
+
+  .copy-btn {
+    margin-top: 12px; padding: 14px 28px;
+    background: #10b981; color: #fff;
+    border: none; border-radius: 10px;
+    font-family: 'Heebo', sans-serif;
+    font-size: 15px; font-weight: 800;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .copy-btn:hover { background: #059669; }
+  .copy-btn.copied { background: #003764; }
+
+  @media(max-width: 640px) {
+    .grid.cols2, .grid.cols3 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <h1>מחולל פרומפט — דוח ביצועים Meta</h1>
+  <p class="subtitle">מלא את השדות ולחץ על "צור פרומפט" — תקבל פרומפט מוכן להדבקה ב-Claude</p>
+
+  <!-- 1. פרטי לקוח -->
+  <div class="card">
+    <div class="card-title"><span class="num">1</span> פרטי לקוח</div>
+    <div class="grid cols2">
+      <div class="field"><label>שם הלקוח</label><input id="clientName" placeholder="למשל: רוח נכונה"></div>
+      <div class="field"><label>שם הסוכנות (מכין הדוח)</label><input id="agencyName" placeholder="למשל: RPG Digital"></div>
+      <div class="field"><label>חודש הדוח</label><input id="reportMonth" placeholder="למשל: מרץ 2026"></div>
+      <div class="field"><label>תאריך הפקה</label><input id="reportDate" placeholder="למשל: 10 באפריל 2026"></div>
+      <div class="field"><label>לוגו URL (אופציונלי)</label><input id="logoUrl" placeholder="https://..."></div>
+      <div class="field"><label>מייל ליצירת קשר</label><input id="contactEmail" placeholder="email@agency.co.il"></div>
+      <div class="field"><label>צבע ראשי HEX</label><input id="color1" placeholder="#003764"></div>
+      <div class="field"><label>צבע הדגשה HEX</label><input id="color2" placeholder="#FFC20E"></div>
+    </div>
+  </div>
+
+  <!-- 2. נתוני Meta -->
+  <div class="card">
+    <div class="card-title"><span class="num">2</span> נתוני Meta Ads — סיכום כולל</div>
+    <div class="grid cols3">
+      <div class="field"><label>סך השקעה ₪</label><input id="totalSpend" placeholder="6,222"></div>
+      <div class="field"><label>חשיפות (Impressions)</label><input id="impressions" placeholder="329,535"></div>
+      <div class="field"><label>Reach (ייחודיים)</label><input id="reach" placeholder="142,475"></div>
+      <div class="field"><label>CPM ממוצע ₪</label><input id="cpm" placeholder="18.88"></div>
+      <div class="field"><label>סך קליקים</label><input id="clicks" placeholder="6,557"></div>
+      <div class="field"><label>סך המרות / לידים</label><input id="conversions" placeholder="57"></div>
+    </div>
+    <div class="grid" style="margin-top:16px">
+      <div class="field">
+        <label>מה נמדד כהמרה?</label>
+        <select id="convType">
+          <option value="תרומות">תרומות</option>
+          <option value="לידים">לידים</option>
+          <option value="רכישות">רכישות (e-commerce)</option>
+          <option value="הרשמות">הרשמות / רישומים</option>
+          <option value="פניות">פניות / צור קשר</option>
+          <option value="אחר">אחר</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. קמפיינים -->
+  <div class="card">
+    <div class="card-title"><span class="num">3</span> פילוח קמפיינים</div>
+    <div id="campaigns-container">
+      <!-- קמפיין ראשון -->
+      <div class="camp-block" id="camp-1">
+        <div class="camp-block-title">קמפיין 1</div>
+        <div class="grid cols2">
+          <div class="field"><label>שם הקמפיין</label><input class="camp-name" placeholder="שם הקמפיין"></div>
+          <div class="field">
+            <label>סוג</label>
+            <select class="camp-type">
+              <option value="Conversions">Conversions (המרות)</option>
+              <option value="Lead Generation">Lead Generation (לידים)</option>
+              <option value="Traffic">Traffic (טראפיק)</option>
+              <option value="Awareness">Awareness (מודעות)</option>
+            </select>
+          </div>
+          <div class="field"><label>תקציב שהוצא ₪</label><input class="camp-spend" placeholder="4,399"></div>
+          <div class="field"><label>המרות / לידים</label><input class="camp-conv" placeholder="29"></div>
+          <div class="field"><label>עלות להמרה/ליד ₪</label><input class="camp-cpa" placeholder="151.71"></div>
+          <div class="field"><label>קליקים</label><input class="camp-clicks" placeholder="3,338"></div>
+          <div class="field"><label>חשיפות</label><input class="camp-imp" placeholder="241,685"></div>
+          <div class="field"><label>Reach</label><input class="camp-reach" placeholder="102,000"></div>
+        </div>
+      </div>
+    </div>
+    <button class="add-btn" onclick="addCampaign()">+ הוסף קמפיין</button>
+  </div>
+
+  <!-- 4. תוצאות עסקיות -->
+  <div class="card">
+    <div class="card-title"><span class="num">4</span> תוצאות עסקיות</div>
+    <div class="grid cols2">
+      <div class="field"><label>סך הכנסות / תרומות / לידים</label><input id="bizTotal" placeholder="₪27,606 / 61 לידים"></div>
+      <div class="field"><label>מספר עסקאות / לקוחות</label><input id="bizCount" placeholder="126 עסקאות, 102 ייחודיים"></div>
+      <div class="field"><label>ערך ממוצע לעסקה/ליד</label><input id="bizAvg" placeholder="₪219 לעסקה"></div>
+      <div class="field"><label>מדד נוסף חשוב</label><input id="bizExtra" placeholder="43 הוראות קבע פעילות"></div>
+    </div>
+    <div class="field" style="margin-top:16px">
+      <label>פילוח לפי קטגוריות (כתוב חופשי)</label>
+      <textarea id="bizBreakdown" placeholder="קמפיין גיוס = ₪18,539 (67%), הוראות קבע = ₪7,127 (26%), שונות = ₪1,940 (7%)"></textarea>
+    </div>
+  </div>
+
+  <!-- 5. תובנות -->
+  <div class="card">
+    <div class="card-title"><span class="num">5</span> תובנות והמלצות</div>
+    <div class="grid">
+      <div class="field"><label>✓ מה עבד טוב — הצלחה 1</label><input id="win1" placeholder="למשל: קמפיין התרומות הניב 29 המרות ב-₪151 לממוצע"></div>
+      <div class="field"><label>✓ מה עבד טוב — הצלחה 2 (אופציונלי)</label><input id="win2" placeholder="למשל: קמפיין הלידים הניב 28 פניות ב-₪27 לליד"></div>
+      <div class="field"><label>⚠ מה צריך לשפר</label><input id="warn1" placeholder="למשל: לכבות מודעות חלשות ולהגדיל תקציב לוידאו"></div>
+      <div class="field"><label>◆ המלצה אסטרטגית</label><input id="rec1" placeholder="למשל: להפעיל רה-מרקטינג לגולשים שלא המירו"></div>
+      <div class="field"><label>◆ המלצה נוספת (אופציונלי)</label><input id="rec2" placeholder="למשל: לבנות Lookalike מרשימת הלקוחות הקיימים"></div>
+    </div>
+  </div>
+
+  <button class="generate-btn" onclick="generatePrompt()">⚡ צור פרומפט מוכן להעתקה</button>
+
+  <!-- OUTPUT -->
+  <div id="output-section">
+    <div class="card">
+      <div class="card-title"><span class="num">✓</span> הפרומפט מוכן — העתק והדבק ב-Claude</div>
+      <textarea id="prompt-output" readonly></textarea>
+      <button class="copy-btn" onclick="copyPrompt(this)">העתק פרומפט</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let campCount = 1;
+
+function addCampaign() {
+  campCount++;
+  const container = document.getElementById('campaigns-container');
+  const div = document.createElement('div');
+  div.className = 'camp-block';
+  div.id = `camp-${campCount}`;
+  div.innerHTML = `
+    <div class="camp-block-title">
+      קמפיין ${campCount}
+      <button class="remove-btn" onclick="removeCampaign('camp-${campCount}')">× הסר</button>
+    </div>
+    <div class="grid cols2">
+      <div class="field"><label>שם הקמפיין</label><input class="camp-name" placeholder="שם הקמפיין"></div>
+      <div class="field">
+        <label>סוג</label>
+        <select class="camp-type">
+          <option value="Conversions">Conversions (המרות)</option>
+          <option value="Lead Generation">Lead Generation (לידים)</option>
+          <option value="Traffic">Traffic (טראפיק)</option>
+          <option value="Awareness">Awareness (מודעות)</option>
+        </select>
+      </div>
+      <div class="field"><label>תקציב שהוצא ₪</label><input class="camp-spend" placeholder="0"></div>
+      <div class="field"><label>המרות / לידים</label><input class="camp-conv" placeholder="0"></div>
+      <div class="field"><label>עלות להמרה/ליד ₪</label><input class="camp-cpa" placeholder="0"></div>
+      <div class="field"><label>קליקים</label><input class="camp-clicks" placeholder="0"></div>
+      <div class="field"><label>חשיפות</label><input class="camp-imp" placeholder="0"></div>
+      <div class="field"><label>Reach</label><input class="camp-reach" placeholder="0"></div>
+    </div>
+  `;
+  container.appendChild(div);
+}
+
+function removeCampaign(id) {
+  document.getElementById(id).remove();
+}
+
+function val(id) {
+  const el = document.getElementById(id);
+  return el ? el.value.trim() || '—' : '—';
+}
+
+function generatePrompt() {
+  // לקוח
+  const client    = val('clientName');
+  const agency    = val('agencyName');
+  const month     = val('reportMonth');
+  const date      = val('reportDate');
+  const logo      = val('logoUrl');
+  const email     = val('contactEmail');
+  const color1    = val('color1');
+  const color2    = val('color2');
+
+  // Meta
+  const spend     = val('totalSpend');
+  const imp       = val('impressions');
+  const reach     = val('reach');
+  const cpm       = val('cpm');
+  const clicks    = val('clicks');
+  const convs     = val('conversions');
+  const convType  = val('convType');
+
+  // קמפיינים
+  const camps = document.querySelectorAll('.camp-block');
+  let campsText = '';
+  camps.forEach((c, i) => {
+    const name   = c.querySelector('.camp-name')?.value || '—';
+    const type   = c.querySelector('.camp-type')?.value || '—';
+    const cSpend = c.querySelector('.camp-spend')?.value || '—';
+    const cConv  = c.querySelector('.camp-conv')?.value || '—';
+    const cCpa   = c.querySelector('.camp-cpa')?.value || '—';
+    const cClk   = c.querySelector('.camp-clicks')?.value || '—';
+    const cImp   = c.querySelector('.camp-imp')?.value || '—';
+    const cReach = c.querySelector('.camp-reach')?.value || '—';
+    campsText += `
+קמפיין ${i+1}: ${name}
+  סוג: ${type}
+  תקציב: ₪${cSpend}
+  המרות/לידים: ${cConv}
+  עלות להמרה/ליד: ₪${cCpa}
+  קליקים: ${cClk}
+  חשיפות: ${cImp}
+  Reach: ${cReach}
+`;
+  });
+
+  // עסקי
+  const bizTotal     = val('bizTotal');
+  const bizCount     = val('bizCount');
+  const bizAvg       = val('bizAvg');
+  const bizExtra     = val('bizExtra');
+  const bizBreakdown = val('bizBreakdown');
+
+  // תובנות
+  const win1 = val('win1');
+  const win2 = val('win2');
+  const warn = val('warn1');
+  const rec1 = val('rec1');
+  const rec2 = val('rec2');
+
+  const prompt = `בנה לי דוח ביצועים חודשי מלא ב-HTML.
+הדוח צריך להיות RTL, בעברית, עיצוב מקצועי, HTML+CSS בלבד (בלי JavaScript).
+השתמש בפונט Heebo מ-Google Fonts.
+מבנה: Header עם לוגו → Hero section → סקשיינים ממוספרים → Footer.
+כל סקשיין יכיל KPI cards, טבלאות, גרפי בר ב-CSS, כרטיסי תובנה.
+
+=== פרטי לקוח ===
+שם לקוח: ${client}
+לוגו: ${logo}
+חודש: ${month}
+הוכן על ידי: ${agency}
+תאריך הפקה: ${date}
+מייל ליצירת קשר: ${email}
+צבע ראשי: ${color1}
+צבע הדגשה: ${color2}
+
+=== נתוני Meta Ads ===
+סך השקעה: ₪${spend}
+חשיפות: ${imp}
+Reach: ${reach}
+CPM ממוצע: ₪${cpm}
+סך קליקים: ${clicks}
+סך המרות (${convType}): ${convs}
+
+=== קמפיינים ===${campsText}
+=== תוצאות עסקיות ===
+סך ${convType}: ${bizTotal}
+מספר עסקאות/לקוחות: ${bizCount}
+ערך ממוצע: ${bizAvg}
+מדד נוסף: ${bizExtra}
+פילוח קטגוריות: ${bizBreakdown}
+
+=== תובנות והמלצות ===
+✓ הצלחה 1: ${win1}
+✓ הצלחה 2: ${win2}
+⚠ לשיפור: ${warn}
+◆ המלצה 1: ${rec1}
+◆ המלצה 2: ${rec2}
+
+=== הוראות עיצוב ===
+- צבע ראשי ${color1}, הדגשה ${color2}
+- כרטיסי KPI עם border ימני צבעוני ו-hover effect
+- כרטיסי קמפיין עם stats grid (3 עמודות)
+- טבלת פילוח עם שורת סיכום (tfoot) בצבע הדגשה
+- גרפי בר ב-CSS טהור (div עם רוחב אחוזי)
+- כרטיסי תובנה: ✓ = גבול צהוב, ⚠ = גבול כהה, ◆ = גבול כחול
+- Footer: "${client} · ${month} · הופק על ידי ${agency} · ${email}"
+- Responsive עד 768px (2 עמודות → 1)`;
+
+  document.getElementById('prompt-output').value = prompt;
+  document.getElementById('output-section').style.display = 'block';
+  document.getElementById('output-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+function copyPrompt(btn) {
+  const ta = document.getElementById('prompt-output');
+  ta.select();
+  navigator.clipboard.writeText(ta.value).then(() => {
+    btn.textContent = '✓ הועתק!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'העתק פרומפט';
+      btn.classList.remove('copied');
+    }, 2500);
+  });
+}
+</script>
+</body>
+</html>

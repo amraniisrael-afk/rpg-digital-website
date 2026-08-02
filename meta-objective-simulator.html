@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>סימולטור אובייקטים — Meta Ads Manager</title>
+<style>
+  :root{
+    --blue:#1877f2;
+    --blue-light:#e7f0ff;
+    --border:#dadde1;
+    --gray-bg:#f0f2f5;
+    --text-dim:#65676b;
+    --green:#42b72a;
+  }
+  *{box-sizing:border-box;}
+  body{
+    font-family:'Segoe UI', Arial, sans-serif;
+    background:var(--gray-bg);
+    margin:0;
+    padding:18px;
+    color:#050505;
+    font-size:13px;
+  }
+  h1{font-size:17px;margin:0 0 3px;}
+  .subtitle{color:var(--text-dim);font-size:11.5px;margin-bottom:14px;}
+  .wrap{max-width:1300px;margin:0 auto;}
+
+  /* top selectors bar */
+  .top-bar{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:12px;
+    margin-bottom:14px;
+    align-items:flex-end;
+  }
+  .field{
+    flex:1;
+    min-width:170px;
+  }
+  label.field-label{
+    font-size:11px;
+    font-weight:700;
+    margin-bottom:4px;
+    display:block;
+    color:var(--text-dim);
+    text-transform:uppercase;
+    letter-spacing:.2px;
+  }
+  select{
+    width:100%;
+    padding:7px 8px;
+    border:1px solid var(--border);
+    border-radius:6px;
+    font-size:12.5px;
+    background:#fff;
+  }
+  select:disabled{background:#f5f6f7;color:var(--text-dim);}
+  .locked-hint{font-size:10.5px;color:#9a7b00;margin-top:3px;}
+
+  .panel{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:14px 16px;
+  }
+
+  .rec-badge{
+    background:#e7f7e3;color:var(--green);
+    font-size:10px;font-weight:700;
+    padding:1px 6px;border-radius:9px;
+  }
+
+  /* explanation boxes */
+  .explain-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media (max-width:800px){.explain-grid{grid-template-columns:1fr;}}
+  .explain-box{
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:12px 14px;
+    background:#fafbfc;
+  }
+  .explain-box.active{
+    border-color:var(--blue);
+    background:var(--blue-light);
+  }
+  .explain-title{font-size:13px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+  .explain-row{margin-bottom:6px;font-size:12px;line-height:1.55;}
+  .explain-row b{color:#1c1e21;}
+  .tag-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px;}
+  .tag{
+    background:#eef0f3;
+    font-size:10px;
+    padding:2px 8px;
+    border-radius:11px;
+    color:var(--text-dim);
+  }
+  .empty-state{
+    color:var(--text-dim);
+    font-size:12.5px;
+    text-align:center;
+    padding:30px 16px;
+  }
+  .breadcrumb{
+    font-size:11px;
+    color:var(--text-dim);
+    margin-bottom:12px;
+    display:flex;
+    gap:5px;
+    flex-wrap:wrap;
+  }
+  .breadcrumb span.crumb{
+    background:#f0f2f5;
+    padding:2px 9px;
+    border-radius:11px;
+  }
+  .scenario-box{
+    grid-column:1 / -1;
+    border:1px solid #b9d4ff;
+    background:#eef5ff;
+    border-radius:8px;
+    padding:12px 14px;
+    margin-bottom:2px;
+  }
+  .scenario-box .explain-title{color:#0b5fc7;}
+  .alt-row{font-size:11.5px;color:var(--text-dim);margin-top:6px;border-top:1px dashed #cdd8e8;padding-top:6px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>🧭 סימולטור אובייקטים — Meta Ads Manager</h1>
+<div class="subtitle">מבוסס על בדיקה ידנית ומאומתת בחשבון אמיתי (Sales · Leads · Engagement · Traffic · Awareness). App Promotion יתווסף בהמשך.</div>
+
+<div class="top-bar" id="scenarioBar">
+  <div class="field" style="flex:3;">
+    <label class="field-label">🔍 מצא לפי תרחיש עסקי (אופציונלי)</label>
+    <select id="scenarioSelect"></select>
+  </div>
+  <div class="field" style="flex:1;min-width:120px;">
+    <label class="field-label">&nbsp;</label>
+    <button id="resetScenarioBtn" type="button" style="width:100%;padding:7px 8px;border:1px solid var(--border);border-radius:6px;font-size:12px;background:#f5f6f7;cursor:pointer;">אפס למצב ידני</button>
+  </div>
+</div>
+
+<div class="top-bar">
+  <div class="field">
+    <label class="field-label">1. Campaign objective</label>
+    <select id="objSelect"></select>
+  </div>
+  <div class="field">
+    <label class="field-label">2. Campaign bid strategy</label>
+    <select id="bidSelect"></select>
+  </div>
+  <div class="field" id="locationField">
+    <label class="field-label">3. Conversion location</label>
+    <select id="locationSelect"></select>
+  </div>
+  <div class="field" id="engagementTypeWrap" style="display:none;">
+    <label class="field-label">Engagement type</label>
+    <select id="engagementTypeSelect"></select>
+  </div>
+  <div class="field">
+    <label class="field-label">4. Performance goal</label>
+    <select id="goalSelect"></select>
+    <div class="locked-hint" id="lockedHint" style="display:none;"></div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="breadcrumb" id="breadcrumb"></div>
+  <div class="explain-grid" id="explainWrap">
+    <div class="empty-state">בחר אובייקט כדי להתחיל</div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const DATA = {
+  Awareness: {
+    icon:"📣",
+    label:"Awareness",
+    noLocation:true,
+    bidStrategies:[
+      {key:"highest_volume", title:"Highest volume", desc:"Get the most results for your budget.",
+       explain:"ברירת מחדל — אין כאן אופציית Value/ROAS, כי לחשיפת מותג אין ערך כספי טבעי. מתאים לרוב קמפייני Awareness סטנדרטיים."},
+      {key:"cost_goal", title:"Cost per result goal", desc:"Aim for a certain cost per result while maximizing the volume of results.",
+       explain:"מתאים כשיש יעד עלות ספציפי, למשל עלות מקסימלית לאלף הופעות (CPM) או לצפיית ThruPlay, ויש כבר דאטה היסטורית."},
+      {key:"bid_cap", title:"Bid cap", desc:"Set the highest you want to bid in any auction.",
+       explain:"למתקדמים שמכירים בדיוק את שווי החשיפה הרצוי להם. נדיר לשימוש ב-Awareness כי קל לפגוע ב-Delivery וב-Reach."}
+    ],
+    locations:{
+      "default": {
+        hideLocationField:true,
+        groupTitle:"Awareness goals",
+        otherTitle:"Video view goals",
+        goals:[
+          {key:"max_reach", title:"Maximize reach of ads",
+           desc:"We'll try to show your ads to as many people as possible.",
+           explain:"הבחירה הקלאסית להשקת מותג/מוצר חדש או הגדלת מודעות (Awareness) רחבה — המטרה היא לחשוף את המודעה לכמה שיותר אנשים ייחודיים, בלי קשר לכמה פעמים כל אחד רואה אותה."},
+          {key:"max_impressions", title:"Maximize number of impressions",
+           desc:"We'll try to show your ads to people as many times as possible.",
+           explain:"מתאים כשרוצים להגדיל תדירות חשיפה (כמה פעמים כל אדם רואה את המודעה) ולא בהכרח להרחיב את מספר האנשים הייחודיים — שימושי בקמפייני Frequency גבוהה לפני מועד חשוב (השקה, מבצע, אירוע)."},
+          {key:"max_recall", title:"Maximize ad recall lift",
+           desc:"We'll try to show your ads to people who are likely to remember seeing them.",
+           explain:"דורש Brand Lift Study מובנה של מטא — מתאים למותגים עם תקציב גדול שרוצים למדוד את ההשפעה האמיתית על זכירות המותג (לא רק חשיפה גולמית), עם מדידה סטטיסטית מובנית על קבוצת מבחן."}
+        ],
+        other:[
+          {key:"thruplay_aware", title:"Maximize ThruPlay views",
+           desc:"We'll try to show your video ads to people who will watch the entire video when it's shorter than 15 seconds. For longer videos, we'll try to show it to people who are likely to watch at least 15 seconds.",
+           explain:"מתאים למותגים שרוצים חשיפת תוכן וידאו עומק ולמדוד תשומת לב אמיתית — איכות הצפייה גבוהה יותר, אך CPM גבוה יותר מ-2-second plays."},
+          {title:"Maximize 2-second continuous video plays",
+           desc:"We'll try to show your video ads to people who are likely to watch 2 continuous seconds or more. Most 2-second continuous video plays will have at least 50% of the video pixels on screen.",
+           explain:"מתאים ל-Reach רחב יותר בעלות נמוכה יותר — פחות מדויק לאיכות צפייה, טוב לקמפייני מיתוג בתקציב מוגבל או טופ-פאנל רחב."}
+        ]
+      }
+    }
+  },
+
+  Sales: {
+    icon:"💼",
+    label:"Sales",
+    bidStrategies:[
+      {key:"highest_volume", title:"Highest volume", desc:"Get the most results for your budget.",
+       explain:"ברירת המחדל לקמפיינים חדשים או בלי דאטה היסטורית מספקת. מטא ינסה להביא את מקסימום ההמרות בתוך התקציב, בלי להתחשב בעלות לכל המרה בודדת. מתאים כשאתה עדיין בשלב למידה / בודק קריאייטיב / אין לך עדיין יעד CPA ברור."},
+      {key:"cost_goal", title:"Cost per result goal", desc:"Aim for a certain cost per result while maximizing the volume of results.",
+       explain:"מתאים אחרי שיש לך כבר 50+ קונברז'ות והבנה של ה-CPA הממוצע שלך. אתה נותן יעד עלות-להמרה ומטא ינסה לשמור עליו תוך מקסום נפח. שימושי לשמירה על רווחיות יציבה כשמגדילים תקציב (Scaling)."},
+      {key:"roas_goal", title:"ROAS goal", desc:"Aim for a certain return on ad spend while maximizing the value of results.",
+       explain:"קיים רק כש-Performance Goal הוא 'Maximize value of conversions' ויש דיווח Value תקין מה-Pixel/CAPI. משדה ריק = מתנהג כמו 'Highest Value' הישן (בלי רצפה). עם מספר = רצפת תשואה מינימלית. מתאים לחנויות עם טווח מחירים רחב שרוצות להבטיח רווחיות מינימלית."},
+      {key:"bid_cap", title:"Bid cap", desc:"Set the highest you want to bid in any auction.",
+       explain:"למתקדמים בלבד שמכירים בדיוק את שווי ההמרה והאוקציה שלהם. שליטה מקסימלית אך מסוכן — קביעת בid נמוך מהשוק עלולה לחסום Delivery כליל. נמצא תחת 'Other options' כי מטא ממליצים להשתמש בו רק במקרים ספציפיים."}
+    ],
+    locations:{
+      "Website": {
+        groupTitle:"Conversion goals",
+        goals:[
+          {key:"max_conv", title:"Maximize number of conversions", recommended:true, hideWithBid:["ROAS goal"],
+           desc:"We'll try to show your ads to the people most likely to take a specific action on your website.",
+           explain:"מתאים לרוב חנויות איקומרס עם מוצרים במחיר אחיד או קרוב, כשהמטרה היא נפח מכירות מקסימלי. דורש Pixel/CAPI מוגדר עם אירוע Purchase תקין ולפחות כמה עשרות קונברז'ות בשבוע ללמידה תקינה. נבדק בפועל: מופיע (ומומלץ) תחת Highest volume / Cost per result goal / Bid cap. תחת Cost per result goal ו-Bid cap זו האפשרות היחידה — 'Maximize value of conversions' נעלם; תחת Highest volume שתי האפשרויות מופיעות יחד.",
+           useWhen:["יש Pixel + Purchase event תקינים","מוצרים במחיר דומה","המטרה היא נפח, לא ערך עגלה"]},
+          {key:"max_value", title:"Maximize value of conversions", hideWithBid:["Cost per result goal","Bid cap"],
+           desc:"We'll try to show your ads to the people most likely to generate higher value for your business.",
+           explain:"נבדק בפועל: מופיע תחת Highest volume (לצד Maximize number of conversions, לא מסומן Recommended). נעלם לחלוטין תחת Cost per result goal ו-Bid cap. תחת ROAS goal לא אומת ויזואלית (Not Eligible בחשבון שבדקנו) — בהנחה סבירה ימשיך להופיע, אולי כברירת מחדל מומלצת. מתאים לחנויות עם טווח מחירים רחב (מוצר זול לצד מוצר דגל) שרוצות להעדיף עגלות גדולות יותר. דורש שליחת ערך (value) תקין בכל אירוע Purchase.",
+           useWhen:["טווח מחירים רחב בקטלוג","יש Average Order Value שמשתנה הרבה","רוצים למקסם הכנסה ולא רק מספר עסקאות","לא זמין כש-Bid Strategy הוא Cost per result goal או Bid cap"]}
+        ],
+        other:[
+          {title:"Maximize number of landing page views", desc:"We'll try to show your ads to the people most likely to view the website linked in your ad.",
+           explain:"טוב לקמפיינים חדשים בלי דאטה היסטורית של קונברז'ן (לפני שיש 50+ אירועים), או לבדיקת קריאייטיב מהירה בעלות נמוכה לפני מעבר לאופטימיזציית מכירות."},
+          {title:"Maximize number of link clicks", desc:"We'll try to show your ads to the people most likely to click on them.",
+           explain:"שימושי בעיקר ל-Retargeting קר או בדיקות A/B על קריאייטיב/קופי, לא מומלץ כיעד קבוע לקמפיין מכירה."},
+          {title:"Maximize daily unique reach", desc:"We'll try to show your ads to as many people as possible.",
+           explain:"מתאים לקמפיינים עם תקציב נמוך מאוד שרוצים לכסות אודיינס שלם פעם ביום (לדוגמה Retargeting על רשימה סגורה וקטנה)."},
+          {title:"Maximize number of impressions", desc:"We'll try to show your ads to people as many times as possible.",
+           explain:"כמעט ולא רלוונטי למכירות — שימושי רק כשהמטרה היא תדירות חשיפה (Frequency) ולא פעולה בפועל."}
+        ]
+      },
+      "Message destinations": {
+        groupTitle:null,
+        goals:[
+          {key:"max_conv_msg", title:"Maximize number of conversions", recommended:true,
+           desc:"We'll try to deliver your ads to the right people to help you get the most website conversions.",
+           explain:"גם כשיעד ה-Conversion Location הוא הודעות, מטא יכולים עדיין לאופטימז לקונברז'ן באתר אם יש Pixel — שימושי כשהשיחה בוואטסאפ היא רק שלב בדרך לרכישה באתר."},
+          {key:"max_conv_count", title:"Maximize number of conversations",
+           desc:"We'll try to show your ads to people most likely to have a conversation with you through messaging.",
+           explain:"מתאים לעסקים שמוכרים דרך וואטסאפ/מסנג'ר (תיאום מול נציג מכירות, התאמה אישית של הזמנה), כשהאתר הוא רק תיווך ולא נקודת הרכישה הסופית. הסגירה בפועל קורית בשיחה, לא במדידת Pixel."}
+        ],
+        other:[
+          {title:"Maximize number of link clicks", desc:"We'll try to show your ads to the people most likely to click on them.", explain:"לבדיקת קריאייטיב מהירה לפני אופטימיזציית שיח/מכירה."},
+          {title:"Maximize daily unique reach", desc:"We'll try to show your ads to as many people as possible.", explain:"לכיסוי אודיינס קטן וסגור בתדירות מבוקרת."},
+          {title:"Maximize number of impressions", desc:"We'll try to show your ads to people as many times as possible.", explain:"נדיר לשימוש במכירות — רלוונטי רק למיתוג צד-לצד."}
+        ]
+      },
+      "Calls": {
+        groupTitle:null,
+        locked:true,
+        goals:[
+          {key:"max_calls", title:"Maximize number of calls", recommended:true,
+           desc:"We'll try to deliver your ads to try to get you the most possible calls.",
+           explain:"האפשרות היחידה כש-Conversion Location הוא Calls — השדה נעול/אפור כי אין צורך לבחור. מתאים לעסקים מקומיים ושירותים שההמרה שלהם קורית בטלפון (מרפאות, נדל\"ן, שירותי בית, מסעדות). מטא מודד 'שיחה שהתקבלה' כתוצאה, לא מכירה בפועל — חשוב לעקוב אחרי איכות השיחות בנפרד."}
+        ],
+        other:[]
+      }
+    }
+  },
+
+  Traffic: {
+    icon:"🖱️",
+    label:"Traffic",
+    bidStrategies:[
+      {key:"highest_volume", title:"Highest volume", desc:"Get the most results for your budget.",
+       explain:"ברירת מחדל — אין כאן אופציית Value/ROAS, כי לתנועה (קליקים, צפיות בדף) אין ערך כספי טבעי. מתאים לרוב קמפייני התנועה הסטנדרטיים."},
+      {key:"cost_goal", title:"Cost per result goal", desc:"Aim for a certain cost per result while maximizing the volume of results.",
+       explain:"מתאים כשיש יעד עלות-לתוצאה ספציפי (למשל עלות מקסימלית לצפייה בדף נחיתה) אחרי שכבר יש דאטה היסטורית."},
+      {key:"bid_cap", title:"Bid cap", desc:"Set the highest you want to bid in any auction.",
+       explain:"למתקדמים שמכירים בדיוק את שווי הקליק/הצפייה בדף. שימוש נדיר ב-Traffic כי קל ל'חנוק' Delivery — Traffic הוא בד\"כ אובייקט עם תקציב נמוך-בינוני שלא סובל הגבלות חדות."}
+    ],
+    locations:{
+      "Website": {
+        groupTitle:"Traffic goals",
+        goals:[
+          {key:"max_lpv", title:"Maximize number of landing page views", recommended:true,
+           desc:"We'll try to show your ads to the people most likely to view the website linked in your ad.",
+           explain:"ברירת המחדל המומלצת ל-Traffic לאתר — בשונה מ'Link clicks' הישן, זה מסנן קליקים שלא הובילו בפועל לטעינת הדף (Bounce/Drop-off באמצע הטעינה), כך שהאודיינס שמטרגטים הוא איכותי יותר.",
+           useWhen:["רוצים תנועה איכותית לדף נחיתה/בלוג","האתר טוען בסבירות גבוהה (לא איטי מדי)","שלב טופ-פאנל לפני אופטימיזציית קונברז'ן מלאה"]},
+          {key:"max_link_clicks", title:"Maximize number of link clicks",
+           desc:"We'll try to show your ads to the people most likely to click on them.",
+           explain:"שימושי כשרוצים נפח קליקים מקסימלי בלי קשר אם הדף בפועל נטען — לבדיקת CTR גולמי על קריאייטיב/קופי, או כשהיעד הוא לחיצה (לא בהכרח טעינת דף, למשל קישור ל-PDF/קובץ)."}
+        ],
+        other:[
+          {title:"Maximize daily unique reach", desc:"We'll try to show your ads to people up to once per day.", explain:"לכיסוי אודיינס סגור וקטן בתדירות מבוקרת, תקציבים נמוכים."},
+          {title:"Maximize number of conversations", desc:"We'll try to show your ads to people most likely to have a conversation with you through messaging.", explain:"שילוב היברידי — תנועה לאתר אך עם פתח לשיח, כשהמודעה כוללת גם אופציית הודעה."},
+          {title:"Maximize number of impressions", desc:"We'll try to show your ads to people as many times as possible.", explain:"רלוונטי רק למיתוג/תדירות חשיפה, לא למדידת תנועה אמיתית לאתר."}
+        ]
+      },
+      "Instagram live video": {
+        groupTitle:"Traffic goals",
+        goals:[
+          {key:"max_link_clicks_live", title:"Maximize number of link clicks", recommended:true,
+           desc:"We'll try to show your ads to the people most likely to click on them.",
+           explain:"האפשרות העיקרית היחידה ל-Instagram live video כי אין דף נחיתה למדוד — שימושי לקדם שידור חי בזמן אמת ולמשוך צופים להיכנס אליו עכשיו."}
+        ],
+        other:[
+          {title:"Maximize number of conversations", desc:"We'll try to show your ads to people most likely to have a conversation with you through messaging.", explain:"לשיח עם צופים תוך כדי השידור החי (שאלות, מכירה בשידור)."},
+          {title:"Maximize daily unique reach", desc:"We'll try to show your ads to people up to once per day.", explain:"להגדיל מודעות לשידור החי באודיינס סגור."},
+          {title:"Maximize number of impressions", desc:"We'll try to show your ads to people as many times as possible.", explain:"להגברת תדירות חשיפה לפני/בזמן השידור."}
+        ]
+      },
+      "Message destinations": {
+        groupTitle:"Traffic goals",
+        goals:[
+          {key:"max_conversations_traffic", title:"Maximize number of conversations", recommended:true,
+           desc:"We'll try to show your ads to people most likely to have a conversation with you through messaging.",
+           explain:"מתאים כשהמטרה היא להתחיל שיח מכירה/שירות תחת אובייקט Traffic (טירגוט רחב יותר מ-Engagement, פחות ממוקד-המרה מ-Sales) — שלב ביניים טוב לבדיקת שוק לפני מעבר לאובייקט Sales עם Conversion Location דומה."}
+        ],
+        other:[
+          {title:"Maximize daily unique reach", desc:"We'll try to show your ads to people up to once per day.", explain:"לכיסוי אודיינס סגור בתדירות מבוקרת."},
+          {title:"Maximize number of impressions", desc:"We'll try to show your ads to people as many times as possible.", explain:"רלוונטי רק למיתוג משלים."}
+        ]
+      },
+      "Instagram or Facebook": {
+        groupTitle:null,
+        locked:true,
+        goals:[
+          {key:"profile_visits_traffic", title:"Maximize number of Instagram profile and Facebook Page visits", recommended:true,
+           desc:"We'll try to show your ads to people most likely to visit or follow your profile and Page.",
+           explain:"האפשרות היחידה — בניית קהילה/עוקבים תחת אובייקט Traffic (טירגוט רחב יותר מ-Engagement). מתאים למותגים שרוצים גם תנועה לפרופיל וגם נוכחות, לא רק מעורבות צרה."}
+        ],
+        other:[]
+      },
+      "Calls": {
+        groupTitle:null,
+        locked:true,
+        goals:[
+          {key:"max_calls_traffic", title:"Maximize number of calls", recommended:true,
+           desc:"We'll try to deliver your ads to try to get you the most possible calls.",
+           explain:"האפשרות היחידה — עסקים מקומיים, אבל תחת Traffic (לא Sales) בד\"כ פחות ממוקד. מתאים לבדיקות ראשוניות לפני שיש מסת שיחות קריטית ללמידה, או כשרוצים לשלב שיחות לצד תנועה כללית לאתר."}
+        ],
+        other:[]
+      }
+    }
+  },
+
+  Leads: {
+    icon:"📋",
+    label:"Leads",
+    bidStrategies:[
+      {key:"highest_volume_value", title:"Highest volume or value", desc:"Get the most results or conversion value for your budget.",
+       explain:"אופציה ממוזגת (לא מפוצלת ל-volume/value כמו ב-Sales) כי לליד לא תמיד מוגדר ערך כספי. אם הוגדר Lead Value — המערכת תשקול גם ערך; אם לא — תתנהג כ-Highest Volume טהור. ברירת המחדל לקמפיינים חדשים."},
+      {key:"cost_goal", title:"Cost per result goal", desc:"Aim for a certain cost per result while maximizing the volume of results.",
+       explain:"אחרי שיש היסטוריית עלות-לליד יציבה (50+ לידים), אפשר לקבע יעד CPL ולתת למטא למקסם נפח תוך שמירה עליו. שימושי לתקצוב חוזה שיווק מול הנהלה ('עלות מקסימלית לליד X')."},
+      {key:"bid_cap", title:"Bid cap", desc:"Set the highest you want to bid in any auction.",
+       explain:"למתקדמים שמכירים בדיוק את שווי הליד (לדוגמה אחרי חישוב LTV/Conversion Rate ל-SQL). שליטה הדוקה אך מסוכנת לDelivery אם הbid נמוך מדי."}
+    ],
+    locations:{
+      "Website": {
+        groupTitle:"Leads goals",
+        goals:[
+          {key:"max_leads", title:"Maximize number of leads", recommended:true,
+           desc:"We'll try to show your ads to the people most likely to share their contact information on your website.",
+           explain:"מתאים לתחילת קמפיין או בדיקת שוק — תופס כמה שיותר לידים בלי קשר לאיכותם. טוב כשרוצים נפח גדול לצוות מכירות לסנן בעצמו, או כשעדיין אין מספיק דאטה להגדיר 'איכות'."},
+          {key:"max_qualified", title:"Maximize number of qualified leads",
+           desc:"We'll try to show your ads to the people most likely to convert after sharing their contact information with you.",
+           explain:"דורש אינטגרציית CRM/Lead Scoring שמדווחת בחזרה למטא (דרך Conversions API / CAPIG) אילו לידים היו 'איכותיים' (הפכו ל-SQL/לקוח). כשמוגדר נכון — זה ה-Performance Goal הטוב ביותר, כי חוסך לצוות מכירות זמן על לידים גרועים."}
+        ],
+        other:[
+          {title:"Maximize number of landing page views", desc:"We'll try to show your ads to the people most likely to view the website linked in your ad.", explain:"לקמפיינים חדשים בלי דאטה, או בדיקת איכות תנועה לדף הנחיתה לפני שיש מספיק לידים ללמידה."},
+          {title:"Maximize number of link clicks", desc:"We'll try to show your ads to the people most likely to click on them.", explain:"בדיקת קריאייטיב/קופי מהירה לפני אופטימיזציית לידים מלאה."},
+          {title:"Maximize daily unique reach", desc:"We'll try to show your ads to people up to once per day.", explain:"לכיסוי אודיינס סגור וקטן (לדוגמה רשימת לידים ישנים) בתדירות מבוקרת."},
+          {title:"Maximize number of impressions", desc:"We'll try to show your ads to people as many times as possible.", explain:"כמעט ולא רלוונטי ללידים — רק למיתוג משלים."}
+        ]
+      }
+    }
+  },
+
+  Engagement: {
+    icon:"💬",
+    label:"Engagement",
+    bidStrategies:[
+      {key:"highest_volume", title:"Highest volume", desc:"Get the most results for your budget.",
+       explain:"ברירת מחדל — אין כאן אופציית Value/ROAS כלל, כי למעורבות (לייקים, תגובות, צפיות) אין ערך כספי טבעי. מתאים לכל קמפיין Engagement סטנדרטי."},
+      {key:"cost_goal", title:"Cost per result goal", desc:"Aim for a certain cost per result while maximizing the volume of results.",
+       explain:"כש-יש לך יעד תקציבי ספציפי, למשל 'עלות מקסימלית לתגובה לאירוע' או 'עלות מקסימלית לצפיית ThruPlay'. שימושי לשמירה על תקציב יציב בקמפיינים חוזרים."},
+      {key:"bid_cap", title:"Bid cap", desc:"Set the highest you want to bid in any auction.",
+       explain:"למתקדמים שרוצים שליטה הדוקה על עלות המעורבות — פחות שימושי ב-Engagement כי הסיכון ל'חניקת' Delivery גבוה יחסית לתועלת."}
+    ],
+    locations:{
+      "Message destinations": {
+        groupTitle:null,
+        goals:[
+          {key:"max_conv_eng", title:"Maximize number of conversions", recommended:true,
+           desc:"We'll try to deliver your ads to the right people to help you get the most website conversions.",
+           explain:"מאפשר למטא לאופטימז גם לקונברז'ן באתר תוך כדי שליחה להודעות — שימושי כשהשיח הוא שלב בדרך, לא מטרה בעצמה."},
+          {key:"max_conversations", title:"Maximize number of conversations",
+           desc:"We'll try to show your ads to people most likely to have a conversation with you through messaging.",
+           explain:"מתאים לעסקים שמטרתם להתחיל שיח שירות/מכירה בוואטסאפ/מסנג'ר — לדוגמה שירות לקוחות ראשוני, מענה על שאלות לפני רכישה."}
+        ],
+        other:[
+          {title:"Maximize number of link clicks", desc:"We'll try to show your ads to the people most likely to click on them.", explain:"בדיקת קריאייטיב לפני מעבר לאופטימיזציית שיח."},
+          {title:"Maximize daily unique reach", desc:"We'll try to show your ads to as many people as possible.", explain:"כיסוי אודיינס קטן וסגור."},
+          {title:"Maximize number of impressions", desc:"We'll try to show your ads to people as many times as possible.", explain:"שימושי רק למיתוג משלים."}
+        ]
+      },
+      "On your ad": {
+        groupTitle:null,
+        needsEngagementType:true,
+        engagementTypes:{
+          "Video views": {
+            goals:[
+              {key:"thruplay", title:"Maximize ThruPlay views", recommended:true,
+               desc:"We'll try to show your video ads to people who will watch the entire video when it's shorter than 15 seconds. For longer videos, we'll try to show it to people who are likely to watch at least 15 seconds.",
+               explain:"מתאים למותגים שרוצים חשיפת תוכן וידאו עומק ולמדוד תשומת לב אמיתית — איכות הצפייה גבוהה יותר, אך CPM גבוה יותר מ-2-second plays."},
+              {key:"cont2sec", title:"Maximize 2-second continuous video plays",
+               desc:"We'll try to show your video ads to people who are likely to watch 2 continuous seconds or more. Most 2-second continuous video plays will have at least 50% of the video pixels on screen.",
+               explain:"מתאים ל-Reach רחב יותר בעלות נמוכה יותר — פחות מדויק לאיכות צפייה, טוב לקמפייני מיתוג בתקציב מוגבל או טופ-פאנל רחב."}
+            ],
+            other:[]
+          },
+          "Post engagement": {
+            goals:[
+              {key:"post_eng", title:"Maximize engagement with a post", recommended:true,
+               desc:"We'll try to show your ads to the people most likely to interact with your post.",
+               explain:"כשרוצים ויראליות/הוכחה חברתית (לייקים, תגובות, שיתופים) — מתאים לבניית Social Proof לפני שמשתמשים בפוסט גם בקמפיינים אחרים (Dark posts עם היסטוריית מעורבות)."}
+            ],
+            other:[
+              {title:"Maximize daily unique reach", desc:"We'll try to show your ads to people up to once per day.", explain:"לכיסוי אודיינס סגור פעם ביום."},
+              {title:"Maximize number of impressions", desc:"We'll try to show your ads to people as many times as possible.", explain:"להגדלת תדירות חשיפה על פוסט קיים."}
+            ]
+          },
+          "Event responses": {
+            goals:[
+              {key:"event_resp", title:"Maximize number of event responses", recommended:true,
+               desc:"We'll try to show your ads to the people most likely to respond to your event.",
+               explain:"מתאים לאירועים פיזיים/וובינרים בפייסבוק — איסוף נרשמים/מאשרי הגעה לאירוע Facebook Event."},
+              {title:"Maximize engagement with a post", desc:"We'll try to show your ads to the people most likely to interact with your post.",
+               explain:"חלופה כשרוצים גם מעורבות כללית על הפוסט המקדם את האירוע, לא רק אישורי הגעה."}
+            ],
+            other:[
+              {title:"Maximize daily unique reach", desc:"We'll try to show your ads to people up to once per day.", explain:"כיסוי אודיינס סגור לפני אירוע."},
+              {title:"Maximize number of impressions", desc:"We'll try to show your ads to people as many times as possible.", explain:"להזכורת תדירה לפני מועד האירוע."}
+            ]
+          },
+          "Reminders set": {
+            locked:true,
+            goals:[
+              {key:"reminders", title:"Maximize reminders set", recommended:true,
+               desc:"We'll try to show your ads to people more likely to set reminders for your upcoming event.",
+               explain:"האפשרות היחידה — מתאים לשידורים חיים/לונצ'ים/פרימיירות, להגדיל נוכחות בזמן השידור עצמו דרך תזכורת אוטומטית שמטא שולח למשתמש."}
+            ],
+            other:[]
+          }
+        }
+      },
+      "Calls": {
+        groupTitle:null,
+        locked:true,
+        goals:[
+          {key:"max_calls_eng", title:"Maximize number of calls", recommended:true,
+           desc:"We'll try to deliver your ads to try to get you the most possible calls.",
+           explain:"האפשרות היחידה — זהה להתנהגות ב-Sales. מתאים לעסקים מקומיים ששירות הלקוחות/ייעוץ הראשוני שלהם הוא טלפוני."}
+        ],
+        other:[]
+      },
+      "Website": {
+        groupTitle:null,
+        goals:[
+          {key:"max_conv_web", title:"Maximize number of conversions", recommended:true,
+           desc:"We'll try to show your ads to the people most likely to take a specific action on your website.",
+           explain:"שונה מ-Sales/Website: כאן זה תחת אובייקט Engagement, ולכן מתאים למיקרו-קונברז'ן (הרשמה לניוזלטר, הורדת מדריך) ולא בהכרח מכירה — האובייקט עדיין מאפשר טירגוט פתוח יותר המתאים לתוכן/מעורבות."}
+        ],
+        other:[
+          {title:"Maximize number of landing page views", desc:"We'll try to show your ads to the people most likely to view the website linked in your ad.", explain:"לבדיקת תנועה לדף נחיתה לפני אופטימיזציה מלאה."},
+          {title:"Maximize number of link clicks", desc:"We'll try to show your ads to the people most likely to click on them.", explain:"בדיקת קריאייטיב מהירה."},
+          {title:"Maximize daily unique reach", desc:"We'll try to show your ads to people up to once per day.", explain:"כיסוי אודיינס סגור פעם ביום."}
+        ]
+      },
+      "Instagram or Facebook": {
+        groupTitle:null,
+        goals:[
+          {key:"profile_visits", title:"Maximize number of Instagram profile and Facebook Page visits", recommended:true,
+           desc:"We'll try to show your ads to people most likely to visit or follow your profile and Page.",
+           explain:"מתאים לבניית קהילה/בסיס עוקבים לפני מהלך השקה/Influencer collab, או למותגים חדשים שרוצים נוכחות חברתית לפני שמתחילים למכור."}
+        ],
+        other:[
+          {title:"Maximize number of Page likes", desc:"We'll deliver your ads to the right people to help you get more Page likes at the lowest cost.", explain:"למותגים חדשים שרוצים בסיס Social Proof (מספר לייקים גבוה) בעלות הנמוכה ביותר — שימושי בעיקר לפרזנטביליות, פחות לביצועים מדידים."}
+        ]
+      }
+    }
+  }
+};
+
+const SCENARIOS = [
+  // ===== עסק מקומי =====
+  {cat:"עסק מקומי", text:"פתחתי חנות מקומית חדשה בעיר שלי", objective:"Awareness", goal:"Maximize reach of ads", bid:"Highest volume",
+   why:"עסק חדש שאף אחד לא מכיר — המטרה הראשונה היא חשיפה לכמה שיותר אנשים באזור, לא מכירה ישירה.",
+   alt:"לחלופין: Engagement→Instagram or Facebook לבניית עוקבים מקומיים, או Traffic→Calls אם רוצים פניות טלפוניות מהר."},
+  {cat:"עסק מקומי", text:"יש לי מרפאה/קליניקה ואני רוצה יותר פניות טלפוניות לתיאום תור", objective:"Sales", location:"Calls", goal:"Maximize number of calls", bid:"Highest volume",
+   why:"שירות שההמרה שלו קורית בטלפון — Conversion Location=Calls עם Sales נותן מדידה ברורה של תוצאה עסקית, לא רק חשיפה.",
+   alt:"אם אין עדיין מסת שיחות ללמידה, אפשר להתחיל מ-Traffic→Calls בתקציב נמוך יותר."},
+  {cat:"עסק מקומי", text:"מסעדה שרוצה להגדיל הזמנות טלפוניות למשלוחים", objective:"Sales", location:"Calls", goal:"Maximize number of calls", bid:"Cost per result goal",
+   why:"יש כבר עסק פעיל עם ביקוש קיים — אפשר לקבע יעד עלות-לשיחה ולשמור על רווחיות.",
+   alt:"Leads→Website אם יש טופס הזמנה אונליין במקום טלפון."},
+  {cat:"עסק מקומי", text:"בעל חנות שרוצה לבנות נוכחות בעוקבים באינסטגרם לפני שמתחיל למכור", objective:"Engagement", location:"Instagram or Facebook", goal:"Maximize number of Instagram profile and Facebook Page visits", bid:"Highest volume",
+   why:"שלב מקדים למכירה — בניית בסיס עוקבים/אמון לפני שמשקיעים בקמפיין Sales.",
+   alt:"Awareness→Maximize reach אם המטרה היא חשיפה רחבה ולא בהכרח עוקבים."},
+  {cat:"עסק מקומי", text:"עסק מקומי שרוצה שאנשים יבואו פיזית לחנות בסוף השבוע (מכירת חיסול/השקה)", objective:"Awareness", goal:"Maximize number of impressions", bid:"Cost per result goal",
+   why:"צריך תדירות חשיפה גבוהה בטווח זמן קצר לפני אירוע ספציפי — Impressions עם יעד עלות שומר על תקציב.",
+   alt:"Traffic→Website אם יש דף עם פרטי האירוע שרוצים שיצפו בו."},
+  {cat:"עסק מקומי", text:"מספרה/מכון יופי שרוצה לקוחות קבועים חדשים באזור מגורים מצומצם", objective:"Leads", goal:"Maximize number of leads", bid:"Highest volume or value",
+   why:"עסק שירות מקומי עם רדיוס קטן — טופס תיאום תור פשוט שמייצר לידים לטיפול ע\"י הצוות.",
+   alt:"Sales→Calls אם מעדיפים תיאום ישיר בטלפון."},
+  {cat:"עסק מקומי", text:"עסק נדל\"ן מקומי שרוצה לידים לבדיקת זכאות למשכנתא", objective:"Leads", goal:"Maximize number of qualified leads", bid:"Cost per result goal",
+   why:"יש בד\"כ סינון/Lead Scoring (זכאות) אחרי מילוי הטופס — Qualified Leads עוזר להתמקד בלידים שבאמת רלוונטיים.",
+   alt:"Maximize number of leads אם עדיין אין מערכת CRM לדירוג איכות."},
+  {cat:"עסק מקומי", text:"עסק שירות בית (אינסטלטור/חשמלאי) שרוצה קריאות שירות דחופות", objective:"Sales", location:"Calls", goal:"Maximize number of calls", bid:"Highest volume",
+   why:"שירות דחוף שדורש שיחה מהירה — Calls עם Highest Volume ימקסם כמות שיחות נכנסות.",
+   alt:"Leads→Website אם רוצים גם טופס פנייה לפניות לא דחופות."},
+  {cat:"עסק מקומי", text:"עסק מקומי שרוצה קריאות שירות תחת קמפיין מעורבות בתקציב נמוך לבדיקה ראשונית", objective:"Engagement", location:"Calls", goal:"Maximize number of calls", bid:"Highest volume",
+   why:"זהה להתנהגות ב-Sales→Calls, אבל תחת Engagement מתאים לתקציב נמוך-בינוני/בדיקת שוק ראשונית.",
+   alt:"Sales→Calls אם רוצים מדידה מלאה ברמת אובייקט מכירה."},
+  {cat:"עסק מקומי", text:"עסק מקומי שרוצה לבדוק כמה שיחות מגיעות מקמפיין תנועה בתקציב נמוך", objective:"Traffic", location:"Calls", goal:"Maximize number of calls", bid:"Highest volume",
+   why:"בדיקה ראשונית בתקציב נמוך לפני שעוברים לאובייקט Sales עם Calls למדידה רצינית.",
+   alt:"Sales→Calls ברגע שרוצים למקסם איכות ונפח שיחות ולא רק בדיקה."},
+  {cat:"עסק מקומי", text:"עסק שירות תיקונים מקומי (מוסכים/מכשירי חשמל)", objective:"Sales", location:"Calls", goal:"Maximize number of calls", bid:"Highest volume",
+   why:"שירות מקומי עם המרה טלפונית קלאסית — Calls תחת Sales נותן מדידה ישירה של תוצאה עסקית.",
+   alt:"Leads→Website אם רוצים גם טופס פנייה לפניות שלא דחופות."},
+  {cat:"עסק מקומי", text:"עסק שמנהל מספר סניפים ורוצה למקד קמפיין שיחות לסניף ספציפי", objective:"Sales", location:"Calls", goal:"Maximize number of calls", bid:"Cost per result goal",
+   why:"יעד עלות-לשיחה קבוע מאפשר לתקצב כל סניף בנפרד ולמדוד ROI לפי מיקום.",
+   alt:"Highest volume אם המטרה היא נפח שיחות מקסימלי בלי הגבלת עלות."},
+  {cat:"עסק מקומי", text:"עסק שרוצה לדעת איזה אזור גאוגרפי מניב הכי הרבה שיחות נכנסות", objective:"Sales", location:"Calls", goal:"Maximize number of calls", bid:"Highest volume",
+   why:"נפח שיחות מקסימלי לכל אזור בנפרד מאפשר השוואה ישירה בין אזורים שונים.",
+   alt:"לפלג את הקמפיין ל-Ad Sets נפרדים לפי אזור עם תקציב ABO, לא רק לשנות Performance Goal."},
+
+  // ===== איקומרס =====
+  {cat:"איקומרס", text:"יש לי אתר איקומרס עם קטלוג מעל 200 מוצרים", objective:"Sales", location:"Website", goal:"Maximize number of conversions", bid:"Highest volume",
+   why:"קטלוג גדול עם מוצרים במחירים מעורבים — מתחילים בנפח מכירות לפני שעוברים לאופטימיזציית ערך.",
+   alt:"Maximize value of conversions אם יש פיזור גדול ב-AOV ורוצים להעדיף עגלות גדולות."},
+  {cat:"איקומרס", text:"חנות איקומרס עם טווח מחירים רחב (ממוצר זול ועד מוצר דגל יקר)", objective:"Sales", location:"Website", goal:"Maximize value of conversions", bid:"ROAS goal",
+   why:"רוצים שהאלגוריתם ירדוף לקוחות עם עגלות גדולות ולא רק כמות עסקאות — ROAS goal מבטיח גם רצפת רווחיות.",
+   alt:"Maximize number of conversions אם המטרה היא נפח ולא הכנסה."},
+  {cat:"איקומרס", text:"חנות איקומרס חדשה בלי היסטוריית מכירות", objective:"Sales", location:"Website", goal:"Maximize number of conversions", bid:"Highest volume",
+   why:"בלי דאטה היסטורית, נדרשת אופטימיזציית נפח רגילה (Highest Volume) כדי לאסוף מספיק קונברז'ות ללמידה.",
+   alt:"בשבועות הראשונים אפשר גם Traffic→Website (Landing Page Views) אם יש מעט מאוד תקציב."},
+  {cat:"איקומרס", text:"חנות בתחילת דרכה עם פחות מ-10 מכירות בחודש", objective:"Traffic", location:"Website", goal:"Maximize number of landing page views", bid:"Highest volume",
+   why:"אין עדיין מספיק קונברז'ות (50+) ללמידה תקינה של אובייקט Sales — מתחילים בתנועה איכותית לדף ובונים דאטה.",
+   alt:"לעבור ל-Sales→Maximize number of conversions ברגע שמצטברות 30-50 מכירות בחודש."},
+  {cat:"איקומרס", text:"חנות איקומרס שרוצה למקד מאמץ בלקוחות חוזרים בעלי ערך גבוה (Retargeting VIP)", objective:"Sales", location:"Website", goal:"Maximize value of conversions", bid:"ROAS goal",
+   why:"קהל ממוקד עם פוטנציאל גבוה — מקסום ערך עם רצפת ROAS שומר על רווחיות בקמפיין Retargeting.",
+   alt:"Maximize number of conversions אם רוצים פשוט להגדיל תדירות חזרה לקנייה."},
+  {cat:"איקומרס", text:"חנות שמוכרת מוצר יחיד במחיר אחיד (מוצר D2C אחד)", objective:"Sales", location:"Website", goal:"Maximize number of conversions", bid:"Highest volume",
+   why:"כשכל המוצרים באותו מחיר, אין הבדל מהותי בין Volume ל-Value — נפח עסקאות הוא המדד הפשוט והנכון.",
+   alt:"Cost per result goal אם רוצים לשמור CPA קבוע בזמן Scaling."},
+  {cat:"איקומרס", text:"חנות שמוכרת בעיקר דרך Retargeting על עגלות נטושות", objective:"Sales", location:"Website", goal:"Maximize number of conversions", bid:"Cost per result goal",
+   why:"אודיינס חם וממוקד — שמירה על יעד CPA קבוע מתאימה כי כבר יש דאטה היסטורית טובה על קהל זה.",
+   alt:"ROAS goal אם בקהל הזה יש גם פיזור גדול בשווי העגלות."},
+  {cat:"איקומרס", text:"דרופשיפינג עם מרווח רווח נמוך שדורש שליטה הדוקה בעלות לרכישה", objective:"Sales", location:"Website", goal:"Maximize number of conversions", bid:"Bid cap",
+   why:"מרווח דק דורש שליטה הדוקה על העלות המקסימלית לכל רכישה — Bid Cap נותן את השליטה ההדוקה ביותר (בסיכון ל-Delivery מוגבל).",
+   alt:"Cost per result goal — פחות הדוק אך בטוח יותר ל-Delivery."},
+  {cat:"איקומרס", text:"חנות איקומרס שמוכרת מוצרי מנוי (Subscription Box חודשי)", objective:"Sales", location:"Website", goal:"Maximize value of conversions", bid:"ROAS goal",
+   why:"ערך הלקוח האמיתי הוא ה-LTV מהמנוי, לא רק העסקה הראשונה — Value+ROAS עוזר למקד באנשים עם פוטנציאל הרשמה לטווח ארוך.",
+   alt:"Maximize number of conversions אם המנוי במחיר אחיד פשוט."},
+  {cat:"איקומרס", text:"חנות שמוכרת גם באתר וגם מנהלת הזמנות בוואטסאפ", objective:"Sales", location:"Message destinations", goal:"Maximize number of conversions", bid:"Highest volume",
+   why:"הקונברסיה עדיין נמדדת באתר (Pixel) גם אם השיח מתבצע בוואטסאפ — מתאים כשהוואטסאפ הוא רק שלב בדרך לרכישה באתר.",
+   alt:"Maximize number of conversations אם הסגירה בפועל קורית בשיחה ולא נמדדת ב-Pixel."},
+  {cat:"איקומרס", text:"חנות בוטיק שסוגרת רוב המכירות שלה דרך שיחת וואטסאפ (התאמת מידות/צבעים)", objective:"Sales", location:"Message destinations", goal:"Maximize number of conversations", bid:"Highest volume",
+   why:"ההמרה האמיתית קורית בשיחה (לא ב-Pixel) — Maximize Conversations ממקד את האלגוריתם בפתיחת שיח, שזה היעד העסקי האמיתי.",
+   alt:"Maximize number of conversions אם בכל זאת מודדים Purchase event באתר בסוף."},
+  {cat:"איקומרס", text:"מותג איקומרס שרוצה לבדוק קריאייטיב חדש בעלות נמוכה לפני שמשקיעים בקמפיין מכירה", objective:"Traffic", location:"Website", goal:"Maximize number of link clicks", bid:"Highest volume",
+   why:"בדיקת CTR גולמי על הקריאייטיב לפני מעבר לאופטימיזציית רכישה — עלות נמוכה, איתות מהיר.",
+   alt:"Maximize number of landing page views אם רוצים גם לבדוק את טעינת הדף, לא רק את הקליק."},
+  {cat:"איקומרס", text:"עסק שמוכר כרטיסים לאירוע/קונצרט ורוצה מכירות אונליין", objective:"Sales", location:"Website", goal:"Maximize number of conversions", bid:"Highest volume",
+   why:"רכישת כרטיס היא Purchase event קלאסי — נפח עסקאות מקסימלי הוא היעד הנכון בעיקר במחיר אחיד לכרטיס.",
+   alt:"Maximize value of conversions אם יש כמה סוגי כרטיסים (VIP/רגיל) במחירים שונים."},
+  {cat:"איקומרס", text:"עסק שמוכר קורס דיגיטלי במחיר אחיד", objective:"Sales", location:"Website", goal:"Maximize number of conversions", bid:"Highest volume",
+   why:"מוצר דיגיטלי במחיר קבוע — נפח מכירות הוא היעד הפשוט והנכון.",
+   alt:"Leads→Website אם המודל הוא וובינר חינמי לפני מכירת הקורס (לא מכירה ישירה)."},
+  {cat:"איקומרס", text:"עסק שמוכר כמה חוגים/קורסים במחירים שונים מאוד", objective:"Sales", location:"Website", goal:"Maximize value of conversions", bid:"ROAS goal",
+   why:"טווח מחירים רחב בקטלוג — מעדיפים עגלות גדולות יותר ושומרים על רווחיות עם רצפת ROAS.",
+   alt:"Maximize number of conversions אם המטרה היא למלא כמה שיותר מקומות בחוגים, לא הכנסה מקסימלית."},
+  {cat:"איקומרס", text:"שירות SaaS עם Self-serve signup בכרטיס אשראי (תשלום ישיר קטן)", objective:"Sales", location:"Website", goal:"Maximize number of conversions", bid:"Highest volume",
+   why:"כשההרשמה כוללת תשלום ישיר (גם אם קטן), זה Purchase event לכל דבר — Sales מתאים יותר מ-Leads.",
+   alt:"Leads→Website אם ה-Trial הוא חינמי בלי כרטיס אשראי."},
+  {cat:"איקומרס", text:"עסק שמוכר מוצר במימון/תשלומים (לדוגמה רהיטים/מוצרי בית יקרים)", objective:"Sales", location:"Website", goal:"Maximize value of conversions", bid:"ROAS goal",
+   why:"עסקאות יקרות עם פיזור גבוה — Maximize value of conversions נפתח רק תחת ROAS goal, ומבטיח גם רצפת תשואה מינימלית, לא רק נפח עסקאות.",
+   alt:"Maximize number of conversions עם Highest volume אם רוצים נפח מקסימלי בלי קשר לערך העסקה הבודדת."},
+  {cat:"איקומרס", text:"עסק שמפעיל תוכנית נאמנות ורוצה לעודד לקוחות קיימים לחזור ולקנות", objective:"Sales", location:"Website", goal:"Maximize value of conversions", bid:"ROAS goal",
+   why:"קהל קיים עם פוטנציאל גבוה (Retargeting/Custom Audience) — מקסום ערך עם רצפת תשואה שומר על רווחיות בקמפיין נאמנות.",
+   alt:"Maximize number of conversions אם המטרה היא תדירות חזרה לקנייה ולא סכום הקנייה."},
+  {cat:"איקומרס", text:"עסק שמוכר מוצר עונתי בלבד (תחפושות פורים/קישוטי חג)", objective:"Sales", location:"Website", goal:"Maximize number of conversions", bid:"Highest volume",
+   why:"חלון זמן קצר עם ביקוש גבוה — נפח מכירות מקסימלי בתוך התקופה הקצרה הוא היעד הדומיננטי.",
+   alt:"Cost per result goal אם רוצים לשמור על רווחיות בזמן שמתחרים מעלים את המחירים בעונה."},
+  {cat:"איקומרס", text:"עסק שרוצה למכור מוצר חדש לקהל שכבר קנה ממנו בעבר (Cross-sell)", objective:"Sales", location:"Website", goal:"Maximize number of conversions", bid:"Cost per result goal",
+   why:"קהל חם עם היסטוריית רכישה — אפשר לקבע יעד עלות יציב כי יש כבר נתוני CPA טובים על קהל זה.",
+   alt:"Maximize value of conversions אם המוצר החדש שונה מאוד במחיר מהרכישה הקודמת."},
+  {cat:"איקומרס", text:"עסק שרוצה לבדוק אם קהל Lookalike חדש מגיב טוב יותר מהקהל הקיים", objective:"Sales", location:"Website", goal:"Maximize number of conversions", bid:"Highest volume",
+   why:"קהל חדש בלי דאטה היסטורית על הקהל הזה — Highest Volume נותן למטא ללמוד ולמצוא את התת-קבוצה הרווחית בתוכו.",
+   alt:"Cost per result goal אם רוצים להשוות ישירות מול ה-CPA של הקהל הקיים."},
+  {cat:"איקומרס", text:"עסק שמוכר שירות מנוי לתוכן (Streaming) במחיר חודשי קבוע", objective:"Sales", location:"Website", goal:"Maximize number of conversions", bid:"Highest volume",
+   why:"מנוי במחיר אחיד — נפח הרשמות מקסימלי הוא היעד הפשוט והנכון.",
+   alt:"Maximize value of conversions אם יש כמה רמות מנוי (בסיסי/פרימיום) במחירים שונים."},
+
+  // ===== לידים / B2B / שירותים =====
+  {cat:"לידים / B2B / שירותים", text:"אני מוכר שירות השכרת מוצר לעסקים", objective:"Leads", goal:"Maximize number of leads", bid:"Highest volume or value",
+   why:"B2B/השכרה הוא בד\"כ תהליך מכירה מורכב יותר מהמרה ישירה באתר — טופס ליד מתחיל את התהליך מול נציג מכירות.",
+   alt:"Maximize number of qualified leads אם יש CRM שמסנן לפי גודל עסק/תקציב."},
+  {cat:"לידים / B2B / שירותים", text:"עסק B2B עם תהליך מכירה ארוך (חוזה שנתי, מכירה מורכבת)", objective:"Leads", goal:"Maximize number of qualified leads", bid:"Cost per result goal",
+   why:"בתהליך מכירה ארוך וחוזה גדול, חשוב לסנן כבר בשלב הפרסום לידים שבאמת מתאימים (Lead Scoring) ולא לבזבז על נפח גרידא.",
+   alt:"Maximize number of leads בתחילת הדרך לפני שיש מספיק דאטה ל-Lead Scoring."},
+  {cat:"לידים / B2B / שירותים", text:"חברת ייעוץ/יועץ עצמאי שרוצה לקוחות חדשים", objective:"Leads", goal:"Maximize number of leads", bid:"Highest volume or value",
+   why:"שירות מבוסס-יחסים שדורש שיחת ייעוץ ראשונית — טופס ליד פשוט הוא נקודת הכניסה הסטנדרטית.",
+   alt:"Sales→Calls אם מעדיפים תיאום שיחת ייעוץ ישירות בטלפון."},
+  {cat:"לידים / B2B / שירותים", text:"סוכנות ביטוח שרוצה הצעות מחיר חדשות", objective:"Leads", goal:"Maximize number of leads", bid:"Cost per result goal",
+   why:"ענף עם תחרות גבוהה על עלות-לליד — חשוב לקבע יעד CPL ולשמור על תקציב הרכש מול ההכנסה הצפויה לפוליסה.",
+   alt:"Maximize number of qualified leads אם יש מערכת שמסננת לידים רלוונטיים מבחינת גיל/סוג ביטוח."},
+  {cat:"לידים / B2B / שירותים", text:"עסק שמוכר קורס/הדרכה מקצועית ורוצה נרשמים לוובינר חינמי", objective:"Leads", goal:"Maximize number of leads", bid:"Highest volume or value",
+   why:"וובינר חינמי הוא לרוב שלב Top-of-funnel לפני מכירת הקורס — נרשמים הם הליד, לא הרכישה הסופית.",
+   alt:"Engagement→On your ad→Event responses אם הוובינר מנוהל כ-Facebook Event רשמי."},
+  {cat:"לידים / B2B / שירותים", text:"עסק B2B שרוצה לידים איכותיים בלבד ומוכן לשלם יותר לכל ליד טוב", objective:"Leads", goal:"Maximize number of qualified leads", bid:"Bid cap",
+   why:"כשמוכנים לשלם יותר על ליד איכותי במיוחד, Bid Cap נותן שליטה ישירה על המקסימום שמוכנים להציע באוקציה לכל ליד כזה.",
+   alt:"Cost per result goal אם רוצים יעד ממוצע גמיש יותר ולא הגבלה קשיחה."},
+  {cat:"לידים / B2B / שירותים", text:"עסק שירותים פיננסיים (יעוץ פנסיוני/השקעות) שרוצה פגישות יעוץ", objective:"Leads", goal:"Maximize number of qualified leads", bid:"Cost per result goal",
+   why:"תחום רגולטורי עם תהליך סינון מחויב — Lead Scoring (אישור זכאות) מתאים, עם יעד עלות קבוע לניהול תקציב שיווק מול הכנסה צפויה.",
+   alt:"Maximize number of leads בתחילת קמפיין לפני שיש דאטה לסינון."},
+  {cat:"לידים / B2B / שירותים", text:"נותן שירות שרוצה הזמנות לפגישת אבחון/הערכה ראשונית בחינם", objective:"Leads", goal:"Maximize number of leads", bid:"Highest volume or value",
+   why:"פגישת אבחון בחינם היא בד\"כ הצעד הראשון בתהליך מכירה — ליד פשוט (טופס/יומן פגישות) הוא הכלי הנכון.",
+   alt:"Sales→Calls אם ההזמנה לפגישה נעשית בטלפון."},
+  {cat:"לידים / B2B / שירותים", text:"עסק שמוכר מוצר יוקרה/B2B עם שווי עסקה גבוה מאוד (Ticket גדול)", objective:"Leads", goal:"Maximize number of qualified leads", bid:"Bid cap",
+   why:"עסקה בודדת שווה הרבה — מצדיק תקרת bid גבוהה לליד יחיד איכותי, גם אם המשמעות היא פחות נפח לידים.",
+   alt:"Maximize number of leads אם בכל זאת רוצים למקסם כמות לפני סינון ע\"י הצוות."},
+  {cat:"לידים / B2B / שירותים", text:"עסק שרוצה למלא יומן פגישות לחודש הקרוב (קיבולת מוגבלת)", objective:"Leads", goal:"Maximize number of leads", bid:"Cost per result goal",
+   why:"יומן מוגבל = יעד נפח קבוע וברור עם עלות יציבה, לא רוצים יותר מדי לידים שלא ניתן לטפל בהם.",
+   alt:"להגביל תקציב יומי במקום לשנות Performance Goal, אם הבעיה היא רק כמות."},
+  {cat:"לידים / B2B / שירותים", text:"אפליקציית הזמנת תורים מבוססת אתר (SaaS) שרוצה הרשמות חדשות", objective:"Leads", goal:"Maximize number of leads", bid:"Highest volume or value",
+   why:"הרשמה לשירות SaaS היא בד\"כ ליד/Trial, לא רכישה ישירה — טופס/הרשמה הוא היעד הנכון.",
+   alt:"Sales→Website→Maximize number of conversions אם יש תשלום ישיר בהרשמה (Self-serve)."},
+  {cat:"לידים / B2B / שירותים", text:"עסק B2B שרוצה למשוך הרשמות לניוזלטר תעשייתי (לא מכירה)", objective:"Leads", goal:"Maximize number of leads", bid:"Highest volume or value",
+   why:"הרשמה לניוזלטר היא ליד קלאסי — שלב בניית רשימת תפוצה לטיפוח לידים עתידי (Nurturing).",
+   alt:"Engagement→Website→Maximize number of conversions אם רוצים טירגוט פתוח יותר ולא ממוקד-ליד."},
+  {cat:"לידים / B2B / שירותים", text:"חברה שרוצה לגייס מועמדים לעבודה (גיוס עובדים, לא מכירה)", objective:"Leads", goal:"Maximize number of leads", bid:"Highest volume or value",
+   why:"בקשת עבודה היא טופס ליד קלאסי — מטרת הקמפיין היא איסוף קו\"ח/פניות מועמדים.",
+   alt:"Maximize number of qualified leads אם יש סינון ראשוני אוטומטי לפי קריטריונים."},
+  {cat:"לידים / B2B / שירותים", text:"עסק שירות שרוצה הזמנות לפגישת מכירה בשטח (לא טלפון, לא אתר)", objective:"Leads", goal:"Maximize number of leads", bid:"Highest volume or value",
+   why:"גם פגישה בשטח מתחילה בטופס תיאום — ליד הוא נקודת הכניסה הסטנדרטית בכל מקרה.",
+   alt:"Sales→Calls אם בפועל הלקוחות מתקשרים ישירות לתיאום."},
+  {cat:"לידים / B2B / שירותים", text:"מותג שרוצה לדעת מה העלות-לליד המקסימלית שמוכן לשלם לפני שמשיק קמפיין גדול", objective:"Leads", goal:"Maximize number of leads", bid:"Bid cap",
+   why:"Bid Cap נותן שליטה ישירה על המקסימום שמוכנים להציע באוקציה לכל ליד.",
+   alt:"Cost per result goal אם רוצים יעד ממוצע גמיש יותר ולא הגבלה קשיחה לכל ליד בודד."},
+  {cat:"לידים / B2B / שירותים", text:"עסק שרוצה לקבע יעד עלות-לליד קבוע לאחר שיש כבר 3 חודשי דאטה", objective:"Leads", goal:"Maximize number of leads", bid:"Cost per result goal",
+   why:"דאטה היסטורית מספקת מאפשרת לקבע יעד CPL ולתת למטא למקסם נפח תוך שמירה עליו.",
+   alt:"Highest volume or value אם רוצים לבדוק אם אפשר להוריד עוד את ה-CPL בלי יעד נוקב."},
+  {cat:"לידים / B2B / שירותים", text:"עסק שמוכר שירותי ניקיון/אחזקה לעסקים (B2B שירותי)", objective:"Leads", goal:"Maximize number of leads", bid:"Highest volume or value",
+   why:"שירות B2B חוזר — טופס בקשת הצעת מחיר הוא נקודת הכניסה הסטנדרטית למכירה מורכבת.",
+   alt:"Sales→Calls אם מעדיפים תיאום הצעת מחיר ישירות בטלפון."},
+  {cat:"לידים / B2B / שירותים", text:"עסק שמוכר ביטוח רכב/דירה ורוצה הצעות מחיר מקוונות מהירות", objective:"Leads", goal:"Maximize number of leads", bid:"Cost per result goal",
+   why:"ענף תחרותי עם עלות-לליד ידועה — שמירה על יעד CPL מאפשרת לתכנן את הרכש מול הרווחיות הצפויה לפוליסה.",
+   alt:"Maximize number of qualified leads אם יש סינון ראשוני לפי גיל רכב/סוג כיסוי."},
+  {cat:"לידים / B2B / שירותים", text:"עסק שמנהל תוכנית שותפים/Affiliate ורוצה גיוס שותפים חדשים", objective:"Leads", goal:"Maximize number of leads", bid:"Highest volume or value",
+   why:"גיוס שותפים הוא תהליך B2B עם טופס הרשמה — ליד קלאסי לפני סינון ואישור שותפות.",
+   alt:"Engagement→Website אם רוצים טירגוט פתוח יותר לתוכן ולא ממוקד-ליד."},
+  {cat:"לידים / B2B / שירותים", text:"עסק שמוכר שירות תרגום/כתיבה ורוצה לקוחות פרילנס חדשים", objective:"Leads", goal:"Maximize number of leads", bid:"Highest volume or value",
+   why:"שירות פרילנס מבוסס בקשות עבודה — טופס פנייה הוא דרך הכניסה הסטנדרטית מול לקוח פוטנציאלי.",
+   alt:"Sales→Message destinations אם רוב הפניות מתבצעות ישירות בהודעה."},
+
+  // ===== מודעות ומיתוג =====
+  {cat:"מודעות ומיתוג", text:"השקת מוצר חדש למותג קיים", objective:"Awareness", goal:"Maximize reach of ads", bid:"Highest volume",
+   why:"השקה דורשת חשיפה רחבה לקהל חדש ככל האפשר — Reach הוא המדד הנכון לטופ-פאנל.",
+   alt:"Maximize ad recall lift אם יש תקציב גדול ורוצים למדוד את ההשפעה על זכירות המוצר החדש."},
+  {cat:"מודעות ומיתוג", text:"מותג שרוצה למדוד את ההשפעה האמיתית של הקמפיין על זכירות המותג", objective:"Awareness", goal:"Maximize ad recall lift", bid:"Cost per result goal",
+   why:"דורש Brand Lift Study מובנה — מתאים למותגים עם תקציב גדול שרוצים מדידה סטטיסטית אמיתית, לא רק חשיפה גולמית.",
+   alt:"Maximize reach of ads אם אין תקציב מספיק ל-Brand Lift Study."},
+  {cat:"מודעות ומיתוג", text:"מותג שרוצה תזכורת תדירה ללקוחות קיימים לפני מבצע גדול", objective:"Awareness", goal:"Maximize number of impressions", bid:"Cost per result goal",
+   why:"המטרה היא תדירות חשיפה גבוהה על אודיינס מוכר, לא הרחבת קהל — Impressions עם יעד עלות שומר על תקציב.",
+   alt:"Engagement→On your ad→Reminders set אם המבצע מנוהל כאירוע פייסבוק עם תזכורת."},
+  {cat:"מודעות ומיתוג", text:"סטודיו/יוצר תוכן שרוצה חשיפת וידאו עומק (לא רק צפיות שטחיות)", objective:"Awareness", goal:"Maximize ThruPlay views", bid:"Highest volume",
+   why:"ThruPlay מודד צפייה איכותית/עמוקה בווידאו, מתאים כשהמסר דורש זמן צפייה ולא רק חשיפה רגעית.",
+   alt:"Maximize 2-second continuous video plays ל-Reach רחב יותר בעלות נמוכה אם האיכות פחות קריטית."},
+  {cat:"מודעות ומיתוג", text:"קמפיין מיתוג בתקציב מוגבל שרוצה Reach רחב במינימום עלות", objective:"Awareness", goal:"Maximize 2-second continuous video plays", bid:"Highest volume",
+   why:"עלות-לצפייה נמוכה יותר מ-ThruPlay, מתאים כשהמטרה היא כיסוי רחב בעלות מינימלית ולא איכות צפייה.",
+   alt:"Maximize reach of ads אם אין בכלל קריאייטיב וידאו ורוצים סטטי."},
+  {cat:"מודעות ומיתוג", text:"מותג שמשיק קמפיין עונתי (חגים/בלאק פריידיי) וצריך חשיפה לפני העונה", objective:"Awareness", goal:"Maximize reach of ads", bid:"Cost per result goal",
+   why:"לפני עונת מבצעים, נכון לבנות מודעות רחבה מבעוד מועד עם שליטה בעלות לפני שהמתחרים מעלים מחירים.",
+   alt:"Maximize number of impressions אם יש כבר Reach טוב ורוצים רק להעלות תדירות."},
+  {cat:"מודעות ומיתוג", text:"עסק שרוצה למדוד ROI על קמפיין מיתוג טהור (לא מכירות ישירות)", objective:"Awareness", goal:"Maximize ad recall lift", bid:"Highest volume",
+   why:"Ad Recall Lift הוא המדד הקרוב ביותר ל'השפעת מיתוג' כשאי אפשר למדוד ROI ישיר במכירות.",
+   alt:"Maximize reach of ads אם אין תקציב ל-Brand Lift Study המובנה."},
+  {cat:"מודעות ומיתוג", text:"עסק שרוצה לבדוק האם להגדיל תדירות חשיפה למודעה קיימת שמצליחה", objective:"Awareness", goal:"Maximize number of impressions", bid:"Highest volume",
+   why:"מודעה שכבר עובדת — המטרה היא להגדיל תדירות חשיפה לאותו קהל, לא להרחיב קהל חדש.",
+   alt:"Maximize reach of ads אם רוצים גם להרחיב לקהל חדש לצד התדירות."},
+  {cat:"מודעות ומיתוג", text:"מותג שמשיק קמפיין PR/השקה לפני כיסוי תקשורתי", objective:"Awareness", goal:"Maximize reach of ads", bid:"Highest volume",
+   why:"לפני כיסוי תקשורתי, נכון למקסם כיסוי קהל רחב כך שכשהכתבה תצא, יהיה כבר זיהוי ראשוני למותג.",
+   alt:"Maximize ad recall lift אם יש תקציב למדידת ההשפעה בפועל."},
+  {cat:"מודעות ומיתוג", text:"עסק שמשיק קמפיין מיתוג מקומי לפני אירוע עירוני", objective:"Awareness", goal:"Maximize reach of ads", bid:"Cost per result goal",
+   why:"כיסוי רחב באזור גאוגרפי מוגדר לפני אירוע, עם שליטה בעלות כי התקציב מוגבל בזמן.",
+   alt:"Engagement→Instagram or Facebook אם המטרה היא גם לבנות עוקבים מקומיים לטווח ארוך."},
+  {cat:"מודעות ומיתוג", text:"מותג שרוצה למקסם חשיפה לסרטון מותג ארוך (Brand film)", objective:"Awareness", goal:"Maximize ThruPlay views", bid:"Highest volume",
+   why:"סרטון מותג ארוך דורש צפייה איכותית בפועל (15+ שניות), לא רק חשיפה רגעית — ThruPlay מתאים.",
+   alt:"Maximize 2-second continuous video plays אם המטרה היא כיסוי רחב גם במחיר איכות צפייה נמוכה יותר."},
+  {cat:"מודעות ומיתוג", text:"עסק שרוצה לבדוק קהל חדש שלא פרסם לו מעולם (קהל קר מוחלט)", objective:"Awareness", goal:"Maximize reach of ads", bid:"Highest volume",
+   why:"קהל קר לחלוטין — המטרה הראשונה היא רק להיכנס למודעות (Reach), לא תגובה/מכירה.",
+   alt:"Traffic→Website אם רוצים גם לבדוק תגובה ראשונית לאתר באותו שלב."},
+
+  // ===== מעורבות וקהילה =====
+  {cat:"מעורבות וקהילה", text:"רוצה לבנות קהילה ועוקבים באינסטגרם לפני שמתחילים למכור", objective:"Engagement", location:"Instagram or Facebook", goal:"Maximize number of Instagram profile and Facebook Page visits", bid:"Highest volume",
+   why:"בניית בסיס עוקבים ונוכחות חברתית היא שלב מקדים נפוץ לפני קמפיין מכירה רציני.",
+   alt:"Maximize number of Page likes אם המטרה הספציפית היא Social Proof במספר לייקים."},
+  {cat:"מעורבות וקהילה", text:"עסק חדש שרוצה בסיס לייקים לדף לפני שמתחילים לפרסם תוכן", objective:"Engagement", location:"Instagram or Facebook", goal:"Maximize number of Page likes", bid:"Highest volume",
+   why:"בסיס לייקים בעלות נמוכה שנותן Social Proof ראשוני למבקרים חדשים בדף.",
+   alt:"Maximize number of Instagram profile and Facebook Page visits אם רוצים גם תנועה לפרופיל לא רק לייקים."},
+  {cat:"מעורבות וקהילה", text:"מותג שרוצה לעודד שיתופים ותגובות על פוסט ויראלי", objective:"Engagement", location:"On your ad", engagementType:"Post engagement", goal:"Maximize engagement with a post", bid:"Highest volume",
+   why:"כשהמטרה היא ויראליות (לייקים/תגובות/שיתופים), Post Engagement הוא היעד הישיר ביותר.",
+   alt:"Maximize daily unique reach אם רוצים גם כיסוי קהל רחב יותר, לא רק מעורבות."},
+  {cat:"מעורבות וקהילה", text:"עסק שירות שרוצה לפתוח שיחות שירות לקוחות ראשוניות בוואטסאפ", objective:"Engagement", location:"Message destinations", goal:"Maximize number of conversations", bid:"Highest volume",
+   why:"כשהמטרה היא להתחיל שיח שירות/מכירה ולא מכירה ישירה מדודה, Maximize Conversations הוא היעד המתאים.",
+   alt:"Maximize number of conversions אם יש גם Pixel שמודד פעולות באתר בנוסף לשיח."},
+  {cat:"מעורבות וקהילה", text:"עסק שרוצה מיקרו-קונברז'ן באתר (הרשמה לניוזלטר) בלי להגדיר את זה כ'מכירה'", objective:"Engagement", location:"Website", goal:"Maximize number of conversions", bid:"Highest volume",
+   why:"תחת Engagement (לא Sales), הטירגוט פתוח יותר ומתאים למיקרו-המרות תוכן/קהילה ולא רק רכישה.",
+   alt:"Leads→Website אם ההרשמה לניוזלטר מוגדרת כאירוע Lead."},
+  {cat:"מעורבות וקהילה", text:"עסק שרוצה לבדוק כמה אנשים ילחצו על קישור מתוך פוסט ממומן עם מעורבות", objective:"Engagement", location:"Website", goal:"Maximize number of link clicks", bid:"Highest volume",
+   why:"בדיקת קריאייטיב/קופי מהירה לפני אופטימיזציה מלאה לקונברז'ן.",
+   alt:"Maximize number of landing page views אם רוצים גם לוודא שהדף בפועל נטען."},
+  {cat:"מעורבות וקהילה", text:"עסק שמוכר מוצרים בקבוצת פייסבוק/אינסטגרם (לא חנות פורמלית)", objective:"Engagement", location:"On your ad", engagementType:"Post engagement", goal:"Maximize engagement with a post", bid:"Highest volume",
+   why:"מודל מכירה מבוסס קהילה/אמון — מעורבות על הפוסט (לדוגמה תגובות שמבטאות רצון לקנות) היא לרוב מנגנון ההזמנה בפועל.",
+   alt:"Sales→Message destinations אם רוב ההזמנות בפועל עוברות להודעה פרטית."},
+  {cat:"מעורבות וקהילה", text:"עסק שכבר עובד עם Sales אבל רוצה גם להגדיל את בסיס העוקבים שלו לצד זה", objective:"Engagement", location:"Instagram or Facebook", goal:"Maximize number of Instagram profile and Facebook Page visits", bid:"Cost per result goal",
+   why:"קמפיין משלים לצד Sales הראשי — בניית קהל לטווח ארוך, לא מכירה ישירה.",
+   alt:"להריץ כקמפיין נפרד בתקציב קטן, לא לערבב עם תקציב ה-Sales הראשי."},
+  {cat:"מעורבות וקהילה", text:"עסק שמפרסם קמפיין מעורבות אבל רוצה שליטה הדוקה על העלות לכל פעולה", objective:"Engagement", location:"Message destinations", goal:"Maximize number of conversations", bid:"Bid cap",
+   why:"שליטה מקסימלית על העלות לשיחה בודדת — שימושי כשיש תקציב מוגבל מאוד וצריך למנוע חריגות.",
+   alt:"Cost per result goal — בטוח יותר ל-Delivery, יעד ממוצע גמיש."},
+
+  // ===== אירועים ושידורים חיים =====
+  {cat:"אירועים ושידורים חיים", text:"עסק שמפרסם אירוע פיזי/וובינר בפייסבוק ורוצה אישורי הגעה", objective:"Engagement", location:"On your ad", engagementType:"Event responses", goal:"Maximize number of event responses", bid:"Highest volume",
+   why:"כשהאירוע מנוהל כ-Facebook Event, Event Responses מודד ישירות את היעד העסקי — נרשמים/מאשרי הגעה.",
+   alt:"Leads→Website אם ההרשמה היא טופס באתר ולא Facebook Event."},
+  {cat:"אירועים ושידורים חיים", text:"עסק שרוצה להגדיל נוכחות חיה בזמן שידור/לונץ' מתוכנן", objective:"Engagement", location:"On your ad", engagementType:"Reminders set", goal:"Maximize reminders set", bid:"Highest volume",
+   why:"תזכורת אוטומטית שמטא שולח למשתמש מגדילה נוכחות חיה בדיוק בזמן השידור — האפשרות היחידה תחת Conversion Location הזה.",
+   alt:"Maximize number of event responses אם רוצים גם לדעת מי מתכוון להגיע, לא רק תזכורת."},
+  {cat:"אירועים ושידורים חיים", text:"מותג שרוצה למקסם צפיות איכותיות בווידאו פרסומי תוך כדי קמפיין מעורבות", objective:"Engagement", location:"On your ad", engagementType:"Video views", goal:"Maximize ThruPlay views", bid:"Cost per result goal",
+   why:"כש-וידאו הוא הקריאייטיב המרכזי בקמפיין מעורבות, ThruPlay נותן את איכות הצפייה הגבוהה ביותר עם שליטה בעלות.",
+   alt:"Maximize 2-second continuous video plays ל-Reach רחב יותר בעלות נמוכה."},
+  {cat:"אירועים ושידורים חיים", text:"עסק וידאו שרוצה לשמור על עלות קבועה לכל צפיית ThruPlay", objective:"Engagement", location:"On your ad", engagementType:"Video views", goal:"Maximize ThruPlay views", bid:"Cost per result goal",
+   why:"כשיש כבר דאטה היסטורית על קמפייני וידאו, אפשר לקבע יעד עלות-לצפייה ולשמור על תקציב.",
+   alt:"Highest volume בקמפיינים חדשים בלי דאטה."},
+  {cat:"אירועים ושידורים חיים", text:"עסק שרוצה למקסם כמות תגובות לאירוע בעלות הנמוכה ביותר", objective:"Engagement", location:"On your ad", engagementType:"Event responses", goal:"Maximize number of event responses", bid:"Highest volume",
+   why:"ברירת המחדל לקמפייני אירועים חדשים — נפח מקסימלי של תגובות בלי יעד עלות נוקב.",
+   alt:"Cost per result goal אם יש כבר אירועים קודמים עם דאטה על עלות-לתגובה."},
+  {cat:"אירועים ושידורים חיים", text:"עסק שמתכנן Launch אונליין גדול (לונץ') ורוצה הכי הרבה אנשים נוכחים", objective:"Engagement", location:"On your ad", engagementType:"Reminders set", goal:"Maximize reminders set", bid:"Highest volume",
+   why:"תזכורת אוטומטית מגדילה נוכחות חיה ברגע הקריטי של הלונץ' — האפשרות היחידה והמתאימה ביותר למטרה הזו.",
+   alt:"Maximize number of event responses אם רוצים גם מספר משוער של מגיעים לפני האירוע."},
+  {cat:"אירועים ושידורים חיים", text:"עסק שמוכר כרטיסים לאירוע מקוון בתשלום (וובינר בתשלום)", objective:"Sales", location:"Website", goal:"Maximize number of conversions", bid:"Highest volume",
+   why:"רכישת כרטיס לאירוע מקוון היא Purchase event רגיל — נפח עסקאות הוא היעד הפשוט.",
+   alt:"Engagement→Reminders set אם יש גם שלב חינמי קודם (Webinar Funnel) לפני המכירה."},
+  {cat:"אירועים ושידורים חיים", text:"עסק שמנהל פודקאסט/תוכן וידאו ורוצה להגדיל מאזינים/צופים קביעים", objective:"Engagement", location:"On your ad", engagementType:"Video views", goal:"Maximize 2-second continuous video plays", bid:"Highest volume",
+   why:"בניית בסיס צופים רחב בעלות נמוכה — מתאים יותר מ-ThruPlay כשהמטרה היא חשיפה לתוכן חדש, לא מדידת מחויבות עמוקה.",
+   alt:"Maximize ThruPlay views אם רוצים למדוד דווקא מאזינים/צופים מחויבים שצופים לאורך זמן."},
+  {cat:"אירועים ושידורים חיים", text:"עסק שרוצה לדעת כמה אנשים יגיבו 'בא לי' לאירוע פייסבוק שמתפרסם", objective:"Engagement", location:"On your ad", engagementType:"Event responses", goal:"Maximize number of event responses", bid:"Highest volume",
+   why:"מדויק ליעד העסקי — מספר אנשים שמאשרים הגעה/מתעניינים באירוע פייסבוק.",
+   alt:"Maximize engagement with a post אם רוצים גם מעורבות כללית על הפוסט המקדם, לא רק אישורי הגעה."},
+
+  // ===== תנועה ובדיקות שוק =====
+  {cat:"תנועה ובדיקות שוק", text:"עסק שמשדר לייב באינסטגרם ורוצה למשוך צופים אליו בזמן אמת", objective:"Traffic", location:"Instagram live video", goal:"Maximize number of link clicks", bid:"Highest volume",
+   why:"היעד העיקרי היחיד ל-IG Live Video תחת Traffic — מתאים למשוך גולשים להיכנס לשידור עכשיו.",
+   alt:"Engagement→On your ad→Video views אם רוצים למדוד צפיות בווידאו מוקלט ולא Live ספציפי."},
+  {cat:"תנועה ובדיקות שוק", text:"אתר תוכן/בלוג שרוצה תנועה איכותית לכתבות חדשות", objective:"Traffic", location:"Website", goal:"Maximize number of landing page views", bid:"Highest volume",
+   why:"בלוג/תוכן לא מודד 'קונברז'ן' כספי — תנועה איכותית לדף היא היעד הנכון, מסנן בונס/דרופ-אוף בטעינה.",
+   alt:"Maximize number of link clicks אם רוצים נפח קליקים מקסימלי בלי קשר לטעינת הדף."},
+  {cat:"תנועה ובדיקות שוק", text:"עסק שרוצה לבדוק טראפיק לדף נחיתה לפני שמשיקים קמפיין מכירה מלא", objective:"Traffic", location:"Website", goal:"Maximize number of landing page views", bid:"Cost per result goal",
+   why:"שלב מקדים לאיסוף דאטה ובדיקת איכות תנועה לפני מעבר לאובייקט Sales, עם שליטה בעלות לבדיקה.",
+   alt:"Maximize number of conversions תחת Sales ברגע שיש מספיק היסטוריה."},
+  {cat:"תנועה ובדיקות שוק", text:"עסק שרוצה תנועה לדף עם אפשרות גם לשיח ישיר בהודעה", objective:"Traffic", location:"Website", goal:"Maximize number of conversations", bid:"Highest volume",
+   why:"שילוב היברידי — תנועה לאתר אך עם פתח לשיח, כשהמודעה כוללת גם אופציית הודעה.",
+   alt:"Maximize number of landing page views אם רוצים למקד רק בתנועה לאתר."},
+  {cat:"תנועה ובדיקות שוק", text:"עסק שרוצה למשוך פניות בוואטסאפ דרך קמפיין תנועה (לא מכירה ישירה)", objective:"Traffic", location:"Message destinations", goal:"Maximize number of conversations", bid:"Highest volume",
+   why:"שלב ביניים טוב לבדיקת שוק לפני מעבר לאובייקט Sales עם Conversion Location דומה.",
+   alt:"Sales→Message destinations ברגע שרוצים למדוד גם המרה כספית."},
+  {cat:"תנועה ובדיקות שוק", text:"עסק שרוצה תנועה לפרופיל אינסטגרם/פייסבוק שלו (לא דווקא מעורבות)", objective:"Traffic", location:"Instagram or Facebook", goal:"Maximize number of Instagram profile and Facebook Page visits", bid:"Highest volume",
+   why:"תחת Traffic מתאים כשרוצים גם תנועה רחבה לפרופיל, לא רק טירגוט מעורבות-ממוקד כמו ב-Engagement.",
+   alt:"Engagement→Instagram or Facebook אם המטרה היא ספציפית בניית קהילה/מעורבות."},
+  {cat:"תנועה ובדיקות שוק", text:"עסק שרוצה לבדוק האם קהל מסוים בכלל מגיב למודעות (בדיקת שוק ראשונית)", objective:"Traffic", location:"Website", goal:"Maximize number of link clicks", bid:"Highest volume",
+   why:"שלב בדיקת שוק זול ומהיר — CTR גולמי נותן איתות ראשוני בלי להשקיע בקונברז'ן מלא.",
+   alt:"Awareness→Maximize reach of ads אם המטרה היא רק לבדוק כיסוי, לא תגובה."},
+  {cat:"תנועה ובדיקות שוק", text:"עסק חדש שרוצה לבדוק 3-4 קריאייטיבים שונים לפני שמחליטים על אסטרטגיה", objective:"Traffic", location:"Website", goal:"Maximize number of link clicks", bid:"Highest volume",
+   why:"בדיקת A/B מהירה וזולה על קריאייטיב, לפני השקעה בקמפיין אופטימיזציה לקונברז'ן.",
+   alt:"Engagement→On your ad→Post engagement אם המודעות הן בעיקר תוכן/פוסטים ולא קישורים."},
+  {cat:"תנועה ובדיקות שוק", text:"עסק תנועה שרוצה למנוע חריגת עלות על כל קליק בודד", objective:"Traffic", location:"Website", goal:"Maximize number of link clicks", bid:"Bid cap",
+   why:"שליטה הדוקה על העלות המקסימלית לקליק — מתאים כשיש תקרת עלות-לקליק ברורה שלא רוצים לחצות.",
+   alt:"Cost per result goal — פחות מסוכן ל-Delivery, שומר יעד ממוצע."},
+  {cat:"תנועה ובדיקות שוק", text:"עסק חדש לגמרי בלי שום דאטה, תקציב מאוד מצומצם, רוצה להתחיל בזהירות", objective:"Traffic", location:"Website", goal:"Maximize number of landing page views", bid:"Highest volume",
+   why:"תקציב נמוך ובלי דאטה — מתחילים בתנועה איכותית וזולה לאיסוף איתותים ראשוניים לפני מעבר לאובייקט יקר יותר.",
+   alt:"Awareness→Maximize reach of ads אם אין אתר כלל ורוצים רק חשיפה."},
+  {cat:"תנועה ובדיקות שוק", text:"עסק שמנהל חוות דעת/השוואת מוצרים ומרוויח מהפניות (Affiliate)", objective:"Traffic", location:"Website", goal:"Maximize number of link clicks", bid:"Highest volume",
+   why:"מודל הכנסה מבוסס קליקים להפניה חיצונית — נפח קליקים מקסימלי הוא היעד הכלכלי הישיר.",
+   alt:"Maximize number of landing page views אם רוצים לוודא שהדף בפועל נטען לפני שהמשתמש ממשיך להפניה."},
+  {cat:"תנועה ובדיקות שוק", text:"עסק שרוצה לדעת אם יש בכלל ביקוש לשירות חדש לפני שמשקיעים בפיתוח", objective:"Traffic", location:"Website", goal:"Maximize number of landing page views", bid:"Highest volume",
+   why:"בדיקת ביקוש ראשונית (Smoke Test) בעלות נמוכה — תנועה איכותית לדף נחיתה עם פרטי השירות.",
+   alt:"Leads→Website אם רוצים גם למדוד התחייבות בפועל (השארת פרטים, לא רק צפייה)."},
+  {cat:"תנועה ובדיקות שוק", text:"עסק שרוצה לבדוק שוק חדש (מדינה/אזור) לפני שמשקיע תקציב גדול", objective:"Traffic", location:"Website", goal:"Maximize number of landing page views", bid:"Highest volume",
+   why:"בדיקת שוק חדש בעלות נמוכה לפני התחייבות תקציבית גדולה — תנועה איכותית נותנת איתות ראשוני מהיר.",
+   alt:"Awareness→Maximize reach of ads אם המטרה היא רק לבדוק חשיפה/עניין כללי, לא תנועה לאתר."},
+  {cat:"תנועה ובדיקות שוק", text:"עסק שמנהל קמפיין השוואתי בין שני קריאייטיבים לפני שמשיקים בגדול", objective:"Traffic", location:"Website", goal:"Maximize number of link clicks", bid:"Highest volume",
+   why:"בדיקת A/B מהירה וזולה — CTR גולמי נותן איתות מקדים על איזה קריאייטיב עובד טוב יותר.",
+   alt:"Maximize number of landing page views אם רוצים גם לבדוק את שיעור הטעינה בפועל."},
+
+  // ===== כללי / השוואות אסטרטגיה =====
+  {cat:"כללי / השוואות אסטרטגיה", text:"עסק שרוצה למכור ישירות מתוך שיחת מסנג'ר/אינסטגרם DM בלי אתר כלל", objective:"Sales", location:"Message destinations", goal:"Maximize number of conversations", bid:"Highest volume",
+   why:"כשאין אתר/Pixel כלל, אי אפשר למדוד Purchase — Maximize Conversations הוא ה-Proxy הקרוב ביותר ליעד מכירה.",
+   alt:"לשקול הקמת אתר/Catalog בסיסי כדי לעבור בעתיד למדידת Conversions אמיתית."},
+  {cat:"כללי / השוואות אסטרטגיה", text:"עסק שרוצה לשמור על CPA קבוע בזמן שמכפילים תקציב (Scaling)", objective:"Sales", location:"Website", goal:"Maximize number of conversions", bid:"Cost per result goal",
+   why:"בזמן הגדלת תקציב (Scaling), Cost per Result Goal שומר על רווחיות יציבה תוך מקסום נפח.",
+   alt:"Highest volume אם מוכנים לקבל תנודתיות ב-CPA בתמורה לצמיחה מקסימלית."},
+  {cat:"כללי / השוואות אסטרטגיה", text:"עסק חדש שעדיין לא בטוח מה ה-CPA הסביר שלו ורוצה למידה ראשונית", objective:"Sales", location:"Website", goal:"Maximize number of conversions", bid:"Highest volume",
+   why:"בלי דאטה היסטורית, Highest Volume הוא ברירת המחדל הנכונה ללמידה — נותן למטא חופש מקסימלי לאסוף קונברז'ות.",
+   alt:"Cost per result goal רק לאחר שמצטברות 50+ קונברז'ות והבנה של CPA ממוצע."},
+  {cat:"כללי / השוואות אסטרטגיה", text:"עסק שרוצה הבטחת תשואה מינימלית על ההשקעה בפרסום (לא רק נפח)", objective:"Sales", location:"Website", goal:"Maximize value of conversions", bid:"ROAS goal",
+   why:"ROAS Goal עם מספר מוגדר נותן רצפת תשואה מינימלית מובטחת, ולא רק מקסום ערך בלי הגבלה.",
+   alt:"השארת שדה ה-ROAS ריק = מתנהג כמו מקסום ערך טהור בלי רצפה."},
+  {cat:"כללי / השוואות אסטרטגיה", text:"עסק שיודע בדיוק כמה שווה לו כל המרה ורוצה שליטה מלאה על האוקציה", objective:"Sales", location:"Website", goal:"Maximize number of conversions", bid:"Bid cap",
+   why:"למתקדמים שמכירים בדיוק את שווי ההמרה — שליטה הדוקה על העלות המקסימלית לכל קליק/המרה באוקציה.",
+   alt:"Cost per result goal — בטוח יותר ל-Delivery, פחות הדוק בשליטה."},
+  {cat:"כללי / השוואות אסטרטגיה", text:"עסק שמנהל חנות גם פיזית וגם אונליין ורוצה למדוד את שתי הזרועות", objective:"Sales", location:"Website", goal:"Maximize number of conversions", bid:"Highest volume",
+   why:"ממוקד במדידת מכירות אונליין — הזרוע הפיזית תחייב קמפיין נפרד (Calls/Awareness) כי לא ניתן למדוד ביקור פיזי באותו אובייקט.",
+   alt:"להריץ קמפיין Awareness/Calls נפרד עבור הזרוע הפיזית, לצד קמפיין Sales לאונליין."}
+];
+
+let state = { objective:null, location:null, engagementType:null, goalSelected:null, bidSelected:null, scenarioInfo:null };
+
+const ALL_OBJECTIVES = [
+  {key:"Sales", available:true},
+  {key:"Leads", available:true},
+  {key:"Engagement", available:true},
+  {key:"Traffic", available:true},
+  {key:"Awareness", available:true},
+  {key:"App Promotion", available:false}
+];
+
+function initObjectiveSelect(){
+  const sel = document.getElementById('objSelect');
+  sel.innerHTML = '<option value="" selected>בחר אובייקט...</option>';
+  ALL_OBJECTIVES.forEach(o=>{
+    const opt = document.createElement('option');
+    opt.value = o.key;
+    opt.textContent = (DATA[o.key]?DATA[o.key].icon+' ':'') + o.key + (!o.available?' (בקרוב)':'');
+    if(!o.available) opt.disabled = true;
+    sel.appendChild(opt);
+  });
+  sel.onchange = ()=>{ if(sel.value) selectObjective(sel.value); };
+}
+
+function selectObjective(key, keepScenario){
+  state.objective = key;
+  state.location = null;
+  state.engagementType = null;
+  state.goalSelected = null;
+  state.bidSelected = null;
+  if(!keepScenario){
+    state.scenarioInfo = null;
+    document.getElementById('scenarioSelect').value = '';
+  }
+  renderBidSelect();
+  renderLocationSelect();
+  renderExplain();
+}
+
+function buildScenarioSelect(){
+  const sel = document.getElementById('scenarioSelect');
+  sel.innerHTML = '<option value="">בחר תרחיש עסקי מהרשימה...</option>';
+  const categories = [...new Set(SCENARIOS.map(s=>s.cat))];
+  categories.forEach(cat=>{
+    const group = document.createElement('optgroup');
+    group.label = cat;
+    SCENARIOS.forEach((s,idx)=>{
+      if(s.cat!==cat) return;
+      const opt = document.createElement('option');
+      opt.value = idx;
+      opt.textContent = s.text;
+      group.appendChild(opt);
+    });
+    sel.appendChild(group);
+  });
+  sel.onchange = ()=>{
+    if(sel.value==='') return;
+    applyScenario(SCENARIOS[parseInt(sel.value,10)]);
+  };
+  document.getElementById('resetScenarioBtn').onclick = ()=>{
+    sel.value = '';
+    state.scenarioInfo = null;
+    document.getElementById('objSelect').value = '';
+    state.objective = null;
+    document.getElementById('bidSelect').innerHTML = '';
+    document.getElementById('locationField').style.display='block';
+    document.getElementById('locationSelect').innerHTML = '';
+    document.getElementById('engagementTypeWrap').style.display='none';
+    document.getElementById('goalSelect').innerHTML = '';
+    document.getElementById('lockedHint').style.display='none';
+    renderExplain();
+  };
+}
+
+function applyScenario(s){
+  document.getElementById('objSelect').value = s.objective;
+  selectObjective(s.objective, true);
+
+  document.getElementById('bidSelect').value = s.bid;
+  state.bidSelected = s.bid;
+
+  if(s.location){
+    document.getElementById('locationSelect').value = s.location;
+    state.location = s.location;
+    state.engagementType = null;
+    handleEngagementTypeVisibility();
+    if(s.engagementType){
+      document.getElementById('engagementTypeSelect').value = s.engagementType;
+      state.engagementType = s.engagementType;
+    }
+    renderGoalSelect();
+  }
+
+  document.getElementById('goalSelect').value = s.goal;
+  state.goalSelected = s.goal;
+
+  state.scenarioInfo = s;
+  renderExplain();
+}
+
+function renderBidSelect(){
+  const sel = document.getElementById('bidSelect');
+  sel.innerHTML = '';
+  const strategies = DATA[state.objective].bidStrategies;
+  strategies.forEach(s=>{
+    const opt = document.createElement('option');
+    opt.value = s.title; opt.textContent = s.title;
+    sel.appendChild(opt);
+  });
+  sel.value = strategies[0].title;
+  state.bidSelected = strategies[0].title;
+  sel.onchange = ()=>{
+    state.bidSelected = sel.value;
+    if(state.location) renderGoalSelect();
+    renderExplain();
+  };
+}
+
+function visibleForBid(g){
+  if(g.onlyWithBid && !g.onlyWithBid.includes(state.bidSelected)) return false;
+  if(g.hideWithBid && g.hideWithBid.includes(state.bidSelected)) return false;
+  return true;
+}
+
+function renderLocationSelect(){
+  const field = document.getElementById('locationField');
+  const sel = document.getElementById('locationSelect');
+  sel.innerHTML = '';
+  const locs = Object.keys(DATA[state.objective].locations);
+  const single = locs.length===1 ? DATA[state.objective].locations[locs[0]] : null;
+
+  if(single && single.hideLocationField){
+    field.style.display='none';
+    state.location = locs[0];
+    handleEngagementTypeVisibility();
+    renderGoalSelect();
+    return;
+  }
+  field.style.display='block';
+
+  locs.forEach(l=>{
+    const opt = document.createElement('option');
+    opt.value = l; opt.textContent = l;
+    sel.appendChild(opt);
+  });
+  sel.value = locs[0];
+  state.location = locs[0];
+  sel.onchange = ()=>{
+    state.location = sel.value;
+    state.engagementType = null;
+    state.goalSelected = null;
+    handleEngagementTypeVisibility();
+    renderGoalSelect();
+    renderExplain();
+  };
+  handleEngagementTypeVisibility();
+  renderGoalSelect();
+}
+
+function handleEngagementTypeVisibility(){
+  const locData = DATA[state.objective].locations[state.location];
+  const wrap = document.getElementById('engagementTypeWrap');
+  if(locData.needsEngagementType){
+    wrap.style.display='block';
+    const sel = document.getElementById('engagementTypeSelect');
+    sel.innerHTML='';
+    const types = Object.keys(locData.engagementTypes);
+    types.forEach(t=>{
+      const opt = document.createElement('option');
+      opt.value=t; opt.textContent=t;
+      sel.appendChild(opt);
+    });
+    sel.value = types[0];
+    state.engagementType = types[0];
+    sel.onchange = ()=>{
+      state.engagementType = sel.value;
+      state.goalSelected = null;
+      renderGoalSelect();
+      renderExplain();
+    };
+  } else {
+    wrap.style.display='none';
+    state.engagementType = null;
+  }
+}
+
+function getCurrentLocationData(){
+  const locData = DATA[state.objective].locations[state.location];
+  if(locData.needsEngagementType){
+    return locData.engagementTypes[state.engagementType];
+  }
+  return locData;
+}
+
+function renderGoalSelect(){
+  const sel = document.getElementById('goalSelect');
+  const hint = document.getElementById('lockedHint');
+  sel.innerHTML = '';
+  const data = getCurrentLocationData();
+  const groupTitle = DATA[state.objective].locations[state.location].groupTitle;
+
+  const visibleGoals = data.goals.filter(visibleForBid);
+  const visibleOther = (data.other||[]).filter(visibleForBid);
+
+  const mainGroup = document.createElement('optgroup');
+  mainGroup.label = groupTitle || 'Goals';
+  visibleGoals.forEach(g=>{
+    const opt = document.createElement('option');
+    opt.value = g.title;
+    opt.textContent = g.title + (g.recommended ? ' ⭐ Recommended' : '');
+    mainGroup.appendChild(opt);
+  });
+  sel.appendChild(mainGroup);
+
+  if(visibleOther.length){
+    const otherGroup = document.createElement('optgroup');
+    otherGroup.label = data.otherTitle || 'Other goals';
+    visibleOther.forEach(g=>{
+      const opt = document.createElement('option');
+      opt.value = g.title; opt.textContent = g.title;
+      otherGroup.appendChild(opt);
+    });
+    sel.appendChild(otherGroup);
+  }
+
+  const rec = visibleGoals.find(g=>g.recommended) || visibleGoals[0] || visibleOther[0];
+  sel.value = rec.title;
+  state.goalSelected = rec.title;
+
+  if(data.locked){
+    sel.disabled = true;
+    hint.style.display='block';
+    hint.textContent = '🔒 ' + rec.title + ' is the only performance goal available for this conversion location.';
+  } else {
+    sel.disabled = false;
+    hint.style.display='none';
+  }
+
+  sel.onchange = ()=>{
+    state.goalSelected = sel.value;
+    renderExplain();
+  };
+}
+
+function renderExplain(){
+  const wrap = document.getElementById('explainWrap');
+  const crumb = document.getElementById('breadcrumb');
+  if(!state.objective){
+    wrap.innerHTML = '<div class="empty-state">בחר אובייקט כדי להתחיל</div>';
+    crumb.innerHTML='';
+    return;
+  }
+  let crumbHtml = `<span class="crumb">${state.objective}</span>`;
+  if(state.location && state.location !== 'default') crumbHtml += `<span class="crumb">${state.location}</span>`;
+  if(state.engagementType) crumbHtml += `<span class="crumb">${state.engagementType}</span>`;
+  if(state.goalSelected) crumbHtml += `<span class="crumb">${state.goalSelected}</span>`;
+  if(state.bidSelected) crumbHtml += `<span class="crumb">${state.bidSelected}</span>`;
+  crumb.innerHTML = crumbHtml;
+
+  let html = '';
+
+  if(state.scenarioInfo){
+    const s = state.scenarioInfo;
+    html += `
+      <div class="scenario-box">
+        <div class="explain-title">💡 תרחיש: ${s.text}</div>
+        <div class="explain-row"><b>למה המסלול הזה:</b> ${s.why}</div>
+        <div class="alt-row"><b>חלופות אפשריות:</b> ${s.alt}</div>
+      </div>
+    `;
+  }
+
+  const locData = getCurrentLocationData();
+  const allGoals = [...locData.goals, ...(locData.other||[])];
+  const g = allGoals.find(x=>x.title===state.goalSelected);
+  if(g){
+    html += `
+      <div class="explain-box active">
+        <div class="explain-title">🎯 ${g.title} ${g.recommended?'<span class="rec-badge">Recommended</span>':''}</div>
+        <div class="explain-row"><b>תיאור רשמי:</b> ${g.desc}</div>
+        <div class="explain-row"><b>מתי להשתמש:</b> ${g.explain}</div>
+        ${g.useWhen?`<div class="tag-row">${g.useWhen.map(t=>`<span class="tag">${t}</span>`).join('')}</div>`:''}
+      </div>
+    `;
+  }
+
+  const bs = DATA[state.objective].bidStrategies.find(s=>s.title===state.bidSelected);
+  if(bs){
+    html += `
+      <div class="explain-box">
+        <div class="explain-title">⚖️ Bid Strategy: ${bs.title}</div>
+        <div class="explain-row"><b>תיאור רשמי:</b> ${bs.desc}</div>
+        <div class="explain-row"><b>מתי להשתמש:</b> ${bs.explain}</div>
+      </div>
+    `;
+  }
+
+  wrap.innerHTML = html;
+}
+
+initObjectiveSelect();
+buildScenarioSelect();
+</script>
+
+</body>
+</html>

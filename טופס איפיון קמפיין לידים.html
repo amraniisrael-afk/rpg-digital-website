@@ -1,0 +1,2279 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>איפיון קמפיינים | RPG Digital</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f0f2f7;
+  color: #1a1a2e;
+  direction: rtl;
+  padding: 20px;
+  line-height: 1.6;
+}
+
+.container { max-width: 820px; margin: 0 auto; }
+
+header {
+  text-align: center;
+  padding: 48px 0 28px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #e0e4ef;
+}
+
+.logo-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #6c63ff 0%, #a855f7 100%);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
+header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 8px;
+}
+
+header p {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* ── Tab nav ── */
+.tab-nav {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 28px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 8px;
+  border: 1px solid #e0e4ef;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.tab-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  padding: 13px 20px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #888;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, #6c63ff 0%, #a855f7 100%);
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(108,99,255,0.3);
+}
+
+.tab-btn:not(.active):hover { background: #f0eeff; color: #6c63ff; }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── Sections ── */
+.section {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 28px;
+  margin-bottom: 20px;
+  border: 1px solid #e0e4ef;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eef0f7;
+}
+
+.section-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #6c63ff 0%, #a855f7 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.section-header h2 { font-size: 1.1rem; font-weight: 700; color: #1a1a2e; }
+.section-header .section-desc { font-size: 0.8rem; color: #888; margin-top: 2px; }
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.form-row.single { grid-template-columns: 1fr; }
+.form-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+
+label { font-size: 0.85rem; color: #333; font-weight: 600; }
+label .req { color: #e53e3e; margin-right: 3px; }
+
+input[type="text"],
+input[type="number"],
+input[type="url"],
+input[type="tel"],
+input[type="email"],
+select,
+textarea {
+  background: #f8f9fc;
+  border: 1.5px solid #d1d9ef;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #1a1a2e;
+  font-size: 0.9rem;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  direction: rtl;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #6c63ff;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.12);
+}
+
+textarea { resize: vertical; min-height: 80px; }
+select option { background: #fff; color: #1a1a2e; }
+input::placeholder, textarea::placeholder { color: #aab; }
+
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: #f8f9fc;
+  border: 1.5px solid #d1d9ef;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.checkbox-item:has(input:checked) { border-color: #6c63ff; background: #f0eeff; }
+
+.checkbox-item input[type="checkbox"],
+.checkbox-item input[type="radio"] {
+  width: 16px; height: 16px;
+  accent-color: #6c63ff;
+  border: none; background: none; padding: 0;
+}
+
+.checkbox-item label { font-size: 0.88rem; color: #333; cursor: pointer; margin: 0; font-weight: 500; }
+
+.hint { font-size: 0.76rem; color: #999; margin-top: 2px; }
+.divider { border: none; border-top: 1px solid #eef0f7; margin: 20px 0; }
+
+/* ── WhatsApp section ── */
+.wa-section {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border: 1.5px solid #86efac;
+  border-radius: 14px;
+  padding: 32px;
+  margin-bottom: 20px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.wa-section h3 { color: #16a34a; font-size: 1.3rem; margin-bottom: 8px; }
+.wa-section p { color: #555; font-size: 0.875rem; margin-bottom: 20px; }
+
+.wa-phone-row {
+  display: flex;
+  gap: 10px;
+  max-width: 380px;
+  margin: 0 auto 16px;
+}
+
+.wa-phone-row input { flex: 1; text-align: center; letter-spacing: 1px; }
+
+.btn-wa {
+  background: #25d366;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 28px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.2s, transform 0.1s;
+  width: 100%;
+  max-width: 380px;
+  justify-content: center;
+}
+
+.btn-wa:hover { background: #1da851; transform: translateY(-1px); }
+
+.btn-preview {
+  background: #fff;
+  color: #6c63ff;
+  border: 1.5px solid #6c63ff;
+  border-radius: 8px;
+  padding: 8px 20px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+  margin-bottom: 12px;
+}
+.btn-preview:hover { background: #f0eeff; }
+
+.btn-copy {
+  background: #fff;
+  color: #555;
+  border: 1.5px solid #d1d9ef;
+  border-radius: 8px;
+  padding: 8px 20px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+  margin-bottom: 12px;
+  margin-right: 8px;
+}
+.btn-copy:hover { border-color: #999; color: #222; }
+
+.preview-box {
+  background: #fff;
+  border: 1.5px solid #d1d9ef;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 12px auto 16px;
+  text-align: right;
+  font-size: 0.82rem;
+  white-space: pre-wrap;
+  display: none;
+  max-width: 560px;
+  max-height: 380px;
+  overflow-y: auto;
+  line-height: 1.8;
+  color: #1a1a2e;
+}
+
+.copy-success { color: #16a34a; font-size: 0.8rem; display: none; margin-top: 6px; }
+
+.wa-divider {
+  border: none;
+  border-top: 1px dashed #a7d9b4;
+  margin: 20px auto;
+  max-width: 380px;
+}
+
+.btn-email {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 13px 28px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.2s, transform 0.1s;
+  width: 100%;
+  max-width: 380px;
+  justify-content: center;
+  margin-top: 4px;
+}
+.btn-email:hover { background: #1d4ed8; transform: translateY(-1px); }
+
+/* ── City Picker ── */
+.cp-wrap {
+  background: #f8f9fc;
+  border: 1.5px solid #d1d9ef;
+  border-radius: 8px;
+  padding: 6px 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  position: relative;
+  cursor: text;
+  min-height: 42px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.cp-wrap:focus-within {
+  border-color: #6c63ff;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(108,99,255,0.12);
+}
+.cp-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(135deg,#6c63ff,#a855f7);
+  color: #fff;
+  border-radius: 20px;
+  padding: 3px 10px 3px 8px;
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+.cp-tag-x {
+  cursor: pointer;
+  font-size: 1.05rem;
+  line-height: 1;
+  opacity: 0.75;
+  margin-right: 1px;
+}
+.cp-tag-x:hover { opacity: 1; }
+.cp-input {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 4px 6px !important;
+  min-width: 110px;
+  flex: 1;
+  font-size: 0.9rem;
+  direction: rtl;
+}
+.cp-input:focus { outline: none; border: none !important; box-shadow: none !important; }
+.cp-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0; left: 0;
+  background: #fff;
+  border: 1.5px solid #d1d9ef;
+  border-radius: 10px;
+  max-height: 210px;
+  overflow-y: auto;
+  z-index: 300;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.13);
+}
+.cp-option {
+  padding: 9px 14px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: #1a1a2e;
+  transition: background 0.12s;
+}
+.cp-option:hover { background: #f0eeff; color: #6c63ff; }
+.cp-no-results { padding: 12px 14px; color: #999; font-size: 0.85rem; }
+
+@media (max-width: 600px) {
+  .form-row, .form-row.triple { grid-template-columns: 1fr; }
+  header h1 { font-size: 1.5rem; }
+  .tab-btn { font-size: 0.82rem; padding: 10px 10px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="logo-badge">RPG Digital</div>
+  <h1>📋 טפסי איפיון קמפיינים</h1>
+  <p>בחר סוג קמפיין, מלא את הטופס ושלח סיכום ישיר לוואטסאפ</p>
+</header>
+
+<!-- Tab navigation -->
+<div class="tab-nav">
+  <button class="tab-btn active" data-tab="leads">📋 קמפיין לידים</button>
+  <button class="tab-btn" data-tab="ecom">🛒 חנות איקומרס</button>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     TAB 1 — לידים
+═══════════════════════════════════════════ -->
+<div id="tab-leads" class="tab-panel active">
+<form id="form">
+
+<!-- 1. פרטי העסק -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">🏢</div>
+    <div>
+      <h2>פרטי העסק</h2>
+      <div class="section-desc">מידע בסיסי על הלקוח ועסקו</div>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>שם העסק <span class="req">*</span></label>
+      <input type="text" id="businessName" placeholder="לדוגמה: קליניקת ד״ר כהן">
+    </div>
+    <div class="form-group">
+      <label>שם איש הקשר <span class="req">*</span></label>
+      <input type="text" id="contactName" placeholder="שם מלא">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>טלפון</label>
+      <input type="tel" id="contactPhone" placeholder="050-0000000">
+    </div>
+    <div class="form-group">
+      <label>מייל</label>
+      <input type="email" id="contactEmail" placeholder="name@example.com">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>תחום עיסוק <span class="req">*</span></label>
+      <input type="text" id="industry" list="industryList" placeholder="בחר או הקלד תחום...">
+      <datalist id="industryList">
+        <option>נדל"ן</option>
+        <option>רפואה ובריאות</option>
+        <option>יופי ואסתטיקה</option>
+        <option>פיננסים וביטוח</option>
+        <option>חינוך והכשרה</option>
+        <option>משפטים</option>
+        <option>בנייה ושיפוצים</option>
+        <option>רכב</option>
+        <option>עסקים ו-B2B</option>
+        <option>תיירות ופנאי</option>
+        <option>אחר</option>
+      </datalist>
+    </div>
+    <div class="form-group">
+      <label>ותק העסק</label>
+      <select id="businessAge">
+        <option value="">בחר...</option>
+        <option>פחות משנה</option>
+        <option>1-3 שנים</option>
+        <option>3-10 שנים</option>
+        <option>מעל 10 שנים</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>תיאור קצר של העסק</label>
+      <textarea id="businessDesc" placeholder="מה העסק עושה, מה השירות/המוצר, מה הקהל הכללי..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- 2. לינקים -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">🔗</div>
+    <div>
+      <h2>נוכחות דיגיטלית — לינקים</h2>
+      <div class="section-desc">כל הקישורים הרלוונטיים של הלקוח</div>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>אתר הבית</label>
+      <input type="url" id="linkWebsite" placeholder="https://www.example.com">
+    </div>
+    <div class="form-group">
+      <label>עמוד נחיתה (Landing Page)</label>
+      <input type="url" id="linkLanding" placeholder="https://...">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>דף פייסבוק</label>
+      <input type="url" id="linkFacebook" placeholder="https://facebook.com/...">
+    </div>
+    <div class="form-group">
+      <label>חשבון אינסטגרם</label>
+      <input type="url" id="linkInstagram" placeholder="https://instagram.com/...">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>ערוץ יוטיוב</label>
+      <input type="url" id="linkYoutube" placeholder="https://youtube.com/...">
+    </div>
+    <div class="form-group">
+      <label>חשבון טיקטוק</label>
+      <input type="url" id="linkTiktok" placeholder="https://tiktok.com/@...">
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>לינקים נוספים</label>
+      <textarea id="linkOther" placeholder="לינקסטר, LinkedIn, טלגרם, דף ווייז, כל לינק רלוונטי אחר..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- 3. יעדי הקמפיין -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">🎯</div>
+    <div>
+      <h2>יעדי הקמפיין</h2>
+      <div class="section-desc">מה רוצים להשיג ובאיזו פלטפורמה</div>
+    </div>
+  </div>
+
+  <div class="form-group" style="margin-bottom:16px">
+    <label>פלטפורמות פרסום <span class="req">*</span></label>
+    <div class="checkbox-group">
+      <div class="checkbox-item"><input type="checkbox" id="pfFB"><label for="pfFB">פייסבוק / אינסטגרם</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="pfGoogle"><label for="pfGoogle">גוגל Search</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="pfDisplay"><label for="pfDisplay">גוגל Display</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="pfYT"><label for="pfYT">יוטיוב</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="pfTT"><label for="pfTT">טיקטוק</label></div>
+    </div>
+  </div>
+
+  <div class="form-row triple">
+    <div class="form-group">
+      <label>תקציב חודשי כולל (₪)</label>
+      <input type="number" id="totalBudget" placeholder="5000">
+    </div>
+    <div class="form-group">
+      <label>לידים חודשיים יעד</label>
+      <input type="number" id="targetLeads" placeholder="100">
+    </div>
+    <div class="form-group">
+      <label>CPL מקסימלי (₪)</label>
+      <input type="number" id="maxCPL" placeholder="80">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>פיצול תקציב — פייסבוק (₪)</label>
+      <input type="number" id="budgetFB" placeholder="אם רלוונטי">
+    </div>
+    <div class="form-group">
+      <label>פיצול תקציב — גוגל (₪)</label>
+      <input type="number" id="budgetGoogle" placeholder="אם רלוונטי">
+    </div>
+  </div>
+
+  <div class="form-group" style="margin-bottom:16px">
+    <label>מה קורה אחרי שמגיע ליד?</label>
+    <div class="checkbox-group">
+      <div class="checkbox-item"><input type="checkbox" id="alPhone"><label for="alPhone">שיחת מכירה טלפונית</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="alMeeting"><label for="alMeeting">פגישה / ייעוץ</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="alDemo"><label for="alDemo">ניסיון / דמו</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="alPurchase"><label for="alPurchase">רכישה ישירה</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="alCourse"><label for="alCourse">הרשמה לקורס</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="alQuote"><label for="alQuote">שליחת הצעת מחיר</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="alOther"><label for="alOther">אחר</label></div>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>מתי רוצים להתחיל?</label>
+      <input type="text" id="startDate" placeholder="לדוגמה: בעוד שבועיים, תאריך ספציפי">
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>מה ההגדרה של "ליד מוצלח"?</label>
+      <textarea id="successLead" placeholder="לדוגמה: מחפש קנייה תוך 3 חודשים, גר בת״א, מגיל 35 ומעלה..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- 4. קהל יעד -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">👥</div>
+    <div>
+      <h2>קהל היעד</h2>
+      <div class="section-desc">דמוגרפיה, גיאוגרפיה ופסיכוגרפיה</div>
+    </div>
+  </div>
+
+  <div class="form-row triple">
+    <div class="form-group">
+      <label>גיל מינימלי</label>
+      <input type="number" id="ageMin" placeholder="18">
+    </div>
+    <div class="form-group">
+      <label>גיל מקסימלי</label>
+      <input type="number" id="ageMax" placeholder="65">
+    </div>
+    <div class="form-group">
+      <label>מין</label>
+      <select id="gender">
+        <option value="all">כולם</option>
+        <option value="male">גברים בלבד</option>
+        <option value="female">נשים בלבד</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>אזורים גיאוגרפיים</label>
+      <div class="cp-wrap" id="geoTarget"></div>
+    </div>
+    <div class="form-group">
+      <label>רדיוס סביב כתובת העסק (ק״מ)</label>
+      <input type="number" id="radius" placeholder="לדוגמה: 20 — אופציונלי">
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>מאפייני הלקוח האידיאלי</label>
+      <textarea id="idealCustomer" placeholder="תחומי עניין, מקצוע, הכנסה משוערת, מצב משפחתי, תחביבים..."></textarea>
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>מה הכאב / הצורך שהשירות פותר?</label>
+      <textarea id="painPoint" placeholder="מה הלקוח מרגיש לפני שמוצא אתכם? מה הוא מחפש? מה מקשה עליו?"></textarea>
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>מי לא רלוונטי לנו? (קהלים לאסור)</label>
+      <input type="text" id="exclusions" placeholder="לדוגמה: אנשים מחוץ לישראל, גיל מתחת ל-25, מתחרים...">
+    </div>
+  </div>
+</div>
+
+<!-- 5. הליד ותהליך מכירה -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">📝</div>
+    <div>
+      <h2>הליד ותהליך המכירה</h2>
+      <div class="section-desc">איך מגיע הליד, מה קורה איתו אחר כך</div>
+    </div>
+  </div>
+
+  <div class="form-group" style="margin-bottom:16px">
+    <label>איך מגיע הליד? (ניתן לבחור כמה)</label>
+    <div class="checkbox-group">
+      <div class="checkbox-item"><input type="checkbox" id="lmFBForm"><label for="lmFBForm">טופס פייסבוק (Instant Form)</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="lmLanding"><label for="lmLanding">עמוד נחיתה — טופס</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="lmCall"><label for="lmCall">Click to Call</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="lmWhatsapp"><label for="lmWhatsapp">וואטסאפ</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="lmGoogleForm"><label for="lmGoogleForm">טופס גוגל (Lead Form)</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="lmChat"><label for="lmChat">צ'אט באתר</label></div>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>זמן תגובה לליד</label>
+      <select id="responseTime">
+        <option value="">בחר...</option>
+        <option>עד שעה</option>
+        <option>עד 3 שעות</option>
+        <option>תוך יום עסקים</option>
+        <option>עד 48 שעות</option>
+        <option>אין SLA מוגדר</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group" style="margin-bottom:16px">
+    <label>שדות נדרשים בטופס הליד</label>
+    <div class="checkbox-group">
+      <div class="checkbox-item"><input type="checkbox" id="fldName" checked><label for="fldName">שם מלא</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="fldPhone" checked><label for="fldPhone">טלפון</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="fldEmail"><label for="fldEmail">מייל</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="fldCity"><label for="fldCity">עיר</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="fldMsg"><label for="fldMsg">הודעה חופשית</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="fldBudget"><label for="fldBudget">תקציב</label></div>
+    </div>
+    <input type="text" id="fldOther" placeholder="שדות נוספים..." style="margin-top:8px">
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>מערכת CRM / ניהול לידים</label>
+      <select id="crm">
+        <option value="">בחר...</option>
+        <option>אין CRM</option>
+        <option>גיליון אקסל</option>
+        <option>מייל בלבד</option>
+        <option>Monday.com</option>
+        <option>Zoho CRM</option>
+        <option>HubSpot</option>
+        <option>Salesforce</option>
+        <option>אחר</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>מחזור מכירה ממוצע</label>
+      <select id="salesCycle">
+        <option value="">בחר...</option>
+        <option>מיידי — באותו יום</option>
+        <option>עד שבוע</option>
+        <option>1-4 שבועות</option>
+        <option>1-3 חודשים</option>
+        <option>מעל 3 חודשים</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>שווי עסקה ממוצעת (₪)</label>
+      <input type="number" id="dealValue" placeholder="3000">
+    </div>
+    <div class="form-group">
+      <label>אחוז סגירה ממוצע מליד</label>
+      <input type="text" id="closeRate" placeholder="לדוגמה: 10%">
+    </div>
+  </div>
+</div>
+
+<!-- 6. הגדרות טכניות -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">⚙️</div>
+    <div>
+      <h2>הגדרות טכניות ומעקב</h2>
+      <div class="section-desc">פיקסל, המרות, CRM ותשתית</div>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>URL עמוד הנחיתה / אתר</label>
+      <input type="url" id="websiteUrl" placeholder="https://...">
+    </div>
+    <div class="form-group">
+      <label>פלטפורמת האתר</label>
+      <select id="sitePlatform">
+        <option value="">בחר...</option>
+        <option>WordPress</option>
+        <option>Wix</option>
+        <option>Elementor</option>
+        <option>Shopify</option>
+        <option>קוד ידני</option>
+        <option>אין אתר</option>
+        <option>אחר</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>פיקסל פייסבוק מותקן?</label>
+      <select id="fbPixel">
+        <option value="">בחר...</option>
+        <option>כן, מוגדר ופועל</option>
+        <option>כן, אבל לא בדוק</option>
+        <option>לא מותקן</option>
+        <option>לא יודע</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Google Analytics (GA4)?</label>
+      <select id="ga4">
+        <option value="">בחר...</option>
+        <option>כן, מוגדר</option>
+        <option>לא מוגדר</option>
+        <option>לא יודע</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>Google Tag Manager (GTM)?</label>
+      <select id="gtm">
+        <option value="">בחר...</option>
+        <option>כן</option>
+        <option>לא</option>
+        <option>לא יודע</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>מעקב המרות גוגל?</label>
+      <select id="googleConv">
+        <option value="">בחר...</option>
+        <option>כן, מוגדר</option>
+        <option>לא</option>
+        <option>לא יודע</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>Business Manager / חשבון פרסום?</label>
+      <select id="bm">
+        <option value="">בחר...</option>
+        <option>כן, BM מסודר עם גישות</option>
+        <option>יש חשבון מודעות ישיר</option>
+        <option>אין כלום — צריך לפתוח</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>גישה לחשבון גוגל?</label>
+      <select id="googleAccess">
+        <option value="">בחר...</option>
+        <option>כן, יש חשבון Google Ads</option>
+        <option>יש חשבון אבל צריך גישה</option>
+        <option>אין חשבון</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>הערות טכניות / מגבלות</label>
+      <input type="text" id="techNotes" placeholder="מגבלות גישה, בעיות ידועות, הגדרות מיוחדות...">
+    </div>
+  </div>
+</div>
+
+<!-- 7. קריאייטיב והצעת ערך -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">🎨</div>
+    <div>
+      <h2>קריאייטיב והצעת ערך</h2>
+      <div class="section-desc">מיתוג, USP והנכסים הקיימים</div>
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>הצעת הערך הראשית (USP)</label>
+      <textarea id="usp" placeholder="למה לפנות דווקא אליכם? מה אתם נותנים שאחרים לא?"></textarea>
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>ההצעה / הפרומו הנוכחי (Lead Magnet)</label>
+      <textarea id="offer" placeholder="ייעוץ חינם, הנחה ראשונה, ניסיון מוגבל, מתנה, הדרכה חינם..."></textarea>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>נכסי קריאייטיב קיימים</label>
+      <select id="assets">
+        <option value="">בחר...</option>
+        <option>כן — תמונות + וידאו</option>
+        <option>כן — תמונות בלבד</option>
+        <option>כן — וידאו בלבד</option>
+        <option>לא, צריך לייצר הכול</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Tone of Voice</label>
+      <select id="tone">
+        <option value="">בחר...</option>
+        <option>מקצועי ורשמי</option>
+        <option>ידידותי ונגיש</option>
+        <option>נלהב ואנרגטי</option>
+        <option>אמין ורציני</option>
+        <option>קליל ומצחיק</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>צבעי מותג</label>
+      <input type="text" id="brandColors" placeholder="כחול נייבי + זהב, #003366, כתום...">
+    </div>
+    <div class="form-group">
+      <label>לוגו זמין?</label>
+      <select id="hasLogo">
+        <option value="">בחר...</option>
+        <option>כן — SVG / AI (וקטור)</option>
+        <option>כן — PNG בלבד</option>
+        <option>אין לוגו</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>מסרים שאסור לציין / הגבלות תוכן</label>
+      <input type="text" id="contentRestrictions" placeholder="הגבלות רגולטוריות, מסרים שמכעיסים לקוחות, מילים שלא לכתוב...">
+      <div class="hint">רלוונטי במיוחד: פיננסים, רפואה, נדל״ן</div>
+    </div>
+  </div>
+</div>
+
+<!-- 8. מתחרים והיסטוריה -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">🔍</div>
+    <div>
+      <h2>מתחרים והיסטוריית פרסום</h2>
+      <div class="section-desc">תחרות, לקחים ועמדת שוק</div>
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>מתחרים עיקריים</label>
+      <input type="text" id="competitors" placeholder="שמות / אתרים / חשבונות רלוונטיים">
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>מה מייחד אתכם מהמתחרים?</label>
+      <textarea id="differentiator" placeholder="מחיר, שירות, מהירות, ניסיון, מיקום, טכנולוגיה..."></textarea>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>היסטוריית קמפיינים?</label>
+      <select id="campaignHistory">
+        <option value="">בחר...</option>
+        <option>כן — פייסבוק</option>
+        <option>כן — גוגל</option>
+        <option>כן — שתי הפלטפורמות</option>
+        <option>לא — ראשון</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>CPL ממוצע היסטורי (₪)</label>
+      <input type="number" id="historicalCPL" placeholder="אם יש — כמה עלה ליד בממוצע">
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>מה עבד / לא עבד בעבר?</label>
+      <textarea id="pastLearnings" placeholder="פורמטים שעבדו, קהלים שלא המירו, הצעות שעבדו, פלטפורמות שאכזבו..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- 9. הערות -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">💬</div>
+    <div><h2>הערות נוספות</h2></div>
+  </div>
+  <div class="form-row single">
+    <div class="form-group">
+      <label>כל מה שלא כוסה למעלה וחשוב שנדע</label>
+      <textarea id="additionalNotes" placeholder="בקשות מיוחדות, לוחות זמנים, רגישויות, הערות כלליות..." style="min-height:100px"></textarea>
+    </div>
+  </div>
+</div>
+
+</form>
+
+<!-- WhatsApp — Leads -->
+<div class="wa-section">
+  <h3>📲 שלח סיכום לוואטסאפ</h3>
+  <p>הכנס מספר יעד — הסיכום ייפתח ישירות בוואטסאפ</p>
+  <div class="wa-phone-row">
+    <input type="tel" id="waPhone" placeholder="050-0000000 (אופציונלי)">
+  </div>
+  <div style="margin-bottom:12px">
+    <button type="button" class="btn-preview" onclick="togglePreview()">👁 תצוגה מקדימה</button>
+    <button type="button" class="btn-copy" onclick="copyToClipboard()">📋 העתק טקסט</button>
+  </div>
+  <div class="preview-box" id="previewBox"></div>
+  <div class="copy-success" id="copySuccess">✅ הועתק ללוח!</div>
+  <button type="button" class="btn-wa" onclick="sendToWhatsApp()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    שלח סיכום לוואטסאפ
+  </button>
+
+  <hr class="wa-divider">
+  <p style="color:#555;font-size:0.875rem;margin-bottom:12px">או שלח ישירות למייל</p>
+  <div class="wa-phone-row">
+    <input type="email" id="emailAddr" placeholder="כתובת מייל (אופציונלי)">
+  </div>
+  <button type="button" class="btn-email" onclick="sendToEmail()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+    </svg>
+    שלח סיכום למייל
+  </button>
+</div>
+
+</div><!-- /tab-leads -->
+
+
+<!-- ═══════════════════════════════════════════
+     TAB 2 — איקומרס
+═══════════════════════════════════════════ -->
+<div id="tab-ecom" class="tab-panel">
+<form id="ecom-form">
+
+<!-- E1. פרטי העסק -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">🏢</div>
+    <div>
+      <h2>פרטי העסק</h2>
+      <div class="section-desc">מידע בסיסי על הלקוח ועסקו</div>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>שם העסק / החנות <span class="req">*</span></label>
+      <input type="text" id="e_businessName" placeholder="לדוגמה: StyleHub, מגדל העשן">
+    </div>
+    <div class="form-group">
+      <label>שם איש הקשר <span class="req">*</span></label>
+      <input type="text" id="e_contactName" placeholder="שם מלא">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>טלפון</label>
+      <input type="tel" id="e_contactPhone" placeholder="050-0000000">
+    </div>
+    <div class="form-group">
+      <label>מייל</label>
+      <input type="email" id="e_contactEmail" placeholder="name@example.com">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>קטגוריית מוצר ראשית <span class="req">*</span></label>
+      <input type="text" id="e_productCategory" list="e_categoryList" placeholder="בחר או הקלד קטגוריה...">
+      <datalist id="e_categoryList">
+        <option>אופנה והלבשה</option>
+        <option>הנעלה ואקססוריז</option>
+        <option>יופי וקוסמטיקה</option>
+        <option>בית ועיצוב</option>
+        <option>ספורט וכושר</option>
+        <option>ילדים ותינוקות</option>
+        <option>אלקטרוניקה וגאדג'טים</option>
+        <option>מזון ומשקאות</option>
+        <option>חיות מחמד</option>
+        <option>ספרים ולימוד</option>
+        <option>בריאות ותוספי תזונה</option>
+        <option>תכשיטים ושעונים</option>
+        <option>אחר</option>
+      </datalist>
+    </div>
+    <div class="form-group">
+      <label>ותק העסק</label>
+      <select id="e_businessAge">
+        <option value="">בחר...</option>
+        <option>פחות משנה</option>
+        <option>1-3 שנים</option>
+        <option>3-10 שנים</option>
+        <option>מעל 10 שנים</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>תיאור קצר של החנות והמוצרים</label>
+      <textarea id="e_businessDesc" placeholder="מה מוכרים, מה ייחודי בחנות, מה הקהל הכללי..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- E2. לינקים -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">🔗</div>
+    <div>
+      <h2>נוכחות דיגיטלית — לינקים</h2>
+      <div class="section-desc">כל הקישורים הרלוונטיים של הלקוח</div>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>אתר החנות <span class="req">*</span></label>
+      <input type="url" id="e_linkWebsite" placeholder="https://www.example.com">
+    </div>
+    <div class="form-group">
+      <label>עמוד נחיתה / מבצע ספציפי</label>
+      <input type="url" id="e_linkLanding" placeholder="https://...">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>דף פייסבוק</label>
+      <input type="url" id="e_linkFacebook" placeholder="https://facebook.com/...">
+    </div>
+    <div class="form-group">
+      <label>חשבון אינסטגרם</label>
+      <input type="url" id="e_linkInstagram" placeholder="https://instagram.com/...">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>חשבון טיקטוק</label>
+      <input type="url" id="e_linkTiktok" placeholder="https://tiktok.com/@...">
+    </div>
+    <div class="form-group">
+      <label>ערוץ יוטיוב / Pinterest</label>
+      <input type="url" id="e_linkOther2" placeholder="https://...">
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>לינקים נוספים</label>
+      <textarea id="e_linkOther" placeholder="לינקסטר, Etsy, Amazon, Yad2, כל פלטפורמה נוספת..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- E3. החנות והמוצרים -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">🛒</div>
+    <div>
+      <h2>החנות והמוצרים</h2>
+      <div class="section-desc">פרטי הקטלוג, מחירים ומדיניות</div>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>פלטפורמת החנות <span class="req">*</span></label>
+      <input type="text" id="e_platform" list="e_platformList" placeholder="בחר או הקלד פלטפורמה...">
+      <datalist id="e_platformList">
+        <option>Shopify</option>
+        <option>WooCommerce (WordPress)</option>
+        <option>Wix eCommerce</option>
+        <option>BigCommerce</option>
+        <option>Magento</option>
+        <option>Ecwid</option>
+        <option>קוד מותאם אישית</option>
+        <option>אחר</option>
+      </datalist>
+    </div>
+    <div class="form-group">
+      <label>מספר מוצרים פעילים</label>
+      <select id="e_productCount">
+        <option value="">בחר...</option>
+        <option>עד 20 מוצרים</option>
+        <option>20–100 מוצרים</option>
+        <option>100–500 מוצרים</option>
+        <option>500–2,000 מוצרים</option>
+        <option>מעל 2,000 מוצרים</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row triple">
+    <div class="form-group">
+      <label>מחיר ממוצע לעסקה — AOV (₪)</label>
+      <input type="number" id="e_aov" placeholder="250">
+    </div>
+    <div class="form-group">
+      <label>מחיר מינימלי (₪)</label>
+      <input type="number" id="e_priceMin" placeholder="50">
+    </div>
+    <div class="form-group">
+      <label>מחיר מקסימלי (₪)</label>
+      <input type="number" id="e_priceMax" placeholder="1500">
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>קטגוריות / מוצרים למיקוד בקמפיין</label>
+      <textarea id="e_focusProducts" placeholder="אילו מוצרים או קטגוריות נדחוף בקמפיין? הנמכרות ביותר? הרווחיות ביותר?"></textarea>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>מדיניות משלוח</label>
+      <input type="text" id="e_shipping" list="e_shippingList" placeholder="בחר או הקלד...">
+      <datalist id="e_shippingList">
+        <option>משלוח חינם לכל הזמנה</option>
+        <option>משלוח חינם מעל סכום מסוים</option>
+        <option>משלוח בתשלום</option>
+        <option>איסוף עצמי בלבד</option>
+        <option>משלוח + איסוף עצמי</option>
+      </datalist>
+    </div>
+    <div class="form-group">
+      <label>זמן משלוח ממוצע</label>
+      <input type="text" id="e_shippingTime" placeholder="1-3 ימי עסקים, עד שבוע...">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>מדיניות החזרות</label>
+      <select id="e_returns">
+        <option value="">בחר...</option>
+        <option>החזרה חינם תוך 14 יום</option>
+        <option>החזרה בתשלום תוך 14 יום</option>
+        <option>החזרה תוך 30 יום</option>
+        <option>אין החזרות</option>
+        <option>תלוי מוצר</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>אמצעי תשלום</label>
+      <input type="text" id="e_payment" placeholder="כרטיס אשראי, PayPal, ביט, פה, תשלומים...">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>יש מלאי מוגבל / בעיות מלאי?</label>
+      <select id="e_stock">
+        <option value="">בחר...</option>
+        <option>לא — מלאי יציב ורחב</option>
+        <option>כן — חלק מהמוצרים מוגבלים</option>
+        <option>כן — לעיתים קרובות</option>
+        <option>מוצרים פיזיים עם ייצור לפי דרישה</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>אחוז רווח גולמי ממוצע</label>
+      <input type="text" id="e_margin" placeholder="לדוגמה: 40%, 60%...">
+    </div>
+  </div>
+</div>
+
+<!-- E4. יעדי הקמפיין -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">🎯</div>
+    <div>
+      <h2>יעדי הקמפיין</h2>
+      <div class="section-desc">תקציב, ROAS, הכנסות ומדדי הצלחה</div>
+    </div>
+  </div>
+
+  <div class="form-group" style="margin-bottom:16px">
+    <label>פלטפורמות פרסום <span class="req">*</span></label>
+    <div class="checkbox-group">
+      <div class="checkbox-item"><input type="checkbox" id="e_pfFB"><label for="e_pfFB">פייסבוק / אינסטגרם</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="e_pfGoogle"><label for="e_pfGoogle">Google Shopping</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="e_pfPMax"><label for="e_pfPMax">Performance Max</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="e_pfTT"><label for="e_pfTT">טיקטוק</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="e_pfYT"><label for="e_pfYT">יוטיוב</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="e_pfPin"><label for="e_pfPin">Pinterest</label></div>
+    </div>
+  </div>
+
+  <div class="form-row triple">
+    <div class="form-group">
+      <label>תקציב חודשי כולל (₪)</label>
+      <input type="number" id="e_totalBudget" placeholder="10000">
+    </div>
+    <div class="form-group">
+      <label>ROAS יעד</label>
+      <input type="text" id="e_targetROAS" placeholder="3, 4x, 500%...">
+    </div>
+    <div class="form-group">
+      <label>הכנסה חודשית יעד (₪)</label>
+      <input type="number" id="e_targetRevenue" placeholder="50000">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>פיצול תקציב — Meta (₪)</label>
+      <input type="number" id="e_budgetMeta" placeholder="אם רלוונטי">
+    </div>
+    <div class="form-group">
+      <label>פיצול תקציב — גוגל (₪)</label>
+      <input type="number" id="e_budgetGoogle" placeholder="אם רלוונטי">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>CPA / עלות רכישה מקסימלית (₪)</label>
+      <input type="number" id="e_maxCPA" placeholder="80">
+    </div>
+    <div class="form-group">
+      <label>מתי רוצים להתחיל?</label>
+      <input type="text" id="e_startDate" placeholder="בעוד שבועיים, תאריך ספציפי...">
+    </div>
+  </div>
+
+  <div class="form-group" style="margin-bottom:16px">
+    <label>מה מוגדר כהמרה?</label>
+    <div class="checkbox-group">
+      <div class="checkbox-item"><input type="checkbox" id="e_cvPurchase"><label for="e_cvPurchase">רכישה</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="e_cvAddCart"><label for="e_cvAddCart">הוספה לסל</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="e_cvCheckout"><label for="e_cvCheckout">התחלת תשלום</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="e_cvReg"><label for="e_cvReg">הרשמה לניוזלטר</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="e_cvWish"><label for="e_cvWish">Wishlist</label></div>
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>יש קמפיינים פעילים כרגע?</label>
+      <textarea id="e_activeCampaigns" placeholder="מה רץ כרגע, באיזו פלטפורמה, תקציב נוכחי, ROAS נוכחי..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- E5. קהל יעד -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">👥</div>
+    <div>
+      <h2>קהל היעד</h2>
+      <div class="section-desc">דמוגרפיה, פסיכוגרפיה ורימרקטינג</div>
+    </div>
+  </div>
+
+  <div class="form-row triple">
+    <div class="form-group">
+      <label>גיל מינימלי</label>
+      <input type="number" id="e_ageMin" placeholder="18">
+    </div>
+    <div class="form-group">
+      <label>גיל מקסימלי</label>
+      <input type="number" id="e_ageMax" placeholder="55">
+    </div>
+    <div class="form-group">
+      <label>מין</label>
+      <select id="e_gender">
+        <option value="all">כולם</option>
+        <option value="female">נשים בלבד</option>
+        <option value="male">גברים בלבד</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>אזורי מכירה</label>
+      <div class="cp-wrap" id="e_geoTarget"></div>
+    </div>
+    <div class="form-group">
+      <label>שפות הקהל</label>
+      <input type="text" id="e_languages" placeholder="עברית, ערבית, אנגלית...">
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>פרופיל הלקוח האידיאלי</label>
+      <textarea id="e_idealCustomer" placeholder="מי הקונה הטיפוסי? תחומי עניין, אורח חיים, ערכים, מה הוא מחפש..."></textarea>
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>מה מניע לרכישה? (Pain / Desire)</label>
+      <textarea id="e_buyingMotivation" placeholder="מה הלקוח מרגיש לפני הרכישה? מה הוא מחפש? מה ה-trigger לקנייה?"></textarea>
+    </div>
+  </div>
+
+  <div class="form-group" style="margin-bottom:16px">
+    <label>קהלי רימרקטינג קיימים?</label>
+    <div class="checkbox-group">
+      <div class="checkbox-item"><input type="checkbox" id="e_rmVisitors"><label for="e_rmVisitors">מבקרי אתר</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="e_rmCart"><label for="e_rmCart">נטישת סל</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="e_rmPurchased"><label for="e_rmPurchased">לקוחות קיימים</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="e_rmEmail"><label for="e_rmEmail">רשימת מיילים</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="e_rmEngage"><label for="e_rmEngage">מעורבות פייסבוק/אינסטגרם</label></div>
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>קהלים לאסור / exclusions</label>
+      <input type="text" id="e_exclusions" placeholder="לקוחות שרכשו ב-30 יום, מתחרים, מחוץ לישראל...">
+    </div>
+  </div>
+</div>
+
+<!-- E6. הגדרות טכניות -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">⚙️</div>
+    <div>
+      <h2>הגדרות טכניות ומעקב</h2>
+      <div class="section-desc">פיקסל, קטלוג, Merchant Center ותשתית</div>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>פיקסל פייסבוק / CAPI?</label>
+      <select id="e_fbPixel">
+        <option value="">בחר...</option>
+        <option>כן — פיקסל + CAPI פעיל</option>
+        <option>כן — פיקסל בלבד (ללא CAPI)</option>
+        <option>כן, אבל לא בדוק</option>
+        <option>לא מותקן</option>
+        <option>לא יודע</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>קטלוג מוצרים (Meta Catalog)?</label>
+      <select id="e_metaCatalog">
+        <option value="">בחר...</option>
+        <option>כן — מוגדר ומעודכן</option>
+        <option>כן — אבל לא בדוק / ישן</option>
+        <option>לא מוגדר</option>
+        <option>לא יודע</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>Google Merchant Center?</label>
+      <select id="e_merchant">
+        <option value="">בחר...</option>
+        <option>כן — פיד מאושר ופעיל</option>
+        <option>כן — אבל יש שגיאות</option>
+        <option>לא מוגדר</option>
+        <option>לא יודע</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Google Analytics (GA4)?</label>
+      <select id="e_ga4">
+        <option value="">בחר...</option>
+        <option>כן, Enhanced Ecommerce מוגדר</option>
+        <option>כן, בסיסי בלבד</option>
+        <option>לא מוגדר</option>
+        <option>לא יודע</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>Google Tag Manager (GTM)?</label>
+      <select id="e_gtm">
+        <option value="">בחר...</option>
+        <option>כן</option>
+        <option>לא</option>
+        <option>לא יודע</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>מעקב המרות גוגל (Purchase)?</label>
+      <select id="e_googleConv">
+        <option value="">בחר...</option>
+        <option>כן, מוגדר עם ערך דינמי</option>
+        <option>כן, ללא ערך דינמי</option>
+        <option>לא</option>
+        <option>לא יודע</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>Business Manager / Meta?</label>
+      <select id="e_bm">
+        <option value="">בחר...</option>
+        <option>כן, BM מסודר עם גישות</option>
+        <option>יש חשבון מודעות ישיר</option>
+        <option>אין — צריך לפתוח</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>חשבון Google Ads?</label>
+      <select id="e_googleAds">
+        <option value="">בחר...</option>
+        <option>כן, יש חשבון Google Ads</option>
+        <option>יש חשבון אבל צריך גישה</option>
+        <option>אין חשבון</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>יש Abandoned Cart emails / SMS?</label>
+      <select id="e_abandonedCart">
+        <option value="">בחר...</option>
+        <option>כן — Klaviyo / אחר</option>
+        <option>לא — ומעוניינים</option>
+        <option>לא — לא רלוונטי</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>מהירות האתר (PageSpeed)</label>
+      <select id="e_pageSpeed">
+        <option value="">בחר...</option>
+        <option>מהיר — מעל 80</option>
+        <option>בינוני — 50-80</option>
+        <option>איטי — מתחת ל-50</option>
+        <option>לא נבדק</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>הערות טכניות / מגבלות</label>
+      <input type="text" id="e_techNotes" placeholder="בעיות ידועות באתר, הגבלות גישה, אינטגרציות חשובות...">
+    </div>
+  </div>
+</div>
+
+<!-- E7. קריאייטיב ומיתוג -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">🎨</div>
+    <div>
+      <h2>קריאייטיב ומיתוג</h2>
+      <div class="section-desc">USP, פרומו, נכסים ועיצוב</div>
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>הצעת הערך הראשית (USP)</label>
+      <textarea id="e_usp" placeholder="למה לקנות אצלכם ולא אצל המתחרה? מחיר? איכות? מהירות? שירות? ייחודיות?"></textarea>
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>הצעה / פרומו פעיל</label>
+      <textarea id="e_promo" placeholder="20% הנחה לרכישה ראשונה, קוד קופון, חבילה מיוחדת, FREE GIFT..."></textarea>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>נכסי קריאייטיב קיימים</label>
+      <select id="e_assets">
+        <option value="">בחר...</option>
+        <option>כן — תמונות מקצועיות + וידאו UGC</option>
+        <option>כן — תמונות מוצר בלבד</option>
+        <option>כן — וידאו בלבד</option>
+        <option>תמונות מוצר בלבד (רקע לבן)</option>
+        <option>לא, צריך לייצר הכול</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Tone of Voice</label>
+      <select id="e_tone">
+        <option value="">בחר...</option>
+        <option>אספירציונלי ויוקרתי</option>
+        <option>ידידותי ונגיש</option>
+        <option>נלהב ואנרגטי</option>
+        <option>אמין ומקצועי</option>
+        <option>קליל ומצחיק</option>
+        <option>מינימליסטי ונקי</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>צבעי מותג</label>
+      <input type="text" id="e_brandColors" placeholder="שחור + זהב, #FF4B4B, פסטל...">
+    </div>
+    <div class="form-group">
+      <label>לוגו זמין?</label>
+      <select id="e_hasLogo">
+        <option value="">בחר...</option>
+        <option>כן — SVG / AI (וקטור)</option>
+        <option>כן — PNG בלבד</option>
+        <option>אין לוגו</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>מסרים שאסור לציין / הגבלות תוכן</label>
+      <input type="text" id="e_contentRestrictions" placeholder="מחירים מסוימים, מינוח, מוצרים מוגבלים, מדיניות קופון...">
+    </div>
+  </div>
+</div>
+
+<!-- E8. עונתיות ומבצעים -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">📅</div>
+    <div>
+      <h2>עונתיות ומבצעים</h2>
+      <div class="section-desc">תקופות שיא, אירועים ולוח שנה שיווקי</div>
+    </div>
+  </div>
+
+  <div class="form-group" style="margin-bottom:16px">
+    <label>עונות / תקופות שיא</label>
+    <div class="checkbox-group">
+      <div class="checkbox-item"><input type="checkbox" id="e_seaBF"><label for="e_seaBF">Black Friday / Cyber Monday</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="e_seaXmas"><label for="e_seaXmas">חגי תשרי (ראש השנה, יו"כ, סוכות)</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="e_seaPesach"><label for="e_seaPesach">פסח</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="e_seaSum"><label for="e_seaSum">קיץ</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="e_seaBack"><label for="e_seaBack">חזרה ללימודים</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="e_seaValentine"><label for="e_seaValentine">ולנטיין / טו באב</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="e_seaMothers"><label for="e_seaMothers">יום האם</label></div>
+      <div class="checkbox-item"><input type="checkbox" id="e_seaAll"><label for="e_seaAll">כל השנה — אין עונתיות</label></div>
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>מבצעים קבועים / תוכנית מבצעים</label>
+      <textarea id="e_salesPlan" placeholder="הנחות קבועות, קודי קופון, תוכנית נאמנות, flash sales..."></textarea>
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>אירועים / קמפיינים ספציפיים בקרוב</label>
+      <input type="text" id="e_upcomingEvents" placeholder="השקת מוצר, מבצע מיוחד, אירוע ממותג...">
+    </div>
+  </div>
+</div>
+
+<!-- E9. מתחרים והיסטוריה -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">🔍</div>
+    <div>
+      <h2>מתחרים והיסטוריית פרסום</h2>
+      <div class="section-desc">תחרות, לקחים ועמדת שוק</div>
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>מתחרים עיקריים</label>
+      <input type="text" id="e_competitors" placeholder="שמות / אתרים / חשבונות רלוונטיים">
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>מה מייחד אתכם מהמתחרים?</label>
+      <textarea id="e_differentiator" placeholder="מחיר, מיתוג, איכות, מהירות משלוח, שירות, מוצר ייחודי..."></textarea>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>היסטוריית קמפיינים?</label>
+      <select id="e_campaignHistory">
+        <option value="">בחר...</option>
+        <option>כן — Meta (FB/IG)</option>
+        <option>כן — Google Shopping / PMax</option>
+        <option>כן — שתי הפלטפורמות</option>
+        <option>לא — ראשון</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>ROAS היסטורי ממוצע</label>
+      <input type="text" id="e_historicalROAS" placeholder="לדוגמה: 3.2, 400%...">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>עלות רכישה (CPA) היסטורית (₪)</label>
+      <input type="number" id="e_historicalCPA" placeholder="אם יש">
+    </div>
+    <div class="form-group">
+      <label>הוצאה חודשית ממוצעת בעבר (₪)</label>
+      <input type="number" id="e_historicalSpend" placeholder="אם יש">
+    </div>
+  </div>
+
+  <div class="form-row single">
+    <div class="form-group">
+      <label>מה עבד / לא עבד בעבר?</label>
+      <textarea id="e_pastLearnings" placeholder="פורמטים שעבדו, קהלים שלא המירו, מוצרים שמכרו, פלטפורמות שאכזבו..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- E10. הערות -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">💬</div>
+    <div><h2>הערות נוספות</h2></div>
+  </div>
+  <div class="form-row single">
+    <div class="form-group">
+      <label>כל מה שלא כוסה למעלה וחשוב שנדע</label>
+      <textarea id="e_additionalNotes" placeholder="בקשות מיוחדות, לוחות זמנים, רגישויות, הערות כלליות..." style="min-height:100px"></textarea>
+    </div>
+  </div>
+</div>
+
+</form>
+
+<!-- WhatsApp — Ecom -->
+<div class="wa-section">
+  <h3>📲 שלח סיכום לוואטסאפ</h3>
+  <p>הכנס מספר יעד — הסיכום ייפתח ישירות בוואטסאפ</p>
+  <div class="wa-phone-row">
+    <input type="tel" id="e_waPhone" placeholder="050-0000000 (אופציונלי)">
+  </div>
+  <div style="margin-bottom:12px">
+    <button type="button" class="btn-preview" onclick="toggleEcomPreview()">👁 תצוגה מקדימה</button>
+    <button type="button" class="btn-copy" onclick="copyEcomToClipboard()">📋 העתק טקסט</button>
+  </div>
+  <div class="preview-box" id="e_previewBox"></div>
+  <div class="copy-success" id="e_copySuccess">✅ הועתק ללוח!</div>
+  <button type="button" class="btn-wa" onclick="sendEcomToWhatsApp()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    שלח סיכום לוואטסאפ
+  </button>
+
+  <hr class="wa-divider">
+  <p style="color:#555;font-size:0.875rem;margin-bottom:12px">או שלח ישירות למייל</p>
+  <div class="wa-phone-row">
+    <input type="email" id="e_emailAddr" placeholder="כתובת מייל (אופציונלי)">
+  </div>
+  <button type="button" class="btn-email" onclick="sendEcomToEmail()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+    </svg>
+    שלח סיכום למייל
+  </button>
+</div>
+
+</div><!-- /tab-ecom -->
+
+</div><!-- /container -->
+
+<script>
+/* ══════════════════════════════════════════
+   CITY PICKER
+══════════════════════════════════════════ */
+const ISRAELI_CITIES = [
+  'אבן יהודה','אום אל-פחם','אופקים','אור יהודה','אילת','אלעד','אלפי מנשה',
+  'אעבלין','אפרת','אריאל','אשדוד','אשקלון',
+  'באר יעקב','באר שבע','בועינה-נוג\'ידאת','בוקעאתא','ביתר עילית','בית אריה-עופרים',
+  'בית שאן','בית שמש','בנימינה-גבעת עדה','בני ברק','בת ים',
+  'גבעת זאב','גבעת שמואל','גבעתיים','גדרה','גן יבנה',
+  "ג'לג'וליה","ג'סר א-זרקא","ג'ת",
+  'דאלית אל-כרמל','דבורייה','דימונה',
+  'הוד השרון','הורה','הרצליה',
+  'וירושלים'/*placeholder*/,
+  'זכרון יעקב',
+  'חדרה','חולון','חיפה','חצור הגלילית','חריש',
+  'טבריה','טייבה','טירת כרמל','טמרה',
+  'יבנה','יהוד-מונוסון','יקנעם עילית','ירושלים','ירוחם','ירכא',
+  'כאבול','כוכב יאיר-צור יגאל','כפר ברא','כפר יונה','כפר כנא','כפר מנדא',
+  'כפר קאסם','כפר קרע','כרמיאל','כסיפה',
+  'לוד','לקיה',
+  'מגדל','מגדל העמק',"מג'ד אל-כרום","מג'דל שמס",
+  'מודיעין עילית','מודיעין-מכבים-רעות','מיתר','מסעדה','מעלה אדומים',
+  'מעלות-תרשיחא','מצפה רמון',
+  'נהריה','נוף הגליל','נס ציונה','נצרת','נשר','נתיבות','נתניה',
+  'עארה','עומר','עוספיא','עכו','עפולה','עראבה','ערד','ערערה',
+  'פרדס חנה-כרכור','פרדסייה','פקיעין',
+  'צפת',
+  'קדימה-צורן','קלנסווה','קצרין','קרית אונו','קרית אתא',
+  'קרית ביאליק','קרית גת','קרית טבעון','קרית ים','קרית מוצקין',
+  'קרית מלאכי','קרית שמונה',
+  'ראש העין','ראש פינה','ראשון לציון','רהט','רחובות',
+  'רמת גן','רמת השרון','רמלה','רעננה',
+  'שגב-שלום','שדרות','שלומי','שפרעם',
+  'תל אביב-יפו','תל שבע',
+].filter(c => c !== 'וירושלים')
+ .sort((a, b) => a.localeCompare(b, 'he'));
+
+const cityPickerState = {};
+
+function initCityPicker(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  cityPickerState[containerId] = [];
+
+  const tagsWrap = document.createElement('div');
+  tagsWrap.style.cssText = 'display:contents';
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'cp-input';
+  input.placeholder = 'חפש עיר...';
+  input.autocomplete = 'off';
+  const dd = document.createElement('div');
+  dd.className = 'cp-dropdown';
+
+  container.appendChild(tagsWrap);
+  container.appendChild(input);
+  container.appendChild(dd);
+
+  container.addEventListener('click', () => input.focus());
+
+  function renderTags() {
+    tagsWrap.innerHTML = '';
+    cityPickerState[containerId].forEach(city => {
+      const tag = document.createElement('span');
+      tag.className = 'cp-tag';
+      tag.innerHTML = `${city}<span class="cp-tag-x" title="הסר">×</span>`;
+      tag.querySelector('.cp-tag-x').addEventListener('click', e => {
+        e.stopPropagation();
+        cityPickerState[containerId] = cityPickerState[containerId].filter(c => c !== city);
+        renderTags();
+      });
+      tagsWrap.appendChild(tag);
+    });
+  }
+
+  function renderDropdown(q) {
+    const sel = cityPickerState[containerId];
+    const list = q
+      ? ISRAELI_CITIES.filter(c => c.includes(q) && !sel.includes(c))
+      : ISRAELI_CITIES.filter(c => !sel.includes(c));
+    const show = list.slice(0, 40);
+    if (!show.length) {
+      dd.innerHTML = '<div class="cp-no-results">לא נמצאו ערים</div>';
+    } else {
+      dd.innerHTML = show.map(c =>
+        `<div class="cp-option" data-city="${c}">${
+          q ? c.replace(q, `<strong>${q}</strong>`) : c
+        }</div>`
+      ).join('');
+      dd.querySelectorAll('.cp-option').forEach(opt => {
+        opt.addEventListener('mousedown', e => e.preventDefault());
+        opt.addEventListener('click', () => {
+          cityPickerState[containerId].push(opt.dataset.city);
+          renderTags();
+          input.value = '';
+          renderDropdown('');
+          input.focus();
+        });
+      });
+    }
+    dd.style.display = 'block';
+  }
+
+  input.addEventListener('input', () => renderDropdown(input.value.trim()));
+  input.addEventListener('focus', () => renderDropdown(input.value.trim()));
+  input.addEventListener('blur', () => setTimeout(() => { dd.style.display = 'none'; }, 160));
+}
+
+function getCityPickerValue(id) {
+  return (cityPickerState[id] || []).join(', ');
+}
+
+/* ── Tab switching ── */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+/* ══════════════════════════════════════════
+   LEADS — helpers & summary
+══════════════════════════════════════════ */
+function v(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+function checked(id) { const el = document.getElementById(id); return el ? el.checked : false; }
+
+function getPlatforms() {
+  const map = [['pfFB','פייסבוק/אינסטגרם'],['pfGoogle','גוגל Search'],['pfDisplay','גוגל Display'],['pfYT','יוטיוב'],['pfTT','טיקטוק']];
+  return map.filter(([id]) => checked(id)).map(([,l]) => l).join(' | ') || '—';
+}
+
+function getLeadFields() {
+  const map = [['fldName','שם מלא'],['fldPhone','טלפון'],['fldEmail','מייל'],['fldCity','עיר'],['fldMsg','הודעה'],['fldBudget','תקציב']];
+  const selected = map.filter(([id]) => checked(id)).map(([,l]) => l);
+  const other = v('fldOther');
+  if (other) selected.push(other);
+  return selected.join(', ') || '—';
+}
+
+function row(label, val) { return val ? `${label}: ${val}\n` : ''; }
+function sec(title, icon) { return `\n${icon} *${title}*\n${'─'.repeat(24)}\n`; }
+
+function buildSummary() {
+  const d = {
+    businessName: v('businessName'), contactName: v('contactName'),
+    contactPhone: v('contactPhone'), contactEmail: v('contactEmail'),
+    industry: v('industry'), businessAge: v('businessAge'), businessDesc: v('businessDesc'),
+    linkWebsite: v('linkWebsite'), linkLanding: v('linkLanding'),
+    linkFacebook: v('linkFacebook'), linkInstagram: v('linkInstagram'),
+    linkYoutube: v('linkYoutube'), linkTiktok: v('linkTiktok'), linkOther: v('linkOther'),
+    platforms: getPlatforms(),
+    totalBudget: v('totalBudget'), budgetFB: v('budgetFB'), budgetGoogle: v('budgetGoogle'),
+    targetLeads: v('targetLeads'), maxCPL: v('maxCPL'),
+    afterLead: [['alPhone','שיחת מכירה'],['alMeeting','פגישה/ייעוץ'],['alDemo','ניסיון/דמו'],
+      ['alPurchase','רכישה ישירה'],['alCourse','הרשמה לקורס'],['alQuote','הצעת מחיר'],['alOther','אחר']]
+      .filter(([id]) => checked(id)).map(([,l]) => l).join(', ') || '',
+    startDate: v('startDate'), successLead: v('successLead'),
+    ageMin: v('ageMin'), ageMax: v('ageMax'), gender: v('gender'),
+    geoTarget: getCityPickerValue('geoTarget'), radius: v('radius'),
+    idealCustomer: v('idealCustomer'), painPoint: v('painPoint'), exclusions: v('exclusions'),
+    leadMethod: [['lmFBForm','טופס FB'],['lmLanding','עמוד נחיתה'],['lmCall','Click to Call'],
+      ['lmWhatsapp','וואטסאפ'],['lmGoogleForm','טופס גוגל'],['lmChat','צ\'אט']]
+      .filter(([id]) => checked(id)).map(([,l]) => l).join(', ') || '',
+    responseTime: v('responseTime'), leadFields: getLeadFields(),
+    crm: v('crm'), salesCycle: v('salesCycle'), dealValue: v('dealValue'), closeRate: v('closeRate'),
+    websiteUrl: v('websiteUrl'), sitePlatform: v('sitePlatform'),
+    fbPixel: v('fbPixel'), ga4: v('ga4'), gtm: v('gtm'), googleConv: v('googleConv'),
+    bm: v('bm'), googleAccess: v('googleAccess'), techNotes: v('techNotes'),
+    usp: v('usp'), offer: v('offer'), assets: v('assets'), tone: v('tone'),
+    brandColors: v('brandColors'), hasLogo: v('hasLogo'), contentRestrictions: v('contentRestrictions'),
+    competitors: v('competitors'), differentiator: v('differentiator'),
+    campaignHistory: v('campaignHistory'), historicalCPL: v('historicalCPL'),
+    pastLearnings: v('pastLearnings'), additionalNotes: v('additionalNotes'),
+  };
+
+  let msg = `📋 *איפיון קמפיין לידים*\n🏢 ${d.businessName || 'ללא שם'}\n📅 ${new Date().toLocaleDateString('he-IL')}\n`;
+
+  msg += sec('פרטי העסק', '🏢');
+  msg += row('שם', d.businessName); msg += row('איש קשר', d.contactName);
+  msg += row('טלפון', d.contactPhone); msg += row('מייל', d.contactEmail);
+  msg += row('תחום', d.industry); msg += row('ותק', d.businessAge);
+  if (d.businessDesc) msg += `תיאור: ${d.businessDesc}\n`;
+
+  const hasLinks = d.linkWebsite || d.linkLanding || d.linkFacebook || d.linkInstagram || d.linkYoutube || d.linkTiktok || d.linkOther;
+  if (hasLinks) {
+    msg += sec('נוכחות דיגיטלית', '🔗');
+    msg += row('אתר', d.linkWebsite); msg += row('עמוד נחיתה', d.linkLanding);
+    msg += row('פייסבוק', d.linkFacebook); msg += row('אינסטגרם', d.linkInstagram);
+    msg += row('יוטיוב', d.linkYoutube); msg += row('טיקטוק', d.linkTiktok);
+    if (d.linkOther) msg += `לינקים נוספים:\n${d.linkOther}\n`;
+  }
+
+  msg += sec('יעדי הקמפיין', '🎯');
+  msg += row('פלטפורמות', d.platforms);
+  msg += row('תקציב כולל', d.totalBudget ? `₪${Number(d.totalBudget).toLocaleString()}` : '');
+  if (d.budgetFB) msg += row('תקציב FB', `₪${Number(d.budgetFB).toLocaleString()}`);
+  if (d.budgetGoogle) msg += row('תקציב Google', `₪${Number(d.budgetGoogle).toLocaleString()}`);
+  msg += row('לידים חודשיים', d.targetLeads); msg += row('CPL מקסימלי', d.maxCPL ? `₪${d.maxCPL}` : '');
+  msg += row('אחרי ליד', d.afterLead); msg += row('התחלה', d.startDate);
+  if (d.successLead) msg += `הגדרת ליד מוצלח:\n${d.successLead}\n`;
+
+  msg += sec('קהל יעד', '👥');
+  const gL = d.gender === 'male' ? 'גברים' : d.gender === 'female' ? 'נשים' : 'כולם';
+  msg += row('גיל', (d.ageMin || d.ageMax) ? `${d.ageMin || '?'}–${d.ageMax || '?'}` : '');
+  msg += row('מין', gL); msg += row('אזורים', d.geoTarget);
+  if (d.radius) msg += row('רדיוס', `${d.radius} ק״מ`);
+  if (d.idealCustomer) msg += `לקוח אידיאלי:\n${d.idealCustomer}\n`;
+  if (d.painPoint) msg += `כאב/צורך:\n${d.painPoint}\n`;
+  if (d.exclusions) msg += row('אסורים', d.exclusions);
+
+  msg += sec('ליד ומכירה', '📝');
+  msg += row('איך מגיע ליד', d.leadMethod); msg += row('זמן תגובה', d.responseTime);
+  msg += row('שדות בטופס', d.leadFields); msg += row('CRM', d.crm);
+  msg += row('מחזור מכירה', d.salesCycle);
+  if (d.dealValue) msg += row('שווי עסקה', `₪${Number(d.dealValue).toLocaleString()}`);
+  msg += row('אחוז סגירה', d.closeRate);
+
+  msg += sec('טכני', '⚙️');
+  msg += row('אתר', d.websiteUrl); msg += row('פלטפורמה', d.sitePlatform);
+  msg += row('פיקסל FB', d.fbPixel); msg += row('GA4', d.ga4);
+  msg += row('GTM', d.gtm); msg += row('המרות Google', d.googleConv);
+  msg += row('BM', d.bm); msg += row('Google Ads', d.googleAccess);
+  if (d.techNotes) msg += row('הערות', d.techNotes);
+
+  msg += sec('קריאייטיב ומיתוג', '🎨');
+  if (d.usp) msg += `USP:\n${d.usp}\n`;
+  if (d.offer) msg += `הצעה/פרומו:\n${d.offer}\n`;
+  msg += row('נכסים', d.assets); msg += row('טון', d.tone);
+  msg += row('צבעים', d.brandColors); msg += row('לוגו', d.hasLogo);
+  if (d.contentRestrictions) msg += row('הגבלות', d.contentRestrictions);
+
+  msg += sec('מתחרים והיסטוריה', '🔍');
+  if (d.competitors) msg += row('מתחרים', d.competitors);
+  if (d.differentiator) msg += `יתרון:\n${d.differentiator}\n`;
+  msg += row('היסטוריה', d.campaignHistory);
+  if (d.historicalCPL) msg += row('CPL היסטורי', `₪${d.historicalCPL}`);
+  if (d.pastLearnings) msg += `לקחים:\n${d.pastLearnings}\n`;
+
+  if (d.additionalNotes) { msg += sec('הערות', '💬'); msg += d.additionalNotes + '\n'; }
+
+  msg += `\n─────────────────────\n🚀 RPG Digital`;
+  return msg;
+}
+
+function togglePreview() {
+  const box = document.getElementById('previewBox');
+  if (box.style.display === 'block') { box.style.display = 'none'; return; }
+  box.textContent = buildSummary();
+  box.style.display = 'block';
+}
+
+function copyToClipboard() {
+  navigator.clipboard.writeText(buildSummary()).then(() => {
+    const el = document.getElementById('copySuccess');
+    el.style.display = 'block';
+    setTimeout(() => { el.style.display = 'none'; }, 2500);
+  });
+}
+
+function sendToWhatsApp() {
+  const encoded = encodeURIComponent(buildSummary());
+  let phone = document.getElementById('waPhone').value.replace(/\D/g, '');
+  let url;
+  if (phone) {
+    if (phone.startsWith('0')) phone = '972' + phone.slice(1);
+    url = `https://wa.me/${phone}?text=${encoded}`;
+  } else {
+    url = `https://wa.me/?text=${encoded}`;
+  }
+  window.open(url, '_blank');
+}
+
+/* ══════════════════════════════════════════
+   ECOM — helpers & summary
+══════════════════════════════════════════ */
+function ev(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+function ech(id) { const el = document.getElementById(id); return el ? el.checked : false; }
+
+function getEcomPlatforms() {
+  const map = [['e_pfFB','Meta (FB/IG)'],['e_pfGoogle','Google Shopping'],['e_pfPMax','PMax'],
+    ['e_pfTT','טיקטוק'],['e_pfYT','יוטיוב'],['e_pfPin','Pinterest']];
+  return map.filter(([id]) => ech(id)).map(([,l]) => l).join(' | ') || '—';
+}
+
+function getConversions() {
+  const map = [['e_cvPurchase','רכישה'],['e_cvAddCart','הוספה לסל'],
+    ['e_cvCheckout','התחלת תשלום'],['e_cvReg','הרשמה לניוזלטר'],['e_cvWish','Wishlist']];
+  return map.filter(([id]) => ech(id)).map(([,l]) => l).join(', ') || '';
+}
+
+function getRemarketing() {
+  const map = [['e_rmVisitors','מבקרי אתר'],['e_rmCart','נטישת סל'],
+    ['e_rmPurchased','לקוחות קיימים'],['e_rmEmail','רשימת מיילים'],['e_rmEngage','מעורבות FB/IG']];
+  return map.filter(([id]) => ech(id)).map(([,l]) => l).join(', ') || '';
+}
+
+function getSeasonality() {
+  const map = [['e_seaBF','Black Friday/CM'],['e_seaXmas','חגי תשרי'],['e_seaPesach','פסח'],
+    ['e_seaSum','קיץ'],['e_seaBack','חזרה ללימודים'],['e_seaValentine','ולנטיין/טו באב'],
+    ['e_seaMothers','יום האם'],['e_seaAll','כל השנה']];
+  return map.filter(([id]) => ech(id)).map(([,l]) => l).join(', ') || '';
+}
+
+function buildEcomSummary() {
+  const d = {
+    businessName: ev('e_businessName'), contactName: ev('e_contactName'),
+    contactPhone: ev('e_contactPhone'), contactEmail: ev('e_contactEmail'),
+    productCategory: ev('e_productCategory'), businessAge: ev('e_businessAge'),
+    businessDesc: ev('e_businessDesc'),
+    linkWebsite: ev('e_linkWebsite'), linkLanding: ev('e_linkLanding'),
+    linkFacebook: ev('e_linkFacebook'), linkInstagram: ev('e_linkInstagram'),
+    linkTiktok: ev('e_linkTiktok'), linkOther2: ev('e_linkOther2'), linkOther: ev('e_linkOther'),
+    platform: ev('e_platform'), productCount: ev('e_productCount'),
+    aov: ev('e_aov'), priceMin: ev('e_priceMin'), priceMax: ev('e_priceMax'),
+    focusProducts: ev('e_focusProducts'), shipping: ev('e_shipping'),
+    shippingTime: ev('e_shippingTime'), returns: ev('e_returns'),
+    payment: ev('e_payment'), stock: ev('e_stock'), margin: ev('e_margin'),
+    platforms: getEcomPlatforms(),
+    totalBudget: ev('e_totalBudget'), targetROAS: ev('e_targetROAS'),
+    targetRevenue: ev('e_targetRevenue'), budgetMeta: ev('e_budgetMeta'),
+    budgetGoogle: ev('e_budgetGoogle'), maxCPA: ev('e_maxCPA'),
+    startDate: ev('e_startDate'), conversions: getConversions(),
+    activeCampaigns: ev('e_activeCampaigns'),
+    ageMin: ev('e_ageMin'), ageMax: ev('e_ageMax'), gender: ev('e_gender'),
+    geoTarget: getCityPickerValue('e_geoTarget'), languages: ev('e_languages'),
+    idealCustomer: ev('e_idealCustomer'), buyingMotivation: ev('e_buyingMotivation'),
+    remarketing: getRemarketing(), exclusions: ev('e_exclusions'),
+    fbPixel: ev('e_fbPixel'), metaCatalog: ev('e_metaCatalog'),
+    merchant: ev('e_merchant'), ga4: ev('e_ga4'),
+    gtm: ev('e_gtm'), googleConv: ev('e_googleConv'),
+    bm: ev('e_bm'), googleAds: ev('e_googleAds'),
+    abandonedCart: ev('e_abandonedCart'), pageSpeed: ev('e_pageSpeed'),
+    techNotes: ev('e_techNotes'),
+    usp: ev('e_usp'), promo: ev('e_promo'), assets: ev('e_assets'), tone: ev('e_tone'),
+    brandColors: ev('e_brandColors'), hasLogo: ev('e_hasLogo'),
+    contentRestrictions: ev('e_contentRestrictions'),
+    seasonality: getSeasonality(), salesPlan: ev('e_salesPlan'),
+    upcomingEvents: ev('e_upcomingEvents'),
+    competitors: ev('e_competitors'), differentiator: ev('e_differentiator'),
+    campaignHistory: ev('e_campaignHistory'), historicalROAS: ev('e_historicalROAS'),
+    historicalCPA: ev('e_historicalCPA'), historicalSpend: ev('e_historicalSpend'),
+    pastLearnings: ev('e_pastLearnings'), additionalNotes: ev('e_additionalNotes'),
+  };
+
+  let msg = `🛒 *איפיון קמפיין איקומרס*\n🏢 ${d.businessName || 'ללא שם'}\n📅 ${new Date().toLocaleDateString('he-IL')}\n`;
+
+  msg += sec('פרטי העסק', '🏢');
+  msg += row('שם', d.businessName); msg += row('איש קשר', d.contactName);
+  msg += row('טלפון', d.contactPhone); msg += row('מייל', d.contactEmail);
+  msg += row('קטגוריה', d.productCategory); msg += row('ותק', d.businessAge);
+  if (d.businessDesc) msg += `תיאור: ${d.businessDesc}\n`;
+
+  const hasLinks = d.linkWebsite || d.linkLanding || d.linkFacebook || d.linkInstagram || d.linkTiktok || d.linkOther2 || d.linkOther;
+  if (hasLinks) {
+    msg += sec('נוכחות דיגיטלית', '🔗');
+    msg += row('אתר החנות', d.linkWebsite); msg += row('עמוד נחיתה', d.linkLanding);
+    msg += row('פייסבוק', d.linkFacebook); msg += row('אינסטגרם', d.linkInstagram);
+    msg += row('טיקטוק', d.linkTiktok); msg += row('יוטיוב/Pinterest', d.linkOther2);
+    if (d.linkOther) msg += `לינקים נוספים:\n${d.linkOther}\n`;
+  }
+
+  msg += sec('החנות והמוצרים', '🛒');
+  msg += row('פלטפורמה', d.platform); msg += row('מספר מוצרים', d.productCount);
+  if (d.aov) msg += row('AOV ממוצע', `₪${Number(d.aov).toLocaleString()}`);
+  if (d.priceMin || d.priceMax) msg += row('טווח מחירים', `₪${d.priceMin || '?'} – ₪${d.priceMax || '?'}`);
+  if (d.focusProducts) msg += `מוצרי מיקוד:\n${d.focusProducts}\n`;
+  msg += row('משלוח', d.shipping); msg += row('זמן משלוח', d.shippingTime);
+  msg += row('החזרות', d.returns); msg += row('אמצעי תשלום', d.payment);
+  msg += row('מלאי', d.stock); msg += row('רווח גולמי', d.margin);
+
+  msg += sec('יעדי הקמפיין', '🎯');
+  msg += row('פלטפורמות', d.platforms);
+  msg += row('תקציב כולל', d.totalBudget ? `₪${Number(d.totalBudget).toLocaleString()}` : '');
+  if (d.budgetMeta) msg += row('תקציב Meta', `₪${Number(d.budgetMeta).toLocaleString()}`);
+  if (d.budgetGoogle) msg += row('תקציב Google', `₪${Number(d.budgetGoogle).toLocaleString()}`);
+  msg += row('ROAS יעד', d.targetROAS);
+  if (d.targetRevenue) msg += row('הכנסה יעד', `₪${Number(d.targetRevenue).toLocaleString()}`);
+  if (d.maxCPA) msg += row('CPA מקסימלי', `₪${d.maxCPA}`);
+  msg += row('המרות', d.conversions); msg += row('התחלה', d.startDate);
+  if (d.activeCampaigns) msg += `קמפיינים פעילים:\n${d.activeCampaigns}\n`;
+
+  msg += sec('קהל יעד', '👥');
+  const gL2 = d.gender === 'male' ? 'גברים' : d.gender === 'female' ? 'נשים' : 'כולם';
+  msg += row('גיל', (d.ageMin || d.ageMax) ? `${d.ageMin || '?'}–${d.ageMax || '?'}` : '');
+  msg += row('מין', gL2); msg += row('אזורי מכירה', d.geoTarget);
+  msg += row('שפות', d.languages);
+  if (d.idealCustomer) msg += `לקוח אידיאלי:\n${d.idealCustomer}\n`;
+  if (d.buyingMotivation) msg += `מניע לרכישה:\n${d.buyingMotivation}\n`;
+  if (d.remarketing) msg += row('קהלי רימרקטינג', d.remarketing);
+  if (d.exclusions) msg += row('אסורים', d.exclusions);
+
+  msg += sec('טכני', '⚙️');
+  msg += row('פיקסל FB / CAPI', d.fbPixel); msg += row('Meta Catalog', d.metaCatalog);
+  msg += row('Google Merchant', d.merchant); msg += row('GA4', d.ga4);
+  msg += row('GTM', d.gtm); msg += row('המרות Google', d.googleConv);
+  msg += row('BM / Meta', d.bm); msg += row('Google Ads', d.googleAds);
+  msg += row('Abandoned Cart', d.abandonedCart); msg += row('PageSpeed', d.pageSpeed);
+  if (d.techNotes) msg += row('הערות', d.techNotes);
+
+  msg += sec('קריאייטיב ומיתוג', '🎨');
+  if (d.usp) msg += `USP:\n${d.usp}\n`;
+  if (d.promo) msg += `פרומו פעיל:\n${d.promo}\n`;
+  msg += row('נכסים', d.assets); msg += row('טון', d.tone);
+  msg += row('צבעים', d.brandColors); msg += row('לוגו', d.hasLogo);
+  if (d.contentRestrictions) msg += row('הגבלות', d.contentRestrictions);
+
+  if (d.seasonality || d.salesPlan || d.upcomingEvents) {
+    msg += sec('עונתיות ומבצעים', '📅');
+    if (d.seasonality) msg += row('עונות שיא', d.seasonality);
+    if (d.salesPlan) msg += `מבצעים:\n${d.salesPlan}\n`;
+    if (d.upcomingEvents) msg += row('אירועים קרובים', d.upcomingEvents);
+  }
+
+  msg += sec('מתחרים והיסטוריה', '🔍');
+  if (d.competitors) msg += row('מתחרים', d.competitors);
+  if (d.differentiator) msg += `יתרון:\n${d.differentiator}\n`;
+  msg += row('היסטוריה', d.campaignHistory);
+  if (d.historicalROAS) msg += row('ROAS היסטורי', d.historicalROAS);
+  if (d.historicalCPA) msg += row('CPA היסטורי', `₪${d.historicalCPA}`);
+  if (d.historicalSpend) msg += row('הוצאה חודשית בעבר', `₪${Number(d.historicalSpend).toLocaleString()}`);
+  if (d.pastLearnings) msg += `לקחים:\n${d.pastLearnings}\n`;
+
+  if (d.additionalNotes) { msg += sec('הערות', '💬'); msg += d.additionalNotes + '\n'; }
+
+  msg += `\n─────────────────────\n🚀 RPG Digital`;
+  return msg;
+}
+
+function toggleEcomPreview() {
+  const box = document.getElementById('e_previewBox');
+  if (box.style.display === 'block') { box.style.display = 'none'; return; }
+  box.textContent = buildEcomSummary();
+  box.style.display = 'block';
+}
+
+function copyEcomToClipboard() {
+  navigator.clipboard.writeText(buildEcomSummary()).then(() => {
+    const el = document.getElementById('e_copySuccess');
+    el.style.display = 'block';
+    setTimeout(() => { el.style.display = 'none'; }, 2500);
+  });
+}
+
+function sendEcomToWhatsApp() {
+  const encoded = encodeURIComponent(buildEcomSummary());
+  let phone = document.getElementById('e_waPhone').value.replace(/\D/g, '');
+  let url;
+  if (phone) {
+    if (phone.startsWith('0')) phone = '972' + phone.slice(1);
+    url = `https://wa.me/${phone}?text=${encoded}`;
+  } else {
+    url = `https://wa.me/?text=${encoded}`;
+  }
+  window.open(url, '_blank');
+}
+/* ── Email send ── */
+function sendToEmail() {
+  const summary = buildSummary();
+  const name = v('businessName') || 'לקוח חדש';
+  const subject = encodeURIComponent(`איפיון קמפיין לידים — ${name}`);
+  const body = encodeURIComponent(summary);
+  const email = document.getElementById('emailAddr').value.trim();
+  window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+}
+
+function sendEcomToEmail() {
+  const summary = buildEcomSummary();
+  const name = ev('e_businessName') || 'לקוח חדש';
+  const subject = encodeURIComponent(`איפיון קמפיין איקומרס — ${name}`);
+  const body = encodeURIComponent(summary);
+  const email = document.getElementById('e_emailAddr').value.trim();
+  window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+}
+
+/* Init city pickers */
+initCityPicker('geoTarget');
+initCityPicker('e_geoTarget');
+</script>
+</body>
+</html>

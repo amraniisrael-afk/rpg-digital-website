@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>83 סגנונות קריאייטיב למטא (Meta Ads)</title>
+    <style>
+        :root {
+            --primary: #0668E1; /* Meta Blue */
+            --bg: #f4f5f7;
+            --text: #1c1e21;
+            --border: #dddfe2;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        p.subtitle {
+            text-align: center;
+            color: #606770;
+            margin-bottom: 30px;
+        }
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+            background: #f0f2f5;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .control-group {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #4b4f56;
+        }
+        input, select {
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(6, 104, 225, 0.2);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid var(--border);
+        }
+        th {
+            background-color: #f0f2f5;
+            font-weight: bold;
+            color: #4b4f56;
+            position: sticky;
+            top: 0;
+        }
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+        .tag {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            background-color: #e4e6eb;
+            color: #1c1e21;
+        }
+        .funnel-top { background-color: #d8f3dc; color: #1b4332; }
+        .funnel-mid { background-color: #fff3cd; color: #856404; }
+        .funnel-bottom { background-color: #f8d7da; color: #721c24; }
+        .funnel-retargeting { background-color: #cce5ff; color: #004085; }
+        
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: #606770;
+            font-style: italic;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>אסטרטגיית קריאייטיב למטא (2026)</h1>
+    <p class="subtitle">מאגר 83 סגנונות קריאייטיב אינטראקטיבי לסינון וחיפוש מדויק</p>
+
+    <div class="controls">
+        <div class="control-group">
+            <label for="search">חיפוש חופשי:</label>
+            <input type="text" id="search" placeholder="חפש סגנון, מילת מפתח או תיאור..." onkeyup="filterTable()">
+        </div>
+        <div class="control-group">
+            <label for="categoryFilter">סינון לפי קטגוריה:</label>
+            <select id="categoryFilter" onchange="filterTable()">
+                <option value="all">הכל</option>
+                <option value="UGC ואותנטיות">UGC ואותנטיות</option>
+                <option value="בעיה ופתרון">בעיה ופתרון</option>
+                <option value="השוואה">השוואה</option>
+                <option value="פוקוס מוצר">פוקוס מוצר</option>
+                <option value="ערך והדרכה">ערך והדרכה</option>
+                <option value="בידור והומור">בידור והומור</option>
+                <option value="הוכחה חברתית">הוכחה חברתית</option>
+                <option value="הצעה ודחיפות">הצעה ודחיפות</option>
+                <option value="אסתטיקה וסטייל">אסתטיקה וסטייל</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label for="funnelFilter">סינון לפי שלב במשפך:</label>
+            <select id="funnelFilter" onchange="filterTable()">
+                <option value="all">הכל</option>
+                <option value="מודעות">מודעות (Top-Funnel)</option>
+                <option value="עניין">עניין (Mid-Funnel)</option>
+                <option value="המרה">המרה (Bottom-Funnel)</option>
+                <option value="חזרה">חזרה והמרה (Retargeting)</option>
+            </select>
+        </div>
+    </div>
+
+    <table id="adsTable">
+        <thead>
+            <tr>
+                <th width="5%">מס'</th>
+                <th width="20%">סגנון קריאייטיב</th>
+                <th width="15%">קטגוריה</th>
+                <th width="40%">תיאור הזווית והביצוע</th>
+                <th width="20%">שלב במשפך (Funnel)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- UGC (1-10) -->
+            <tr data-category="UGC ואותנטיות" data-funnel="עניין"><td>1</td><td><strong>Unboxing (פתיחת קופסה)</strong></td><td>UGC ואותנטיות</td><td>צילום ביתי של לקוח פותח את המשלוח, מתאר את החוויה הראשונית ואת איכות האריזה והמוצר.</td><td><span class="tag funnel-mid">עניין (Mid-Funnel)</span></td></tr>
+            <tr data-category="UGC ואותנטיות" data-funnel="המרה"><td>2</td><td><strong>Testimonial (עדות וידאו)</strong></td><td>UGC ואותנטיות</td><td>לקוח מספר בגוף ראשון על חוויית השימוש, הפתרון לבעיה והתוצאה. מצולם בסגנון "סלפי" טבעי.</td><td><span class="tag funnel-bottom">המרה (Bottom-Funnel)</span></td></tr>
+            <tr data-category="UGC ואותנטיות" data-funnel="מודעות"><td>3</td><td><strong>Founder Story (סיפור המייסד)</strong></td><td>UGC ואותנטיות</td><td>סרטון אותנטי של בעל החברה/המותג המסביר *למה* הוא הקים את העסק ומה החזון.</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            <tr data-category="UGC ואותנטיות" data-funnel="מודעות"><td>4</td><td><strong>GRWM (התארגנו איתי)</strong></td><td>UGC ואותנטיות</td><td>יוצר תוכן מתעד את שגרת הבוקר/ערב שלו ומשלב את המוצר באופן אורגני בתוך הרוטינה.</td><td><span class="tag funnel-top">מודעות / עניין</span></td></tr>
+            <tr data-category="UGC ואותנטיות" data-funnel="עניין"><td>5</td><td><strong>BTS (מאחורי הקלעים)</strong></td><td>UGC ואותנטיות</td><td>הצצה לתהליך הייצור, האריזה או יום במשרד. שקיפות שבונה אמון עמוק.</td><td><span class="tag funnel-mid">עניין (Mid-Funnel)</span></td></tr>
+            <tr data-category="UGC ואותנטיות" data-funnel="מודעות"><td>6</td><td><strong>ראיונות רחוב</strong></td><td>UGC ואותנטיות</td><td>עוצרים אנשים ברחוב (סגנון טיקטוק), שואלים אותם שאלות טריוויה או מבקשים שיתנסו במוצר על המקום.</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            <tr data-category="UGC ואותנטיות" data-funnel="מודעות"><td>7</td><td><strong>Reaction Video (סרטון תגובה)</strong></td><td>UGC ואותנטיות</td><td>מסך מפוצל או צילום של אדם המגיב בהפתעה לתוצאות של המוצר או לסרטון אחר.</td><td><span class="tag funnel-top">מודעות / עניין</span></td></tr>
+            <tr data-category="UGC ואותנטיות" data-funnel="עניין"><td>8</td><td><strong>Day in the Life (יום בחיי...)</strong></td><td>UGC ואותנטיות</td><td>מעקב וולוגי אחרי יום של לקוח אידיאלי, הממחיש איך המוצר חוסך זמן או משפר את איכות חייו.</td><td><span class="tag funnel-mid">עניין (Mid-Funnel)</span></td></tr>
+            <tr data-category="UGC ואותנטיות" data-funnel="עניין"><td>9</td><td><strong>Employee POV (נקודת מבט עובד)</strong></td><td>UGC ואותנטיות</td><td>עובד מחסן או שירות לקוחות מספר "סודות" על המוצרים הנמכרים ביותר.</td><td><span class="tag funnel-mid">עניין (Mid-Funnel)</span></td></tr>
+            <tr data-category="UGC ואותנטיות" data-funnel="מודעות"><td>10</td><td><strong>Product in the Wild</strong></td><td>UGC ואותנטיות</td><td>צילום של המוצר בסביבה הטבעית שלו (למשל ציוד שטח בהרים) ללא אולפן או תאורה מלאכותית.</td><td><span class="tag funnel-top">מודעות / עניין</span></td></tr>
+            
+            <!-- בעיה ופתרון (11-14) -->
+            <tr data-category="בעיה ופתרון" data-funnel="מודעות"><td>11</td><td><strong>Pain Point Agitation</strong></td><td>בעיה ופתרון</td><td>התחלה בווּק (Hook) שלוחץ חזק על התסכול של הלקוח, ואז הצגת המוצר כמושיע.</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            <tr data-category="בעיה ופתרון" data-funnel="המרה"><td>12</td><td><strong>Before & After (לפני ואחרי)</strong></td><td>בעיה ופתרון</td><td>השוואה חזותית מהירה של המצב הגרוע לפני השימוש מול התוצאה המושלמת לאחריו.</td><td><span class="tag funnel-bottom">המרה (Bottom-Funnel)</span></td></tr>
+            <tr data-category="בעיה ופתרון" data-funnel="עניין"><td>13</td><td><strong>Myth vs. Fact (מיתוס מול עובדה)</strong></td><td>בעיה ופתרון</td><td>ניפוץ תפיסות שגויות בתעשייה ("חשבתם ששיווק חייב להיות יקר? תחשבו שוב").</td><td><span class="tag funnel-mid">עניין (Mid-Funnel)</span></td></tr>
+            <tr data-category="בעיה ופתרון" data-funnel="מודעות"><td>14</td><td><strong>The Hack (הטריק)</strong></td><td>בעיה ופתרון</td><td>מיצוב המוצר לא כקנייה אלא כ"קיצור דרך" או טריק סודי שעוקף את הדרך הרגילה.</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            
+            <!-- השוואה (15-18) -->
+            <tr data-category="השוואה" data-funnel="המרה"><td>15</td><td><strong>Us vs. Them (אנחנו מול ההם)</strong></td><td>השוואה</td><td>תמונה מפוצלת או טבלה המשווה את המוצר שלך לאלטרנטיבה הגנרית, עם וי טענות שלך ואיקס אצלם.</td><td><span class="tag funnel-bottom">המרה (Bottom-Funnel)</span></td></tr>
+            <tr data-category="השוואה" data-funnel="מודעות"><td>16</td><td><strong>Old Way / New Way</strong></td><td>השוואה</td><td>הצגת הדרך הטרחנית והישנה לעשות משהו לעומת הדרך החכמה והחדשה (המוצר שלך).</td><td><span class="tag funnel-top">מודעות / עניין</span></td></tr>
+            <tr data-category="השוואה" data-funnel="המרה"><td>17</td><td><strong>Checklist (צ'קליסט יתרונות)</strong></td><td>השוואה</td><td>מודעת תמונה סטטית עם רשימת וי כחול מדגישה את כל הבעיות שהמוצר פותר בבת אחת.</td><td><span class="tag funnel-bottom">המרה (Bottom-Funnel)</span></td></tr>
+            <tr data-category="השוואה" data-funnel="עניין"><td>18</td><td><strong>Blind Taste/Test (מבחן עיוור)</strong></td><td>השוואה</td><td>נסיינים מנסים את המוצר שלכם מול מתחרה מבלי לדעת מי זה מי, ובוחרים בכם.</td><td><span class="tag funnel-mid">עניין (Mid-Funnel)</span></td></tr>
+            
+            <!-- פוקוס מוצר (19-25) -->
+            <tr data-category="פוקוס מוצר" data-funnel="עניין"><td>19</td><td><strong>Feature Callout (חצי הצבעה)</strong></td><td>פוקוס מוצר</td><td>תמונה נקייה של המוצר עם חיצים וטקסטים המצביעים על רכיבים, חומרים או טכנולוגיה ספציפית.</td><td><span class="tag funnel-mid">עניין (Mid-Funnel)</span></td></tr>
+            <tr data-category="פוקוס מוצר" data-funnel="המרה"><td>20</td><td><strong>Product Demo (הדגמה נטו)</strong></td><td>פוקוס מוצר</td><td>וידאו קצר ותכליתי המראה בדיוק איך המוצר עובד, ללא קריינות מורכבת.</td><td><span class="tag funnel-bottom">המרה (Bottom-Funnel)</span></td></tr>
+            <tr data-category="פוקוס מוצר" data-funnel="מודעות"><td>21</td><td><strong>ASMR</strong></td><td>פוקוס מוצר</td><td>וידאו בדגש על סאונד מוגזם ומספק (פתיחת אריזה מתפצפצת, מריחת קרם, צליל של נגיסה פריכה).</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            <tr data-category="פוקוס מוצר" data-funnel="מודעות"><td>22</td><td><strong>Extreme Durability (מבחן ריסוק)</strong></td><td>פוקוס מוצר</td><td>העמדת המוצר במבחן קיצוני (כמו הפלת טלפון מגובה או זריקת תיק לבוץ) כדי להוכיח עמידות.</td><td><span class="tag funnel-top">מודעות / עניין</span></td></tr>
+            <tr data-category="פוקוס מוצר" data-funnel="עניין"><td>23</td><td><strong>האנטומיה של המוצר</strong></td><td>פוקוס מוצר</td><td>אנימציה או תמונה המפרקת את המוצר לשכבות שלו (למשל הסוליות של נעל ריצה).</td><td><span class="tag funnel-mid">עניין (Mid-Funnel)</span></td></tr>
+            <tr data-category="פוקוס מוצר" data-funnel="מודעות"><td>24</td><td><strong>Macro Shots (צילומי תקריב)</strong></td><td>פוקוס מוצר</td><td>התמקדות מוגזמת בטקסטורה של המוצר להמחשת איכות וגימור פרימיום.</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            <tr data-category="פוקוס מוצר" data-funnel="מודעות"><td>25</td><td><strong>3D CGI (הדמיית תלת מימד)</strong></td><td>פוקוס מוצר</td><td>סרטונים ויראליים שבהם מוצר ענק "משתלט" על עיר או מוצג באנימציה מופרעת.</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            
+            <!-- ערך והדרכה (26-32) -->
+            <tr data-category="ערך והדרכה" data-funnel="עניין"><td>26</td><td><strong>How-To Tutorial (מדריך)</strong></td><td>ערך והדרכה</td><td>תוכן חינוכי שנותן ערך מוסף חינמי (למשל: איך לחפוף נכון), כאשר המוצר משולב בפתרון.</td><td><span class="tag funnel-mid">עניין (Mid-Funnel)</span></td></tr>
+            <tr data-category="ערך והדרכה" data-funnel="מודעות"><td>27</td><td><strong>3 Reasons Why (שלוש סיבות למה)</strong></td><td>ערך והדרכה</td><td>פורמט קצבי שמפרט 3 סיבות מהירות למה כולם מדברים על המוצר הזה או חייבים אותו עכשיו.</td><td><span class="tag funnel-top">מודעות / עניין</span></td></tr>
+            <tr data-category="ערך והדרכה" data-funnel="מודעות"><td>28</td><td><strong>Top 5 Mistakes (טעויות נפוצות)</strong></td><td>ערך והדרכה</td><td>הוק שמושך תשומת לב פסיכולוגית באמצעות פחד מהפסד: "5 טעויות שאתם עושים ב-X".</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            <tr data-category="ערך והדרכה" data-funnel="עניין"><td>29</td><td><strong>Infographic (אינפוגרפיקה)</strong></td><td>ערך והדרכה</td><td>גרף, פירמידה או עוגת נתונים סטטית שמעבירה נתון סטטיסטי מוחץ לטובתכם תוך שנייה.</td><td><span class="tag funnel-mid">עניין (Mid-Funnel)</span></td></tr>
+            <tr data-category="ערך והדרכה" data-funnel="מודעות"><td>30</td><td><strong>Listicle (רשימה ממוספרת)</strong></td><td>ערך והדרכה</td><td>מודעה בסגנון כתבה אדיטוריאלית (Advertorial) שמפרטת "4 הדרכים להשיג X".</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            <tr data-category="ערך והדרכה" data-funnel="מודעות"><td>31</td><td><strong>Quiz Hook (חידון סקרנות)</strong></td><td>ערך והדרכה</td><td>מתחילים בשאלה למשתמש ("איזה סוג עור יש לך?") ומניעים אותו להקליק כדי לגלות את התשובה.</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            <tr data-category="ערך והדרכה" data-funnel="מודעות"><td>32</td><td><strong>Fun Fact (הידעתם?)</strong></td><td>ערך והדרכה</td><td>הצגת עובדה לא ידועה, מוזרה או מפתיעה בתחום שלכם, שמנפצת את מחסום הגלילה.</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            
+            <!-- בידור והומור (33-36) -->
+            <tr data-category="בידור והומור" data-funnel="מודעות"><td>33</td><td><strong>Comedy Skit (מערכון)</strong></td><td>בידור והומור</td><td>סרטון קומי או מיני-עלילה שמוגזם במכוון, ומשתמש בהומור כדי למכור מוצרים "משעממים".</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            <tr data-category="בידור והומור" data-funnel="מודעות"><td>34</td><td><strong>Meme Style (ממים)</strong></td><td>בידור והומור</td><td>שימוש בתבניות ממים מוכרות מהרשת עם התאמה טקסטואלית לכאבים של לקוחות המותג.</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            <tr data-category="בידור והומור" data-funnel="מודעות"><td>35</td><td><strong>The Epic Fail (הכישלון)</strong></td><td>בידור והומור</td><td>מתחילים במישהו שמנסה לעשות משהו ונכשל בצורה מצחיקה, ואז מציגים את המוצר כפתרון.</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            <tr data-category="בידור והומור" data-funnel="מודעות"><td>36</td><td><strong>Pop Culture Ref (תרבות פופ)</strong></td><td>בידור והומור</td><td>רפרנס לסרט, סדרה או טרנד רשת נוכחי שעליו "רוכבים" כדי להיראות רלוונטיים ומעודכנים.</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            
+            <!-- הוכחה חברתית (37-41) -->
+            <tr data-category="הוכחה חברתית" data-funnel="עניין"><td>37</td><td><strong>Press Mentions (ציוני עיתונות)</strong></td><td>הוכחה חברתית</td><td>מודעות סטטיות עם הלוגואים של כלי התקשורת שסיקרו אתכם וציטוט מחמיא מהכתבה.</td><td><span class="tag funnel-mid">עניין (Mid-Funnel)</span></td></tr>
+            <tr data-category="הוכחה חברתית" data-funnel="חזרה"><td>38</td><td><strong>Expert Review (סקירת מומחה)</strong></td><td>הוכחה חברתית</td><td>רופא, רואה חשבון, מוסכניק או סמכות מקצועית רלוונטית ממליץ על המוצר בגיבוי תעודות.</td><td><span class="tag funnel-retargeting">חזרה והמרה (Retargeting)</span></td></tr>
+            <tr data-category="הוכחה חברתית" data-funnel="חזרה"><td>39</td><td><strong>Massive Numbers (כוח המספרים)</strong></td><td>הוכחה חברתית</td><td>"למה מעל ל-15,000 ישראלים כבר עברו אלינו?" הוכחה חברתית של העדר.</td><td><span class="tag funnel-retargeting">חזרה והמרה (Retargeting)</span></td></tr>
+            <tr data-category="הוכחה חברתית" data-funnel="המרה"><td>40</td><td><strong>Trustpilot Overlay</strong></td><td>הוכחה חברתית</td><td>תמונה יפה של המוצר שמעליה "מודבקים" 5 כוכבים וצילום מסך של ביקורת אמיתית מלקוח.</td><td><span class="tag funnel-bottom">המרה (Bottom-Funnel)</span></td></tr>
+            <tr data-category="הוכחה חברתית" data-funnel="עניין"><td>41</td><td><strong>Award Winner (פרסים)</strong></td><td>הוכחה חברתית</td><td>התמקדות מוחלטת בפרסים בינלאומיים/מקומיים שהמוצר זכה בהם. משדר יוקרה וסטטוס.</td><td><span class="tag funnel-mid">עניין (Mid-Funnel)</span></td></tr>
+            
+            <!-- הצעה ודחיפות (42-45) -->
+            <tr data-category="הצעה ודחיפות" data-funnel="המרה"><td>42</td><td><strong>Flash Sale (מבצע בזק)</strong></td><td>הצעה ודחיפות</td><td>גרפיקה בולטת של טיימר או ספירה לאחור עם הצעת ערך אגרסיבית ל-24 שעות בלבד.</td><td><span class="tag funnel-bottom">המרה (Bottom-Funnel)</span></td></tr>
+            <tr data-category="הצעה ודחיפות" data-funnel="המרה"><td>43</td><td><strong>The Bundle (מארזים)</strong></td><td>הצעה ודחיפות</td><td>חזות של הררי מוצרים עם מחיר מחוק ("קבלו 5 שלמו על 3"). מעלה את סל הקניות הממוצע.</td><td><span class="tag funnel-bottom">המרה (Bottom-Funnel)</span></td></tr>
+            <tr data-category="הצעה ודחיפות" data-funnel="המרה"><td>44</td><td><strong>Free Trial (ניסיון חינם)</strong></td><td>הצעה ודחיפות</td><td>העברת כל הפוקוס של הקריאייטיב להסרת הסיכון מהלקוח ("נסו 30 יום בחינם, לא אהבתם - לא שילמתם").</td><td><span class="tag funnel-bottom">המרה (Bottom-Funnel)</span></td></tr>
+            <tr data-category="הצעה ודחיפות" data-funnel="חזרה"><td>45</td><td><strong>Secret Code (קוד סודי)</strong></td><td>הצעה ודחיפות</td><td>יוצר התוכן "לוחש" למצלמה קוד קופון אקסקלוסיבי שלא קיים באתר הרגיל, ומייצר תחושת VIP.</td><td><span class="tag funnel-retargeting">חזרה והמרה (Retargeting)</span></td></tr>
+            
+            <!-- אסתטיקה וסטייל (46-50) -->
+            <tr data-category="אסתטיקה וסטייל" data-funnel="מודעות"><td>46</td><td><strong>Oddly Satisfying (מספק מוזר)</strong></td><td>אסתטיקה וסטייל</td><td>שילוב של סאונד וויזואליה מדויקת במיוחד (חיתוך סימטרי, צבעים מושלמים) שמהפנטים את הצופה.</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            <tr data-category="אסתטיקה וסטייל" data-funnel="מודעות"><td>47</td><td><strong>Stop Motion (סטופ מושן)</strong></td><td>אסתטיקה וסטייל</td><td>אנימציית אובייקטים שבה המוצר מרכיב את עצמו, זז לבד או נארז מעצמו בטכניקה צילומית.</td><td><span class="tag funnel-top">מודעות / עניין</span></td></tr>
+            <tr data-category="אסתטיקה וסטייל" data-funnel="עניין"><td>48</td><td><strong>Time-Lapse (הילוך מהיר)</strong></td><td>אסתטיקה וסטייל</td><td>כיווץ של תהליך ארוך (למשל בניית רהיט, ציור, שיפוץ) ל-15 שניות המציגות טרנספורמציה.</td><td><span class="tag funnel-mid">עניין (Mid-Funnel)</span></td></tr>
+            <tr data-category="אסתטיקה וסטייל" data-funnel="מודעות"><td>49</td><td><strong>Aesthetic B-Roll</strong></td><td>אסתטיקה וסטייל</td><td>צילומים מהירים, תאורת אווירה פרימיום ומוזיקה קצבית (ללא דיבור) שמשדרים "וייב" של מותג נחשק.</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            <tr data-category="אסתטיקה וסטייל" data-funnel="מודעות"><td>50</td><td><strong>Kinetic Typography</strong></td><td>אסתטיקה וסטייל</td><td>סרטון המבוסס ברובו על טקסט שזז בצורה דינמית על המסך עם סאונד-אפקטים, ללא צורך בפרזנטור.</td><td><span class="tag funnel-top">מודעות / עניין</span></td></tr>
+
+            <!-- תוספת סגנונות 51-75 -->
+            <tr data-category="UGC ואותנטיות" data-funnel="מודעות"><td>51</td><td><strong>Reply to Comment (תשובה לתגובה)</strong></td><td>UGC ואותנטיות</td><td>הסרטון מתחיל עם מדבקה של תגובה מלקוח – והקרייטור עונה עליה בהוכחה מצולמת.</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            <tr data-category="ערך והדרכה" data-funnel="עניין"><td>52</td><td><strong>The Fake Podcast (פודקאסט מזויף)</strong></td><td>ערך והדרכה</td><td>בעל המותג יושב מול מיקרופון מקצועי, ו"חושף סוד" כאילו הוא מתארח בפודקאסט פופולרי.</td><td><span class="tag funnel-mid">עניין (Mid-Funnel)</span></td></tr>
+            <tr data-category="בעיה ופתרון" data-funnel="מודעות"><td>53</td><td><strong>Reverse Psychology (פסיכולוגיה הפוכה)</strong></td><td>בעיה ופתרון</td><td>מתחילים במשפט: "למה *אסור* לכם לקנות את המוצר הזה...", ואז מסבירים את התועלות שלו.</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            <tr data-category="UGC ואותנטיות" data-funnel="עניין"><td>54</td><td><strong>Packing an Order (אורזים הזמנה)</strong></td><td>UGC ואותנטיות</td><td>הבעלים או העובד מצלם את עצמו אורז הזמנה אמיתית. מייצר תחושת FOMO חזקה.</td><td><span class="tag funnel-mid">עניין (Mid-Funnel)</span></td></tr>
+            <tr data-category="השוואה" data-funnel="המרה"><td>55</td><td><strong>The Ultimate Tester (הנסיין)</strong></td><td>השוואה</td><td>"ניסיתי 10 מותגים שונים... הנה המנצח". הלקוח סומך על עבודת התחקיר שנעשתה עבורו.</td><td><span class="tag funnel-bottom">המרה (Bottom-Funnel)</span></td></tr>
+            <tr data-category="הוכחה חברתית" data-funnel="מודעות"><td>56</td><td><strong>WhatsApp Text Message (שיחת טקסט)</strong></td><td>הוכחה חברתית</td><td>אנימציה של מסך התכתבות בוואטסאפ שבו חבר ממליץ לחבר שני על המוצר.</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            <tr data-category="השוואה" data-funnel="מודעות"><td>57</td><td><strong>Red Flags / Green Flags</strong></td><td>השוואה</td><td>שימוש במושגים מעולם הדייטינג: פתרונות גנריים כ"דגל אדום" והמוצר שלכם כ"דגל ירוק".</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            <tr data-category="בעיה ופתרון" data-funnel="המרה"><td>58</td><td><strong>The Journey Timeline (ציר זמן התקדמות)</strong></td><td>בעיה ופתרון</td><td>מראים תהליך אותנטי: יום 1, יום 14, יום 30. הוכחת הדרגתיות הבונה אמינות.</td><td><span class="tag funnel-bottom">המרה (Bottom-Funnel)</span></td></tr>
+            <tr data-category="UGC ואותנטיות" data-funnel="עניין"><td>59</td><td><strong>Partner Review (ביקורת בן/בת זוג)</strong></td><td>UGC ואותנטיות</td><td>"גנבתי לאשתי את המוצר שלה". סקירה על מוצר שלא נועד לבן הזוג, אך הוא התאהב בו.</td><td><span class="tag funnel-mid">עניין (Mid-Funnel)</span></td></tr>
+            <tr data-category="ערך והדרכה" data-funnel="מודעות"><td>60</td><td><strong>Whiteboard Explainer (לוח מחיק)</strong></td><td>ערך והדרכה</td><td>פרזנטור עומד מול לוח מחיק ומסביר בעזרת שרבוט זריז ופשוט קונספט מורכב.</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            <tr data-category="השוואה" data-funnel="המרה"><td>61</td><td><strong>Venn Diagram (דיאגרמת ון)</strong></td><td>השוואה</td><td>אינפוגרפיקה המציגה מעגלים (מחיר, איכות, מהירות). המוצר ממוקם בדיוק באמצע.</td><td><span class="tag funnel-bottom">המרה (Bottom-Funnel)</span></td></tr>
+            <tr data-category="פוקוס מוצר" data-funnel="מודעות"><td>62</td><td><strong>Hyper-Specific Callout (קריאת נישה)</strong></td><td>פוקוס מוצר</td><td>פנייה אגרסיבית לקהל מדויק: "אם אתה מתכנת מעל גיל 30 שכואב לו הגב, זה בשבילך".</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            <tr data-category="אסתטיקה וסטייל" data-funnel="מודעות"><td>63</td><td><strong>Visual Restocking (חידוש מלאי)</strong></td><td>אסתטיקה וסטייל</td><td>סרטון ASMR ויזואלי של סידור מוצרים בצורה סימטרית על המדפים. מסר של ביקוש מטורף.</td><td><span class="tag funnel-top">מודעות / עניין</span></td></tr>
+            <tr data-category="ערך והדרכה" data-funnel="המרה"><td>64</td><td><strong>The Flowchart (תרשים זרימה)</strong></td><td>ערך והדרכה</td><td>תמונה המשמשת כבוחן: סדרת שאלות שמובילות את הלקוח בדיוק למוצר שמתאים לו.</td><td><span class="tag funnel-bottom">המרה (Bottom-Funnel)</span></td></tr>
+            <tr data-category="בידור והומור" data-funnel="מודעות"><td>65</td><td><strong>Split Screen / "Subway Surfers" Effect</strong></td><td>בידור והומור</td><td>חצי מסך מראה משחק רץ, החצי השני את המודעה. נועד לרתק משתמשים עם בעיות קשב.</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            <tr data-category="ערך והדרכה" data-funnel="מודעות"><td>66</td><td><strong>Industry Secrets (סודות התעשייה)</strong></td><td>ערך והדרכה</td><td>"מה שהמותגים הגדולים לא רוצים שתדעו". חשיפת האמת ומיתוג המוצר כאלטרנטיבה הוגנת.</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            <tr data-category="UGC ואותנטיות" data-funnel="עניין"><td>67</td><td><strong>This or That (זה או זה)</strong></td><td>UGC ואותנטיות</td><td>הצגת שני צבעים/דגמים ושואלת את הקהל איזה הם מעדיפים כדי לעורר מעורבות ותגובות.</td><td><span class="tag funnel-mid">עניין (Mid-Funnel)</span></td></tr>
+            <tr data-category="הצעה ודחיפות" data-funnel="חזרה"><td>68</td><td><strong>The "Secret Menu" (התפריט הסודי)</strong></td><td>הצעה ודחיפות</td><td>הצעת גישה ל"באנדל סודי" שלא מופיע בתפריט הראשי של האתר לתחושת VIP אקסקלוסיבית.</td><td><span class="tag funnel-retargeting">חזרה והמרה (Retargeting)</span></td></tr>
+            <tr data-category="אסתטיקה וסטייל" data-funnel="עניין"><td>69</td><td><strong>Pure POV (גוף ראשון)</strong></td><td>אסתטיקה וסטייל</td><td>המצלמה בגובה העיניים. הצופה רואה רק ידיים שמשתמשות במוצר, מה שמייצר תחושת מעורבות.</td><td><span class="tag funnel-mid">עניין (Mid-Funnel)</span></td></tr>
+            <tr data-category="בידור והומור" data-funnel="מודעות"><td>70</td><td><strong>Customer Support Skit (שירות לקוחות)</strong></td><td>בידור והומור</td><td>נציג שירות מדבר עם לקוח "זועם" שמתלונן שהמוצר עובד *מדי* טוב.</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            <tr data-category="UGC ואותנטיות" data-funnel="מודעות"><td>71</td><td><strong>Trend Aggregation (טיקטוק הכריח אותי)</strong></td><td>UGC ואותנטיות</td><td>הפריט מוצג כחלק מטרנד רחב. "האינטרנט הכריח אותי לקנות את זה".</td><td><span class="tag funnel-top">מודעות (Top-Funnel)</span></td></tr>
+            <tr data-category="בעיה ופתרון" data-funnel="עניין"><td>72</td><td><strong>The "Aha" Moment (רגע התגלית)</strong></td><td>בעיה ופתרון</td><td>התמקדות נטו בפריים שבו הלקוח קולט שהבעיה נפתרה, מדלגים ישר לרגש של אחרי.</td><td><span class="tag funnel-mid">עניין (Mid-Funnel)</span></td></tr>
+            <tr data-category="הצעה ודחיפות" data-funnel="המרה"><td>73</td><td><strong>Stock Warning (אזהרת מלאי)</strong></td><td>הצעה ודחיפות</td><td>"אל תזמינו יותר, אנחנו לא עומדים בעומס". מייצר פאניקת קנייה חיובית (FOMO).</td><td><span class="tag funnel-bottom">המרה (Bottom-Funnel)</span></td></tr>
+            <tr data-category="אסתטיקה וסטייל" data-funnel="מודעות"><td>74</td><td><strong>Reverse Unboxing (אנבוקסינג הפוך)</strong></td><td>אסתטיקה וסטייל</td><td>המוצר מוצג בשיא הדרו בשימוש, ובהילוך אחורי קצבי חוזר עד לאריזה הסגורה.</td><td><span class="tag funnel-top">מודעות / עניין</span></td></tr>
+            <tr data-category="השוואה" data-funnel="המרה"><td>75</td><td><strong>The Price Breakdown (שקיפות מחיר)</strong></td><td>השוואה</td><td>פירוק בשקיפות מלאה של עלות חומרי הגלם וזמן העבודה כדי להצדיק רכישת פרימיום.</td><td><span class="tag funnel-bottom">המרה (Bottom-Funnel)</span></td></tr>
+
+            <!-- תוספת סגנונות ריטרגטינג 76-83 -->
+            <tr data-category="הצעה ודחיפות" data-funnel="חזרה"><td>76</td><td><strong>The Replenishment Reminder (תזכורת חידוש מלאי)</strong></td><td>הצעה ודחיפות</td><td>מודעה שמוצגת כשנגמר ללקוח המוצר: "עברו 30 יום מאז שהזמנת, הנה קליק לחידוש".</td><td><span class="tag funnel-retargeting">חזרה והמרה (Retargeting)</span></td></tr>
+            <tr data-category="הצעה ודחיפות" data-funnel="חזרה"><td>77</td><td><strong>The Cross-Sell Match (השידוך המושלם)</strong></td><td>הצעה ודחיפות</td><td>מודעה המבוססת על רכישה קודמת: "ראינו שאהבת את השמפו – הגיע הזמן שתכיר את המסכה".</td><td><span class="tag funnel-retargeting">חזרה והמרה (Retargeting)</span></td></tr>
+            <tr data-category="הצעה ודחיפות" data-funnel="חזרה"><td>78</td><td><strong>VIP Early Access (גישה מוקדמת)</strong></td><td>הצעה ודחיפות</td><td>הכרזה על קולקציה/מוצר חדש עם גישה מוקדמת רק ללקוחות עבר. בונה נאמנות וסטטוס.</td><td><span class="tag funnel-retargeting">חזרה והמרה (Retargeting)</span></td></tr>
+            <tr data-category="הצעה ודחיפות" data-funnel="חזרה"><td>79</td><td><strong>The "We Missed You" Offer (התגעגענו)</strong></td><td>הצעה ודחיפות</td><td>פנייה ישירה ללקוחות שנטשו: "עבר הרבה זמן, שמנו לך 15% הנחה בחשבון כדי להזכיר לך אותנו".</td><td><span class="tag funnel-retargeting">חזרה והמרה (Retargeting)</span></td></tr>
+            <tr data-category="ערך והדרכה" data-funnel="חזרה"><td>80</td><td><strong>Pro-User Hacks (טריק למתקדמים)</strong></td><td>ערך והדרכה</td><td>סרטון למי שכבר יש לו את המוצר, שמראה שימוש "סודי" או מתקדם בו כדי לעודד שימוש חוזר.</td><td><span class="tag funnel-retargeting">חזרה והמרה (Retargeting)</span></td></tr>
+            <tr data-category="הצעה ודחיפות" data-funnel="חזרה"><td>81</td><td><strong>Subscription Upsell (שדרוג למנוי)</strong></td><td>הצעה ודחיפות</td><td>"נמאס לך להזמין כל חודש מחדש? שדרג למנוי וקבל את המוצר אוטומטית עם הנחה קבועה".</td><td><span class="tag funnel-retargeting">חזרה והמרה (Retargeting)</span></td></tr>
+            <tr data-category="UGC ואותנטיות" data-funnel="חזרה"><td>82</td><td><strong>The Founder's "Thank You" (תודת המייסד)</strong></td><td>UGC ואותנטיות</td><td>וידאו נקי של בעל המותג פונה למצלמה: "תודה אישית שבחרת בנו, צירפתי מתנה להזמנה הבאה".</td><td><span class="tag funnel-retargeting">חזרה והמרה (Retargeting)</span></td></tr>
+            <tr data-category="פוקוס מוצר" data-funnel="חזרה"><td>83</td><td><strong>You Asked, We Listened (ביקשתם, הקשבנו)</strong></td><td>פוקוס מוצר</td><td>הכרזה על שדרוג, טעם חדש או פיצ'ר שהקהל דרש. מוכיח הקשבה ללקוחות ומוכר ליין חדש.</td><td><span class="tag funnel-retargeting">חזרה והמרה (Retargeting)</span></td></tr>
+        </tbody>
+    </table>
+    <div id="noResults" class="no-results">לא נמצאו סגנונות התואמים לחיפוש שלך.</div>
+</div>
+
+<script>
+    function filterTable() {
+        const searchText = document.getElementById("search").value.toLowerCase();
+        const categoryFilter = document.getElementById("categoryFilter").value;
+        const funnelFilter = document.getElementById("funnelFilter").value;
+        
+        const trs = document.querySelectorAll("#adsTable tbody tr");
+        let visibleCount = 0;
+
+        trs.forEach(tr => {
+            const textContent = tr.innerText.toLowerCase();
+            const category = tr.getAttribute("data-category");
+            const funnel = tr.getAttribute("data-funnel");
+            
+            // Logic for match
+            const matchesSearch = textContent.includes(searchText);
+            const matchesCategory = (categoryFilter === "all") || (category === categoryFilter);
+            const matchesFunnel = (funnelFilter === "all") || funnel.includes(funnelFilter);
+
+            if (matchesSearch && matchesCategory && matchesFunnel) {
+                tr.style.display = "";
+                visibleCount++;
+            } else {
+                tr.style.display = "none";
+            }
+        });
+
+        // Show "no results" message if needed
+        document.getElementById("noResults").style.display = visibleCount === 0 ? "block" : "none";
+    }
+</script>
+
+</body>
+</html>

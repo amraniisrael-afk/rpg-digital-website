@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3 דרכים לקהל VIP — GTM, סינון ישיר, Customer Match</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue: #003764;
+  --yellow: #FFC20E;
+  --bg: #0d1117;
+  --surface: #161b27;
+  --surface2: #1a2030;
+  --border: #1e2535;
+  --text: #e2e8f0;
+  --muted: #64748b;
+}
+
+body {
+  font-family: 'Heebo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* ── Header ── */
+.header {
+  background: var(--blue);
+  padding: 28px 40px;
+  border-bottom: 4px solid var(--yellow);
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute;
+  top: -50px; left: -50px;
+  width: 220px; height: 220px;
+  background: rgba(255,194,14,0.05);
+  border-radius: 50%;
+}
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.logo { font-size: 13px; font-weight: 800; color: rgba(255,255,255,0.6); letter-spacing: 1px; }
+.logo span { color: var(--yellow); }
+.platform-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+.platform-tag {
+  font-size: 11px; font-weight: 800;
+  padding: 4px 12px; border-radius: 20px;
+  letter-spacing: 0.4px;
+}
+.tag-ga4  { background: rgba(251,146,60,0.15); border: 1px solid rgba(251,146,60,0.35); color: #fb923c; }
+.tag-meta { background: rgba(24,119,242,0.15); border: 1px solid rgba(24,119,242,0.35); color: #60a5fa; }
+.tag-gads { background: rgba(52,211,153,0.12); border: 1px solid rgba(52,211,153,0.3);  color: #34d399; }
+
+.header h1 {
+  font-size: 26px; font-weight: 900; color: #fff;
+  line-height: 1.25; margin-bottom: 10px;
+}
+.header h1 span { color: var(--yellow); }
+.header-subtitle { font-size: 14px; color: rgba(255,255,255,0.65); max-width: 680px; }
+
+/* ── Container ── */
+.container { max-width: 900px; margin: 0 auto; padding: 40px 24px 64px; }
+
+/* ── Comparison overview ── */
+.methods-overview {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 48px;
+}
+.method-pill {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+  border-top: 3px solid;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.method-pill:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+.method-pill.m1 { border-top-color: #FFC20E; }
+.method-pill.m2 { border-top-color: #3b82f6; }
+.method-pill.m3 { border-top-color: #10b981; }
+.method-pill .mp-icon { font-size: 28px; margin-bottom: 10px; }
+.method-pill .mp-num  { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+.method-pill.m1 .mp-num { color: #FFC20E; }
+.method-pill.m2 .mp-num { color: #60a5fa; }
+.method-pill.m3 .mp-num { color: #34d399; }
+.method-pill h3 { font-size: 13px; font-weight: 800; color: #f1f5f9; margin-bottom: 6px; line-height: 1.35; }
+.method-pill p  { font-size: 11px; color: #64748b; line-height: 1.5; }
+
+/* ── Divider ── */
+.divider {
+  height: 1px; background: var(--border);
+  margin: 48px 0;
+}
+
+/* ── Section header ── */
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.section-num {
+  min-width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 900; flex-shrink: 0;
+}
+.num-1 { background: rgba(255,194,14,0.12); border: 1px solid rgba(255,194,14,0.3); color: var(--yellow); }
+.num-2 { background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.3); color: #60a5fa; }
+.num-3 { background: rgba(16,185,129,0.10); border: 1px solid rgba(16,185,129,0.25); color: #34d399; }
+.section-header-text h2 { font-size: 20px; font-weight: 900; color: #fff; line-height: 1.3; }
+.section-header-text p  { font-size: 13px; color: var(--muted); margin-top: 3px; }
+
+/* ── Card ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.card-body { padding: 24px 28px; }
+.card-body p { font-size: 14px; color: #94a3b8; line-height: 1.8; margin-bottom: 14px; }
+.card-body p:last-child { margin-bottom: 0; }
+.card-body strong { color: #e2e8f0; font-weight: 700; }
+
+/* ── Platform sub-cards ── */
+.platform-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 4px 0;
+}
+.platform-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  border-top: 3px solid;
+}
+.platform-card.ga4  { border-top-color: #fb923c; }
+.platform-card.meta { border-top-color: #1877F2; }
+.platform-card .pc-label {
+  font-size: 10px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 12px;
+  display: flex; align-items: center; gap: 7px;
+}
+.platform-card.ga4  .pc-label { color: #fb923c; }
+.platform-card.meta .pc-label { color: #60a5fa; }
+.platform-card h3 { font-size: 13px; font-weight: 800; color: #f1f5f9; margin-bottom: 10px; }
+
+/* ── Steps inside platform card ── */
+.mini-steps { list-style: none; }
+.mini-step {
+  display: flex;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid #111827;
+  align-items: flex-start;
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.6;
+}
+.mini-step:last-child { border-bottom: none; }
+.mini-step-num {
+  width: 20px; height: 20px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 900; color: #475569;
+  flex-shrink: 0; margin-top: 1px;
+}
+.mini-step strong { color: #94a3b8; }
+.mini-step code {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border);
+  border-radius: 4px; padding: 1px 6px;
+  font-size: 11px; color: var(--yellow);
+  font-family: 'Courier New', monospace;
+  white-space: nowrap;
+}
+
+/* ── Advantage bar ── */
+.advantage-bar {
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-top: 16px;
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.advantage-bar.yellow { background: rgba(255,194,14,0.06); border: 1px solid rgba(255,194,14,0.2); }
+.advantage-bar.green  { background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.2); }
+.advantage-bar.blue   { background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.2); }
+.advantage-bar .ab-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+.advantage-bar p { font-size: 13px; line-height: 1.65; margin: 0; }
+.advantage-bar.yellow p { color: #fde68a; }
+.advantage-bar.green  p { color: #6ee7b7; }
+.advantage-bar.blue   p { color: #93c5fd; }
+.advantage-bar strong { opacity: 0.9; }
+
+/* ── CSV steps (method 3) ── */
+.csv-steps { margin: 16px 0; }
+.csv-step {
+  display: flex;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid #1a2030;
+  align-items: flex-start;
+}
+.csv-step:last-child { border-bottom: none; }
+.csv-step-num {
+  width: 30px; height: 30px;
+  background: rgba(16,185,129,0.08);
+  border: 1px solid rgba(16,185,129,0.25);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 900; color: #34d399;
+  flex-shrink: 0;
+}
+.csv-step-body h4 { font-size: 13px; font-weight: 800; color: #f1f5f9; margin-bottom: 4px; }
+.csv-step-body p  { font-size: 12px; color: #64748b; line-height: 1.65; }
+.csv-step-body strong { color: #94a3b8; }
+
+/* ── Customer Match platforms ── */
+.cm-platforms {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 16px 0;
+}
+.cm-platform {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px;
+  border-top: 3px solid;
+}
+.cm-platform.google { border-top-color: #34d399; }
+.cm-platform.meta   { border-top-color: #1877F2; }
+.cm-platform .cmp-label {
+  font-size: 10px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.cm-platform.google .cmp-label { color: #34d399; }
+.cm-platform.meta   .cmp-label { color: #60a5fa; }
+.cm-platform p { font-size: 12px; color: #64748b; line-height: 1.6; }
+.cm-platform strong { color: #94a3b8; }
+
+/* ── Comparison table ── */
+.comparison-table {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-top: 48px;
+}
+.ct-header {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  background: #1a2030;
+  border-bottom: 1px solid var(--border);
+}
+.ct-th {
+  padding: 12px 16px;
+  font-size: 11px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.8px;
+  color: var(--muted);
+}
+.ct-th:not(:last-child) { border-left: 1px solid var(--border); }
+.ct-row {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  border-bottom: 1px solid #111827;
+  align-items: center;
+}
+.ct-row:last-child { border-bottom: none; }
+.ct-row:hover { background: rgba(255,255,255,0.02); }
+.ct-td {
+  padding: 12px 16px;
+  font-size: 12px;
+}
+.ct-td:not(:last-child) { border-left: 1px solid #111827; }
+.ct-td.label { color: #94a3b8; font-weight: 700; font-size: 13px; }
+.ct-td.good { color: #34d399; font-weight: 600; }
+.ct-td.ok   { color: #fbbf24; font-weight: 600; }
+.ct-td.bad  { color: #94a3b8; }
+
+.table-title {
+  font-size: 17px; font-weight: 900; color: #fff;
+  margin: 48px 0 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.table-title::before {
+  content: '';
+  display: inline-block;
+  width: 4px; height: 18px;
+  background: var(--yellow); border-radius: 2px; flex-shrink: 0;
+}
+
+@media (max-width: 680px) {
+  .methods-overview { grid-template-columns: 1fr; }
+  .platform-split   { grid-template-columns: 1fr; }
+  .cm-platforms     { grid-template-columns: 1fr; }
+  .ct-header, .ct-row { grid-template-columns: 1fr 1fr; }
+  .ct-th:nth-child(n+3), .ct-td:nth-child(n+3) { display: none; }
+  .header { padding: 20px; }
+  .header h1 { font-size: 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="logo">RPG <span>Digital</span> — Knowledge Hub</div>
+    <div class="platform-tags">
+      <div class="platform-tag tag-ga4">📊 GA4</div>
+      <div class="platform-tag tag-meta">📘 Meta</div>
+      <div class="platform-tag tag-gads">🎯 Google Ads</div>
+    </div>
+  </div>
+  <h1>3 דרכים לבנות קהל VIP<br><span>GTM · סינון ישיר · Customer Match</span></h1>
+  <div class="header-subtitle">
+    GTM הוא רק אחת הדרכים. הנה שלוש שיטות שמגיעות לאותה תוצאה — לכל אחת יתרון אחר ומצב שבו היא האפשרות הנכונה.
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Overview pills -->
+  <div class="methods-overview">
+    <div class="method-pill m1">
+      <div class="mp-icon">🏷️</div>
+      <div class="mp-num">דרך 1 — GTM</div>
+      <h3>אירוע מותאם אישית</h3>
+      <p>שליחת אירוע ייחודי (purchase_over_1000) עם סינון בטריגר</p>
+    </div>
+    <div class="method-pill m2">
+      <div class="mp-icon">🎛️</div>
+      <div class="mp-num">דרך 2 — סינון ישיר</div>
+      <h3>פרמטר value בקהל</h3>
+      <p>שימוש באירוע purchase הרגיל + סינון לפי value במערכת הקהלים</p>
+    </div>
+    <div class="method-pill m3">
+      <div class="mp-icon">📋</div>
+      <div class="mp-num">דרך 3 — CSV</div>
+      <h3>Customer Match / List</h3>
+      <p>העלאת רשימת לקוחות ישירות מהחנות — ללא פיקסל</p>
+    </div>
+  </div>
+
+  <!-- METHOD 1 (brief recap) -->
+  <div class="section-header">
+    <div class="section-num num-1">1</div>
+    <div class="section-header-text">
+      <h2>GTM — אירוע מותאם אישית</h2>
+      <p>השיטה שיישמנו — מעולה, אבל דורשת עדכון GTM לכל שינוי בסף</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <p>
+        יצרנו טריגר <strong>Some Custom Events</strong> שמפעיל תג GA4 בשם <code style="background:rgba(255,255,255,0.06);border:1px solid #1e2535;border-radius:5px;padding:2px 8px;font-size:12px;color:#FFC20E;font-family:monospace">purchase_over_1000</code> רק כשהעסקה חוצה את הסף. האירוע הייחודי הזה מגיע ל-GA4 ומשם לקמפיינים.
+      </p>
+      <p>
+        <strong>מתי זה הכי נכון:</strong> כשרוצים אירוע נפרד ומובחן בדוחות GA4, עם שם שקל לזהות. הדאשבורד נשאר נקי כי ה-VIP מוגדר כאירוע בפני עצמו.
+      </p>
+      <p>
+        <strong>החיסרון היחיד:</strong> שינוי הסף (מ-1000 ל-1500 ש"ח) מצריך כניסה ל-GTM, עדכון הטריגר, ו-Publish מחדש.
+      </p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- METHOD 2 -->
+  <div class="section-header">
+    <div class="section-num num-2">2</div>
+    <div class="section-header-text">
+      <h2>סינון ישיר בתוך מערכות הקהלים</h2>
+      <p>אירוע purchase רגיל + פרמטר value — בלי לגעת ב-GTM</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <p>
+        מאחר ש-<strong>Send Ecommerce Data</strong> מסומן, הפרמטר <code style="background:rgba(255,255,255,0.06);border:1px solid #1e2535;border-radius:5px;padding:2px 8px;font-size:12px;color:#FFC20E;font-family:monospace">value</code> (סכום העסקה) כבר זורם עם כל אירוע purchase רגיל לשתי המערכות. כל מה שנשאר — להגיד למערכת הקהלים לסנן לפיו.
+      </p>
+    </div>
+  </div>
+
+  <div class="platform-split">
+    <div class="platform-card ga4">
+      <div class="pc-label">📊 Google Analytics 4</div>
+      <h3>קהל חדש עם פרמטר value</h3>
+      <ul class="mini-steps">
+        <li class="mini-step">
+          <div class="mini-step-num">1</div>
+          <div>יוצרים קהל חדש ב-GA4 — <strong>Admin → Audiences → New audience</strong></div>
+        </li>
+        <li class="mini-step">
+          <div class="mini-step-num">2</div>
+          <div>בוחרים את האירוע הסטנדרטי <code>purchase</code> (לא אירוע מותאם)</div>
+        </li>
+        <li class="mini-step">
+          <div class="mini-step-num">3</div>
+          <div>לוחצים על <strong>Add parameter</strong> → מחפשים <code>value</code></div>
+        </li>
+        <li class="mini-step">
+          <div class="mini-step-num">4</div>
+          <div>מגדירים: <strong>greater than</strong> → <code>1000</code></div>
+        </li>
+        <li class="mini-step">
+          <div class="mini-step-num">5</div>
+          <div>שומרים — הקהל מתחיל לצבור מיד</div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="platform-card meta">
+      <div class="pc-label">📘 Meta (Facebook)</div>
+      <h3>קהל מותאם + Refine by value</h3>
+      <ul class="mini-steps">
+        <li class="mini-step">
+          <div class="mini-step-num">1</div>
+          <div><strong>Audiences → Create → Custom Audience → Website</strong></div>
+        </li>
+        <li class="mini-step">
+          <div class="mini-step-num">2</div>
+          <div>בשדה האירוע בוחרים <code>Purchase</code> (הסטנדרטי)</div>
+        </li>
+        <li class="mini-step">
+          <div class="mini-step-num">3</div>
+          <div>לוחצים על <strong>Refine by</strong> → בוחרים <strong>URL/Parameter</strong></div>
+        </li>
+        <li class="mini-step">
+          <div class="mini-step-num">4</div>
+          <div>בוחרים פרמטר <code>value</code> → <strong>greater than</strong> → <code>1000</code></div>
+        </li>
+        <li class="mini-step">
+          <div class="mini-step-num">5</div>
+          <div>שומרים — הקהל מוכן לשימוש בקמפיינים</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="advantage-bar yellow">
+    <div class="ab-icon">💡</div>
+    <p>
+      <strong>היתרון הגדול:</strong> גמישות מוחלטת — לשנות את הסף מ-1,000 ל-1,500 ש"ח לוקח שני קליקים ישירות בממשק הקהלים, בלי לגעת בקוד או ב-GTM. אין צורך ב-Publish, אין ריצה לדב.
+    </p>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- METHOD 3 -->
+  <div class="section-header">
+    <div class="section-num num-3">3</div>
+    <div class="section-header-text">
+      <h2>Customer Match — העלאת רשימת לקוחות</h2>
+      <p>דאטה מהחנות ישירות למערכת — חסין לחוסמי פרסומות ולבעיות פיקסל</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <p>
+        במקום להסתמך על פיקסל שיזהה את הגולש בזמן אמת, אתה פועל <strong>"אופליין"</strong> — מייצא את הדאטה שכבר קיים במערכת הניהול של החנות ומעלה אותו ישירות לגוגל או לפייסבוק.
+      </p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="csv-steps">
+        <div class="csv-step">
+          <div class="csv-step-num">1</div>
+          <div class="csv-step-body">
+            <h4>יצוא מהחנות</h4>
+            <p>
+              נכנסים ל-Shopify / WooCommerce / מערכת הניהול → מפיקים דוח לקוחות מסונן לפי רכישה בודדת מעל 1,000 ש"ח (או לפי LTV גבוה — סכום מצטבר לאורך זמן). הקובץ יכיל: <strong>כתובת מייל + מספר טלפון</strong>.
+            </p>
+          </div>
+        </div>
+        <div class="csv-step">
+          <div class="csv-step-num">2</div>
+          <div class="csv-step-body">
+            <h4>כניסה למנהל הקהלים</h4>
+            <p>Google Ads: <strong>Tools → Audience Manager → + → Customer list</strong><br>Meta: <strong>Audiences → Create → Custom Audience → Customer list</strong></p>
+          </div>
+        </div>
+        <div class="csv-step">
+          <div class="csv-step-num">3</div>
+          <div class="csv-step-body">
+            <h4>העלאת הקובץ</h4>
+            <p>מעלים את ה-CSV. המערכת מצפינה (Hash) את המיילים ומספרי הטלפון ומשווה אותם למשתמשים אמיתיים בפלטפורמה.</p>
+          </div>
+        </div>
+        <div class="csv-step">
+          <div class="csv-step-num">4</div>
+          <div class="csv-step-body">
+            <h4>שימוש בקמפיינים</h4>
+            <p>
+              הקהל מוכן בתוך כמה שעות — אפשר להשתמש בו לרימרקטינג, Lookalike (Meta) או Audience Signal (PMax).
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cm-platforms">
+    <div class="cm-platform google">
+      <div class="cmp-label">🎯 Google Ads</div>
+      <p>נקרא <strong>Customer Match</strong>. דורש חשבון עם היסטוריה טובה (Ads Policy). קהל תקף גם לקמפייני Search, Shopping ו-YouTube.</p>
+    </div>
+    <div class="cm-platform meta">
+      <div class="cmp-label">📘 Meta</div>
+      <p>נקרא <strong>Customer List</strong>. אחוז ה-Match (התאמה) בדרך כלל 50–70%. כל מאצ' = משתמש אמיתי בקהל.</p>
+    </div>
+  </div>
+
+  <div class="advantage-bar green">
+    <div class="ab-icon">🛡️</div>
+    <p>
+      <strong>היתרון הגדול:</strong> חסינות מוחלטת — חוסמי פרסומות, מחיקת קוקיז, הגבלות iOS של אפל, GTM שהתקלקל. כלום לא משפיע. הדאטה מגיע ישירות מהסליקה שלך ולכן הוא <strong>המדויק ביותר מבין השלושה</strong>.
+    </p>
+  </div>
+
+  <!-- Comparison table -->
+  <div class="table-title">השוואה מלאה — איזו שיטה מתאימה מתי?</div>
+
+  <div class="comparison-table">
+    <div class="ct-header">
+      <div class="ct-th">קריטריון</div>
+      <div class="ct-th">GTM Event</div>
+      <div class="ct-th">סינון ישיר</div>
+      <div class="ct-th">Customer Match</div>
+    </div>
+    <div class="ct-row">
+      <div class="ct-td label">גמישות בשינוי סף</div>
+      <div class="ct-td bad">GTM + Publish</div>
+      <div class="ct-td good">2 קליקים ✓</div>
+      <div class="ct-td ok">יצוא CSV מחדש</div>
+    </div>
+    <div class="ct-row">
+      <div class="ct-td label">עמידות לחוסמי פרסומות</div>
+      <div class="ct-td ok">חלקית</div>
+      <div class="ct-td ok">חלקית</div>
+      <div class="ct-td good">מלאה ✓</div>
+    </div>
+    <div class="ct-row">
+      <div class="ct-td label">דיוק הנתונים</div>
+      <div class="ct-td ok">תלוי פיקסל</div>
+      <div class="ct-td ok">תלוי פיקסל</div>
+      <div class="ct-td good">מהסליקה ✓</div>
+    </div>
+    <div class="ct-row">
+      <div class="ct-td label">אירוע ייחודי בדוחות GA4</div>
+      <div class="ct-td good">כן ✓</div>
+      <div class="ct-td bad">לא</div>
+      <div class="ct-td bad">לא</div>
+    </div>
+    <div class="ct-row">
+      <div class="ct-td label">עדכון בזמן אמת</div>
+      <div class="ct-td good">כן ✓</div>
+      <div class="ct-td good">כן ✓</div>
+      <div class="ct-td bad">יצוא ידני</div>
+    </div>
+    <div class="ct-row">
+      <div class="ct-td label">לקוחות היסטוריים (לפני הפיקסל)</div>
+      <div class="ct-td bad">לא</div>
+      <div class="ct-td bad">לא</div>
+      <div class="ct-td good">כן ✓</div>
+    </div>
+    <div class="ct-row">
+      <div class="ct-td label">סינון לפי LTV (ערך חיים)</div>
+      <div class="ct-td bad">מורכב</div>
+      <div class="ct-td bad">מוגבל</div>
+      <div class="ct-td good">מלא ✓</div>
+    </div>
+  </div>
+
+  <div class="advantage-bar blue" style="margin-top:24px;">
+    <div class="ab-icon">🏆</div>
+    <p>
+      <strong>הגישה האידיאלית:</strong> שלב את שלושתן. GTM לדיווח נקי בגוגל, סינון ישיר לגמישות מהירה, ו-Customer Match כ"רשת ביטחון" שתופסת את מי שהפיקסל פספס — ומאפשרת לבנות קהל VIP על בסיס LTV אמיתי מהחנות.
+    </p>
+  </div>
+
+</div>
+</body>
+</html>

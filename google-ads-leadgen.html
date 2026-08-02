@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ארכיטקטורת Google Search לליד ג'נרשן מתקדם</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#1a73e8;--blue-dark:#1557b0;--green:#1e8c45;--red:#d93025;
+  --orange:#f29900;--purple:#7b2d8b;--bg:#f8f9fa;--card:#fff;
+  --text:#202124;--muted:#5f6368;--border:#dadce0;--radius:12px;
+  --shadow:0 2px 8px rgba(0,0,0,.1);--shadow-md:0 4px 16px rgba(0,0,0,.15);
+}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;font-size:16px}
+a{color:var(--blue);text-decoration:none}
+h1{font-size:2.4rem;font-weight:800;line-height:1.2}
+h2{font-size:1.8rem;font-weight:700;margin-bottom:1rem}
+h3{font-size:1.25rem;font-weight:700;margin-bottom:.6rem}
+h4{font-size:1.05rem;font-weight:600;margin-bottom:.4rem}
+p{margin-bottom:.9rem}
+ul,ol{padding-right:1.4rem;margin-bottom:.9rem}
+li{margin-bottom:.3rem}
+strong{font-weight:700}
+.container{max-width:1100px;margin:0 auto;padding:0 20px}
+.section{padding:70px 0}
+.section:nth-child(even){background:#fff}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--border);box-shadow:var(--shadow)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;max-width:1100px;margin:0 auto;flex-wrap:wrap;gap:8px}
+.nav-logo{font-weight:800;font-size:1rem;color:var(--blue)}
+.nav-links{display:flex;gap:6px;flex-wrap:wrap}
+.nav-links a{font-size:.78rem;padding:5px 10px;border-radius:20px;color:var(--muted);transition:.2s;white-space:nowrap}
+.nav-links a:hover,.nav-links a.active{background:var(--blue);color:#fff}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1a73e8 0%,#0d47a1 60%,#1a237e 100%);color:#fff;padding:80px 0 60px;text-align:center}
+.hero h1{margin-bottom:1rem;font-size:2.5rem}
+.hero p{font-size:1.15rem;opacity:.9;max-width:700px;margin:0 auto 1.5rem}
+.badge{display:inline-block;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);border-radius:20px;padding:5px 14px;font-size:.85rem;margin-bottom:1.5rem}
+.hero-stats{display:flex;gap:30px;justify-content:center;flex-wrap:wrap;margin-top:2rem}
+.hero-stat{text-align:center}
+.hero-stat strong{display:block;font-size:1.8rem;font-weight:800}
+.hero-stat span{font-size:.85rem;opacity:.8}
+
+/* CARDS */
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;margin-bottom:20px;border:1px solid var(--border)}
+.card-grid{display:grid;gap:20px}
+.card-grid-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.card-grid-3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.card-icon{font-size:2rem;margin-bottom:.6rem}
+.tag{display:inline-block;padding:3px 10px;border-radius:12px;font-size:.78rem;font-weight:600;margin-bottom:.5rem}
+.tag-blue{background:#e8f0fe;color:#1557b0}
+.tag-green{background:#e6f4ea;color:#1e8c45}
+.tag-red{background:#fce8e6;color:#c5221f}
+.tag-orange{background:#fef7e0;color:#b06000}
+.tag-purple{background:#f3e8fd;color:#6a0dad}
+.callout{border-radius:var(--radius);padding:18px 20px;margin:20px 0}
+.callout-blue{background:#e8f0fe;border-right:4px solid var(--blue)}
+.callout-green{background:#e6f4ea;border-right:4px solid var(--green)}
+.callout-orange{background:#fef7e0;border-right:4px solid var(--orange)}
+.callout-red{background:#fce8e6;border-right:4px solid var(--red)}
+
+/* SECTION HEADER */
+.section-label{display:inline-block;background:#e8f0fe;color:var(--blue);border-radius:20px;padding:4px 14px;font-size:.8rem;font-weight:700;margin-bottom:.6rem}
+.section-title{margin-bottom:.5rem}
+.section-sub{color:var(--muted);font-size:1.05rem;max-width:700px;margin-bottom:2rem}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.9rem}
+th{background:#e8f0fe;padding:10px 14px;text-align:right;font-weight:700;border:1px solid var(--border)}
+td{padding:10px 14px;border:1px solid var(--border);vertical-align:top}
+tr:nth-child(even){background:#f8f9fa}
+
+/* FLIP CARDS */
+.flip-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;margin-top:24px}
+.flip-card{height:240px;perspective:1000px;cursor:pointer}
+.flip-card-inner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.flip-card.flipped .flip-card-inner{transform:rotateY(180deg)}
+.flip-front,.flip-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:var(--radius);padding:24px;display:flex;flex-direction:column;justify-content:center}
+.flip-front{background:#fce8e6;border:2px solid #d93025;color:var(--text)}
+.flip-back{background:#e6f4ea;border:2px solid var(--green);transform:rotateY(180deg)}
+.flip-hint{font-size:.78rem;opacity:.7;margin-top:auto;text-align:center}
+.flip-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.5rem}
+.flip-front .flip-label{color:var(--red)}
+.flip-back .flip-label{color:var(--green)}
+
+/* QUIZ */
+.quiz-q{background:#fff;border-radius:var(--radius);border:1px solid var(--border);padding:22px;margin-bottom:16px;box-shadow:var(--shadow)}
+.quiz-q h4{margin-bottom:12px;font-size:1rem}
+.quiz-options{display:flex;flex-direction:column;gap:8px}
+.quiz-opt{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:8px;border:2px solid var(--border);cursor:pointer;transition:.2s;background:#fff;text-align:right;width:100%;font-size:.95rem}
+.quiz-opt:hover{border-color:var(--blue);background:#e8f0fe}
+.quiz-opt.correct{border-color:var(--green);background:#e6f4ea}
+.quiz-opt.wrong{border-color:var(--red);background:#fce8e6}
+.quiz-opt.disabled{pointer-events:none}
+.quiz-feedback{margin-top:10px;padding:10px 14px;border-radius:8px;font-size:.9rem;font-weight:600;display:none}
+.quiz-feedback.show{display:block}
+.feedback-correct{background:#e6f4ea;color:#1e8c45}
+.feedback-wrong{background:#fce8e6;color:#c5221f}
+#quiz-score{text-align:center;font-size:1.3rem;font-weight:800;padding:20px;display:none}
+
+/* SORT EXERCISE */
+.sort-board{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+@media(max-width:600px){.sort-board{grid-template-columns:1fr}}
+.sort-pool{background:#fff;border-radius:var(--radius);border:2px dashed var(--border);padding:16px;min-height:120px}
+.sort-pool h4{font-size:.85rem;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.sort-item{display:inline-block;padding:6px 12px;border-radius:20px;background:#e8f0fe;border:1px solid #c5d8fb;font-size:.85rem;margin:3px;cursor:pointer;transition:.2s;user-select:none}
+.sort-item:hover{background:#d2e3fc;transform:scale(1.02)}
+.sort-item.selected{background:var(--blue);color:#fff;border-color:var(--blue-dark)}
+.sort-item.placed-high{background:#e6f4ea;border-color:#a8d5b5;color:#1e4d2b;cursor:default}
+.sort-item.placed-compare{background:#e8f0fe;border-color:#c5d8fb;color:#1557b0;cursor:default}
+.sort-item.placed-info{background:#fef7e0;border-color:#f9d97e;color:#5c3d00;cursor:default}
+.sort-item.placed-neg{background:#fce8e6;border-color:#f5c6c3;color:#7d1b14;cursor:default}
+.sort-zone{background:#fff;border-radius:var(--radius);border:2px solid var(--border);padding:14px;min-height:100px}
+.zone-high{border-color:#a8d5b5}
+.zone-compare{border-color:#c5d8fb}
+.zone-info{border-color:#f9d97e}
+.zone-neg{border-color:#f5c6c3}
+.sort-zone h4{font-size:.82rem;margin-bottom:8px}
+.sort-btn{background:var(--blue);color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:.95rem;cursor:pointer;margin-top:16px;font-weight:600}
+.sort-btn:hover{background:var(--blue-dark)}
+#sort-feedback{margin-top:16px;padding:16px;border-radius:var(--radius);background:#e6f4ea;border:1px solid #a8d5b5;display:none;font-size:.9rem}
+#sort-feedback.show{display:block}
+
+/* DIAGNOSTIC */
+.diag-item{display:flex;align-items:flex-start;gap:10px;padding:10px;border-radius:8px;margin-bottom:8px;cursor:pointer;border:2px solid var(--border);transition:.2s}
+.diag-item:hover{border-color:var(--blue);background:#e8f0fe}
+.diag-item.selected{border-color:var(--blue);background:#e8f0fe}
+.diag-item.correct-sel{border-color:var(--green);background:#e6f4ea}
+.diag-item.wrong-sel{border-color:var(--red);background:#fce8e6}
+.diag-item.missed{border-color:var(--orange);background:#fef7e0}
+.diag-check{width:20px;height:20px;border-radius:4px;border:2px solid var(--border);flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:.8rem}
+.diag-item.selected .diag-check,.diag-item.correct-sel .diag-check{background:var(--blue);border-color:var(--blue);color:#fff}
+#diag-result{margin-top:16px;padding:18px;border-radius:var(--radius);display:none;font-size:.9rem}
+#diag-result.show{display:block}
+
+/* CHECKLIST */
+.checklist-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border-radius:8px;border:1px solid var(--border);margin-bottom:8px;cursor:pointer;transition:.2s;background:#fff}
+.checklist-item:hover{border-color:var(--blue);background:#e8f0fe}
+.checklist-item.checked{border-color:var(--green);background:#e6f4ea}
+.cl-box{width:22px;height:22px;border-radius:5px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.85rem;transition:.2s}
+.checklist-item.checked .cl-box{background:var(--green);border-color:var(--green);color:#fff}
+.cl-text strong{display:block;font-size:.95rem}
+.cl-text span{font-size:.82rem;color:var(--muted)}
+#cl-progress{height:8px;background:#e0e0e0;border-radius:4px;margin-bottom:16px;overflow:hidden}
+#cl-bar{height:100%;background:var(--green);width:0;transition:.3s;border-radius:4px}
+#cl-count{font-size:.85rem;color:var(--muted);margin-bottom:12px}
+
+/* CHAIN */
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:0;margin:20px 0}
+.chain-step{background:#e8f0fe;border:1px solid #c5d8fb;border-radius:8px;padding:10px 16px;font-size:.85rem;text-align:center;min-width:110px;flex:1}
+.chain-arrow{color:var(--muted);font-size:1.2rem;padding:0 4px;flex-shrink:0}
+
+/* VBB TABLE */
+.vbb-table td:first-child{font-weight:600}
+.vbb-val{color:var(--green);font-weight:700}
+
+/* PROGRESS BAR */
+.metric-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.metric-label{min-width:140px;font-size:.88rem;text-align:right}
+.metric-bar{flex:1;height:10px;background:#e0e0e0;border-radius:5px;overflow:hidden}
+.metric-fill{height:100%;border-radius:5px;transition:.5s}
+.metric-val{min-width:50px;font-size:.88rem;font-weight:700;text-align:left}
+.before-fill{background:#f28b82}
+.after-fill{background:#81c995}
+
+/* PILL GROUP */
+.pill-group{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.pill{display:inline-block;padding:4px 12px;border-radius:12px;font-size:.8rem;font-weight:600}
+.pill-blue{background:#e8f0fe;color:#1557b0}
+.pill-red{background:#fce8e6;color:#c5221f}
+.pill-green{background:#e6f4ea;color:#1e8c45}
+
+/* BTN */
+.btn{display:inline-block;padding:10px 22px;border-radius:8px;border:none;font-size:.95rem;font-weight:600;cursor:pointer;transition:.2s}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:var(--blue-dark)}
+.btn-outline{background:#fff;color:var(--blue);border:2px solid var(--blue)}
+.btn-outline:hover{background:#e8f0fe}
+
+/* ACCORDION */
+.accordion{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:12px}
+.acc-header{padding:16px 20px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:600;background:#fff;transition:.2s}
+.acc-header:hover{background:#f8f9fa}
+.acc-body{padding:0 20px;max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease;background:#fff}
+.acc-body.open{max-height:600px;padding:16px 20px}
+.acc-icon{transition:.3s;font-style:normal;flex-shrink:0}
+.accordion.open .acc-icon{transform:rotate(180deg)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  h1{font-size:1.8rem}h2{font-size:1.4rem}
+  .hero{padding:50px 0 40px}
+  .section{padding:50px 0}
+  .flip-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .chain{flex-direction:column;align-items:flex-start}
+  .chain-arrow{transform:rotate(90deg)}
+  .sort-board{grid-template-columns:1fr}
+}
+@media(max-width:480px){.hero h1{font-size:1.5rem}}
+
+/* SCROLL REVEAL */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .5s,transform .5s}
+.reveal.visible{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <div class="nav-inner">
+    <span class="nav-logo">Google Ads Lead Gen</span>
+    <div class="nav-links">
+      <a href="#intro">מבוא</a>
+      <a href="#keywords-vs-terms">מילות מפתח vs חיפושים</a>
+      <a href="#skag-stag">SKAG vs STAG</a>
+      <a href="#lead-strategy">אסטרטגיית לידים</a>
+      <a href="#conversion">מעקב המרות</a>
+      <a href="#negatives">מילות שלילה</a>
+      <a href="#match-types">סוגי התאמה</a>
+      <a href="#alignment">שרשרת ההתאמה</a>
+      <a href="#case-study">Case Study</a>
+      <a href="#exercises">תרגילים</a>
+      <a href="#checklist">צ'קליסט</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="badge">מדריך מתקדם | Google Search | Lead Generation</div>
+    <h1>ארכיטקטורת קמפיינים לליד ג'נרשן מתקדם</h1>
+    <p>איך לבנות מבנה Ad Groups ומילות מפתח שמייצר לידים איכותיים, תומך ב-Smart Bidding, ומשפר את איכות הליד — לא רק את הנפח</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><strong>8</strong><span>פרקי תוכן מעמיקים</span></div>
+      <div class="hero-stat"><strong>4</strong><span>תרגילים אינטראקטיביים</span></div>
+      <div class="hero-stat"><strong>1</strong><span>Case Study מלא</span></div>
+      <div class="hero-stat"><strong>15+</strong><span>כלים ותבניות מעשיות</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section class="section" id="intro">
+  <div class="container">
+    <div class="section-label">מבוא</div>
+    <h2 class="section-title">למה המבנה עדיין חשוב בעידן ה-AI?</h2>
+    <p class="section-sub">גם עם Smart Bidding, Performance Max ו-Broad Match — המבנה שלכם קובע כמה גוגל יכולה ללמוד, ועל מה היא מייעלת</p>
+
+    <div class="callout callout-blue">
+      <strong>המחשבה הנפוצה (והמסוכנת):</strong> "גוגל עכשיו AI, אין צורך במבנה מדוקדק — פשוט נתנו לאלגוריתם לעבוד."<br>
+      <strong>המציאות:</strong> האלגוריתם מייעל לפי הנתונים שאתם נותנים לו. מבנה גרוע = נתוני לימוד גרועים = אופטימיזציה גרועה.
+    </div>
+
+    <div class="card-grid card-grid-2">
+      <div class="card">
+        <div class="card-icon">🏗️</div>
+        <h3>מה קובע המבנה?</h3>
+        <ul>
+          <li>איזה מסר מוצג לאיזה משתמש</li>
+          <li>כמה רלוונטי המודעה לחיפוש בפועל</li>
+          <li>באיזו דף נחיתה המשתמש נוחת</li>
+          <li>כמה נקודות Quality Score האד גרופ מקבל</li>
+          <li>כמה Smart Bidding יכול ללמוד מהנתונים</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-icon">🎯</div>
+        <h3>ההיררכיה בקמפיין</h3>
+        <table>
+          <tr><th>רמה</th><th>תפקיד</th></tr>
+          <tr><td><strong>Campaign</strong></td><td>תקציב, אסטרטגיית בידינג, גיאוגרפיה, יעד המרה</td></tr>
+          <tr><td><strong>Ad Group</strong></td><td>נושא / כוונה, מסר מרכזי</td></tr>
+          <tr><td><strong>Keywords</strong></td><td>מילות הגישה לאוקציה</td></tr>
+          <tr><td><strong>Ads (RSA)</strong></td><td>מסר לפי נושא האד גרופ</td></tr>
+          <tr><td><strong>Landing Page</strong></td><td>המשך חווית המשתמש</td></tr>
+          <tr><td><strong>Conversion</strong></td><td>פידבק לאלגוריתם</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KEYWORDS VS SEARCH TERMS -->
+<section class="section" id="keywords-vs-terms">
+  <div class="container">
+    <div class="section-label">בסיס חיוני</div>
+    <h2 class="section-title">מילות מפתח vs מונחי חיפוש בפועל</h2>
+    <p class="section-sub">אחד המיומנויות הכי חשובות בליד ג'נרשן: לנהל את הפער בין מה שהגדרתם לבין מה שגוגל מציג</p>
+
+    <div class="card-grid card-grid-2">
+      <div class="card" style="border-right:4px solid var(--blue)">
+        <div class="tag tag-blue">Keywords — מה שאתם מגדירים</div>
+        <h3>מילות המפתח</h3>
+        <p>אלו הן המילים שאתם מוסיפים לאד גרופ. הן מגדירות <strong>באיזה אוקציות גוגל תשתמש במודעות שלכם</strong>.</p>
+        <div class="pill-group">
+          <span class="pill pill-blue">[שירות SEO לעסקים]</span>
+          <span class="pill pill-blue">"ניהול קמפיינים גוגל"</span>
+          <span class="pill pill-blue">קידום אתרים</span>
+        </div>
+        <p style="font-size:.88rem;color:var(--muted)">אלו כוונות רחבות שאתם מגדירים — גוגל מחליטה מה בדיוק גורם להצגה</p>
+      </div>
+      <div class="card" style="border-right:4px solid var(--green)">
+        <div class="tag tag-green">Search Terms — מה שהמשתמש מחפש בפועל</div>
+        <h3>מונחי החיפוש בפועל</h3>
+        <p>אלו הן המילים שהמשתמש כתב בפועל בגוגל. גוגל מחליטה שיש התאמה למילת המפתח שלכם ומציגה את המודעה.</p>
+        <div class="pill-group">
+          <span class="pill pill-green">כמה עולה שירות SEO לחברה קטנה</span>
+          <span class="pill pill-green">חברת ניהול קמפיינים גוגל בתל אביב</span>
+          <span class="pill pill-green">קידום אתרים חינם</span>
+        </div>
+        <p style="font-size:.88rem;color:var(--muted)">שימו לב! "קידום אתרים חינם" — זה ליד גרוע. אבל גוגל יכולה להציג אתכם עליו.</p>
+      </div>
+    </div>
+
+    <div class="callout callout-orange">
+      <strong>🔑 הפער הזה הוא שדה הקרב האמיתי:</strong> משווקים מתחילים מנהלים מילות מפתח. משווקים מתקדמים מנהלים את <em>מונחי החיפוש בפועל</em>.
+    </div>
+
+    <h3 style="margin-top:1.5rem">מה לחפש ב-Search Terms Report?</h3>
+    <div class="card-grid card-grid-3">
+      <div class="card">
+        <div class="tag tag-green">✅ הזדמנויות</div>
+        <ul style="font-size:.9rem">
+          <li>ביטויים עם CTR גבוה ורלוונטיים</li>
+          <li>חיפושים שמייצרים לידים איכותיים</li>
+          <li>ביטויים שיכולים להיות Ad Group עצמאי</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="tag tag-red">🚫 בזבוז תקציב</div>
+        <ul style="font-size:.9rem">
+          <li>חיפושי "חינם" / "בדיוק עצמאית"</li>
+          <li>חיפושי עבודה / קריירה</li>
+          <li>חיפושי מידע ללא כוונת קנייה</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="tag tag-orange">⚠️ לידים זולים — אך גרועים</div>
+        <ul style="font-size:.9rem">
+          <li>ביטויים כלליים מדי</li>
+          <li>חיפושים לא ממוקדים בפתרון</li>
+          <li>קהלים שלא עומדים בפרופיל הלקוח</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKAG VS STAG -->
+<section class="section" id="skag-stag">
+  <div class="container">
+    <div class="section-label">מבנה Ad Groups</div>
+    <h2 class="section-title">SKAG vs STAG — המהפכה שחייבים להבין</h2>
+    <p class="section-sub">מה היה, למה השתנה, ואיך לבנות נכון היום</p>
+
+    <div class="card-grid card-grid-2">
+      <div class="card" style="border-right:4px solid var(--red)">
+        <div class="tag tag-red">עבר — SKAG</div>
+        <h3>Single Keyword Ad Groups</h3>
+        <p>כל מילת מפתח קיבלה אד גרופ משלה. הגישה הייתה: שליטה מקסימלית = ביצועים מקסימליים.</p>
+        <ul style="font-size:.9rem">
+          <li>אד גרופ: "ניהול קמפיינים" (exact)</li>
+          <li>אד גרופ: "ניהול קמפיינים גוגל" (exact)</li>
+          <li>אד גרופ: "ניהול קמפיינים PPC" (exact)</li>
+          <li>אד גרופ: "ניהול קמפיינים ממומנים" (exact)</li>
+        </ul>
+        <div class="callout callout-red" style="margin-top:10px">
+          <strong>הבעיה:</strong> מאות אד גרופים עם 0-1 המרות כל אחד. Smart Bidding לא יכולה ללמוד. נתוני המרה מפוזרים.
+        </div>
+      </div>
+      <div class="card" style="border-right:4px solid var(--green)">
+        <div class="tag tag-green">היום — STAG</div>
+        <h3>Single Theme Ad Groups</h3>
+        <p>קיבוץ לפי <strong>כוונה משותפת</strong>, לא לפי מילים בלבד. כל אד גרופ מייצג נושא ברור.</p>
+        <ul style="font-size:.9rem">
+          <li>אד גרופ: "ניהול קמפיינים" — כולל כל הוריאציות</li>
+          <li>ניהול קמפיינים גוגל / PPC / ממומנים</li>
+          <li>מספיק נפח להמרות לחודש</li>
+          <li>RSA אחת חזקה לכל נושא</li>
+        </ul>
+        <div class="callout callout-green" style="margin-top:10px">
+          <strong>היתרון:</strong> Smart Bidding לומד מנפח נתונים גדול יותר, RSA מותאמת לנושא, QS גבוה יותר.
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:2rem">מתי עדיין כדאי לפצל?</h3>
+    <div class="card-grid card-grid-3">
+      <div class="card"><div class="card-icon">💰</div><h4>ערך ליד שונה</h4><p style="font-size:.88rem">B2B Enterprise vs SMB — הלידים שווים אחרת. Smart Bidding צריכה לדעת.</p></div>
+      <div class="card"><div class="card-icon">🗺️</div><h4>אזורים גיאוגרפיים</h4><p style="font-size:.88rem">ת"א vs צפון — תקציב שונה, CPA שונה, לפעמים מסר שונה.</p></div>
+      <div class="card"><div class="card-icon">🏢</div><h4>B2B vs B2C</h4><p style="font-size:.88rem">לפעמים אותה מילה מייצרת לידים לשני קהלים שונים לחלוטין.</p></div>
+      <div class="card"><div class="card-icon">📄</div><h4>דף נחיתה שונה</h4><p style="font-size:.88rem">כוונות שונות מובילות לדפים שונים — חייבים אד גרופ נפרד.</p></div>
+      <div class="card"><div class="card-icon">🎯</div><h4>כוונת רכישה שונה</h4><p style="font-size:.88rem">מחפש מחיר vs מחפש השוואה vs מחפש ספק — כוונות שצריכות מסר שונה.</p></div>
+      <div class="card"><div class="card-icon">🛠️</div><h4>מוצרים שונים</h4><p style="font-size:.88rem">כל שירות/מוצר עם ערך ומסר ייחודי חייב אד גרופ נפרד.</p></div>
+    </div>
+
+    <div class="callout callout-blue" style="margin-top:1.5rem">
+      <strong>הכלל המנחה:</strong> קונסולידציה לא אומרת מיזוג עיוור. מזגו כשהכוונה דומה. פצלו כשיש הבדל אמיתי בערך הליד, בדף הנחיתה, או במסר.
+    </div>
+  </div>
+</section>
+
+<!-- LEAD STRATEGY -->
+<section class="section" id="lead-strategy">
+  <div class="container">
+    <div class="section-label">אסטרטגיה מתקדמת</div>
+    <h2 class="section-title">Lead Gen מתקדם — לידים איכותיים, לא רק נפח</h2>
+
+    <div class="callout callout-red">
+      <strong>הטעות הכי יקרה בליד ג'נרשן:</strong> אופטימיזציה למספר הלידים בלי לבדוק את איכותם. CPA נמוך עם לידים גרועים = בזבוז.
+    </div>
+
+    <h3>סינון לידים גרועים דרך RSA — לפני הקליק</h3>
+    <p>המודעה היא שומר הסף הראשון. RSA חכמה מסנן משתמשים לא רלוונטיים לפני שהם לוחצים:</p>
+    <div class="card-grid card-grid-2">
+      <div class="card">
+        <div class="tag tag-red">❌ RSA כללית — מושכת כל ליד</div>
+        <ul style="font-size:.9rem">
+          <li>"פתרונות תוכנה לעסקים"</li>
+          <li>"צרו קשר עוד היום"</li>
+          <li>"שירות מהיר ואמין"</li>
+          <li>"חינם לנסות"</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="tag tag-green">✅ RSA מסננת — מייצרת ליד איכותי</div>
+        <ul style="font-size:.9rem">
+          <li>"מ-50 עובדים ומעלה בלבד"</li>
+          <li>"מחיר מ-15,000 ₪ לחודש"</li>
+          <li>"שירות לעסקים בלבד | לא ליחידים"</li>
+          <li>"פרויקטים מינימום 100K ₪"</li>
+          <li>"נותנים שירות באזור המרכז בלבד"</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 style="margin-top:2rem">Value-Based Bidding — ללמד את גוגל מה ליד שווה</h3>
+    <p>לא כל ליד שווה אותו דבר. VBB מאפשרת לכם לתקשר לגוגל את הערך האמיתי של כל שלב:</p>
+    <div class="card">
+      <table class="vbb-table">
+        <tr><th>שלב בפאנל</th><th>ערך שמוקצה</th><th>הסבר</th></tr>
+        <tr><td>מילוי טופס בסיסי</td><td class="vbb-val">10 ₪</td><td>הראשוני — לא מאומת</td></tr>
+        <tr><td>ליד מוכשר (Qualified Lead)</td><td class="vbb-val">50 ₪</td><td>עמד בקריטריונים ראשוניים</td></tr>
+        <tr><td>MQL — Marketing Qualified Lead</td><td class="vbb-val">150 ₪</td><td>מוכן לשיחת מכירה</td></tr>
+        <tr><td>SQL — Sales Qualified Lead</td><td class="vbb-val">500 ₪</td><td>הגיע לשלב הצעת מחיר</td></tr>
+        <tr><td>עסקה שנסגרה</td><td class="vbb-val">5,000 ₪</td><td>לקוח אמיתי</td></tr>
+      </table>
+      <div class="callout callout-blue" style="margin:12px 0 0">
+        <strong>התוצאה:</strong> Smart Bidding לומדת אילו מילות מפתח, חיפושים, קהלים ושעות מייצרים עסקות — לא רק טפסים.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONVERSION TRACKING -->
+<section class="section" id="conversion">
+  <div class="container">
+    <div class="section-label">הבסיס של הכל</div>
+    <h2 class="section-title">היגיינת מעקב המרות — ה-Smart Bidding תלוי בזה</h2>
+
+    <div class="callout callout-red">
+      <strong>Smart Bidding מייעל לפי מה שאתם סופרים. אם אתם סופרים את הדברים הלא נכונים — הוא ייעל לדברים הלא נכונים.</strong>
+    </div>
+
+    <h3>טעויות מעקב נפוצות</h3>
+    <div class="card-grid card-grid-2">
+      <div class="card">
+        <div class="tag tag-red">טעויות שמרסקות ביצועים</div>
+        <ul style="font-size:.9rem">
+          <li>ספירת כל מילוי טופס שווה — כולל ספאם</li>
+          <li>ספירת לחיצות על כפתור כ"המרה"</li>
+          <li>ספירת שיחות קצרות מאוד (מתחת ל-30 שניות)</li>
+          <li>המרות כפולות — אותו ליד נספר מספר פעמים</li>
+          <li>מיקרו-המרות (צפייה בדף) כ-Primary Goal</li>
+          <li>חוסר ייבוא המרות אופליין מ-CRM</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="tag tag-green">מה לעשות נכון</div>
+        <ul style="font-size:.9rem">
+          <li>הגדירו Primary Conversion = ליד שאומת</li>
+          <li>Secondary: מילוי טופס ראשוני בלבד</li>
+          <li>החלו Offline Conversion Import מ-CRM</li>
+          <li>חברו שלבי CRM חזרה לגוגל אדס</li>
+          <li>השתמשו ב-Enhanced Conversions for Leads</li>
+          <li>הגדירו ערכים שונים לכל שלב המרה</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="accordion" style="margin-top:1.5rem">
+      <div class="acc-header" onclick="toggleAcc(this)">
+        <span>🔄 מה זה Offline Conversion Import ולמה זה קריטי?</span>
+        <em class="acc-icon">▼</em>
+      </div>
+      <div class="acc-body">
+        <p>כשמשתמש ממלא טופס — גוגל יודעת. אבל מה קרה אחרי? האם הוא הפך ללקוח? גוגל לא יודעת — אלא אם אתם מספרים לה.</p>
+        <p>Offline Conversion Import מאפשר לכם לשלוח לגוגל נתונים מה-CRM: מי שיחה, מי נסגר, מה שווה כל לקוח. ככה Smart Bidding לומדת לייעל לפי <strong>עסקות אמיתיות</strong>, לא רק טפסים.</p>
+        <div class="callout callout-green">דוגמה: לקוח ממלא טופס (גוגל יודעת) → שיחת מכירה → נסגר ב-20,000 ₪. שלחו לגוגל את הערך הזה. עכשיו היא יודעת מה מקור הליד שמייצר הכנסה.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEGATIVES -->
+<section class="section" id="negatives">
+  <div class="container">
+    <div class="section-label">הגנה תקציבית</div>
+    <h2 class="section-title">מילות שלילה — אסטרטגיה, לא רשימה</h2>
+
+    <div class="card-grid card-grid-3">
+      <div class="card">
+        <div class="tag tag-blue">ברמת Account</div>
+        <h4>רשימה גלובלית</h4>
+        <p style="font-size:.88rem">ביטויים שלעולם לא רלוונטיים לכם, לא משנה מה הקמפיין.</p>
+        <div class="pill-group">
+          <span class="pill pill-red">חינם</span>
+          <span class="pill pill-red">דרושים</span>
+          <span class="pill pill-red">עבודה</span>
+          <span class="pill pill-red">קורס</span>
+          <span class="pill pill-red">לימודים</span>
+          <span class="pill pill-red">טמפלט</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="tag tag-orange">ברמת Campaign</div>
+        <h4>לפי יעד הקמפיין</h4>
+        <p style="font-size:.88rem">ביטויים שרלוונטיים לתחום אבל לא לקמפיין הספציפי.</p>
+        <div class="pill-group">
+          <span class="pill pill-red">מחירון</span>
+          <span class="pill pill-red">ללא עלות</span>
+          <span class="pill pill-red">יד 2</span>
+          <span class="pill pill-red">זול</span>
+          <span class="pill pill-red">מדריך</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="tag tag-purple">ברמת Ad Group</div>
+        <h4>מניעת קניבליזציה</h4>
+        <p style="font-size:.88rem">שמירת כל אד גרופ נקי — כדי שחיפוש לא יפגע ב-2 אד גרופים.</p>
+        <div class="pill-group">
+          <span class="pill pill-red">[מילת מפתח של אד גרופ אחר]</span>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:2rem">דוגמאות מילות שלילה לעסק B2B</h3>
+    <div class="card">
+      <div class="card-grid card-grid-2">
+        <div>
+          <div class="tag tag-red">חיפושי DIY / חינמיות</div>
+          <div class="pill-group">
+            <span class="pill pill-red">עשה זאת בעצמך</span>
+            <span class="pill pill-red">בחינם</span>
+            <span class="pill pill-red">ללא עלות</span>
+            <span class="pill pill-red">תוכנה חינמית</span>
+            <span class="pill pill-red">כלי חינמי</span>
+          </div>
+          <div class="tag tag-red" style="margin-top:10px">חיפושי קריירה / לימודים</div>
+          <div class="pill-group">
+            <span class="pill pill-red">קורס</span>
+            <span class="pill pill-red">לימודים</span>
+            <span class="pill pill-red">דרושים</span>
+            <span class="pill pill-red">עבודה</span>
+            <span class="pill pill-red">תעודה</span>
+          </div>
+        </div>
+        <div>
+          <div class="tag tag-red">חיפושי מחיר / השוואה</div>
+          <div class="pill-group">
+            <span class="pill pill-red">ביקורות</span>
+            <span class="pill pill-red">האם שווה</span>
+            <span class="pill pill-red">חלופה ל</span>
+            <span class="pill pill-red">זול ביותר</span>
+          </div>
+          <div class="tag tag-red" style="margin-top:10px">חיפושי מידע בלבד</div>
+          <div class="pill-group">
+            <span class="pill pill-red">מה זה</span>
+            <span class="pill pill-red">למתחילים</span>
+            <span class="pill pill-red">הסבר</span>
+            <span class="pill pill-red">הגדרה</span>
+          </div>
+        </div>
+      </div>
+      <div class="callout callout-orange" style="margin-top:12px">
+        <strong>⚠️ אזהרה:</strong> אל תוסיפו מילות שלילה באופן עיוור. כל הוספה חייבת להתבסס על ניתוח Search Terms Report, מודל עסקי, ואיכות לידים בפועל.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MATCH TYPES -->
+<section class="section" id="match-types">
+  <div class="container">
+    <div class="section-label">סוגי התאמה</div>
+    <h2 class="section-title">Exact, Phrase, Broad — מתי להשתמש בכל אחד?</h2>
+
+    <table>
+      <tr>
+        <th>סוג התאמה</th>
+        <th>שליטה</th>
+        <th>טווח הגעה</th>
+        <th>מומלץ כשיש</th>
+        <th>סיכון עיקרי</th>
+      </tr>
+      <tr>
+        <td><strong>Exact Match</strong><br><span style="font-size:.8rem;color:var(--muted)">[מילת מפתח]</span></td>
+        <td>גבוהה מאוד</td>
+        <td>מצומצם</td>
+        <td>מילות מפתח עם ביצועים מוכחים, תקציב מוגבל</td>
+        <td>פוספוס חיפושים רלוונטיים בניסוחים שונים</td>
+      </tr>
+      <tr>
+        <td><strong>Phrase Match</strong><br><span style="font-size:.8rem;color:var(--muted)">"מילת מפתח"</span></td>
+        <td>בינונית</td>
+        <td>בינוני</td>
+        <td>הרחבה מבוקרת, שמירה על הנושא</td>
+        <td>כניסה לחיפושים סמוכים אך לא מדויקים</td>
+      </tr>
+      <tr>
+        <td><strong>Broad Match</strong><br><span style="font-size:.8rem;color:var(--muted)">מילת מפתח</span></td>
+        <td>נמוכה</td>
+        <td>רחב מאוד</td>
+        <td>מעקב המרות אמין, Smart Bidding מלומדת, שליטה בשלילות</td>
+        <td>ייצור לידים גרועים, סקיילינג של הכוונה הלא נכונה</td>
+      </tr>
+    </table>
+
+    <div class="callout callout-orange" style="margin-top:1rem">
+      <strong>Broad Match + מעקב המרות גרוע = קטסטרופה.</strong> כש-Broad Match מביא חיפושים רחבים, הוא מביא גם לידים גרועים — ואם גוגל חושבת שהם "המרות", היא תמשיך לייצר עוד כאלה.
+    </div>
+
+    <h3 style="margin-top:1.5rem">דוגמה: אותו נושא ב-3 סוגי התאמה</h3>
+    <div class="card">
+      <table>
+        <tr><th>סוג</th><th>מילת מפתח</th><th>דוגמת חיפוש שיופיע</th><th>מטרה</th></tr>
+        <tr><td><strong>Exact</strong></td><td>[ניהול רשתות חברתיות לעסקים]</td><td>ניהול רשתות חברתיות לעסקים</td><td>חיפושים מדויקים עם כוונה גבוהה</td></tr>
+        <tr><td><strong>Phrase</strong></td><td>"ניהול רשתות חברתיות"</td><td>ניהול רשתות חברתיות בתל אביב, ניהול רשתות חברתיות לרופאים</td><td>הרחבה מבוקרת לפי הנושא</td></tr>
+        <tr><td><strong>Broad</strong></td><td>רשתות חברתיות עסקיות</td><td>מומחה מדיה חברתית, שיווק ברשתות, כלים לניהול סושיאל</td><td>גילוי ביקושים חדשים — בסיכון גבוה יותר</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ALIGNMENT CHAIN -->
+<section class="section" id="alignment">
+  <div class="container">
+    <div class="section-label">שרשרת ההצלחה</div>
+    <h2 class="section-title">מחיפוש ועד ליד איכותי — כל החוליות חייבות להיות מחוברות</h2>
+
+    <div class="chain">
+      <div class="chain-step">🔍<br><strong>Search Term</strong><br><small>מה המשתמש חיפש</small></div>
+      <div class="chain-arrow">←</div>
+      <div class="chain-step">🏷️<br><strong>Keyword</strong><br><small>מה שהפעיל את המודעה</small></div>
+      <div class="chain-arrow">←</div>
+      <div class="chain-step">📁<br><strong>Ad Group</strong><br><small>הנושא והכוונה</small></div>
+      <div class="chain-arrow">←</div>
+      <div class="chain-step">📢<br><strong>RSA</strong><br><small>המסר הרלוונטי</small></div>
+      <div class="chain-arrow">←</div>
+      <div class="chain-step">📄<br><strong>Landing Page</strong><br><small>המשך אותו מסר</small></div>
+      <div class="chain-arrow">←</div>
+      <div class="chain-step">✅<br><strong>Conversion</strong><br><small>ליד מאומת</small></div>
+    </div>
+
+    <h3 style="margin-top:2rem">דוגמה מלאה — תוכנת CRM</h3>
+    <div class="card">
+      <table>
+        <tr><th>שלב</th><th>תוכן</th></tr>
+        <tr><td><strong>Search Term</strong></td><td>מערכת CRM לעסקים קטנים בישראל</td></tr>
+        <tr><td><strong>Keyword</strong></td><td>"מערכת CRM לעסקים"</td></tr>
+        <tr><td><strong>Ad Group</strong></td><td>CRM לעסקים קטנים ובינוניים</td></tr>
+        <tr><td><strong>RSA Headline</strong></td><td>מערכת CRM לעסקים | הטמעה מלאה וליווי</td></tr>
+        <tr><td><strong>RSA Description</strong></td><td>פתרון CRM לעסקים עם 5-100 עובדים | כולל הדרכה | תשלום חודשי קבוע</td></tr>
+        <tr><td><strong>Landing Page</strong></td><td>דף ייעודי לעסקים קטנים עם demo request</td></tr>
+        <tr><td><strong>Conversion</strong></td><td>קביעת שיחת demo — ערך: 150 ₪</td></tr>
+        <tr><td><strong>Lead Quality Signal</strong></td><td>עסק עם 10+ עובדים → MQL</td></tr>
+      </table>
+    </div>
+
+    <div class="callout callout-blue" style="margin-top:1rem">
+      <strong>ה"חיכוך" בדף הנחיתה הוא לא תמיד רע:</strong> שדות כמו "מספר עובדים", "גודל תקציב", "ענף" — מורידים conversion rate אבל מעלים lead quality. לפעמים CPA גבוה יותר עם לידים טובים יותר = ROI טוב יותר.
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDY -->
+<section class="section" id="case-study">
+  <div class="container">
+    <div class="section-label">Case Study אינטראקטיבי</div>
+    <h2 class="section-title">לפני ואחרי — סוכנות שיווק B2B</h2>
+    <p class="section-sub">לחצו על הכרטיסיות כדי לגלות את השיפורים</p>
+
+    <div class="flip-grid">
+      <div class="flip-card" onclick="flipCard(this)" tabindex="0" onkeypress="if(event.key==='Enter')flipCard(this)">
+        <div class="flip-card-inner">
+          <div class="flip-front">
+            <div class="flip-label">לפני — בעיה</div>
+            <h4>מבנה Ad Groups</h4>
+            <ul style="font-size:.85rem">
+              <li>47 אד גרופים פעילים</li>
+              <li>רוב האד גרופים — 0-2 המרות לחודש</li>
+              <li>כוונות מעורבות באותו אד גרופ</li>
+              <li>קניבליזציה בין אד גרופים</li>
+            </ul>
+            <p class="flip-hint">לחץ לראות את הפתרון ←</p>
+          </div>
+          <div class="flip-back">
+            <div class="flip-label">אחרי — פתרון</div>
+            <h4>מבנה מבוסס כוונה</h4>
+            <ul style="font-size:.85rem">
+              <li>8 אד גרופים חזקים לפי נושא</li>
+              <li>כל אד גרופ: 8-15 המרות לחודש</li>
+              <li>כוונה אחת ברורה לכל אד גרופ</li>
+              <li>אין קניבליזציה — מילות שלילה ברמת אד גרופ</li>
+            </ul>
+            <p class="flip-hint">לחץ לחזור ←</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="flipCard(this)" tabindex="0" onkeypress="if(event.key==='Enter')flipCard(this)">
+        <div class="flip-card-inner">
+          <div class="flip-front">
+            <div class="flip-label">לפני — בעיה</div>
+            <h4>מעקב המרות</h4>
+            <ul style="font-size:.85rem">
+              <li>כל מילוי טופס = המרה</li>
+              <li>גם ספאם נספר</li>
+              <li>לחיצה על כפתור "שלח" = המרה</li>
+              <li>אין ייבוא מ-CRM</li>
+            </ul>
+            <p class="flip-hint">לחץ לראות את הפתרון ←</p>
+          </div>
+          <div class="flip-back">
+            <div class="flip-label">אחרי — פתרון</div>
+            <h4>מעקב נקי</h4>
+            <ul style="font-size:.85rem">
+              <li>Primary: ליד שאומת ע"י מכירות</li>
+              <li>Secondary: מילוי טופס (לניטור בלבד)</li>
+              <li>Offline Import: MQL, SQL, Deal</li>
+              <li>ערכים שונים לכל שלב</li>
+            </ul>
+            <p class="flip-hint">לחץ לחזור ←</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="flipCard(this)" tabindex="0" onkeypress="if(event.key==='Enter')flipCard(this)">
+        <div class="flip-card-inner">
+          <div class="flip-front">
+            <div class="flip-label">לפני — בעיה</div>
+            <h4>RSA ומסר</h4>
+            <ul style="font-size:.85rem">
+              <li>RSA גנרית לכל הקמפיין</li>
+              <li>אין סינון לפי גודל עסק</li>
+              <li>אין אזכור מחיר / קריטריונים</li>
+              <li>מושכת כל ליד</li>
+            </ul>
+            <p class="flip-hint">לחץ לראות את הפתרון ←</p>
+          </div>
+          <div class="flip-back">
+            <div class="flip-label">אחרי — פתרון</div>
+            <h4>RSA מסננת</h4>
+            <ul style="font-size:.85rem">
+              <li>RSA ייחודית לכל נושא</li>
+              <li>"לעסקים עם 20+ עובדים"</li>
+              <li>"מחיר מ-3,500 ₪ לחודש"</li>
+              <li>CTR ירד — אבל lead quality עלה</li>
+            </ul>
+            <p class="flip-hint">לחץ לחזור ←</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="flipCard(this)" tabindex="0" onkeypress="if(event.key==='Enter')flipCard(this)">
+        <div class="flip-card-inner">
+          <div class="flip-front">
+            <div class="flip-label">לפני — בעיה</div>
+            <h4>מילות שלילה</h4>
+            <ul style="font-size:.85rem">
+              <li>רשימת שלילה בסיסית בלבד</li>
+              <li>לא נותחו Search Terms</li>
+              <li>תקציב הולך על חיפושי "חינם"</li>
+              <li>לידים ממחפשי עבודה</li>
+            </ul>
+            <p class="flip-hint">לחץ לראות את הפתרון ←</p>
+          </div>
+          <div class="flip-back">
+            <div class="flip-label">אחרי — פתרון</div>
+            <h4>שלילות אסטרטגיות</h4>
+            <ul style="font-size:.85rem">
+              <li>150+ מילות שלילה ברמת account</li>
+              <li>ניתוח שבועי של Search Terms</li>
+              <li>שלילות B2C לקמפיין B2B</li>
+              <li>שלילות ספציפיות לכל אד גרופ</li>
+            </ul>
+            <p class="flip-hint">לחץ לחזור ←</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:2.5rem">שיפורים בפועל — לפני מול אחרי</h3>
+    <p style="color:var(--muted);font-size:.88rem;margin-bottom:1rem">* מספרים אילוסטרטיביים לצרכי לימוד — לא ערבות לתוצאות</p>
+    <div class="card">
+      <div id="metrics-container">
+        <div class="metric-row">
+          <span class="metric-label">CPA לליד</span>
+          <div class="metric-bar"><div class="metric-fill before-fill" style="width:85%"></div></div>
+          <span class="metric-val" style="color:var(--red)">850 ₪</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">CPA לאחר</span>
+          <div class="metric-bar"><div class="metric-fill after-fill" style="width:42%"></div></div>
+          <span class="metric-val" style="color:var(--green)">420 ₪</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">% לידים מוסמכים (לפני)</span>
+          <div class="metric-bar"><div class="metric-fill before-fill" style="width:18%"></div></div>
+          <span class="metric-val" style="color:var(--red)">18%</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">% לידים מוסמכים (אחרי)</span>
+          <div class="metric-bar"><div class="metric-fill after-fill" style="width:52%"></div></div>
+          <span class="metric-val" style="color:var(--green)">52%</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">CTR ממוצע (לפני)</span>
+          <div class="metric-bar"><div class="metric-fill before-fill" style="width:28%"></div></div>
+          <span class="metric-val" style="color:var(--red)">2.8%</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">CTR ממוצע (אחרי)</span>
+          <div class="metric-bar"><div class="metric-fill after-fill" style="width:58%"></div></div>
+          <span class="metric-val" style="color:var(--green)">5.8%</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Quality Score ממוצע (לפני)</span>
+          <div class="metric-bar"><div class="metric-fill before-fill" style="width:45%"></div></div>
+          <span class="metric-val" style="color:var(--red)">4.5/10</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Quality Score ממוצע (אחרי)</span>
+          <div class="metric-bar"><div class="metric-fill after-fill" style="width:78%"></div></div>
+          <span class="metric-val" style="color:var(--green)">7.8/10</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXERCISES -->
+<section class="section" id="exercises">
+  <div class="container">
+    <div class="section-label">תרגול אינטראקטיבי</div>
+    <h2 class="section-title">תרגילים — בדקו את עצמכם</h2>
+
+    <!-- SORT EXERCISE -->
+    <div class="card" style="margin-bottom:2rem">
+      <h3>תרגיל 1: מיון מונחי חיפוש לקבוצות</h3>
+      <p>בחרו מונח חיפוש ואז לחצו על הקבוצה המתאימה</p>
+
+      <div id="sort-pool" style="margin-bottom:16px">
+        <p style="font-size:.85rem;font-weight:600;margin-bottom:8px">מונחי חיפוש למיון:</p>
+        <div id="terms-pool"></div>
+      </div>
+
+      <div class="sort-board">
+        <div class="sort-zone zone-high" onclick="sortDrop('high')">
+          <h4 style="color:var(--green)">🎯 כוונה מסחרית גבוהה</h4>
+          <div id="zone-high"></div>
+        </div>
+        <div class="sort-zone zone-compare" onclick="sortDrop('compare')">
+          <h4 style="color:var(--blue)">🔍 השוואה / מחקר ספקים</h4>
+          <div id="zone-compare"></div>
+        </div>
+        <div class="sort-zone zone-info" onclick="sortDrop('info')">
+          <h4 style="color:var(--orange)">📚 מידע בלבד</h4>
+          <div id="zone-info"></div>
+        </div>
+        <div class="sort-zone zone-neg" onclick="sortDrop('neg')">
+          <h4 style="color:var(--red)">🚫 מועמד למילת שלילה</h4>
+          <div id="zone-neg"></div>
+        </div>
+      </div>
+
+      <button class="sort-btn" onclick="checkSort()">בדוק תשובות</button>
+      <button class="sort-btn" onclick="resetSort()" style="background:#fff;color:var(--blue);border:2px solid var(--blue);margin-right:10px">אפס</button>
+      <div id="sort-feedback"></div>
+    </div>
+
+    <!-- DIAGNOSTIC -->
+    <div class="card" style="margin-bottom:2rem">
+      <h3>תרגיל 2: אבחון — מה הבעיה באד גרופ הזה?</h3>
+      <div class="card" style="background:#fef7e0;border:1px solid #f9d97e;margin-bottom:16px">
+        <h4 style="margin-bottom:8px">Ad Group: "שיווק דיגיטלי" — קמפיין לייד ג'נרשן B2B</h4>
+        <p style="font-size:.85rem"><strong>מילות מפתח:</strong> שיווק דיגיטלי, קידום עסקים, פרסום באינטרנט, מה זה SEO, קורס שיווק דיגיטלי חינם, איש שיווק דרושים, שיווק דיגיטלי לעצמאים, הכי זול, ניהול קמפיינים, שיווק ברשתות חברתיות, שיווק דיגיטלי למתחילים</p>
+        <p style="font-size:.85rem"><strong>RSA:</strong> שיווק דיגיטלי | פתרונות לכולם | צרו קשר</p>
+        <p style="font-size:.85rem"><strong>דף נחיתה:</strong> דף הבית ראשי</p>
+        <p style="font-size:.85rem"><strong>המרה:</strong> לחיצה על כפתור וואטסאפ</p>
+      </div>
+      <p style="font-size:.9rem;margin-bottom:12px"><strong>אילו בעיות אתם רואים? (בחרו את כולן)</strong></p>
+      <div id="diag-items"></div>
+      <button class="btn btn-primary" onclick="checkDiag()" style="margin-top:12px">בדוק אבחון</button>
+      <div id="diag-result"></div>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="card">
+      <h3>תרגיל 3: חידון ידע מעשי</h3>
+      <div id="quiz-container"></div>
+      <div id="quiz-score"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CHECKLIST -->
+<section class="section" id="checklist">
+  <div class="container">
+    <div class="section-label">יישום בפועל</div>
+    <h2 class="section-title">צ'קליסט בניית קמפיין Lead Gen</h2>
+    <p class="section-sub">השתמשו בצ'קליסט הזה בכל פעם שאתם בונים קמפיין Google Search חדש</p>
+
+    <div id="cl-count">0 מתוך 15 פריטים הושלמו</div>
+    <div id="cl-progress"><div id="cl-bar"></div></div>
+    <div id="checklist-container"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="section" style="background:#1a73e8;color:#fff">
+  <div class="container" style="text-align:center">
+    <h2 style="color:#fff;margin-bottom:1rem">עקרונות הזהב של Lead Gen מתקדם</h2>
+    <div class="card-grid card-grid-3" style="margin-top:1.5rem;text-align:right">
+      <div class="card" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff">
+        <div class="card-icon">🏗️</div>
+        <h3 style="color:#fff">מבנה לפי כוונה</h3>
+        <p style="opacity:.9;font-size:.9rem">קבצו לפי intent משותף, לא לפי מילים. STAG > SKAG בעידן ה-Smart Bidding.</p>
+      </div>
+      <div class="card" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff">
+        <div class="card-icon">📊</div>
+        <h3 style="color:#fff">מעקב המרות נקי</h3>
+        <p style="opacity:.9;font-size:.9rem">Smart Bidding מייעל למה שאתם סופרים. נתוני המרה גרועים = ביצועים גרועים.</p>
+      </div>
+      <div class="card" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff">
+        <div class="card-icon">🎯</div>
+        <h3 style="color:#fff">איכות על פני נפח</h3>
+        <p style="opacity:.9;font-size:.9rem">CPA נמוך עם לידים גרועים = הפסד. מדדו lead-to-close rate, לא רק שמות בטופס.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// ============================================================
+// NAVIGATION — active link on scroll
+// ============================================================
+(function(){
+  var sections=document.querySelectorAll('section[id]'),links=document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll',function(){
+    var top=window.scrollY+120;
+    sections.forEach(function(s){
+      if(top>=s.offsetTop && top<s.offsetTop+s.offsetHeight){
+        links.forEach(function(l){l.classList.remove('active')});
+        var a=document.querySelector('.nav-links a[href="#'+s.id+'"]');
+        if(a)a.classList.add('active');
+      }
+    });
+  });
+  links.forEach(function(a){
+    a.addEventListener('click',function(e){
+      e.preventDefault();
+      var t=document.querySelector(this.getAttribute('href'));
+      if(t)t.scrollIntoView({behavior:'smooth'});
+    });
+  });
+})();
+
+// ============================================================
+// SCROLL REVEAL
+// ============================================================
+(function(){
+  var els=document.querySelectorAll('.card,.callout,.flip-card');
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible')}});
+  },{threshold:.1});
+  els.forEach(function(el){el.classList.add('reveal');obs.observe(el)});
+})();
+
+// ============================================================
+// ACCORDION
+// ============================================================
+function toggleAcc(header){
+  var acc=header.parentElement;
+  var body=acc.querySelector('.acc-body');
+  var isOpen=body.classList.contains('open');
+  document.querySelectorAll('.acc-body.open').forEach(function(b){b.classList.remove('open');b.parentElement.classList.remove('open')});
+  if(!isOpen){body.classList.add('open');acc.classList.add('open');}
+}
+
+// ============================================================
+// FLIP CARDS
+// ============================================================
+function flipCard(el){el.classList.toggle('flipped');}
+
+// ============================================================
+// SORT EXERCISE DATA
+// ============================================================
+var sortTerms=[
+  {id:'t1',text:'ניהול קמפיינים גוגל לעסקים',correct:'high',explain:'חיפוש עם כוונה מסחרית ברורה — מחפש שירות'},
+  {id:'t2',text:'השוואה: Google Ads vs Facebook Ads',correct:'compare',explain:'חיפוש השוואה — בשלב מחקר ועדיין לא החליט'},
+  {id:'t3',text:'מה זה PPC ואיך זה עובד',correct:'info',explain:'מידע בסיסי בלבד — לא מחפש לקנות שירות'},
+  {id:'t4',text:'קורס Google Ads חינם',correct:'neg',explain:'חיפוש חינמי/לימודי — לא לקוח פוטנציאלי'},
+  {id:'t5',text:'סוכנות PPC בתל אביב',correct:'high',explain:'כוונה גבוהה + גיאוגרפי — מחפש ספק ספציפי'},
+  {id:'t6',text:'ביקורות על סוכנויות PPC',correct:'compare',explain:'שלב מחקר — משווה ספקים לפני החלטה'},
+  {id:'t7',text:'דרושים מנהל קמפיינים',correct:'neg',explain:'חיפוש עבודה — לא לקוח'},
+  {id:'t8',text:'מחיר ניהול קמפיין גוגל',correct:'compare',explain:'מחקר מחיר — קרוב להחלטה אבל עדיין משווה'},
+];
+var sortSelected=null;
+var sortPlaced={};
+
+function initSort(){
+  var pool=document.getElementById('terms-pool');
+  pool.innerHTML='';
+  sortTerms.forEach(function(t){
+    var el=document.createElement('span');
+    el.className='sort-item';
+    el.id='item-'+t.id;
+    el.textContent=t.text;
+    el.onclick=function(){selectTerm(t.id,el)};
+    pool.appendChild(el);
+  });
+  ['high','compare','info','neg'].forEach(function(z){
+    document.getElementById('zone-'+z).innerHTML='';
+  });
+  document.getElementById('sort-feedback').className='';
+  document.getElementById('sort-feedback').innerHTML='';
+  sortSelected=null;
+  sortPlaced={};
+}
+
+function selectTerm(id,el){
+  if(sortPlaced[id])return;
+  document.querySelectorAll('.sort-item').forEach(function(i){i.classList.remove('selected')});
+  sortSelected=id;
+  el.classList.add('selected');
+}
+
+function sortDrop(zone){
+  if(!sortSelected)return;
+  var term=sortTerms.find(function(t){return t.id===sortSelected});
+  if(!term||sortPlaced[sortSelected])return;
+  var origEl=document.getElementById('item-'+sortSelected);
+  if(origEl){origEl.style.display='none';}
+  var zoneEl=document.getElementById('zone-'+zone);
+  var pill=document.createElement('span');
+  pill.className='sort-item placed-'+zone;
+  pill.textContent=term.text;
+  pill.dataset.id=sortSelected;
+  pill.dataset.zone=zone;
+  zoneEl.appendChild(pill);
+  sortPlaced[sortSelected]=zone;
+  sortSelected=null;
+}
+
+function checkSort(){
+  if(Object.keys(sortPlaced).length===0){alert('אנא מיינו לפחות מונח אחד');return;}
+  var correct=0,total=Object.keys(sortPlaced).length;
+  var fb=['<strong>תוצאות המיון:</strong><br><br>'];
+  Object.keys(sortPlaced).forEach(function(id){
+    var term=sortTerms.find(function(t){return t.id===id});
+    var placed=sortPlaced[id];
+    var isCorrect=placed===term.correct;
+    if(isCorrect)correct++;
+    var zoneNames={high:'כוונה גבוהה',compare:'השוואה',info:'מידע בלבד',neg:'שלילה'};
+    var icon=isCorrect?'✅':'❌';
+    fb.push(icon+' <strong>'+term.text+'</strong> — '+(isCorrect?'נכון!':'מומלץ: '+zoneNames[term.correct])+' | '+term.explain+'<br>');
+  });
+  fb.push('<br>ציון: '+correct+'/'+total);
+  var el=document.getElementById('sort-feedback');
+  el.innerHTML=fb.join('');
+  el.className='show';
+}
+
+function resetSort(){initSort();}
+
+// ============================================================
+// DIAGNOSTIC
+// ============================================================
+var diagProblems=[
+  {id:'d1',text:'מילות מפתח עם כוונות מעורבות — B2B ו-B2C באותו אד גרופ',correct:true},
+  {id:'d2',text:'מילות מפתח לימודיות ("קורס", "מה זה") שלא צריכות להיות כאן',correct:true},
+  {id:'d3',text:'RSA גנרית שלא מסננת ולא רלוונטית לנושא',correct:true},
+  {id:'d4',text:'דף הבית כ-Landing Page — חוסר message match',correct:true},
+  {id:'d5',text:'המרה = לחיצה על כפתור — לא ייצוג של ליד אמיתי',correct:true},
+  {id:'d6',text:'שימוש ב-Exact Match בלבד',correct:false},
+  {id:'d7',text:'חסרות מילות שלילה (חינם, דרושים, מתחילים)',correct:true},
+  {id:'d8',text:'שימוש ב-Smart Bidding',correct:false},
+];
+var diagSelected={};
+
+function initDiag(){
+  var container=document.getElementById('diag-items');
+  container.innerHTML='';
+  diagProblems.forEach(function(p){
+    var div=document.createElement('div');
+    div.className='diag-item';
+    div.id='diag-'+p.id;
+    div.innerHTML='<div class="diag-check"></div><span>'+p.text+'</span>';
+    div.onclick=function(){toggleDiag(p.id,div)};
+    container.appendChild(div);
+  });
+}
+
+function toggleDiag(id,el){
+  diagSelected[id]=!diagSelected[id];
+  el.classList.toggle('selected',diagSelected[id]);
+}
+
+function checkDiag(){
+  var fb=['<strong>אבחון:</strong><br><br>'];
+  var correct=0,total=0;
+  diagProblems.forEach(function(p){
+    var el=document.getElementById('diag-'+p.id);
+    var selected=!!diagSelected[p.id];
+    el.classList.remove('selected','correct-sel','wrong-sel','missed');
+    if(p.correct){
+      total++;
+      if(selected){correct++;el.classList.add('correct-sel');}
+      else{el.classList.add('missed');}
+    } else {
+      if(selected){el.classList.add('wrong-sel');}
+    }
+  });
+  fb.push('זיהיתם '+correct+' מתוך '+total+' בעיות אמיתיות.');
+  fb.push('<br><small>ירוק = בעיה שזיהיתם נכון | כתום = בעיה שהחמצתם | אדום = לא בעיה</small>');
+  var el=document.getElementById('diag-result');
+  el.innerHTML=fb.join('');
+  el.className='show';
+  el.style.background=correct>=4?'#e6f4ea':'#fef7e0';
+  el.style.border='1px solid '+(correct>=4?'#a8d5b5':'#f9d97e');
+}
+
+// ============================================================
+// QUIZ
+// ============================================================
+var quizData=[
+  {
+    q:'קמפיין לייד ג\'נרשן B2B עם 40 אד גרופים, כל אחד עם 0-1 המרות לחודש. מה הבעיה העיקרית?',
+    opts:['Smart Bidding לא יכולה ללמוד מנתונים כה מפוזרים','יש יותר מדי מילות מפתח','צריך להוסיף RSA לכל אד גרופ','הבעיה היא בדף הנחיתה'],
+    correct:0,
+    explain:'Smart Bidding צריכה נפח מינימלי של המרות (20-30+ לחודש) כדי לייעל. עם 40 אד גרופים ו-40 המרות בחודש — כל אד גרופ מקבל פחות מ-1 המרה. אין ממה ללמוד.'
+  },
+  {
+    q:'לקוח מציג: CPA ירד מ-300 ₪ ל-100 ₪ — מדהים! אבל איכות הלידים ירדה חדות. מה כנראה קרה?',
+    opts:['Smart Bidding ייעלה לקבלת יותר לידים זולים ולא איכותיים','הקמפיין השתפר — CPA נמוך זה תמיד טוב','הבעיה היא בצוות המכירות','צריך להגדיל תקציב'],
+    correct:0,
+    explain:'כשמייעלים ל-CPA נמוך בלי לבדוק איכות — גוגל מוצאת את הלידים הזולים ביותר. אלה לרוב המחפשים הכי פחות מוכשרים. זוהי הטעות הקלאסית של אופטימיזציה על מדד הלא נכון.'
+  },
+  {
+    q:'מתי Broad Match מסוכן בליד ג\'נרשן?',
+    opts:['כשמעקב ההמרות לא אמין ויש לידים גרועים בנתוני ההמרה','תמיד — לעולם אל תשתמשו ב-Broad Match','כשיש יותר מ-10 מילות מפתח','כשמשתמשים ב-Target CPA'],
+    correct:0,
+    explain:'Broad Match + נתוני המרה לקויים = אסון. גוגל תסקיל את הכוונה הלא נכונה. Broad Match יכול לעבוד מצוין כשיש מעקב נקי, שלילות חזקות, ו-Smart Bidding מלומדת.'
+  },
+  {
+    q:'איזה מסר RSA עדיף לעסק B2B שמוכר ייעוץ מ-15,000 ₪ לחודש?',
+    opts:['ייעוץ עסקי | מחיר מ-15K לחודש | לעסקים בלבד','ייעוץ עסקי | מחירים נוחים | לכולם','פתרונות עסקיים | צרו קשר היום','שירות ייעוץ | מומחים בתחום'],
+    correct:0,
+    explain:'ציון המחיר מסנן לקוחות שלא עומדים בתקציב לפני הקליק. זה מוריד CTR אבל מעלה איכות הליד — בדיוק מה שעסק B2B פרימיום צריך.'
+  },
+  {
+    q:'מה ההבדל המהותי בין Keyword לבין Search Term?',
+    opts:['Keyword הוא מה שאתם מגדירים; Search Term הוא מה שהמשתמש הקליד בפועל','הם אותו דבר בדיוק','Keyword רחב יותר מ-Search Term','Search Term הוא רק ל-Exact Match'],
+    correct:0,
+    explain:'זהו ההבדל הקריטי: אתם שולטים ב-Keywords אבל גוגל מחליטה אילו Search Terms יפעילו אותם. הפער הזה הוא שדה הקרב של ניהול קמפיינים מקצועי.'
+  }
+];
+var quizAnswered={};
+
+function initQuiz(){
+  var container=document.getElementById('quiz-container');
+  container.innerHTML='';
+  quizData.forEach(function(q,i){
+    var div=document.createElement('div');
+    div.className='quiz-q';
+    var opts=q.opts.map(function(o,j){
+      return '<button class="quiz-opt" onclick="answerQuiz('+i+','+j+',this)" aria-label="אפשרות '+(j+1)+'">'+o+'</button>';
+    }).join('');
+    div.innerHTML='<h4>'+(i+1)+'. '+q.q+'</h4><div class="quiz-options">'+opts+'</div><div class="quiz-feedback" id="qfb-'+i+'"></div>';
+    container.appendChild(div);
+  });
+}
+
+function answerQuiz(qi,oi,btn){
+  if(quizAnswered[qi])return;
+  quizAnswered[qi]=oi;
+  var q=quizData[qi];
+  var opts=btn.closest('.quiz-options').querySelectorAll('.quiz-opt');
+  opts.forEach(function(o){o.classList.add('disabled')});
+  if(oi===q.correct){
+    btn.classList.add('correct');
+  } else {
+    btn.classList.add('wrong');
+    opts[q.correct].classList.add('correct');
+  }
+  var fb=document.getElementById('qfb-'+qi);
+  fb.innerHTML=(oi===q.correct?'✅ נכון! ':'❌ לא מדויק. ')+q.explain;
+  fb.className='quiz-feedback show '+(oi===q.correct?'feedback-correct':'feedback-wrong');
+
+  if(Object.keys(quizAnswered).length===quizData.length){
+    var score=0;
+    quizData.forEach(function(q,i){if(quizAnswered[i]===q.correct)score++;});
+    var scoreEl=document.getElementById('quiz-score');
+    scoreEl.innerHTML='סיימתם! ציון: <strong>'+score+'/'+quizData.length+'</strong> — '+(score>=4?'מצוין! 🎉':score>=3?'טוב, ממשיכים להתאמן 💪':'כדאי לחזור על החומר 📚');
+    scoreEl.style.display='block';
+    scoreEl.style.color=score>=4?var_color('green'):score>=3?var_color('orange'):var_color('red');
+  }
+}
+function var_color(c){return c==='green'?'#1e8c45':c==='orange'?'#b06000':'#c5221f';}
+
+// ============================================================
+// CHECKLIST
+// ============================================================
+var clItems=[
+  {title:'יעד קמפיין ברור',desc:'הגדרתי מה נחשב ליד איכותי — לא רק מילוי טופס'},
+  {title:'מעקב המרות נקי',desc:'Primary Conversion = ליד מאומת, לא לחיצה על כפתור'},
+  {title:'ערכים שונים לכל שלב',desc:'הקציתי ערך שונה לכל שלב: טופס, MQL, SQL, עסקה'},
+  {title:'מיפוי כוונות מילות מפתח',desc:'חילקתי ביטויים לפי כוונה: גבוהה / השוואה / מידע'},
+  {title:'STAG — קיבוץ לפי נושא',desc:'כל אד גרופ מייצג נושא/כוונה אחת ברורה'},
+  {title:'אין קניבליזציה בין אד גרופים',desc:'הוספתי מילות שלילה ברמת אד גרופ'},
+  {title:'RSA מסננת ורלוונטית',desc:'כל RSA כוללת מסר מתאים לנושא האד גרופ'},
+  {title:'אסטרטגיית Match Types',desc:'Exact לביטויים מוכחים, Phrase להרחבה, Broad רק עם תנאים'},
+  {title:'שלילות account-level',desc:'רשימת שלילה גלובלית: חינם, דרושים, קורסים, לימודים'},
+  {title:'ניתוח Search Terms שבועי',desc:'קביעתי תהליך קבוע לסקירת Search Terms Report'},
+  {title:'Message Match מלא',desc:'Search Term → Keyword → RSA → Landing Page — הכל מחובר'},
+  {title:'Smart Bidding מוכנה',desc:'20+ המרות לחודש per campaign, מעקב נקי'},
+  {title:'Offline Conversion Import',desc:'חברתי CRM לגוגל — שולח נתוני ליד מוסמך'},
+  {title:'סינון לידים גרועים',desc:'Landing Page כולל שדות סינון: גודל עסק, תקציב, אזור'},
+  {title:'לולאת פידבק איכות',desc:'יש תהליך קבוע: צוות מכירות → נתוני לידים → Google Ads'},
+];
+var clChecked={};
+
+function initChecklist(){
+  var container=document.getElementById('checklist-container');
+  container.innerHTML='';
+  clItems.forEach(function(item,i){
+    var div=document.createElement('div');
+    div.className='checklist-item';
+    div.id='cl-'+i;
+    div.innerHTML='<div class="cl-box" id="cl-box-'+i+'"></div><div class="cl-text"><strong>'+item.title+'</strong><span>'+item.desc+'</span></div>';
+    div.onclick=function(){toggleCl(i)};
+    container.appendChild(div);
+  });
+  updateClProgress();
+}
+
+function toggleCl(i){
+  clChecked[i]=!clChecked[i];
+  var el=document.getElementById('cl-'+i);
+  var box=document.getElementById('cl-box-'+i);
+  el.classList.toggle('checked',clChecked[i]);
+  box.textContent=clChecked[i]?'✓':'';
+  updateClProgress();
+}
+
+function updateClProgress(){
+  var count=Object.values(clChecked).filter(Boolean).length;
+  document.getElementById('cl-count').textContent=count+' מתוך '+clItems.length+' פריטים הושלמו';
+  document.getElementById('cl-bar').style.width=(count/clItems.length*100)+'%';
+}
+
+// ============================================================
+// INIT ALL
+// ============================================================
+document.addEventListener('DOMContentLoaded',function(){
+  initSort();
+  initDiag();
+  initQuiz();
+  initChecklist();
+});
+</script>
+</body>
+</html>

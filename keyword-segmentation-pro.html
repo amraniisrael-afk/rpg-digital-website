@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>חלוקת מילות מפתח — רמת סוכנות</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1a1a2e;--blue:#1a56db;--blue-soft:#e8f0fe;--green:#0d7a3e;--green-soft:#e6f4ea;
+  --red:#b91c1c;--red-soft:#fef2f2;--orange:#c2410c;--orange-soft:#fff7ed;
+  --purple:#6d28d9;--purple-soft:#f5f3ff;--yellow:#92400e;--yellow-soft:#fffbeb;
+  --border:#e2e8f0;--muted:#64748b;--bg:#f8fafc;--card:#fff;
+  --radius:10px;--shadow:0 1px 4px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.72;font-size:15.5px}
+h1{font-size:2.3rem;font-weight:800;line-height:1.2;letter-spacing:-.02em}
+h2{font-size:1.65rem;font-weight:750;letter-spacing:-.01em;margin-bottom:.8rem}
+h3{font-size:1.18rem;font-weight:700;margin-bottom:.55rem}
+h4{font-size:1rem;font-weight:700;margin-bottom:.35rem}
+p{margin-bottom:.85rem;color:#2d3748}
+ul,ol{padding-right:1.3rem;margin-bottom:.85rem}
+li{margin-bottom:.28rem;color:#2d3748}
+strong{font-weight:700;color:var(--ink)}
+code{font-family:Consolas,monospace;font-size:.88rem;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 5px}
+.container{max-width:1080px;margin:0 auto;padding:0 22px}
+.section{padding:68px 0}
+.alt-bg{background:#fff}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.nav-wrap{max-width:1080px;margin:0 auto;padding:0 22px;display:flex;align-items:center;gap:10px;height:52px;overflow-x:auto}
+.nav-wrap::-webkit-scrollbar{height:0}
+.nav-logo{font-weight:800;font-size:.9rem;color:var(--blue);white-space:nowrap;margin-left:16px}
+.nav-wrap a{white-space:nowrap;font-size:.78rem;padding:5px 11px;border-radius:20px;color:var(--muted);transition:.15s;text-decoration:none}
+.nav-wrap a:hover,.nav-wrap a.on{background:var(--blue);color:#fff}
+
+/* HERO */
+.hero{background:linear-gradient(150deg,#0f1c4d 0%,#1a3a8f 50%,#1e40af 100%);color:#fff;padding:72px 0 60px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero-tag{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:4px 12px;font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:18px}
+.hero h1{margin-bottom:.9rem;font-size:2.4rem}
+.hero p{opacity:.85;font-size:1.08rem;max-width:680px;margin-bottom:0}
+.hero-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.hero-pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:5px;padding:5px 13px;font-size:.8rem}
+
+/* CARDS */
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border);padding:22px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+@media(max-width:720px){.grid2,.grid3{grid-template-columns:1fr}}
+
+/* CALLOUT */
+.box{border-radius:var(--radius);padding:16px 20px;margin:18px 0}
+.box-blue{background:var(--blue-soft);border-right:4px solid var(--blue)}
+.box-green{background:var(--green-soft);border-right:4px solid var(--green)}
+.box-red{background:var(--red-soft);border-right:4px solid var(--red)}
+.box-orange{background:var(--orange-soft);border-right:4px solid var(--orange)}
+.box-purple{background:var(--purple-soft);border-right:4px solid var(--purple)}
+.box-yellow{background:var(--yellow-soft);border-right:4px solid #d97706}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.88rem}
+th{background:#f1f5f9;padding:9px 13px;text-align:right;font-weight:700;border:1px solid var(--border);font-size:.82rem;letter-spacing:.01em}
+td{padding:9px 13px;border:1px solid var(--border);vertical-align:top;color:#2d3748}
+tr:nth-child(even) td{background:#fafbfc}
+
+/* SECTION HEADER */
+.sec-kicker{display:inline-flex;align-items:center;gap:6px;background:var(--blue-soft);color:var(--blue);border-radius:5px;padding:3px 11px;font-size:.75rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:10px}
+.sec-sub{color:var(--muted);font-size:1rem;max-width:680px;margin-top:6px;margin-bottom:28px}
+
+/* TAG */
+.tag{display:inline-block;padding:2px 9px;border-radius:4px;font-size:.74rem;font-weight:700;vertical-align:middle;margin-right:4px}
+.t-green{background:#dcfce7;color:#166534}.t-blue{background:#dbeafe;color:#1e40af}
+.t-red{background:#fee2e2;color:#991b1b}.t-orange{background:#ffedd5;color:#9a3412}
+.t-purple{background:#ede9fe;color:#5b21b6}.t-yellow{background:#fef9c3;color:#713f12}
+.t-gray{background:#f1f5f9;color:#475569}
+
+/* KEYWORD PILL */
+.kw{display:inline-block;font-family:Consolas,monospace;font-size:.82rem;padding:3px 9px;border-radius:4px;margin:2px;border:1px solid}
+.kw-exact{background:#dcfce7;border-color:#86efac;color:#14532d}
+.kw-phrase{background:#dbeafe;border-color:#93c5fd;color:#1e3a8a}
+.kw-broad{background:#fef9c3;border-color:#fde047;color:#713f12}
+.kw-neg{background:#fee2e2;border-color:#fca5a5;color:#7f1d1d}
+.kw-trans{background:#f5f3ff;border-color:#c4b5fd;color:#4c1d95}
+
+/* INTENT PYRAMID */
+.pyramid{margin:24px auto;max-width:600px}
+.pyramid-level{border-radius:8px;padding:14px 20px;margin-bottom:6px;position:relative;cursor:default;transition:.2s}
+.pyramid-level:hover{transform:translateX(-3px)}
+.pl-trans{background:linear-gradient(135deg,#14532d,#16a34a);color:#fff}
+.pl-comm{background:linear-gradient(135deg,#1e40af,#3b82f6);color:#fff}
+.pl-invest{background:linear-gradient(135deg,#92400e,#f59e0b);color:#fff}
+.pl-info{background:linear-gradient(135deg,#64748b,#94a3b8);color:#fff}
+.pyramid-level h4{font-size:.95rem;margin-bottom:3px;color:#fff}
+.pyramid-level p{font-size:.8rem;opacity:.9;margin:0;color:rgba(255,255,255,.9)}
+.pl-badge{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:.72rem;font-weight:800;opacity:.8}
+
+/* WATERFALL */
+.wf{display:flex;flex-direction:column;gap:0}
+.wf-step{display:flex;align-items:stretch;gap:0}
+.wf-label{width:140px;flex-shrink:0;display:flex;align-items:center;justify-content:flex-end;padding-left:16px;font-weight:700;font-size:.9rem;text-align:left}
+.wf-conn{display:flex;flex-direction:column;align-items:center;width:32px;flex-shrink:0}
+.wf-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;margin-top:18px}
+.wf-line{flex:1;width:2px;background:var(--border)}
+.wf-card{flex:1;border-radius:var(--radius);border:1px solid var(--border);padding:14px 16px;margin:6px 0;background:#fff;box-shadow:var(--shadow)}
+.wf-card h4{margin-bottom:6px}
+
+/* INTERACTIVE */
+.intent-game{margin-top:20px}
+.game-term{background:#f1f5f9;border-radius:var(--radius);border:1px solid var(--border);padding:14px 18px;margin-bottom:12px}
+.game-term .term-text{font-size:1.05rem;font-weight:700;font-family:Consolas,monospace;margin-bottom:10px;color:var(--ink)}
+.game-opts{display:flex;flex-wrap:wrap;gap:8px}
+.game-btn{padding:7px 15px;border-radius:6px;border:2px solid var(--border);background:#fff;cursor:pointer;font-size:.85rem;font-weight:600;transition:.15s;color:var(--ink)}
+.game-btn:hover{border-color:var(--blue);background:var(--blue-soft);color:var(--blue)}
+.game-btn.correct{border-color:var(--green);background:var(--green-soft);color:var(--green)}
+.game-btn.wrong{border-color:var(--red);background:var(--red-soft);color:var(--red)}
+.game-btn.show-correct{border-color:var(--green);background:var(--green-soft);color:var(--green);opacity:.7}
+.game-btn.disabled{pointer-events:none}
+.game-explain{margin-top:10px;padding:10px 14px;border-radius:7px;font-size:.87rem;display:none}
+.game-explain.show{display:block}
+
+/* MATCH ARCHITECT */
+.arch-scenario{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:14px;box-shadow:var(--shadow)}
+.arch-theme{font-weight:800;font-size:1.05rem;margin-bottom:4px}
+.arch-context{font-size:.85rem;color:var(--muted);margin-bottom:12px}
+.arch-slots{display:flex;flex-direction:column;gap:8px}
+.arch-slot{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:7px;border:1px dashed var(--border);background:#fafbfc}
+.arch-slot-label{font-size:.78rem;font-weight:700;width:80px;flex-shrink:0;color:var(--muted)}
+.arch-choices{display:flex;flex-wrap:wrap;gap:6px;flex:1}
+.arch-choice{padding:4px 11px;border-radius:5px;border:1px solid var(--border);cursor:pointer;font-size:.8rem;font-weight:600;background:#fff;transition:.15s}
+.arch-choice:hover{background:var(--blue-soft);border-color:var(--blue);color:var(--blue)}
+.arch-choice.sel{background:var(--blue);color:#fff;border-color:var(--blue)}
+.arch-choice.correct-c{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.arch-choice.wrong-c{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.arch-choice.dis{pointer-events:none}
+#arch-result{display:none;margin-top:16px;padding:14px;border-radius:var(--radius);font-size:.88rem}
+
+/* CANNIB */
+.cannib-group{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:14px}
+.cannib-ag{margin-bottom:10px;padding:10px 14px;border-radius:7px;border:1px solid var(--border)}
+.cannib-ag-name{font-weight:700;font-size:.85rem;margin-bottom:6px;color:var(--blue)}
+.kw-row{display:flex;flex-wrap:wrap;gap:4px}
+.overlap-hint{display:none;font-size:.8rem;color:var(--red);font-weight:600;margin-top:6px}
+.overlap-hint.show{display:block}
+
+/* QUIZ PRO */
+.qpro{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:14px;box-shadow:var(--shadow)}
+.qpro-num{font-size:.75rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.qpro-q{font-size:1rem;font-weight:700;margin-bottom:12px;line-height:1.5}
+.qpro-scenario{background:#f8fafc;border-right:3px solid var(--blue);border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:.88rem;font-family:Consolas,monospace}
+.qpro-opts{display:flex;flex-direction:column;gap:7px}
+.qpro-opt{padding:9px 14px;border-radius:7px;border:2px solid var(--border);cursor:pointer;font-size:.9rem;text-align:right;background:#fff;transition:.15s}
+.qpro-opt:hover{border-color:var(--blue);background:var(--blue-soft)}
+.qpro-opt.c{border-color:var(--green);background:var(--green-soft);color:#14532d}
+.qpro-opt.w{border-color:var(--red);background:var(--red-soft);color:#7f1d1d}
+.qpro-opt.sc{border-color:var(--green);background:rgba(22,163,74,.1)}
+.qpro-opt.dis{pointer-events:none}
+.qpro-fb{margin-top:10px;padding:10px 14px;border-radius:7px;font-size:.87rem;display:none;line-height:1.6}
+.qpro-fb.show{display:block}
+.fb-c{background:var(--green-soft);color:#14532d;border:1px solid #86efac}
+.fb-w{background:var(--red-soft);color:#7f1d1d;border:1px solid #fca5a5}
+#qpro-final{text-align:center;padding:22px;display:none;border-radius:var(--radius);margin-top:16px;font-size:1.1rem;font-weight:700}
+
+/* PROGRESS */
+.prog-bar{height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden;margin-bottom:5px}
+.prog-fill{height:100%;border-radius:3px;transition:.4s}
+
+/* ACCORDION */
+.acc{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:10px;background:#fff}
+.acc-h{padding:14px 18px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:.95rem;transition:.15s}
+.acc-h:hover{background:#f8fafc}
+.acc-b{max-height:0;overflow:hidden;transition:max-height .35s ease;padding:0 18px}
+.acc-b.op{max-height:1000px;padding-bottom:16px;padding-top:4px}
+.acc-icon{transition:.3s;font-style:normal;font-size:.8rem;flex-shrink:0;color:var(--muted)}
+.acc.op .acc-icon{transform:rotate(180deg)}
+
+/* RULE CARD */
+.rule{display:flex;gap:14px;padding:14px;border-radius:var(--radius);border:1px solid var(--border);background:#fff;margin-bottom:10px}
+.rule-num{font-size:1.8rem;font-weight:900;line-height:1;color:var(--blue);opacity:.25;flex-shrink:0;width:36px}
+.rule-body h4{margin-bottom:4px}
+.rule-body p{margin:0;font-size:.9rem;color:var(--muted)}
+
+/* MATRIX */
+.matrix-cell{text-align:center;font-size:.82rem;padding:10px 8px !important}
+.matrix-hdr{font-weight:800;background:#1e40af;color:#fff;text-align:center}
+.mc-high{background:#dcfce7;color:#14532d;font-weight:700}
+.mc-med{background:#fef9c3;color:#713f12;font-weight:600}
+.mc-low{background:#fee2e2;color:#991b1b;font-weight:600}
+.mc-cond{background:#f5f3ff;color:#5b21b6;font-weight:600}
+
+/* BTN */
+.btn{padding:9px 20px;border-radius:7px;border:none;font-size:.9rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-p{background:var(--blue);color:#fff}.btn-p:hover{background:#1d4ed8}
+.btn-s{background:#fff;color:var(--blue);border:2px solid var(--blue)}.btn-s:hover{background:var(--blue-soft)}
+.btn-sm{padding:6px 14px;font-size:.82rem}
+
+/* MISC */
+.divider{height:1px;background:var(--border);margin:28px 0}
+.signal-row{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.sig{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:5px;font-size:.8rem;font-weight:600}
+.sig-high{background:#dcfce7;color:#14532d}
+.sig-med{background:#fef9c3;color:#713f12}
+.sig-low{background:#fee2e2;color:#991b1b}
+.sig-info{background:#dbeafe;color:#1e40af}
+
+@media(max-width:640px){h1{font-size:1.7rem}h2{font-size:1.35rem}.hero{padding:50px 0 40px}.section{padding:48px 0}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-wrap">
+    <span class="nav-logo">Keyword Architecture</span>
+    <a href="#intent">Intent Pyramid</a>
+    <a href="#signals">אותות כוונה</a>
+    <a href="#segmentation">שיטות חלוקה</a>
+    <a href="#match-arch">Match Architecture</a>
+    <a href="#waterfall">Waterfall</a>
+    <a href="#cannib">קניבליזציה</a>
+    <a href="#exercises">תרגילים</a>
+    <a href="#rules">כללי ברזל</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-tag">Agency-Level · Search Campaigns · Advanced</div>
+    <h1>חלוקת מילות מפתח — רמת סוכנות</h1>
+    <p>שיטות חלוקה לפי כוונת חיפוש וארכיטקטורת Match Types. לא עוד "exact לשליטה, broad להרחבה" — הלוגיקה העמוקה שמאחורי כל החלטה.</p>
+    <div class="hero-pills">
+      <span class="hero-pill">Intent Pyramid</span>
+      <span class="hero-pill">Modifier Signals</span>
+      <span class="hero-pill">Waterfall Architecture</span>
+      <span class="hero-pill">Alpha / Beta</span>
+      <span class="hero-pill">Cannibalization Control</span>
+      <span class="hero-pill">Smart Bidding Implications</span>
+    </div>
+  </div>
+</div>
+
+<!-- INTENT PYRAMID -->
+<section class="section" id="intent">
+  <div class="container">
+    <div class="sec-kicker">חלק א׳</div>
+    <h2>Intent Pyramid — ארבע שכבות, לא שלוש</h2>
+    <p class="sec-sub">כל ספר גוגל אדס מדבר על "כוונת חיפוש". מעטים מבינים כמה שכבות יש בה, ואיך כל שכבה מחייבת מבנה קמפיין שונה לחלוטין.</p>
+
+    <div class="pyramid">
+      <div class="pyramid-level pl-trans">
+        <h4>Transactional — "אני רוצה לקנות/ליצור קשר עכשיו"</h4>
+        <p>המשתמש יש לו פתרון בראש. הוא מחפש ספק. זה הזהב.</p>
+        <div class="pl-badge">CPA גבוה · Lead quality גבוהה</div>
+      </div>
+      <div class="pyramid-level pl-comm">
+        <h4>Commercial — "אני מתכנן לקנות, מחפש את הטוב ביותר"</h4>
+        <p>השוואות, "הטוב ביותר", "מומלץ", "מחיר". עדיין קרוב לקנייה.</p>
+        <div class="pl-badge">CPA בינוני · עדיין שווה</div>
+      </div>
+      <div class="pyramid-level pl-invest">
+        <h4>Investigational — "אני שוקל, אבל עוד לא בטוח"</h4>
+        <p>"האם כדאי", "חלופה ל", "יתרונות וחסרונות". קהל בשלב מחקר.</p>
+        <div class="pl-badge">CPA גבוה · lead quality נמוכה</div>
+      </div>
+      <div class="pyramid-level pl-info">
+        <h4>Informational — "אני רוצה ללמוד"</h4>
+        <p>"מה זה", "איך", "מדריך", "הסבר". לרוב — מילות שלילה.</p>
+        <div class="pl-badge">לרוב שלילה בקמפיין Search</div>
+      </div>
+    </div>
+
+    <div class="box box-blue">
+      <strong>הנקודה שרוב המשווקים מפספסים:</strong> Transactional ו-Commercial אינם זהים. מישהו שמחפש "השוואה בין ERP לעסקים קטנים" יכול להיות MQL מחר — אבל הוא <em>לא</em> מוכן לטופס היום. מבנה אחד לשניהם = דף נחיתה שגוי = המרה שמשכנעת אותו לברוח.
+    </div>
+
+    <h3 style="margin-top:2rem">דוגמה — עסק B2B: ניהול שכר לחברות</h3>
+    <table>
+      <tr>
+        <th style="width:20%">שכבת Intent</th>
+        <th>דוגמת חיפוש</th>
+        <th style="width:22%">דף נחיתה מתאים</th>
+        <th style="width:18%">Conversion Goal</th>
+      </tr>
+      <tr>
+        <td><span class="t-green">Transactional</span></td>
+        <td><code>שירות ניהול שכר לחברות</code>, <code>חברת שכר בתל אביב</code>, <code>מיקור חוץ שכר</code></td>
+        <td>דף שירות ישיר + טופס קצר</td>
+        <td>פגישת ייעוץ</td>
+      </tr>
+      <tr>
+        <td><span class="t-blue">Commercial</span></td>
+        <td><code>תוכנת שכר מומלצת</code>, <code>מחיר ניהול שכר לחברה</code>, <code>השוואת שירותי שכר</code></td>
+        <td>דף השוואה / תמחור</td>
+        <td>הורדת מדריך / כלי חישוב</td>
+      </tr>
+      <tr>
+        <td><span class="t-orange">Investigational</span></td>
+        <td><code>האם כדאי למיקור חוץ שכר</code>, <code>תוכנה לניהול שכר עצמאי</code></td>
+        <td>מאמר בלוג / landing ארוך</td>
+        <td>מיקרו-המרה (ניוזלטר)</td>
+      </tr>
+      <tr>
+        <td><span class="t-gray">Informational</span></td>
+        <td><code>מה זה תלוש שכר</code>, <code>איך מחשבים שכר נטו</code></td>
+        <td>→ <strong>מילת שלילה</strong></td>
+        <td>—</td>
+      </tr>
+    </table>
+
+    <div class="box box-orange">
+      <strong>⚡ שאלה שחייבים לשאול על כל Ad Group:</strong> "אם מישהו כתב את החיפוש הזה — מה הוא מצפה לראות ב-3 השניות הבאות?"<br>
+      אם התשובה שלכם ודף הנחיתה שלכם נותנים תשובה שונה — יש בעיה. זה גם הסבר עיקרי ל-Quality Score נמוך.
+    </div>
+  </div>
+</section>
+
+<!-- MODIFIER SIGNALS -->
+<section class="section alt-bg" id="signals">
+  <div class="container">
+    <div class="sec-kicker">חלק ב׳</div>
+    <h2>Modifier Signals — המילים שמגלות הכל</h2>
+    <p class="sec-sub">לא צריך לנחש את כוונת החיפוש. יש מילים ספציפיות שמגלות אותה. כשתלמדו לקרוא אותן — קיבוץ הביטויים הופך לאוטומטי.</p>
+
+    <div class="grid2">
+      <div>
+        <h3><span class="t-green">Transactional Signals</span></h3>
+        <p style="font-size:.88rem;color:var(--muted)">מילים שמסמנות כוונת פעולה מיידית:</p>
+        <div class="signal-row">
+          <span class="sig sig-high">שירות</span><span class="sig sig-high">לשכור</span>
+          <span class="sig sig-high">לקנות</span><span class="sig sig-high">הצעת מחיר</span>
+          <span class="sig sig-high">ספק</span><span class="sig sig-high">חברה</span>
+          <span class="sig sig-high">פגישה</span><span class="sig sig-high">ייעוץ</span>
+          <span class="sig sig-high">צור קשר</span><span class="sig sig-high">מיקור חוץ</span>
+          <span class="sig sig-high">עלות</span><span class="sig sig-high">תמחור</span>
+          <span class="sig sig-high">+[עיר/אזור]</span>
+        </div>
+        <div class="box box-green" style="margin-top:12px;font-size:.88rem">
+          <strong>גיאוגרפיה = intent signal:</strong> "רואה חשבון תל אביב" חזק יותר מ"רואה חשבון" — הוספת עיר מסמנת שהמשתמש מחפש ספק אמיתי, לא מידע.
+        </div>
+      </div>
+      <div>
+        <h3><span class="t-blue">Commercial Signals</span></h3>
+        <p style="font-size:.88rem;color:var(--muted)">מילים שמסמנות שלב השוואה ומחקר:</p>
+        <div class="signal-row">
+          <span class="sig sig-info">הטוב ביותר</span><span class="sig sig-info">מומלץ</span>
+          <span class="sig sig-info">השוואה</span><span class="sig sig-info">ביקורות</span>
+          <span class="sig sig-info">מחיר</span><span class="sig sig-info">עלות ממוצעת</span>
+          <span class="sig sig-info">כמה עולה</span><span class="sig sig-info">אלטרנטיבה</span>
+          <span class="sig sig-info">vs</span><span class="sig sig-info">חלופה</span>
+          <span class="sig sig-info">top 10</span><span class="sig sig-info">מדריך בחירה</span>
+        </div>
+      </div>
+      <div>
+        <h3><span class="t-orange">Investigational Signals</span></h3>
+        <p style="font-size:.88rem;color:var(--muted)">ספק, שאלה, ציד מידע להחלטה:</p>
+        <div class="signal-row">
+          <span class="sig sig-med">האם כדאי</span><span class="sig sig-med">יתרונות וחסרונות</span>
+          <span class="sig sig-med">מתי צריך</span><span class="sig sig-med">מי צריך</span>
+          <span class="sig sig-med">האם אפשר</span><span class="sig sig-med">הסיכונים</span>
+          <span class="sig sig-med">תוכנה עצמאית</span><span class="sig sig-med">בעצמי</span>
+        </div>
+      </div>
+      <div>
+        <h3><span class="t-red">Negative Signals (לרוב שלילה)</span></h3>
+        <p style="font-size:.88rem;color:var(--muted)">מילות אזהרה אדומות בקמפיין ממומן:</p>
+        <div class="signal-row">
+          <span class="sig sig-low">מה זה</span><span class="sig sig-low">הגדרה</span>
+          <span class="sig sig-low">איך</span><span class="sig sig-low">מדריך</span>
+          <span class="sig sig-low">הסבר</span><span class="sig sig-low">קורס</span>
+          <span class="sig sig-low">לימוד</span><span class="sig sig-low">חינם</span>
+          <span class="sig sig-low">דרושים</span><span class="sig sig-low">עבודה</span>
+          <span class="sig sig-low">DIY</span><span class="sig sig-low">בעצמי</span>
+        </div>
+        <div class="box box-red" style="margin-top:12px;font-size:.88rem">
+          <strong>אזהרה:</strong> "איך" אינה <em>תמיד</em> שלילה. "איך להגיע ל" / "איך לבחור ספק" — יכולות להיות commercial. הקשר חשוב.
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <h3>Signal Stacking — כשמספר אותות משולבים</h3>
+    <p style="font-size:.9rem">לפעמים חיפוש אחד מכיל מספר signals שמגדילים או מקטינים את עוצמת הכוונה:</p>
+    <table>
+      <tr><th>חיפוש</th><th>Signals שזוהו</th><th>שכבת Intent</th><th>מסקנה</th></tr>
+      <tr>
+        <td><code>מחיר רואה חשבון חיצוני לחברות סטארטאפ תל אביב</code></td>
+        <td>מחיר ✓ · חיצוני ✓ · לחברות ✓ · עיר ✓</td>
+        <td><span class="t-green">Transactional++</span></td>
+        <td>מהחיפושים הכי חזקים. דף ישיר + טופס.</td>
+      </tr>
+      <tr>
+        <td><code>השוואת מחירי ניהול שכר</code></td>
+        <td>השוואה ✓ · מחיר ✓</td>
+        <td><span class="t-blue">Commercial</span></td>
+        <td>מוכן להחליט, אבל עדיין משווה. דף תמחור.</td>
+      </tr>
+      <tr>
+        <td><code>האם כדאי לעשות מיקור חוץ שכר</code></td>
+        <td>האם כדאי ✓ · מיקור חוץ ✓</td>
+        <td><span class="t-orange">Investigational</span></td>
+        <td>טרם החלטה. כדאי לשקול — ייתכן שלילה.</td>
+      </tr>
+      <tr>
+        <td><code>איך מחשבים ניכויי שכר</code></td>
+        <td>איך ✓ · מחשבים ✓ (DIY signal)</td>
+        <td><span class="t-red">Informational</span></td>
+        <td>מחפש לעשות בעצמו → שלילה.</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<!-- SEGMENTATION METHODS -->
+<section class="section" id="segmentation">
+  <div class="container">
+    <div class="sec-kicker">חלק ג׳</div>
+    <h2>שיטות חלוקה — 5 מסגרות שעובדות</h2>
+    <p class="sec-sub">לא "חלקו לפי נושא ותסגרו". יש לפחות 5 שיטות חלוקה, ולכל אחת יש מתי להשתמש בה.</p>
+
+    <div class="acc op" id="acc1">
+      <div class="acc-h" onclick="tog('acc1')">
+        <span>🎯 שיטה 1 — Intent-Based Segmentation (הבסיס)</span>
+        <em class="acc-icon">▼</em>
+      </div>
+      <div class="acc-b op">
+        <p>כל Ad Group = שכבת intent אחת. זה הכי פשוט להסביר ולכן הכי ממעיטים בו. <strong>בפועל:</strong> Transactional ו-Commercial יכולים לשבת יחד רק אם דף הנחיתה אחד משרת שניהם טוב — וזה נדיר.</p>
+        <div class="grid2">
+          <div class="card">
+            <div class="tag t-green" style="margin-bottom:8px">✅ נכון</div>
+            <p style="font-size:.85rem;font-weight:700">Campaign: שירותי רואה חשבון</p>
+            <p style="font-size:.82rem"><strong>AG1 — Transactional:</strong><br>
+            <span class="kw kw-exact">[רואה חשבון לחברות]</span>
+            <span class="kw kw-exact">[שירות ראיית חשבון]</span>
+            <span class="kw kw-phrase">"רואה חשבון חיצוני"</span><br>
+            → דף נחיתה: "קביעת פגישה"</p>
+            <p style="font-size:.82rem"><strong>AG2 — Commercial:</strong><br>
+            <span class="kw kw-phrase">"מחיר רואה חשבון"</span>
+            <span class="kw kw-phrase">"כמה עולה רואה חשבון"</span><br>
+            → דף נחיתה: "מחירון ושאלות נפוצות"</p>
+          </div>
+          <div class="card">
+            <div class="tag t-red" style="margin-bottom:8px">❌ נפוץ ופוגע</div>
+            <p style="font-size:.85rem;font-weight:700">Campaign: שירותי רואה חשבון</p>
+            <p style="font-size:.82rem"><strong>AG1 — "כל מה שקשור לרואה חשבון":</strong><br>
+            <span class="kw kw-broad">רואה חשבון</span>
+            <span class="kw kw-phrase">"מחיר רואה חשבון"</span>
+            <span class="kw kw-exact">[שירות ראיית חשבון]</span>
+            <span class="kw kw-broad">מה זה ראיית חשבון</span>
+            <span class="kw kw-phrase">"מהי ראיית חשבון"</span><br>
+            → דף נחיתה: דף הבית הכללי</p>
+            <p style="font-size:.82rem;color:var(--red)">כל כוונה מקבלת אותו מסר ואותו דף. QS נמוך. CPA גבוה. לידים מעורבים.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc" id="acc2">
+      <div class="acc-h" onclick="tog('acc2')">
+        <span>📐 שיטה 2 — Funnel-Stage Segmentation</span>
+        <em class="acc-icon">▼</em>
+      </div>
+      <div class="acc-b">
+        <p>חלוקה לפי שלב במשפך — לא לפי מה המשתמש מחפש, אלא <em>איפה הוא נמצא בתהליך ההחלטה.</em> נפוץ ב-B2B עם מחזור מכירה ארוך.</p>
+        <table>
+          <tr><th>שלב פאנל</th><th>סוג חיפוש</th><th>Conversion Goal</th><th>Smart Bidding Target</th></tr>
+          <tr><td><strong>TOFU</strong></td><td>שאלות רחבות, מודעות לבעיה</td><td>הורדת מדריך, ניוזלטר</td><td>Max Conversions (micro)</td></tr>
+          <tr><td><strong>MOFU</strong></td><td>השוואה, מחקר פתרונות</td><td>Webinar, Demo request</td><td>Target CPA (למיקרו)</td></tr>
+          <tr><td><strong>BOFU</strong></td><td>Transactional, ספציפי</td><td>ליד מוסמך, פגישה</td><td>Target CPA / TROAS</td></tr>
+        </table>
+        <div class="box box-blue">
+          <strong>מתי להשתמש בזה:</strong> כשמחזור המכירה שלכם הוא 2+ שבועות. אם לקוח רגיל סוגר תוך 48 שעות — אין טעם בחלוקת פאנל. אם הוא לוקח 3 חודשים לסגור — זה קריטי.
+        </div>
+      </div>
+    </div>
+
+    <div class="acc" id="acc3">
+      <div class="acc-h" onclick="tog('acc3')">
+        <span>💰 שיטה 3 — Value-Based Segmentation</span>
+        <em class="acc-icon">▼</em>
+      </div>
+      <div class="acc-b">
+        <p>חלוקה לפי הערך הצפוי של הליד שיגיע מהחיפוש. זה לא על מה שהמשתמש כותב בלבד — זה על <em>מי</em> כותב את זה.</p>
+        <table>
+          <tr><th>קבוצת ביטויים</th><th>ערך ליד משוער</th><th>CPA Target</th><th>מבנה</th></tr>
+          <tr><td>Enterprise: <code>ERP לחברות 200+ עובדים</code></td><td>גבוה מאוד</td><td>500–2,000 ₪</td><td>Campaign נפרד</td></tr>
+          <tr><td>SMB: <code>תוכנת ERP לעסק קטן</code></td><td>בינוני</td><td>80–200 ₪</td><td>Campaign נפרד</td></tr>
+          <tr><td>Self-serve: <code>ERP בענן בחינם</code></td><td>נמוך / שלילה</td><td>—</td><td>שלילה</td></tr>
+        </table>
+        <div class="box box-orange">
+          <strong>הטעות הנפוצה:</strong> לשים Enterprise ו-SMB באותו campaign עם אותו CPA target. Smart Bidding לא יכולה לדעת שהם שווים ערך שונה — כי אתם לא אמרתם לה.
+        </div>
+      </div>
+    </div>
+
+    <div class="acc" id="acc4">
+      <div class="acc-h" onclick="tog('acc4')">
+        <span>🔍 שיטה 4 — Long-Tail vs. Head Term Segmentation</span>
+        <em class="acc-icon">▼</em>
+      </div>
+      <div class="acc-b">
+        <p>Head terms (ביטויים קצרים, נפח גבוה) ו-Long-tail (ביטויים ארוכים, ספציפיים) מתנהגים שונה לחלוטין — ומצריכים גישה שונה.</p>
+        <div class="grid2">
+          <div class="card">
+            <h4><span class="t-orange">Head Terms</span></h4>
+            <ul style="font-size:.88rem">
+              <li>נפח חיפוש גבוה → תחרות גבוהה → CPC גבוה</li>
+              <li>כוונה מעורבת — "רואה חשבון" יכול להיות הכל</li>
+              <li>QS קשה להשיג כי המסר חייב להיות רחב</li>
+              <li>טוב לנוכחות, לא תמיד לעלות-תועלת</li>
+              <li>בדרך כלל Phrase או Exact</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4><span class="t-green">Long-Tail</span></h4>
+            <ul style="font-size:.88rem">
+              <li>נפח נמוך → תחרות נמוכה → CPC נמוך</li>
+              <li>כוונה ברורה → QS גבוה → המרה טובה יותר</li>
+              <li>"רואה חשבון חיצוני לחברות סטארטאפ תל אביב" — רצינות גבוהה</li>
+              <li>Long-tail מצטבר = נפח משמעותי בסיכון נמוך</li>
+              <li>Exact Match עם נפח הוא הנכס הכי יקר בחשבון</li>
+            </ul>
+          </div>
+        </div>
+        <div class="box box-purple">
+          <strong>תובנה עמוקה:</strong> Long-tail Exact שצובר 50 המרות לחודש שווה יותר מ-Head Term Broad עם 200 המרות — כי ה-50 כנראה איכותיים יותר. ה-CPA "נמוך" של Broad מטעה.
+        </div>
+      </div>
+    </div>
+
+    <div class="acc" id="acc5">
+      <div class="acc-h" onclick="tog('acc5')">
+        <span>🏷️ שיטה 5 — Branded vs. Non-Branded Separation</span>
+        <em class="acc-icon">▼</em>
+      </div>
+      <div class="acc-b">
+        <p>ברנד תמיד נפרד. זה לא רק "best practice" — זה הגיון עסקי ונתוני ביצוע שחייבים להיות מופרדים.</p>
+        <table>
+          <tr><th>סיבה לפרד</th><th>הסבר</th></tr>
+          <tr><td>CTR מנפח נתוני ברנד</td><td>CTR של ברנד הוא 20–50%+. זה מדלג QS של Non-Brand ומטעה בהשוואות.</td></tr>
+          <tr><td>CPA שונה לחלוטין</td><td>ליד מחיפוש ברנד עולה 30–70% פחות. מיזוג מסתיר את הביצועים האמיתיים.</td></tr>
+          <tr><td>Budget control</td><td>ברנד לעולם לא ייגמר תקציב — Non-Brand כן. חייבים שליטה נפרדת.</td></tr>
+          <tr><td>Smart Bidding Learning</td><td>הפרדה מאפשרת CPA/ROAS target שונה לכל campaign.</td></tr>
+          <tr><td>דיווח לקוח</td><td>ללא הפרדה, ביצועי ברנד מסבסדים מספרים גרועים של Non-Brand.</td></tr>
+        </table>
+        <div class="box box-red">
+          <strong>מה גם מופרד:</strong> Competitor terms נפרד (מסר שונה, CPC שונה, QS שונה) · Reseller/Partner terms אם רלוונטי.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MATCH TYPE ARCHITECTURE -->
+<section class="section alt-bg" id="match-arch">
+  <div class="container">
+    <div class="sec-kicker">חלק ד׳</div>
+    <h2>Match Type Architecture — מה שלא מלמדים בקורסים</h2>
+    <p class="sec-sub">Match Types הם לא "בוררי טווח הגעה". הם מנגנון שליטה בתהליך גילוי דרישה. כל match type ממלא תפקיד שונה באסטרטגיה.</p>
+
+    <h3>מה כל match type <em>באמת</em> עושה ב-2024–2025</h3>
+    <div class="box box-orange" style="margin-bottom:18px">
+      <strong>שינוי קריטי:</strong> Phrase Match ו-Exact Match השתנו משמעותית בשנים האחרונות. Exact Match כבר מציג על "close variants" (שגיאות כתיב, סינונימים קרובים, סדר מילים שונה). Phrase Match מתנהג כמו ה-Modified Broad הישן. זה משנה את כל חישוב הסיכון.
+    </div>
+
+    <table>
+      <tr>
+        <th style="width:15%">Match Type</th>
+        <th>מה הוא עושה <em>בפועל</em></th>
+        <th>מה הוא <em>לא</em> עושה</th>
+        <th style="width:22%">מתי להשתמש</th>
+      </tr>
+      <tr>
+        <td><span class="kw kw-exact">[exact]</span></td>
+        <td>עונה על החיפוש המדויק + close variants (שגיאות כתיב, סדר שונה, ו/ב/ל לפני). <em>לא</em> נרדפות.</td>
+        <td>לא מגיע לחיפושים עם מילים נוספות (אלא אם close variant)</td>
+        <td>ביטויים מוכחים עם נפח, High-value terms, Budget control אחרי גילוי דרישה</td>
+      </tr>
+      <tr>
+        <td><span class="kw kw-phrase">"phrase"</span></td>
+        <td>הנושא המרכזי חייב להיות בחיפוש, אבל מילים נוספות לפני/אחרי מותרות. פועל כ-Modified Broad הישן.</td>
+        <td>לא יופיע אם מילות הליבה לא קיימות בחיפוש</td>
+        <td>הרחבה מבוקרת סביב נושא מוגדר, גילוי long-tail relevant</td>
+      </tr>
+      <tr>
+        <td><span class="kw kw-broad">broad</span></td>
+        <td>גוגל מפרשת את הכוונה לפי הקשר רחב, היסטוריית גלישה, ו-signals. לא רק מילים.</td>
+        <td>אין ערובה שהנושא יישמר. יכול לחרוג רחוק.</td>
+        <td>רק עם Smart Bidding + מעקב המרות אמין + שלילות חזקות + review שוטף</td>
+      </tr>
+    </table>
+
+    <h3 style="margin-top:2rem">מטריצת Match Type × Smart Bidding</h3>
+    <table>
+      <tr>
+        <th class="matrix-hdr">מצב חשבון ↓ \ Match Type →</th>
+        <th class="matrix-hdr">Exact</th>
+        <th class="matrix-hdr">Phrase</th>
+        <th class="matrix-hdr">Broad</th>
+      </tr>
+      <tr>
+        <td><strong>חשבון חדש, 0 נתונים</strong></td>
+        <td class="matrix-cell mc-high">מומלץ מאוד</td>
+        <td class="matrix-cell mc-med">אפשרי בזהירות</td>
+        <td class="matrix-cell mc-low">מסוכן</td>
+      </tr>
+      <tr>
+        <td><strong>Smart Bidding בשלב לימוד</strong></td>
+        <td class="matrix-cell mc-high">מומלץ</td>
+        <td class="matrix-cell mc-high">מומלץ</td>
+        <td class="matrix-cell mc-low">לא מומלץ</td>
+      </tr>
+      <tr>
+        <td><strong>Smart Bidding יציב, מעקב נקי</strong></td>
+        <td class="matrix-cell mc-high">מומלץ</td>
+        <td class="matrix-cell mc-high">מומלץ</td>
+        <td class="matrix-cell mc-cond">אפשרי</td>
+      </tr>
+      <tr>
+        <td><strong>מעקב המרות עם בעיות</strong></td>
+        <td class="matrix-cell mc-high">בטוח יחסית</td>
+        <td class="matrix-cell mc-med">בזהירות</td>
+        <td class="matrix-cell mc-low">אסור</td>
+      </tr>
+      <tr>
+        <td><strong>Budget מוגבל מאוד</strong></td>
+        <td class="matrix-cell mc-high">מומלץ מאוד</td>
+        <td class="matrix-cell mc-med">עם שלילות חזקות</td>
+        <td class="matrix-cell mc-low">בזבוז</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<!-- WATERFALL ARCHITECTURE -->
+<section class="section" id="waterfall">
+  <div class="container">
+    <div class="sec-kicker">חלק ה׳</div>
+    <h2>Waterfall Architecture — שיטת הגילוי המבוקר</h2>
+    <p class="sec-sub">זהו הלוגיק העמוק מאחורי ניהול match types מקצועי. לא בחירה בין match types — אלא מערכת שלמה שמנהלת זרימת תעבורה.</p>
+
+    <div class="box box-blue" style="margin-bottom:24px">
+      <strong>הרעיון המרכזי:</strong> Broad/Phrase משמשות כ"כלי גילוי". חיפושים שמוכיחים את עצמם (המרות, CTR, CPC טוב) עוברים ל-Exact. כאלה שפוגעים — הופכים לשלילות. כל חיפוש בסופו של דבר "ממוין".
+    </div>
+
+    <div class="wf">
+      <div class="wf-step">
+        <div class="wf-label" style="color:var(--yellow)">שלב 1<br>גילוי</div>
+        <div class="wf-conn"><div class="wf-dot" style="background:var(--yellow);margin-top:22px"></div><div class="wf-line"></div></div>
+        <div class="wf-card">
+          <h4><span class="kw kw-broad">Broad Match</span> — רשת גילוי</h4>
+          <p style="font-size:.88rem">מפעילים עם Smart Bidding ומעקב המרות מוכח. מטרה: לגלות חיפושים שלא ידענו שקיימים. <strong>ניתוח שבועי של Search Terms הוא חובה.</strong></p>
+          <p style="font-size:.82rem;color:var(--muted)">→ חיפושים עם המרות? יועברו ל-Exact. חיפושים גרועים? → שלילות.</p>
+        </div>
+      </div>
+      <div class="wf-step">
+        <div class="wf-label" style="color:var(--blue)">שלב 2<br>סינון</div>
+        <div class="wf-conn"><div class="wf-dot" style="background:var(--blue);margin-top:22px"></div><div class="wf-line"></div></div>
+        <div class="wf-card">
+          <h4><span class="kw kw-phrase">Phrase Match</span> — אמצע הדרך</h4>
+          <p style="font-size:.88rem">כשאתם יודעים את הנושא אבל לא את כל הוריאציות שלו. Phrase מאפשרת לגלות long-tail תוך שמירה על הנושא המרכזי.</p>
+          <p style="font-size:.82rem;color:var(--muted)">→ גם כאן: search terms שמוכיחים את עצמם → Exact. אחרים → שלילות.</p>
+        </div>
+      </div>
+      <div class="wf-step">
+        <div class="wf-label" style="color:var(--green)">שלב 3<br>נעילה</div>
+        <div class="wf-conn"><div class="wf-dot" style="background:var(--green);margin-top:22px"></div></div>
+        <div class="wf-card">
+          <h4><span class="kw kw-exact">[Exact Match]</span> — הנכסים המוכחים</h4>
+          <p style="font-size:.88rem">כל ביטוי שנחת כאן עבר את הגילוי ואת הסינון. הוא הוכיח שהוא רלוונטי ומייצר המרות. <strong>הביאו לכאן רק ביטויים עם נפח מוכח.</strong></p>
+          <p style="font-size:.82rem;color:var(--muted)">→ Exact מקבל CPA target ייחודי. Smart Bidding לומדת עליו בנפרד.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <h3>Alpha / Beta Campaign — הגרסה המתקדמת של Waterfall</h3>
+    <p style="font-size:.9rem">שיטה ישנה יותר שעדיין רלוונטית לחשבונות עם שליטה גבוהה. שני קמפיינים מקבילים:</p>
+    <div class="grid2">
+      <div class="card">
+        <div class="tag t-green" style="margin-bottom:8px">Alpha Campaign — "הנכסים"</div>
+        <ul style="font-size:.88rem">
+          <li>מכיל רק Exact Match מוכח</li>
+          <li>CPA target אגרסיבי יותר</li>
+          <li>כל מילת מפתח Phrase/Broad מה-Beta נשללת כאן</li>
+          <li>תקציב מוגן — זה הגרעין הרווחי</li>
+          <li>Smart Bidding לומדת על נתונים נקיים</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="tag t-orange" style="margin-bottom:8px">Beta Campaign — "הגילוי"</div>
+        <ul style="font-size:.88rem">
+          <li>מכיל Phrase ו-Broad לגילוי</li>
+          <li>כל ביטוי Alpha נשלל כאן (כדי שלא יתחרו)</li>
+          <li>CPA target גבוה יותר — כאן הסיכון</li>
+          <li>תקציב מוגבל — זה הכלי, לא המנוע</li>
+          <li>ניתוח שבועי: מה להעביר ל-Alpha, מה לשלול</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box box-blue" style="margin-top:12px">
+      <strong>Alpha/Beta ב-2025:</strong> פחות נפוץ בגלל Smart Bidding שמטפלת בחלק מהעבודה, אבל עדיין שימושי בחשבונות עם תקציב גבוה ושליטה קריטית על איכות הלידים.
+    </div>
+
+    <div class="divider"></div>
+    <h3>כמה מילות מפתח לאד גרופ? הנוסחה האמיתית</h3>
+    <div class="box box-yellow">
+      <strong>התשובה הלא נכונה:</strong> "5–20 מילות מפתח לאד גרופ" (כפי שכתוב בכל מקום).<br>
+      <strong>התשובה הנכונה:</strong> כמה שנדרש כדי שכל מילת מפתח תשתף פעולה עם ה-RSA ועם דף הנחיתה. אם יש לכם 3 מילות מפתח שמתארות בדיוק אותה כוונה — 3 מספיק. אם יש 15 שמתארות אותה כוונה — 15 בסדר. הבעיה היא מילות מפתח <em>שלא מתאימות</em> לנושא האד גרופ, לא <em>כמה</em> יש.
+    </div>
+  </div>
+</section>
+
+<!-- CANNIBALIZATION -->
+<section class="section alt-bg" id="cannib">
+  <div class="container">
+    <div class="sec-kicker">חלק ו׳</div>
+    <h2>קניבליזציה — האויב השקט של הביצועים</h2>
+    <p class="sec-sub">קניבליזציה קורית כשגוגל לא יודעת איזה Ad Group להפעיל. זה גורם לתחרות פנימית, CPC עולה, ו-QS יורד.</p>
+
+    <h3>מתי קניבליזציה קורית?</h3>
+    <table>
+      <tr><th>תרחיש</th><th>למה זה בעיה</th><th>פתרון</th></tr>
+      <tr>
+        <td>אותה מילה ב-2 Ad Groups (match types שונים)</td>
+        <td>גוגל עלולה לבחור את ה-Ad Group עם ה-QS הנמוך יותר</td>
+        <td>שיטה: Exact ב-Alpha + שלילה ב-Beta</td>
+      </tr>
+      <tr>
+        <td>Broad מכסה Exact של Ad Group אחר</td>
+        <td>Broad "גונב" חיפושים שמיועדים ל-Exact עם מסר יותר מדויק</td>
+        <td>הוסיפו כמילת שלילה Exact לאד גרופ ה-Broad</td>
+      </tr>
+      <tr>
+        <td>Phrase Match חופף ל-Exact Match</td>
+        <td>Phrase יכולה לפגוע ב-QS של Exact כשהן באותו Ad Group ומתחרות</td>
+        <td>הפרידו ל-Ad Groups שונים עם Negative cross-fencing</td>
+      </tr>
+      <tr>
+        <td>2 Ad Groups עם נושא דומה מדי</td>
+        <td>גוגל מפיצה תקציב ונתוני לימוד בין שניהם — שניהם חלשים</td>
+        <td>מיזוג אד גרופים עם חפיפת כוונה גבוהה</td>
+      </tr>
+    </table>
+
+    <h3 style="margin-top:1.5rem">איך בונים Negative Cross-Fencing?</h3>
+    <p style="font-size:.9rem">הטכניקה: כל ביטוי Exact Match שרצה ב-Ad Group A — מוסיפים אותו כמילת שלילה Exact ל-Ad Group B שעלול לכסות אותו.</p>
+    <div class="card" style="margin-bottom:16px">
+      <h4>דוגמה: 2 Ad Groups שחופפים</h4>
+      <div class="cannib-group">
+        <div class="cannib-ag">
+          <div class="cannib-ag-name">Ad Group 1: "ניהול קמפיינים גוגל"</div>
+          <div class="kw-row">
+            <span class="kw kw-exact">[ניהול קמפיינים גוגל]</span>
+            <span class="kw kw-phrase">"ניהול קמפיינים PPC"</span>
+            <span class="kw kw-broad">ניהול קמפיינים ממומנים</span>
+          </div>
+        </div>
+        <div class="cannib-ag">
+          <div class="cannib-ag-name">Ad Group 2: "פרסום גוגל"</div>
+          <div class="kw-row">
+            <span class="kw kw-exact">[פרסום גוגל לעסקים]</span>
+            <span class="kw kw-phrase">"פרסום בגוגל"</span>
+            <span class="kw kw-broad">פרסום ממומן גוגל</span>
+          </div>
+        </div>
+        <div class="overlap-hint show">⚠️ ה-Broad Match "ניהול קמפיינים ממומנים" ו-"פרסום ממומן גוגל" יכולים להצטלב. פתרון: הוסיפו <span class="kw kw-neg">-[פרסום בגוגל]</span> ל-AG1 ו-<span class="kw kw-neg">-[ניהול קמפיינים]</span> ל-AG2</div>
+      </div>
+    </div>
+
+    <div class="box box-purple">
+      <strong>בדיקת קניבליזציה ידנית:</strong> בגוגל אדס → Ad Groups → לחצו על מילת מפתח → "Search Terms" → אם אותו חיפוש מופיע ב-2 Ad Groups שונים — יש קניבליזציה.
+    </div>
+  </div>
+</section>
+
+<!-- EXERCISES -->
+<section class="section" id="exercises">
+  <div class="container">
+    <div class="sec-kicker">תרגול</div>
+    <h2>תרגילים — רמת סוכנות</h2>
+
+    <!-- INTENT GAME -->
+    <div class="card" style="margin-bottom:24px">
+      <h3 style="margin-bottom:4px">תרגיל 1: Intent Classifier</h3>
+      <p style="font-size:.88rem;color:var(--muted);margin-bottom:16px">סווגו כל חיפוש לשכבת ה-intent הנכונה. חשבו על ה-Modifier Signals לפני שאתם בוחרים.</p>
+      <div class="intent-game" id="intent-game"></div>
+      <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-p btn-sm" onclick="resetIntentGame()">תרגיל חדש</button>
+        <span id="intent-score" style="align-self:center;font-size:.88rem;color:var(--muted)"></span>
+      </div>
+    </div>
+
+    <!-- MATCH ARCHITECT -->
+    <div class="card" style="margin-bottom:24px">
+      <h3 style="margin-bottom:4px">תרגיל 2: Match Type Architect</h3>
+      <p style="font-size:.88rem;color:var(--muted);margin-bottom:16px">לכל תרחיש — בחרו את ה-Match Type הנכון לכל קבוצת ביטויים. לכל slot יש תשובה אחת נכונה.</p>
+      <div id="arch-scenarios"></div>
+      <button class="btn btn-p btn-sm" onclick="checkArch()" style="margin-top:8px">בדוק תשובות</button>
+      <button class="btn btn-s btn-sm" onclick="initArch()" style="margin-top:8px;margin-right:8px">אפס</button>
+      <div id="arch-result"></div>
+    </div>
+
+    <!-- QUIZ PRO -->
+    <div class="card">
+      <h3 style="margin-bottom:4px">תרגיל 3: חידון מקצועי</h3>
+      <p style="font-size:.88rem;color:var(--muted);margin-bottom:4px">שאלות שמבדילות בין ניהול קמפיינים ממוצע לבין עבודת סוכנות מקצועית.</p>
+      <div class="prog-bar" style="margin:12px 0 4px"><div class="prog-fill" id="qprog" style="width:0;background:var(--blue)"></div></div>
+      <div style="font-size:.78rem;color:var(--muted);margin-bottom:14px" id="qprog-label">0 / 6 שאלות</div>
+      <div id="qpro-container"></div>
+      <div id="qpro-final"></div>
+    </div>
+  </div>
+</section>
+
+<!-- RULES -->
+<section class="section alt-bg" id="rules">
+  <div class="container">
+    <div class="sec-kicker">סיכום</div>
+    <h2>10 כללי ברזל — ארכיטקטורת מילות מפתח</h2>
+
+    <div class="rule"><div class="rule-num">1</div><div class="rule-body"><h4>קבצו לפי כוונה, לא לפי מילים</h4><p>שתי מילות מפתח עם אותה כוונה שייכות לאותו Ad Group גם אם הניסוח שונה. מילה אחת עם כוונות שונות חייבת פיצול.</p></div></div>
+    <div class="rule"><div class="rule-num">2</div><div class="rule-body"><h4>Exact First — בנו על בסיס מוכח</h4><p>התחילו עם Exact על ביטויים שאתם בטוחים בהם. הוסיפו Phrase/Broad רק כשיש מספיק נתוני המרה ל-Smart Bidding ללמוד.</p></div></div>
+    <div class="rule"><div class="rule-num">3</div><div class="rule-body"><h4>Broad Match הוא כלי, לא ברירת מחדל</h4><p>Broad ללא Smart Bidding מלומד + מעקב המרות נקי + שלילות חזקות = בזבוז. זה לא "כדי להגיע ליותר אנשים".</p></div></div>
+    <div class="rule"><div class="rule-num">4</div><div class="rule-body"><h4>Search Terms Report הוא לא בדיקה — זה תהליך</h4><p>ניתוח Search Terms חייב להיות תהליך שבועי, לא "כשיש זמן". כל שבוע יש חיפושים חדשים שצריכים סיווג.</p></div></div>
+    <div class="rule"><div class="rule-num">5</div><div class="rule-body"><h4>שללו בהגיון, לא ברשימות מוכנות</h4><p>רשימות שלילה מוכנות מהאינטרנט הן נקודת התחלה. כל עסק צריך לבנות שלילות על בסיס ה-Search Terms שלו.</p></div></div>
+    <div class="rule"><div class="rule-num">6</div><div class="rule-body"><h4>Branded Campaign תמיד נפרד</h4><p>ברנד מסבסד Non-Brand. ביצועים מעורבים מקשים על קבלת החלטות. CPA/ROAS targets חייבים להיות שונים.</p></div></div>
+    <div class="rule"><div class="rule-num">7</div><div class="rule-body"><h4>Negative Cross-Fencing מונע קניבליזציה</h4><p>כל Ad Group שיש בו Exact — שיללו אותו ב-Ad Groups אחרים שעלולים לכסות אותו. זה תחזוקה שוטפת.</p></div></div>
+    <div class="rule"><div class="rule-num">8</div><div class="rule-body"><h4>מספר מילות מפתח ≠ איכות מבנה</h4><p>3 מילות מפתח ב-Ad Group נכון עדיפות על 30 במבנה שגוי. Relevance > Volume.</p></div></div>
+    <div class="rule"><div class="rule-num">9</div><div class="rule-body"><h4>כל חיפוש חייב להגיע לדף הנחיתה הנכון</h4><p>אם כוונת חיפוש מסוימת מגיעה לדף שגוי — גם QS נמוך, גם לידים גרועים. מבנה Ad Groups מחייב מיפוי דפי נחיתה.</p></div></div>
+    <div class="rule"><div class="rule-num">10</div><div class="rule-body"><h4>נתוני המרה גרועים מבטלים ארכיטקטורה טובה</h4><p>אפשר לבנות מבנה מושלם — אם Smart Bidding מקבלת פידבק לקוי, היא תהרוס אותו. מעקב המרות הוא התשתית, לא ה"עוד פיצ'ר".</p></div></div>
+  </div>
+</section>
+
+<script>
+// ============================================================
+// NAV
+// ============================================================
+(function(){
+  var secs=document.querySelectorAll('section[id],[id]'),links=document.querySelectorAll('.nav-wrap a');
+  window.addEventListener('scroll',function(){
+    var t=window.scrollY+80;
+    secs.forEach(function(s){
+      if(t>=s.offsetTop&&t<s.offsetTop+s.offsetHeight){
+        links.forEach(function(l){l.classList.remove('on')});
+        var a=document.querySelector('.nav-wrap a[href="#'+s.id+'"]');
+        if(a)a.classList.add('on');
+      }
+    });
+  });
+  links.forEach(function(a){
+    a.addEventListener('click',function(e){
+      e.preventDefault();
+      var t=document.querySelector(this.getAttribute('href'));
+      if(t)t.scrollIntoView({behavior:'smooth'});
+    });
+  });
+})();
+
+// ============================================================
+// ACCORDION
+// ============================================================
+function tog(id){
+  var el=document.getElementById(id);
+  var body=el.querySelector('.acc-b');
+  var isOpen=body.classList.contains('op');
+  // close all
+  document.querySelectorAll('.acc-b.op').forEach(function(b){b.classList.remove('op');b.parentElement.classList.remove('op')});
+  if(!isOpen){body.classList.add('op');el.classList.add('op');}
+}
+
+// ============================================================
+// INTENT GAME
+// ============================================================
+var intentTerms=[
+  {term:'ניהול קמפיינים גוגל לעסקים בת"א',correct:'trans',explain:'Signal: "לעסקים" (B2B) + גיאוגרפי ("ת"א") + "ניהול" (שירות). שלושה signals של Transactional.'},
+  {term:'כמה עולה ניהול קמפיינים PPC',correct:'comm',explain:'Signal: "כמה עולה" = מחיר. Commercial Investigation — עדיין בשלב השוואת עלויות.'},
+  {term:'מה ההבדל בין SEO לגוגל אדס',correct:'invest',explain:'Comparative query — שלב מחקר להבין ערוצים שונים. לא מחפש ספק עדיין.'},
+  {term:'איך מגדירים המרות בגוגל אדס',correct:'info',explain:'Signal: "איך מגדירים" — DIY, רוצה לעשות בעצמו. לרוב שלילה לחשבון סוכנות.'},
+  {term:'חברת PPC מומלצת לסטארטאפ',correct:'trans',explain:'Signal: "חברת" + "מומלצת" + "סטארטאפ". מחפש ספק ספציפי. גבוה מאוד.'},
+  {term:'השוואת כלי ניהול קמפיינים',correct:'comm',explain:'"השוואה" = Commercial signal. מחפש כלי — לא שירות. דף נחיתה: השוואת כלים.'},
+  {term:'האם כדאי לפרסם בגוגל לעסק קטן',correct:'invest',explain:'"האם כדאי" = ספק. לא בטוח שרוצה. Investigational — לא מוכן לטופס.'},
+  {term:'PPC agency brief template',correct:'info',explain:'"Template" = DIY signal. מחפש תבנית לעשות בעצמו, לא לשכור סוכנות.'},
+  {term:'ניהול פרסום ממומן חיצוני לחברה',correct:'trans',explain:'Signal חזק: "חיצוני" (מיקור חוץ) + "לחברה" (B2B). ברור שמחפש ספק.'},
+  {term:'קורס גוגל אדס למתחילים',correct:'neg',explain:'"קורס" + "למתחילים" = Informational + לא קהל יעד לסוכנות. שלילה.'},
+];
+var intentLabels={trans:{label:'Transactional',cls:'t-green'},comm:{label:'Commercial',cls:'t-blue'},invest:{label:'Investigational',cls:'t-orange'},info:{label:'Informational',cls:'t-gray'},neg:{label:'שלילה',cls:'t-red'}};
+var intentQ=[],intentScore=0,intentTotal=0;
+
+function shuffleArr(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+
+function initIntentGame(){
+  intentQ=shuffleArr(intentTerms).slice(0,5);
+  intentScore=0;intentTotal=0;
+  var container=document.getElementById('intent-game');
+  container.innerHTML='';
+  var opts=['trans','comm','invest','info','neg'];
+  intentQ.forEach(function(q,i){
+    var div=document.createElement('div');
+    div.className='game-term';
+    div.id='ig-'+i;
+    var btns=opts.map(function(o){
+      return '<button class="game-btn" onclick="answerIntent('+i+',\''+o+'\',this)">'+(intentLabels[o]?intentLabels[o].label:o)+'</button>';
+    }).join('');
+    div.innerHTML='<div class="term-text">🔍 "'+q.term+'"</div><div class="game-opts">'+btns+'</div><div class="game-explain" id="igx-'+i+'"></div>';
+    container.appendChild(div);
+  });
+  document.getElementById('intent-score').textContent='';
+}
+
+function answerIntent(i,choice,btn){
+  var q=intentQ[i];
+  var container=document.getElementById('ig-'+i);
+  if(container.dataset.answered)return;
+  container.dataset.answered='1';
+  intentTotal++;
+  var btns=container.querySelectorAll('.game-btn');
+  btns.forEach(function(b){b.classList.add('disabled')});
+  if(choice===q.correct){
+    btn.classList.add('correct');
+    intentScore++;
+  } else {
+    btn.classList.add('wrong');
+    btns.forEach(function(b){
+      if(b.textContent===(intentLabels[q.correct]?intentLabels[q.correct].label:q.correct))b.classList.add('show-correct');
+    });
+  }
+  var ex=document.getElementById('igx-'+i);
+  ex.innerHTML=(choice===q.correct?'✅ ':'❌ ')+q.explain;
+  ex.className='game-explain show';
+  ex.style.background=choice===q.correct?'var(--green-soft)':'var(--red-soft)';
+  ex.style.borderRight='3px solid '+(choice===q.correct?'var(--green)':'var(--red)');
+  if(intentTotal===intentQ.length){
+    document.getElementById('intent-score').textContent='ציון: '+intentScore+'/'+intentQ.length;
+  }
+}
+
+function resetIntentGame(){initIntentGame();}
+
+// ============================================================
+// MATCH ARCHITECT
+// ============================================================
+var archData=[
+  {
+    theme:'ניהול שכר לחברות — חשבון חדש, 0 נתוני המרה',
+    context:'תקציב: 5,000 ₪/חודש. Smart Bidding: Max Clicks. ניסיון עם הלקוח: ראשוני.',
+    slots:[
+      {label:'ביטויים ודאיים',kws:['[שירות ניהול שכר]','[ניהול שכר חיצוני]'],correct:'exact',hint:'חשבון חדש = שליטה מקסימלית. ביטויים ודאיים → Exact.'},
+      {label:'הרחבה ראשונית',kws:['"ניהול שכר לחברות"','"שירות שכר"'],correct:'phrase',hint:'Phrase מרחיב בבטחה סביב הנושא. Broad מוקדם מדי ללא נתונים.'},
+      {label:'גילוי דרישה',kws:['ניהול שכר'],correct:'none',hint:'Broad Match ללא נתוני המרה ו-Smart Bidding לא מומלץ בחשבון חדש.'},
+    ]
+  },
+  {
+    theme:'תוכנת CRM — חשבון בוגר, Smart Bidding עם 80+ המרות/חודש',
+    context:'מעקב המרות: נקי. Smart Bidding: Target CPA. Search Terms נסקרים שבועית.',
+    slots:[
+      {label:'Core Terms (ודאיים)',kws:['[CRM לעסקים]','[תוכנת CRM]'],correct:'exact',hint:'תמיד מגנים על ה-core terms ב-Exact.'},
+      {label:'הרחבת נושא',kws:['"CRM לעסקים קטנים"','"מערכת CRM"'],correct:'phrase',hint:'Phrase מאפשרת לגלות long-tail תוך שמירה על הנושא.'},
+      {label:'גילוי ביקוש',kws:['CRM עסקי'],correct:'broad',hint:'עם Smart Bidding מלומד ומעקב נקי — Broad לגילוי ביקושים חדשים.'},
+    ]
+  },
+  {
+    theme:'שירות הסעות B2B — Budget מאוד מוגבל (2,000 ₪/חודש)',
+    context:'15 מילות מפתח פעילות. CPA target: 120 ₪. לקוח רגיש לבזבוז.',
+    slots:[
+      {label:'All keywords',kws:['[הסעות לאירועים]','[הסעות עובדים]'],correct:'exact',hint:'Budget מוגבל = Exact בלבד. כל קליק לא רלוונטי פוגע בלקוח.'},
+      {label:'הרחבת טווח',kws:['"הסעות"'],correct:'none',hint:'עם Budget מוגבל — לא. Phrase ו-Broad מסוכנים כשאין כרית לבזבוז.'},
+      {label:'Long-tail ספציפי',kws:['"הסעות לאירועי חברה בת"א"'],correct:'phrase',hint:'Long-tail specific ב-Phrase — טווח מוגבל, רלוונטי מאוד.'},
+    ]
+  },
+];
+var archAnswers={};
+
+function initArch(){
+  archAnswers={};
+  var container=document.getElementById('arch-scenarios');
+  container.innerHTML='';
+  var opts=[
+    {val:'exact',label:'[Exact]',cls:'kw-exact'},
+    {val:'phrase',label:'"Phrase"',cls:'kw-phrase'},
+    {val:'broad',label:'Broad',cls:'kw-broad'},
+    {val:'none',label:'לא להוסיף',cls:'kw-neg'},
+  ];
+  archData.forEach(function(sc,si){
+    var div=document.createElement('div');
+    div.className='arch-scenario';
+    var slotsHtml=sc.slots.map(function(sl,sli){
+      var btns=opts.map(function(o){
+        return '<button class="arch-choice" data-si="'+si+'" data-sli="'+sli+'" data-val="'+o.val+'" onclick="pickArch('+si+','+sli+',\''+o.val+'\',this)">'+o.label+'</button>';
+      }).join('');
+      return '<div class="arch-slot"><div class="arch-slot-label">'+sl.label+'</div><div class="arch-choices">'+btns+'</div></div>';
+    }).join('');
+    div.innerHTML='<div class="arch-theme">📋 '+sc.theme+'</div><div class="arch-context">'+sc.context+'</div><div class="arch-slots">'+slotsHtml+'</div>';
+    container.appendChild(div);
+  });
+  document.getElementById('arch-result').style.display='none';
+}
+
+function pickArch(si,sli,val,btn){
+  if(!archAnswers[si])archAnswers[si]={};
+  archAnswers[si][sli]=val;
+  // deselect others in same slot
+  document.querySelectorAll('[data-si="'+si+'"][data-sli="'+sli+'"]').forEach(function(b){
+    b.classList.remove('sel');
+  });
+  btn.classList.add('sel');
+}
+
+function checkArch(){
+  var correct=0,total=0;
+  var feedback=[];
+  archData.forEach(function(sc,si){
+    sc.slots.forEach(function(sl,sli){
+      total++;
+      var ans=archAnswers[si]&&archAnswers[si][sli];
+      var isCorrect=ans===sl.correct;
+      if(isCorrect)correct++;
+      // mark buttons
+      document.querySelectorAll('[data-si="'+si+'"][data-sli="'+sli+'"]').forEach(function(b){
+        b.classList.add('dis');
+        if(b.dataset.val===sl.correct)b.classList.add('correct-c');
+        else if(b.classList.contains('sel')&&!isCorrect)b.classList.add('wrong-c');
+      });
+      if(!isCorrect){
+        var optLabel={exact:'[Exact]',phrase:'"Phrase"',broad:'Broad',none:'לא להוסיף'};
+        feedback.push('❌ <strong>'+sc.theme+' / '+sl.label+':</strong> '+sl.hint+' (נכון: '+optLabel[sl.correct]+')');
+      }
+    });
+  });
+  var res=document.getElementById('arch-result');
+  var pct=Math.round(correct/total*100);
+  res.innerHTML='<strong>ציון: '+correct+'/'+total+' ('+pct+'%)</strong>'+(feedback.length?'<br><br>'+feedback.join('<br><br>'):'<br><br>✅ מושלם!');
+  res.style.display='block';
+  res.style.background=pct>=80?'var(--green-soft)':'var(--red-soft)';
+  res.style.border='1px solid '+(pct>=80?'#86efac':'#fca5a5)');
+  res.style.padding='14px';res.style.borderRadius='8px';
+}
+
+// ============================================================
+// QUIZ PRO
+// ============================================================
+var qproData=[
+  {
+    num:'שאלה 1',
+    q:'חשבון עם 120 המרות לחודש, Smart Bidding Target CPA פעיל. מוסיפים Broad Match על מילת מפתח חדשה שמעולם לא הייתה בחשבון. מה הסיכון העיקרי?',
+    scenario:null,
+    opts:['Broad Match מחייב עוד תקציב','גוגל תשתמש ב-Broad לגילוי אבל Smart Bidding תייעל לפי ה-CPA target — אם CPA הנוכחי נמוך מ-Target, היא תביא יותר המרות בכל מחיר שיהיה תחת ה-Target, כולל חיפושים שליליים','Broad Match לא עובד עם Target CPA','אין סיכון — Smart Bidding מגן'],
+    correct:1,
+    explain:'זו הנקודה הכי מסוכנת ב-Broad עם Smart Bidding: האלגוריתם לא שואל "האם הליד הזה טוב?" — הוא שואל "האם ה-CPA מתחת ל-Target?" אם מעקב ההמרות גס (כל טופס = המרה), הוא יביא אלפי חיפושים שליליים כל עוד ה-CPA נראה תחת ה-Target.'
+  },
+  {
+    num:'שאלה 2',
+    q:'מה הבעיה עם המבנה הבא?',
+    scenario:'Ad Group: "שירותי חשבונאות"\nKWs: [שירות ראיית חשבון] + "כמה עולה רואה חשבון" + מה זה ביקורת חשבונות + [רואה חשבון מומלץ] + "מחיר רואה חשבון חיצוני"\nLP: דף הבית הכללי',
+    opts:['יש יותר מדי מילות מפתח','יש 3 שכבות Intent שונות: Transactional + Commercial + Informational, כולן עם אותו RSA ואותו LP — מסר שגוי לכולן','RSA צריכה להיות ייחודית לכל מילה','ה-LP צריך להיות ייעודי לכל מילה'],
+    correct:1,
+    explain:'זו טעות Intent Mixing קלאסית. מי שחיפש "מה זה ביקורת חשבונות" ומי שחיפש "שירות ראיית חשבון" — שני אנשים שונים לחלוטין. לתת להם אותו מסר ואותו דף זה בדיוק למה QS נמוך ו-CVR נמוך.'
+  },
+  {
+    num:'שאלה 3',
+    q:'לקוח מבקש להוסיף Exact Match לכל מילת מפתח כדי "לחסוך כסף". חשבון עם 200+ מילות מפתח, Smart Bidding Target CPA. מה התגובה הנכונה?',
+    scenario:null,
+    opts:['מצוין — Exact תמיד חוסך','Exact מצמצם את signal pool של Smart Bidding. עם 200 exact מילות שונות, כל מילה מקבלת מעט מאוד נתונים. Smart Bidding לא יכולה ללמוד. פחות ad groups עם כוונה משותפת ו-Phrase/Exact עדיף.','לא לגעת — זה עובד ככה','לעבור ל-Broad Match לכולן'],
+    correct:1,
+    explain:'Exact על כל מילה בנפרד פוגעת ב-Smart Bidding כי הנתונים מפוזרים. Smart Bidding צריכה נפח — כשכל Exact מקבל 2-3 קליקות לחודש, אין ממה ללמוד. קיבוץ לפי כוונה עם Phrase/Exact נותן נפח ולמידה.'
+  },
+  {
+    num:'שאלה 4',
+    q:'Search Terms Report מראה שהחיפוש "שירות הנהלת חשבונות לעסקים קטנים תל אביב" מייצר 8 המרות בחודש ב-CPA טוב. הוא מופיע תחת Phrase Match "הנהלת חשבונות". מה עושים?',
+    scenario:null,
+    opts:['לא לגעת — Phrase עובד','להוסיף אותו כ-Exact Match כדי לנעול אותו, לשלול אותו מה-Phrase (או להשאיר את שניהם עם priority ל-Exact), ולתת לו CPA target ייחודי','למחוק את ה-Phrase ולשים Exact','לשנות ל-Broad כדי לקבל עוד נפח'],
+    correct:1,
+    explain:'חיפוש שמוכיח את עצמו בנפח הופך ל-Exact. Waterfall בפעולה: Phrase גילה את הביטוי → הוכיח עצמו → נועל ב-Exact עם שליטה ייחודית ו-CPA target שתפור לו. ה-Phrase ממשיך לגלות ביטויים חדשים.'
+  },
+  {
+    num:'שאלה 5',
+    q:'Ad Group "ביטוח עסקי" מכיל: [ביטוח עסקי] (exact) + "ביטוח עסק" (phrase) + ביטוח לעסקים (broad). Search Terms מראה קניבליזציה בין ה-Exact ל-Phrase. מה הגורם?',
+    scenario:null,
+    opts:['יש יותר מדי מילות מפתח','Exact ו-Phrase עם חפיפה גבוהה באותו Ad Group גורמים לכך שגוגל מסתבכת ומחלקת impressions ביניהן — לפעמים Phrase מנצחת Exact. הפתרון: הפרידו ל-2 Ad Groups עם Cross-Fencing.','צריך להוריד את ה-Broad','להוסיף עוד מילות מפתח'],
+    correct:1,
+    explain:'כשאותו חיפוש יכול להיות מופעל על ידי גם Exact וגם Phrase באותו Ad Group, גוגל בוחרת לפי Ad Rank — לא תמיד את הנכון. פתרון: AG-A עם Exact, AG-B עם Phrase שנשלל ממנה ה-Exact.'
+  },
+  {
+    num:'שאלה 6',
+    q:'מה ה-Signal הכי חזק שמסמן Transactional Intent בחיפוש בעברית?',
+    scenario:null,
+    opts:['שימוש במילת "מה"','שם עיר/אזור ספציפי בשילוב עם מונח שירות — "שירות X בתל אביב" מסמן שהמשתמש מחפש ספק ספציפי לאזור, לא מידע כללי','ביטויים ארוכים מ-4 מילים','כל חיפוש בעברית הוא Transactional'],
+    correct:1,
+    explain:'גיאוגרפי הוא ה-intent signal הכי אמין בעברית. "רואה חשבון" יכול להיות כל דבר. "רואה חשבון תל אביב פתח תקווה" — מישהו שרוצה ספק. Signal stacking: עיר + שירות + פירוט = Transactional ברמה גבוהה.'
+  },
+];
+var qproAnswered={};
+
+function initQPro(){
+  qproAnswered={};
+  var container=document.getElementById('qpro-container');
+  container.innerHTML='';
+  qproData.forEach(function(q,i){
+    var div=document.createElement('div');
+    div.className='qpro';
+    var sc=q.scenario?'<div class="qpro-scenario">'+q.scenario.replace(/\n/g,'<br>')+'</div>':'';
+    var opts=q.opts.map(function(o,j){
+      return '<button class="qpro-opt" onclick="answerQPro('+i+','+j+',this)">'+o+'</button>';
+    }).join('');
+    div.innerHTML='<div class="qpro-num">'+q.num+'</div><div class="qpro-q">'+q.q+'</div>'+sc+'<div class="qpro-opts">'+opts+'</div><div class="qpro-fb" id="qfb-'+i+'"></div>';
+    container.appendChild(div);
+  });
+  document.getElementById('qpro-final').style.display='none';
+  document.getElementById('qprog').style.width='0';
+  document.getElementById('qprog-label').textContent='0 / '+qproData.length+' שאלות';
+}
+
+function answerQPro(qi,oi,btn){
+  if(qproAnswered[qi]!==undefined)return;
+  qproAnswered[qi]=oi;
+  var q=qproData[qi];
+  var opts=btn.closest('.qpro-opts').querySelectorAll('.qpro-opt');
+  opts.forEach(function(o){o.classList.add('dis')});
+  var isC=oi===q.correct;
+  btn.classList.add(isC?'c':'w');
+  if(!isC)opts[q.correct].classList.add('sc');
+  var fb=document.getElementById('qfb-'+qi);
+  fb.innerHTML=(isC?'✅ נכון! ':'❌ ')+q.explain;
+  fb.className='qpro-fb show '+(isC?'fb-c':'fb-w');
+  var answered=Object.keys(qproAnswered).length;
+  var pct=answered/qproData.length;
+  document.getElementById('qprog').style.width=(pct*100)+'%';
+  document.getElementById('qprog-label').textContent=answered+' / '+qproData.length+' שאלות';
+  if(answered===qproData.length){
+    var score=0;
+    qproData.forEach(function(q,i){if(qproAnswered[i]===q.correct)score++;});
+    var final=document.getElementById('qpro-final');
+    var msg=score===qproData.length?'מושלם! רמת סוכנות אמיתית. 🏆':score>=4?'טוב מאוד — עוד מעט מגיעים לרמה המקצועית 💪':score>=3?'בסיס טוב, יש עוד מה לעמיק 📚':'כדאי לחזור על החומר ולתרגל שוב';
+    final.innerHTML='ציון סופי: <strong>'+score+'/'+qproData.length+'</strong><br><span style="font-size:.9rem;font-weight:400">'+msg+'</span>';
+    final.style.display='block';
+    final.style.background=score>=5?'var(--green-soft)':score>=3?'var(--yellow-soft)':'var(--red-soft)';
+    final.style.border='1px solid '+(score>=5?'#86efac':score>=3?'#fde047':'#fca5a5');
+    final.style.borderRadius='10px';
+  }
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded',function(){
+  initIntentGame();
+  initArch();
+  initQPro();
+});
+</script>
+</body>
+</html>

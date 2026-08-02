@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מחולל פרומפט — דוח מדיה מלא</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Heebo', sans-serif; background: #f0f4f8; color: #334155; line-height: 1.6; }
+  .page { max-width: 860px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  .top {
+    background: #003764; border-radius: 16px;
+    padding: 28px 32px; margin-bottom: 28px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .top h1 { color: #fff; font-size: 22px; font-weight: 800; line-height: 1.4; }
+  .top .badge-top { background: #FFC20E; color: #003764; font-size: 13px; font-weight: 800; padding: 6px 14px; border-radius: 20px; white-space: nowrap; }
+
+  .card {
+    background: #fff; border: 1px solid #e2e8f0;
+    border-radius: 16px; padding: 24px 28px;
+    margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .card-title {
+    font-size: 15px; font-weight: 800; color: #003764;
+    margin-bottom: 18px; padding-bottom: 12px;
+    border-bottom: 2px solid #FFC20E;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .badge {
+    background: #003764; color: #FFC20E;
+    width: 26px; height: 26px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 900; flex-shrink: 0;
+  }
+  .tip {
+    background: #f0f9ff; border: 1px solid #bae6fd;
+    border-radius: 8px; padding: 10px 14px;
+    font-size: 12px; color: #0369a1; font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  .grid { display: grid; gap: 14px; }
+  .cols2 { grid-template-columns: 1fr 1fr; }
+  .cols3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  label { font-size: 12px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.3px; }
+  label .req { color: #ef4444; margin-right: 3px; }
+  label .opt { color: #94a3b8; font-size: 11px; font-weight: 500; text-transform: none; }
+
+  input, textarea, select {
+    border: 1.5px solid #e2e8f0; border-radius: 8px;
+    padding: 10px 14px; font-family: 'Heebo', sans-serif;
+    font-size: 14px; color: #1e293b; background: #f8fafc;
+    outline: none; transition: border-color 0.2s, background 0.2s; width: 100%;
+  }
+  input:focus, textarea:focus, select:focus { border-color: #009EDB; background: #fff; }
+  input::placeholder, textarea::placeholder { color: #cbd5e1; }
+  textarea { resize: vertical; min-height: 72px; }
+
+  /* PLATFORMS */
+  .platforms-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .platform-card {
+    border: 2px solid #e2e8f0; border-radius: 12px;
+    padding: 14px; cursor: pointer;
+    transition: all 0.2s; user-select: none;
+    background: #f8fafc;
+  }
+  .platform-card:hover { border-color: #009EDB; background: #f0f9ff; }
+  .platform-card.active { border-color: #003764; background: #f0f6ff; }
+  .platform-card .pf-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .platform-card .pf-icon { font-size: 22px; line-height: 1; }
+  .platform-card .pf-name { font-size: 14px; font-weight: 800; color: #1e293b; }
+  .platform-card .pf-check {
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 2px solid #cbd5e1; margin-right: auto;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: transparent; transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .platform-card.active .pf-check { background: #003764; border-color: #003764; color: #FFC20E; }
+  .platform-card .pf-fields { display: none; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .platform-card.active .pf-fields { display: flex; }
+  .platform-card input {
+    font-size: 12px; padding: 7px 10px;
+    border-radius: 6px;
+  }
+  .platform-card label { font-size: 11px; }
+
+  /* BREAKDOWNS */
+  .breakdowns-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .breakdown-item {
+    display: flex; align-items: center; gap: 0;
+    border: 2px solid #e2e8f0; border-radius: 10px;
+    padding: 12px; cursor: pointer;
+    transition: all 0.18s; background: #f8fafc;
+    position: relative;
+  }
+  .breakdown-item input[type="checkbox"] {
+    position: absolute; opacity: 0; width: 0; height: 0;
+  }
+  .breakdown-item .bd-content {
+    display: flex; align-items: center; gap: 10px; width: 100%;
+  }
+  .breakdown-item .bd-icon { font-size: 20px; flex-shrink: 0; }
+  .breakdown-item .bd-label {
+    font-size: 13px; font-weight: 700; color: #334155;
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .breakdown-item .bd-label small {
+    font-size: 11px; font-weight: 500; color: #94a3b8;
+  }
+  .breakdown-item:has(input:checked) {
+    border-color: #003764; background: #f0f6ff;
+  }
+  .breakdown-item:has(input:checked) .bd-label { color: #003764; }
+  .breakdown-item:has(input:checked)::after {
+    content: "✓"; position: absolute; top: 6px; left: 8px;
+    font-size: 11px; font-weight: 900; color: #FFC20E;
+    background: #003764; width: 18px; height: 18px;
+    border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; line-height: 18px; text-align: center;
+  }
+
+  .color-row { display: flex; align-items: center; gap: 10px; }
+  .color-row input[type="color"] { width: 44px; height: 40px; padding: 2px 4px; cursor: pointer; border-radius: 8px; }
+  .color-row input[type="text"] { flex: 1; }
+
+  .generate-btn {
+    width: 100%; padding: 18px; background: #003764; color: #FFC20E;
+    border: none; border-radius: 12px; font-family: 'Heebo', sans-serif;
+    font-size: 18px; font-weight: 800; cursor: pointer;
+    transition: background 0.2s; margin-top: 8px;
+  }
+  .generate-btn:hover { background: #004f90; }
+
+  #output-section { display: none; margin-top: 28px; }
+  #prompt-output {
+    width: 100%; min-height: 360px;
+    font-family: 'Courier New', monospace; font-size: 12.5px;
+    background: #0f172a; color: #e2e8f0;
+    border: none; border-radius: 10px; padding: 20px;
+    line-height: 1.75; direction: ltr; text-align: left; resize: vertical;
+  }
+  .actions { display: flex; gap: 12px; margin-top: 12px; }
+  .copy-btn {
+    flex: 1; padding: 14px; background: #10b981; color: #fff;
+    border: none; border-radius: 10px; font-family: 'Heebo', sans-serif;
+    font-size: 15px; font-weight: 800; cursor: pointer; transition: background 0.2s;
+  }
+  .copy-btn:hover { background: #059669; }
+  .copy-btn.copied { background: #003764; }
+  .reset-btn {
+    padding: 14px 24px; background: #f1f5f9; color: #475569;
+    border: 1.5px solid #e2e8f0; border-radius: 10px; font-family: 'Heebo', sans-serif;
+    font-size: 14px; font-weight: 700; cursor: pointer;
+  }
+
+  @media(max-width:640px) {
+    .cols2, .cols3, .platforms-grid, .breakdowns-grid { grid-template-columns: 1fr; }
+    .top { flex-direction: column; gap: 12px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="top">
+    <h1>מחולל פרומפט<br><span style="font-size:14px;font-weight:400;color:#cbd5e1">דוח ביצועים חודשי — כל הפלטפורמות</span></h1>
+    <span class="badge-top">AI READY</span>
+  </div>
+
+  <!-- 1 פרטי לקוח -->
+  <div class="card">
+    <div class="card-title"><span class="badge">1</span> פרטי הלקוח</div>
+    <div class="grid cols2">
+      <div class="field">
+        <label><span class="req">*</span> שם הלקוח / חשבון</label>
+        <input id="clientName" placeholder="הכנס כאן שם חשבון המודעות">
+      </div>
+      <div class="field">
+        <label>לוגו URL <span class="opt">(אופציונלי)</span></label>
+        <input id="logoUrl" placeholder="https://example.com/logo.png">
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 פרטי הדוח -->
+  <div class="card">
+    <div class="card-title"><span class="badge">2</span> פרטי הדוח</div>
+    <div class="grid cols3">
+      <div class="field">
+        <label><span class="req">*</span> חודש הדוח</label>
+        <input id="reportMonth" placeholder="מרץ 2026">
+      </div>
+      <div class="field">
+        <label><span class="req">*</span> תאריך התחלה</label>
+        <input id="dateFrom" type="date">
+      </div>
+      <div class="field">
+        <label><span class="req">*</span> תאריך סיום</label>
+        <input id="dateTo" type="date">
+      </div>
+      <div class="field">
+        <label><span class="req">*</span> שם הסוכנות</label>
+        <input id="agencyName" placeholder="RPG Digital">
+      </div>
+      <div class="field">
+        <label><span class="req">*</span> מייל ליצירת קשר</label>
+        <input id="contactEmail" placeholder="israel@agency.co.il">
+      </div>
+      <div class="field">
+        <label>מטבע</label>
+        <select id="currency">
+          <option value="₪">₪ שקל (ILS)</option>
+          <option value="$">$ דולר (USD)</option>
+          <option value="€">€ יורו (EUR)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 פלטפורמות -->
+  <div class="card">
+    <div class="card-title"><span class="badge">3</span> פלטפורמות פעילות — לחץ לבחירה</div>
+    <div class="tip">בחר רק את הפלטפורמות שרצות לאותו לקוח. הסוכן ידלג אוטומטית על הבלתי פעילות.</div>
+    <div class="platforms-grid">
+
+      <div class="platform-card" id="pf-meta" onclick="togglePlatform('meta')">
+        <div class="pf-top">
+          <span class="pf-icon">📘</span>
+          <span class="pf-name">Meta Ads<br><small style="font-weight:500;color:#64748b">Facebook + Instagram</small></span>
+          <span class="pf-check">✓</span>
+        </div>
+        <div class="pf-fields">
+          <label>Ad Account ID</label>
+          <input id="meta-id" placeholder="act_123456789" onclick="e=>e.stopPropagation()">
+          <label>Pixel ID</label>
+          <input id="meta-pixel" placeholder="987654321" onclick="e=>e.stopPropagation()">
+        </div>
+      </div>
+
+      <div class="platform-card" id="pf-google" onclick="togglePlatform('google')">
+        <div class="pf-top">
+          <span class="pf-icon">🔍</span>
+          <span class="pf-name">Google Ads<br><small style="font-weight:500;color:#64748b">Search + Display + YouTube</small></span>
+          <span class="pf-check">✓</span>
+        </div>
+        <div class="pf-fields">
+          <label>Customer ID</label>
+          <input id="google-id" placeholder="123-456-7890" onclick="e=>e.stopPropagation()">
+        </div>
+      </div>
+
+      <div class="platform-card" id="pf-tiktok" onclick="togglePlatform('tiktok')">
+        <div class="pf-top">
+          <span class="pf-icon">🎵</span>
+          <span class="pf-name">TikTok Ads<br><small style="font-weight:500;color:#64748b">In-Feed + TopView</small></span>
+          <span class="pf-check">✓</span>
+        </div>
+        <div class="pf-fields">
+          <label>Advertiser ID</label>
+          <input id="tiktok-id" placeholder="7123456789012345678" onclick="e=>e.stopPropagation()">
+        </div>
+      </div>
+
+      <div class="platform-card" id="pf-linkedin" onclick="togglePlatform('linkedin')">
+        <div class="pf-top">
+          <span class="pf-icon">💼</span>
+          <span class="pf-name">LinkedIn Ads<br><small style="font-weight:500;color:#64748b">Sponsored Content</small></span>
+          <span class="pf-check">✓</span>
+        </div>
+        <div class="pf-fields">
+          <label>Account ID</label>
+          <input id="linkedin-id" placeholder="505XXXXXX" onclick="e=>e.stopPropagation()">
+        </div>
+      </div>
+
+      <div class="platform-card" id="pf-outbrain" onclick="togglePlatform('outbrain')">
+        <div class="pf-top">
+          <span class="pf-icon">📰</span>
+          <span class="pf-name">Outbrain<br><small style="font-weight:500;color:#64748b">Native Content</small></span>
+          <span class="pf-check">✓</span>
+        </div>
+        <div class="pf-fields">
+          <label>Account ID / Marketer</label>
+          <input id="outbrain-id" placeholder="XXXXXXXXXXXXXXXX" onclick="e=>e.stopPropagation()">
+        </div>
+      </div>
+
+      <div class="platform-card" id="pf-taboola" onclick="togglePlatform('taboola')">
+        <div class="pf-top">
+          <span class="pf-icon">📡</span>
+          <span class="pf-name">Taboola<br><small style="font-weight:500;color:#64748b">Native Ads</small></span>
+          <span class="pf-check">✓</span>
+        </div>
+        <div class="pf-fields">
+          <label>Account ID</label>
+          <input id="taboola-id" placeholder="XXXXXXXX" onclick="e=>e.stopPropagation()">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 4 פילוחים -->
+  <div class="card">
+    <div class="card-title"><span class="badge">4</span> פילוחים נוספים — מה לכלול בדוח?</div>
+    <div class="tip">סמן את הפילוחים הרצויים — הסוכן ישלוף ויציג אותם בדוח עבור כל פלטפורמה שתומכת בהם</div>
+    <div class="breakdowns-grid">
+
+      <label class="breakdown-item">
+        <input type="checkbox" id="bd-gender" checked>
+        <div class="bd-content">
+          <span class="bd-icon">⚧</span>
+          <span class="bd-label">מגדר<small>גברים / נשים / לא מוגדר</small></span>
+        </div>
+      </label>
+
+      <label class="breakdown-item">
+        <input type="checkbox" id="bd-age" checked>
+        <div class="bd-content">
+          <span class="bd-icon">🎂</span>
+          <span class="bd-label">גיל<small>פילוח לפי קבוצות גיל</small></span>
+        </div>
+      </label>
+
+      <label class="breakdown-item">
+        <input type="checkbox" id="bd-device" checked>
+        <div class="bd-content">
+          <span class="bd-icon">📱</span>
+          <span class="bd-label">סוג מכשיר<small>Mobile / Desktop / Tablet</small></span>
+        </div>
+      </label>
+
+      <label class="breakdown-item">
+        <input type="checkbox" id="bd-os" checked>
+        <div class="bd-content">
+          <span class="bd-icon">🍎</span>
+          <span class="bd-label">מערכת הפעלה<small>iOS / Android / Windows / Mac</small></span>
+        </div>
+      </label>
+
+      <label class="breakdown-item">
+        <input type="checkbox" id="bd-geo" checked>
+        <div class="bd-content">
+          <span class="bd-icon">🌍</span>
+          <span class="bd-label">גיאוגרפיה<small>עיר / אזור / מדינה</small></span>
+        </div>
+      </label>
+
+      <label class="breakdown-item">
+        <input type="checkbox" id="bd-hour">
+        <div class="bd-content">
+          <span class="bd-icon">🕐</span>
+          <span class="bd-label">שעות ביממה<small>Hourly performance</small></span>
+        </div>
+      </label>
+
+      <label class="breakdown-item">
+        <input type="checkbox" id="bd-day">
+        <div class="bd-content">
+          <span class="bd-icon">📅</span>
+          <span class="bd-label">ימי שבוע<small>ביצועים לפי יום</small></span>
+        </div>
+      </label>
+
+      <label class="breakdown-item">
+        <input type="checkbox" id="bd-placement">
+        <div class="bd-content">
+          <span class="bd-icon">🖼️</span>
+          <span class="bd-label">Placement<small>Feed / Reels / Stories / Search</small></span>
+        </div>
+      </label>
+
+      <label class="breakdown-item">
+        <input type="checkbox" id="bd-creative">
+        <div class="bd-content">
+          <span class="bd-icon">🎨</span>
+          <span class="bd-label">קריאטיב מוביל<small>Top 3 מודעות לפי ביצועים</small></span>
+        </div>
+      </label>
+
+    </div>
+  </div>
+
+  <!-- 5 מיתוג -->
+  <div class="card">
+    <div class="card-title"><span class="badge">5</span> מיתוג ועיצוב</div>
+    <div class="grid cols3">
+      <div class="field">
+        <label>צבע ראשי</label>
+        <div class="color-row">
+          <input type="color" id="c1p" value="#003764" oninput="document.getElementById('c1').value=this.value">
+          <input type="text" id="c1" value="#003764" oninput="document.getElementById('c1p').value=this.value">
+        </div>
+      </div>
+      <div class="field">
+        <label>צבע הדגשה</label>
+        <div class="color-row">
+          <input type="color" id="c2p" value="#FFC20E" oninput="document.getElementById('c2').value=this.value">
+          <input type="text" id="c2" value="#FFC20E" oninput="document.getElementById('c2p').value=this.value">
+        </div>
+      </div>
+      <div class="field">
+        <label>צבע משלים</label>
+        <div class="color-row">
+          <input type="color" id="c3p" value="#009EDB" oninput="document.getElementById('c3').value=this.value">
+          <input type="text" id="c3" value="#009EDB" oninput="document.getElementById('c3p').value=this.value">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 מטרות -->
+  <div class="card">
+    <div class="card-title"><span class="badge">6</span> מטרה עסקית והקשר</div>
+    <div class="grid cols2">
+      <div class="field">
+        <label><span class="req">*</span> מה נמדד כהצלחה?</label>
+        <select id="convType">
+          <option value="לידים">לידים</option>
+          <option value="תרומות">תרומות</option>
+          <option value="רכישות">רכישות (e-commerce)</option>
+          <option value="הרשמות">הרשמות לאירוע</option>
+          <option value="פניות / צור קשר">פניות / צור קשר</option>
+          <option value="הורדות אפליקציה">הורדות אפליקציה</option>
+          <option value="מכירות בחנות פיזית">מכירות בחנות פיזית</option>
+          <option value="הזמנת שולחן / תור">הזמנת שולחן / תור</option>
+          <option value="רישום לניוזלטר">רישום לניוזלטר</option>
+          <option value="צפייה בסרטון (75%+)">צפייה בסרטון (75%+)</option>
+          <option value="שיחת טלפון (Call Tracking)">שיחת טלפון (Call Tracking)</option>
+          <option value="ניווט ל-Waze / Google Maps">ניווט ל-Waze / Google Maps</option>
+          <option value="WhatsApp Click">WhatsApp Click</option>
+          <option value="הרשמה לוובינר">הרשמה לוובינר</option>
+          <option value="הוספה לסל (Add to Cart)">הוספה לסל (Add to Cart)</option>
+          <option value="__custom__">✏️ הכנס ידנית...</option>
+        </select>
+        <input type="text" id="convTypeCustom" placeholder="כתוב כאן את מדד ההצלחה שלך" style="display:none; margin-top:8px;">
+      </div>
+      <div class="field">
+        <label>יעד חודשי <span class="opt">(אופציונלי)</span></label>
+        <input id="monthlyGoal" placeholder="50 לידים / ₪30,000 הכנסה">
+      </div>
+      <div class="field">
+        <label>קהל יעד עיקרי</label>
+        <input id="targetAudience" placeholder="גברים 35-55, ישראל, דתיים">
+      </div>
+      <div class="field">
+        <label>עמוד נחיתה ראשי <span class="opt">(URL)</span></label>
+        <input id="landingPage" placeholder="https://example.com/landing">
+      </div>
+    </div>
+    <div class="field" style="margin-top:14px">
+      <label>הקשר עסקי / הערות</label>
+      <textarea id="context" placeholder="למשל: חברת B2B לתוכנה, קהל מנהלים בכירים. Meta בעיקר לרימרקטינג, Google לחיפוש, LinkedIn לפרוספקטינג."></textarea>
+    </div>
+  </div>
+
+  <!-- 7 פלט -->
+  <div class="card">
+    <div class="card-title"><span class="badge">7</span> הגדרות פלט</div>
+    <div class="grid cols2">
+      <div class="field">
+        <label>שם קובץ הדוח</label>
+        <input id="outputFile" placeholder="client-march-2026-report.html">
+      </div>
+      <div class="field">
+        <label>שפת הדוח</label>
+        <select id="reportLang">
+          <option value="עברית (RTL)">עברית</option>
+          <option value="אנגלית (LTR)">אנגלית</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <button class="generate-btn" onclick="generatePrompt()">⚡ צור פרומפט</button>
+
+  <div id="output-section">
+    <div class="card">
+      <div class="card-title"><span class="badge">✓</span> הפרומפט מוכן — העתק והדבק</div>
+      <textarea id="prompt-output" readonly></textarea>
+      <div class="actions">
+        <button class="copy-btn" onclick="copyPrompt(this)">📋 העתק פרומפט</button>
+        <button class="reset-btn" onclick="document.getElementById('output-section').style.display='none'">נקה</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script>
+const activePlatforms = new Set();
+
+function togglePlatform(id) {
+  const card = document.getElementById('pf-' + id);
+  if (activePlatforms.has(id)) {
+    activePlatforms.delete(id);
+    card.classList.remove('active');
+  } else {
+    activePlatforms.add(id);
+    card.classList.add('active');
+  }
+}
+
+function v(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('convType').addEventListener('change', function() {
+    const custom = document.getElementById('convTypeCustom');
+    custom.style.display = this.value === '__custom__' ? 'block' : 'none';
+    if (this.value === '__custom__') custom.focus();
+  });
+});
+
+function getBreakdowns() {
+  const map = {
+    'bd-gender':    { label: 'מגדר',              detail: 'גברים / נשים / לא מוגדר — לפי חשיפות, קליקים והמרות' },
+    'bd-age':       { label: 'גיל',               detail: 'קבוצות גיל (18–24, 25–34, 35–44, 45–54, 55+) — לפי חשיפות, CTR ו-CPA' },
+    'bd-device':    { label: 'סוג מכשיר',         detail: 'Mobile / Desktop / Tablet — הוצאה, קליקים, המרות, CPA לכל סוג' },
+    'bd-os':        { label: 'מערכת הפעלה',       detail: 'iOS / Android / Windows / Mac / אחר — ביצועים לכל OS' },
+    'bd-geo':       { label: 'גיאוגרפיה',         detail: 'Top 10 ערים/אזורים/מדינות לפי המרות ולפי הוצאה' },
+    'bd-hour':      { label: 'שעות ביממה',        detail: 'ביצועים לפי שעה (0–23) — זיהוי שעות שיא ושעות חלשות' },
+    'bd-day':       { label: 'ימי שבוע',          detail: 'ביצועים לפי יום (ראשון–שבת) — CPA וקליקים לכל יום' },
+    'bd-placement': { label: 'Placement',         detail: 'Feed / Reels / Stories / Search / Display / YouTube — הוצאה + המרות לכל מיקום' },
+    'bd-creative':  { label: 'קריאטיב מוביל',    detail: 'Top 3 מודעות לפי המרות + Top 3 לפי CTR — שם/תמונה, הוצאה, המרות, CPA' },
+  };
+  const active = [];
+  Object.entries(map).forEach(([id, cfg]) => {
+    if (document.getElementById(id)?.checked) active.push(cfg);
+  });
+  return active;
+}
+
+function formatDate(d) {
+  if (!d) return '';
+  const [y, m, day] = d.split('-');
+  return `${day}.${m}.${y}`;
+}
+
+// מדדים לפי פלטפורמה
+const platformConfig = {
+  meta: {
+    name: 'Meta Ads (Facebook + Instagram)',
+    icon: '📘',
+    metrics: `- סך הוצאה | חשיפות | Reach | תדירות | CPM | CTR
+- סך קליקים על לינק | Landing Page Views
+- המרות מהפיקסל (לפי אירוע רלוונטי) | עלות להמרה (CPA/CPL)
+- פילוח לפי Placement: Feed / Reels / Stories / Audience Network
+- Top 3 מודעות לפי המרות
+- לכל קמפיין בנפרד: שם, מטרה, הוצאה, המרות, CPA, CPM, קליקים, Reach`,
+    idField: 'meta-id',
+    idLabel: 'Ad Account ID',
+    extraField: 'meta-pixel',
+    extraLabel: 'Pixel ID'
+  },
+  google: {
+    name: 'Google Ads',
+    icon: '🔍',
+    metrics: `- סך הוצאה | חשיפות | קליקים | CTR | CPC ממוצע
+- המרות | עלות להמרה (CPA) | ROAS (אם e-commerce)
+- פילוח לפי סוג קמפיין: Search / Display / YouTube / Performance Max / Shopping
+- מילות מפתח מובילות (Top 10 by conversions)
+- Quality Score ממוצע לקמפייני Search
+- לכל קמפיין: שם, סוג, הוצאה, המרות, CPA, CTR, קליקים`,
+    idField: 'google-id',
+    idLabel: 'Customer ID'
+  },
+  tiktok: {
+    name: 'TikTok Ads',
+    icon: '🎵',
+    metrics: `- סך הוצאה | חשיפות | Reach | תדירות | CPM | CTR
+- סך קליקים | עלות לקליק (CPC)
+- המרות / לידים | עלות להמרה
+- Video Views: 2s / 6s / 25% / 50% / 75% / 100%
+- פילוח לפי פורמט: In-Feed / TopView / Spark Ads
+- Top 3 קריאטיבים לפי ביצועים
+- לכל קמפיין: שם, מטרה, הוצאה, המרות, CPM, CTR`,
+    idField: 'tiktok-id',
+    idLabel: 'Advertiser ID'
+  },
+  linkedin: {
+    name: 'LinkedIn Ads',
+    icon: '💼',
+    metrics: `- סך הוצאה | חשיפות | Reach | CTR | CPC ממוצע
+- לידים (Lead Gen Forms) | עלות לליד (CPL)
+- פילוח קהל: Job Title / Industry / Seniority / Company Size
+- פילוח לפי פורמט: Single Image / Carousel / Video / Message Ad / Document Ad
+- Engagement Rate
+- לכל קמפיין: שם, מטרה, הוצאה, לידים, CPL, CTR`,
+    idField: 'linkedin-id',
+    idLabel: 'Account ID'
+  },
+  outbrain: {
+    name: 'Outbrain',
+    icon: '📰',
+    metrics: `- סך הוצאה | חשיפות | קליקים | CTR | CPC ממוצע
+- המרות / לידים | עלות להמרה
+- פילוח לפי Publisher (אתרי תוכן מובילים)
+- פילוח לפי Section / Widget
+- Top 3 כותרות (Headlines) לפי CTR
+- לכל קמפיין: שם, הוצאה, קליקים, CTR, CPC, המרות`,
+    idField: 'outbrain-id',
+    idLabel: 'Account ID'
+  },
+  taboola: {
+    name: 'Taboola',
+    icon: '📡',
+    metrics: `- סך הוצאה | חשיפות | קליקים | CTR | CPC ממוצע
+- המרות / לידים | עלות להמרה | VCPM
+- פילוח לפי Publisher ו-Placement
+- Top 3 קריאטיבים לפי CTR
+- Viewability Rate
+- לכל קמפיין: שם, הוצאה, קליקים, CTR, CPC, המרות`,
+    idField: 'taboola-id',
+    idLabel: 'Account ID'
+  }
+};
+
+function generatePrompt() {
+  if (activePlatforms.size === 0) {
+    alert('יש לבחור לפחות פלטפורמה אחת');
+    return;
+  }
+
+  const client    = v('clientName')   || '[שם הלקוח]';
+  const logo      = v('logoUrl')      || '[URL_TO_LOGO]';
+  const month     = v('reportMonth')  || '[חודש שנה]';
+  const dateFrom  = formatDate(v('dateFrom')) || '[DD.MM.YYYY]';
+  const dateTo    = formatDate(v('dateTo'))   || '[DD.MM.YYYY]';
+  const agency    = v('agencyName')   || '[שם הסוכנות]';
+  const email     = v('contactEmail') || '[email@agency.com]';
+  const c1        = v('c1') || '#003764';
+  const c2        = v('c2') || '#FFC20E';
+  const c3        = v('c3') || '#009EDB';
+  const currency  = v('currency') || '₪';
+  const convTypeRaw = v('convType');
+  const convType = convTypeRaw === '__custom__' ? (v('convTypeCustom') || 'המרה') : (convTypeRaw || 'לידים');
+  const goal      = v('monthlyGoal');
+  const lp        = v('landingPage');
+  const audience  = v('targetAudience');
+  const context   = v('context');
+  const outputFile = v('outputFile') || `${client.replace(/\s/g,'-')}-${month.replace(/\s/g,'-')}-report.html`;
+  const lang      = v('reportLang') || 'עברית (RTL)';
+
+  // פילוחים
+  const breakdowns = getBreakdowns();
+  let breakdownBlock = '';
+  if (breakdowns.length > 0) {
+    breakdownBlock = `\n### פילוחים נדרשים (לכל פלטפורמה שתומכת בהם):\n`;
+    breakdowns.forEach((bd, i) => {
+      breakdownBlock += `${i+1}. **${bd.label}** — ${bd.detail}\n`;
+    });
+    breakdownBlock += `\nחשוב: אם פלטפורמה לא מספקת פילוח מסוים — רשום "לא זמין" ואל תמציא נתונים.\n`;
+  }
+
+  // בנה בלוק שליפת נתונים לכל פלטפורמה
+  let dataBlocks = '';
+  let platformNames = [];
+  let sectionsList = '';
+  let sectionNum = 3;
+
+  activePlatforms.forEach(pfId => {
+    const pf = platformConfig[pfId];
+    if (!pf) return;
+    const accountId = v(pf.idField) || '[ACCOUNT_ID]';
+    const extraId   = pf.extraField ? v(pf.extraField) : null;
+
+    platformNames.push(`${pf.icon} ${pf.name}`);
+
+    dataBlocks += `
+### ${pf.icon} ${pf.name}
+- ${pf.idLabel}: ${accountId}${extraId ? `\n- ${pf.extraLabel}: ${extraId}` : ''}
+- תקופה: ${dateFrom} – ${dateTo}
+מדדים לשלוף:
+${pf.metrics}
+`;
+
+    sectionsList += `
+**סקשיין ${String(sectionNum).padStart(2,'0')} — ${pf.icon} ${pf.name}:**
+- Hero mini: לוגו הפלטפורמה + סך הוצאה + מדד מרכזי
+- KPI cards (6–8): המדדים העיקריים של הפלטפורמה
+- כרטיסי קמפיין: כרטיס לכל קמפיין פעיל עם stats grid
+- גרף בר ב-CSS: השוואה בין קמפיינים לפי המרות/הוצאה
+- כרטיסי תובנה ייחודיים לפלטפורמה (2–3): מה עבד, מה לשפר, המלצה
+`;
+    sectionNum++;
+  });
+
+  const crossSection = sectionNum;
+
+  const goalLine     = goal     ? `\n- יעד חודשי: ${goal}` : '';
+  const lpLine       = lp       ? `\n- עמוד נחיתה ראשי: ${lp}` : '';
+  const audienceLine = audience ? `\n- קהל יעד עיקרי: ${audience}` : '';
+  const contextBlock = context  ? `\n\n## הקשר עסקי חשוב\n${context}` : '';
+  const pfNamesStr   = platformNames.join(' | ');
+
+  const prompt =
+`## משימה: דוח ביצועים חודשי מאוחד — כל הפלטפורמות
+
+אתה סוכן שיווק דיגיטלי בכיר. המשימה שלך: לשלוף נתונים מכל הפלטפורמות הפעילות של הלקוח, לנתח אותם ולהפיק דוח HTML מקצועי ומפורט. בצע את כל השלבים ושמור את הפלט.
+
+---
+
+## פרטי הלקוח
+- שם: ${client}
+- לוגו: ${logo}
+- חודש הדוח: ${month}
+- תקופה: ${dateFrom} – ${dateTo}
+- סוכנות: ${agency} | מייל: ${email}
+- מטרה עסקית: ${convType}${goalLine}${lpLine}${audienceLine}
+- פלטפורמות פעילות: ${pfNamesStr}${contextBlock}
+
+---
+
+## שלב 1 — שליפת נתונים מכל הפלטפורמות
+${dataBlocks}
+${breakdownBlock}
+**הנחיות שליפה:**
+- אם פלטפורמה מסוימת לא מחזירה נתונים או שהגישה נכשלת — המשך לשאר הפלטפורמות ורשום הערה בדוח
+- שלוף נתונים לתקופה המדויקת בלבד: ${dateFrom} – ${dateTo}
+- אם יש קמפיינים עם סטטוס PAUSED שרצו חלק מהתקופה — כלול אותם עם ציון "הופסק"
+
+---
+
+## שלב 2 — חישובים מוקדמים (לפני בניית הדוח)
+חשב ושמור:
+- סך הוצאה מאוחד (כל הפלטפורמות יחד)
+- סך המרות / ${convType} מכל הפלטפורמות
+- עלות ממוצעת להמרה מאוחדת (Blended CPA)
+- פילוח הוצאה לפי פלטפורמה (אחוז מהסך)
+- הפלטפורמה היעילה ביותר (לפי CPA הנמוך ביותר)
+- הפלטפורמה עם הכי הרבה המרות
+- תדירות ממוצעת מאוחדת (אם רלוונטי)
+
+---
+
+## שלב 3 — בניית דוח HTML מלא
+
+### דרישות כלליות:
+- ${lang}, HTML + CSS בלבד, ללא JavaScript
+- פונט: Heebo מ-Google Fonts
+- צבע ראשי: ${c1} | הדגשה: ${c2} | משלים: ${c3} | מטבע: ${currency}
+- Responsive: מתחת ל-768px עובר לעמודה אחת
+- KPI cards: border ימני 4px, hover translateY(-3px)
+- גרפי בר: div עם width% ב-CSS טהור
+
+---
+
+### מבנה הדוח:
+
+**Header** — לוגו הלקוח + "דוח ביצועים חודשי | ${month}"
+
+**Hero Section** — שם הלקוח גדול, תת-כותרת, meta-row:
+תקופה: ${dateFrom}–${dateTo} | ערוצים: ${pfNamesStr} | הוכן על ידי: ${agency} | תאריך הפקה: [היום]
+
+**סקשיין 01 — תקציר מנהלים (Cross-Platform):**
+- KPI cards: סך הוצאה מאוחד / סך ${convType} / Blended CPA / הפלטפורמה המובילה / חיסכון לעומת יעד (אם סופק)
+- טבלת השוואה בין פלטפורמות: עמודות = פלטפורמה / הוצאה / % מהסך / המרות / CPA / הערה
+- 3 כרטיסי תובנה כלליות (win / warn / המלצה)
+${sectionsList}
+**סקשיין ${String(crossSection).padStart(2,'0')} — פילוח דמוגרפי ומכשירים (Cross-Platform):**
+${breakdowns.length > 0 ? breakdowns.map(bd => {
+  if (bd.label === 'מגדר') return `- גרף עמודות: פילוח מגדרי מאוחד — הוצאה + המרות לפי גברים/נשים בכל פלטפורמה`;
+  if (bd.label === 'גיל') return `- גרף בר: פילוח גיל מאוחד — CTR ו-CPA לכל קבוצת גיל`;
+  if (bd.label === 'סוג מכשיר') return `- גרף עמודות: Mobile vs Desktop vs Tablet — הוצאה, המרות, CPA השוואתי`;
+  if (bd.label === 'מערכת הפעלה') return `- גרף בר: iOS vs Android vs Desktop OS — ביצועים השוואתיים`;
+  if (bd.label === 'גיאוגרפיה') return `- טבלה: Top 10 ערים/אזורים לפי המרות + CPA לכל מיקום`;
+  if (bd.label === 'שעות ביממה') return `- גרף שעות (24 עמודות) — שיא ביצועים לפי שעה`;
+  if (bd.label === 'ימי שבוע') return `- גרף ימים (7 עמודות) — CPA וקליקים לפי יום בשבוע`;
+  if (bd.label === 'Placement') return `- גרף בר: Placement breakdown — Feed / Reels / Stories / Search / Display`;
+  if (bd.label === 'קריאטיב מוביל') return `- טבלה: Top 3 מודעות לפי המרות + Top 3 לפי CTR`;
+  return `- ${bd.label}`;
+}).join('\n') : '- (לא נבחרו פילוחים)'}
+- תובנה אוטומטית: "הקהל המגיב ביותר הוא ..." (בהתבסס על הנתונים)
+- תובנה אוטומטית: "המכשיר היעיל ביותר להמרה הוא ..." עם המלצה לתקצוב
+
+**סקשיין ${String(crossSection+2).padStart(2,'0')} — ניתוח כולל ו-Cross-Platform Insights:**
+- גרף עמודות: הוצאה לפי פלטפורמה (השוואה ויזואלית)
+- גרף עמודות: המרות לפי פלטפורמה
+- טבלת ROAS / יעילות לפי פלטפורמה
+- 4–6 תובנות אסטרטגיות מבוססות כל הנתונים:
+  - ✓ הצלחות בין-פלטפורמיות (גבול ${c2})
+  - ⚠ בעיות שחוזרות על עצמן (גבול ${c1})
+  - ◆ המלצות לחלוקת תקציב מחדש (גבול ${c3})
+  - ◆ המלצות קריאטיב ואסטרטגיה לחודש הבא
+
+**סקשיין ${String(crossSection+3).padStart(2,'0')} — המלצות לחודש הבא:**
+- רשימה ממוספרת של 5–8 פעולות מומלצות, מסודרות לפי עדיפות
+- כל פעולה: כותרת + הסבר + פלטפורמה רלוונטית + השפעה צפויה
+
+**Footer** — ${client} · ${month} · הופק על ידי ${agency} · ${email}
+
+---
+
+## פלט
+שמור את הדוח המוכן בשם: ${outputFile}
+וודא שהקובץ נפתח תקין בדפדפן ושכל הנתונים מולאו בפועל — אל תשאיר placeholder ריק.`;
+
+  document.getElementById('prompt-output').value = prompt;
+  document.getElementById('output-section').style.display = 'block';
+  setTimeout(() => document.getElementById('output-section').scrollIntoView({ behavior: 'smooth' }), 100);
+}
+
+function copyPrompt(btn) {
+  const ta = document.getElementById('prompt-output');
+  ta.select();
+  navigator.clipboard.writeText(ta.value).then(() => {
+    btn.textContent = '✓ הועתק בהצלחה!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '📋 העתק פרומפט'; btn.classList.remove('copied'); }, 2500);
+  });
+}
+</script>
+</body>
+</html>

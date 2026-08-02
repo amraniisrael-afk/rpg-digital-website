@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enhanced Conversions — GTM Setup Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f1f5f9;
+  --surface: #ffffff;
+  --surface2: #f8fafc;
+  --border: #e2e8f0;
+  --yellow: #FFC20E;
+  --blue: #003764;
+  --text: #1e293b;
+  --muted: #64748b;
+  --green: #059669;
+  --cyan: #0891b2;
+}
+
+body {
+  font-family: 'Heebo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ── Header ── */
+.header {
+  background: var(--blue);
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 3px solid var(--yellow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.logo { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: -0.5px; }
+.logo span { color: var(--yellow); }
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,194,14,0.12);
+  border: 1px solid rgba(255,194,14,0.3);
+  color: var(--yellow);
+  font-family: 'Heebo', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 7px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.back-btn:hover { background: rgba(255,194,14,0.22); }
+
+/* ── Hero ── */
+.hero {
+  background: linear-gradient(135deg, #003764 0%, #001d38 100%);
+  padding: 48px 32px 40px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,194,14,0.12);
+  border: 1px solid rgba(255,194,14,0.3);
+  color: var(--yellow);
+  font-size: 12px;
+  font-weight: 800;
+  padding: 5px 16px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+  margin-bottom: 18px;
+}
+.hero h1 {
+  font-size: 36px;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 12px;
+  line-height: 1.15;
+}
+.hero h1 span { color: var(--yellow); }
+.hero p {
+  font-size: 16px;
+  color: #94a3b8;
+  max-width: 640px;
+  margin: 0 auto 28px;
+  line-height: 1.6;
+}
+.hero-stats {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.hero-stat {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 14px 24px;
+  text-align: center;
+}
+.hero-stat-num { font-size: 24px; font-weight: 900; color: var(--yellow); }
+.hero-stat-label { font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 600; }
+
+/* ── Flow diagram ── */
+.flow-section {
+  padding: 40px 32px 0;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.flow-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.flow-title::before {
+  content: '';
+  display: inline-block;
+  width: 3px; height: 14px;
+  background: var(--yellow);
+  border-radius: 2px;
+}
+.flow-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.flow-node {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.flow-node .num {
+  width: 22px; height: 22px;
+  background: var(--yellow);
+  color: #000;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.flow-arrow {
+  color: var(--muted);
+  font-size: 18px;
+  font-weight: 300;
+}
+
+/* ── Steps ── */
+.steps-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 0 32px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.step-block {
+  position: relative;
+  display: flex;
+  gap: 0;
+}
+
+/* vertical line between steps */
+.step-block:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 23px;
+  top: 56px;
+  bottom: -30px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--yellow), var(--border));
+  opacity: 0.4;
+}
+
+.step-num-col {
+  width: 48px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 2px;
+}
+.step-circle {
+  width: 48px; height: 48px;
+  background: var(--yellow);
+  color: #000;
+  border-radius: 50%;
+  font-size: 20px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 4px rgba(255,194,14,0.15);
+}
+
+.step-content {
+  flex: 1;
+  margin-right: 24px;
+  margin-bottom: 48px;
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.step-title {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--text);
+}
+.step-tag {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+}
+.tag-gtm { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+.tag-ads { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+.tag-verify { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+
+.step-desc {
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+/* Config table */
+.config-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  font-size: 13px;
+}
+.config-table thead tr {
+  background: #fffbeb;
+  border-bottom: 1px solid var(--border);
+}
+.config-table th {
+  padding: 10px 16px;
+  text-align: right;
+  font-size: 11px;
+  font-weight: 800;
+  color: #92400e;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.config-table td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-weight: 500;
+}
+.config-table tr:last-child td { border-bottom: none; }
+.config-table td:last-child { color: var(--cyan); font-family: 'Courier New', monospace; font-size: 12px; }
+.config-table tr:hover td { background: #f8fafc; }
+
+/* Code block */
+.code-block {
+  background: #0a0f1a;
+  border: 1px solid var(--border);
+  border-right: 3px solid var(--yellow);
+  border-radius: 10px;
+  padding: 20px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.8;
+  overflow-x: auto;
+  margin-bottom: 20px;
+  position: relative;
+}
+.code-block .code-label {
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: 'Heebo', sans-serif;
+}
+.code-key { color: #60a5fa; }
+.code-str { color: #34d399; }
+.code-num { color: #fb923c; }
+.code-comment { color: #4b5563; font-style: italic; }
+
+/* Image card */
+.img-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 8px;
+  transition: border-color 0.2s;
+}
+.img-card:hover { border-color: rgba(255,194,14,0.3); }
+.img-card-label {
+  padding: 10px 16px;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.img-card-label span { color: var(--yellow); }
+.img-card img {
+  width: 100%;
+  display: block;
+  cursor: zoom-in;
+}
+
+/* Tip box */
+.tip-box {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-right: 3px solid var(--green);
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: #166534;
+  margin-bottom: 16px;
+  line-height: 1.6;
+  display: flex;
+  gap: 10px;
+}
+.tip-box .tip-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+/* Info box */
+.info-box {
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-right: 3px solid var(--cyan);
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: #0c4a6e;
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+/* Success box */
+.success-box {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 12px;
+  padding: 20px 22px;
+  margin-bottom: 16px;
+}
+.success-box .sb-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #15803d;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.success-box .sb-body {
+  font-size: 13px;
+  color: #166534;
+  line-height: 1.7;
+}
+
+/* Inline code */
+code {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 1px 7px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: #0369a1;
+}
+
+/* Lightbox */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  cursor: zoom-out;
+}
+.lightbox.open { display: flex; }
+.lightbox img {
+  max-width: 90vw;
+  max-height: 90vh;
+  border-radius: 10px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.8);
+}
+.lb-close {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 40px; height: 40px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Summary card */
+.summary-card {
+  background: linear-gradient(135deg, #fffbeb, #eff6ff);
+  border: 1px solid #fde68a;
+  border-radius: 16px;
+  padding: 32px;
+  margin: 0 32px 60px;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.summary-card h2 {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.summary-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+.sum-step {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.sum-num {
+  width: 26px; height: 26px;
+  background: var(--yellow);
+  color: #000;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.sum-text { font-size: 13px; color: #475569; font-weight: 600; line-height: 1.5; }
+
+@media (max-width: 640px) {
+  .hero h1 { font-size: 26px; }
+  .steps-container { padding: 0 16px 60px; }
+  .flow-section { padding: 32px 16px 0; }
+  .step-title { font-size: 17px; }
+  .summary-card { margin: 0 16px 40px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="logo">RPG <span>Digital</span></div>
+  <a href="RPG-Hub.html" class="back-btn">← חזרה ל-Hub</a>
+</div>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-badge">🏷 GTM · Google Ads</div>
+  <h1>Enhanced <span>Conversions</span><br>הגדרה מלאה עם GTM</h1>
+  <p>שליחת נתוני משתמש מוצפנים (HASH) לגוגל אדס לשיפור דיוק המדידה — 6 שלבים מהדאטאליירר עד אימות מלא</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num">6</div>
+      <div class="hero-stat-label">שלבים</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">3</div>
+      <div class="hero-stat-label">רכיבי GTM</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">SHA256</div>
+      <div class="hero-stat-label">הצפנת אימייל</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">100%</div>
+      <div class="hero-stat-label">Server-Side Ready</div>
+    </div>
+  </div>
+</div>
+
+<!-- Flow -->
+<div class="flow-section">
+  <div class="flow-title">תהליך ההגדרה</div>
+  <div class="flow-row">
+    <div class="flow-node"><span class="num">1</span>DataLayer</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node"><span class="num">2</span>Variable: Email</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node"><span class="num">3</span>User Provided Data</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node"><span class="num">4</span>Conversion Tag</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node"><span class="num">5</span>EC Assist</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node"><span class="num">6</span>Debug Mode</div>
+  </div>
+</div>
+
+<!-- Steps -->
+<div class="steps-container">
+
+  <!-- STEP 1 -->
+  <div class="step-block">
+    <div class="step-num-col">
+      <div class="step-circle">1</div>
+    </div>
+    <div class="step-content">
+      <div class="step-header">
+        <div class="step-title">בדוק שה-DataLayer שולח את האימייל</div>
+        <span class="step-tag tag-gtm">GTM Preview</span>
+      </div>
+      <p class="step-desc">
+        לפני כל הגדרה בטמ — וודא שאירוע ה-<code>purchase</code> מכיל את השדה <code>user_email</code> עם הערך האמיתי.
+        פתח GTM ב-Preview Mode, בצע רכישה, לחץ על האירוע <code>purchase</code> ובדוק ב-API Call.
+      </p>
+
+      <div class="code-block">
+        <span class="code-label">DataLayer — API Call</span>
+<span class="code-key">dataLayer</span>.push({<br>
+&nbsp;&nbsp;<span class="code-key">event</span>: <span class="code-str">"purchase"</span>,<br>
+&nbsp;&nbsp;<span class="code-key">user_email</span>: <span class="code-str">"john@doe.com"</span>, <span class="code-comment">// ← חשוב: חייב להיות פה</span><br>
+&nbsp;&nbsp;<span class="code-key">ecommerce</span>: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-key">discount_value</span>: <span class="code-str">"10.00"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-key">currency</span>: <span class="code-str">"EUR"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-key">value</span>: <span class="code-str">"29.99"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-key">transaction_id</span>: <span class="code-str">"no12345-91129"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-key">items</span>: [{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-key">item_name</span>: <span class="code-str">"Awesome green T-shirt"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-key">item_id</span>: <span class="code-str">"agt1"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-key">price</span>: <span class="code-str">"29.99"</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;}]<br>
+&nbsp;&nbsp;}<br>
+})
+      </div>
+
+      <div class="img-card">
+        <div class="img-card-label">📸 <span>צילום מסך</span> — GTM Preview: אירוע purchase עם user_email</div>
+        <img src="gtm-images/step1-datalayer.jpeg" alt="DataLayer purchase event עם user_email" onclick="openLightbox(this.src)">
+      </div>
+
+      <div class="tip-box">
+        <span class="tip-icon">💡</span>
+        <span>שים לב: ב-GTM Preview רואים את <code>user_email</code> מודגש בכחול — זה אומר שה-dataLayer שלח אותו בהצלחה לפני הטריגר.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step-block">
+    <div class="step-num-col">
+      <div class="step-circle">2</div>
+    </div>
+    <div class="step-content">
+      <div class="step-header">
+        <div class="step-title">צור משתנה: User Email – E.C</div>
+        <span class="step-tag tag-gtm">GTM Variables</span>
+      </div>
+      <p class="step-desc">
+        ב-GTM → Variables → New — צור משתנה מסוג <strong>Data Layer Variable</strong> שמושך את האימייל מה-DataLayer.
+        זה המשתנה שיזין את שאר ההגדרה.
+      </p>
+
+      <table class="config-table">
+        <thead>
+          <tr>
+            <th>שדה</th>
+            <th>ערך</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>שם המשתנה</td><td>User Email - E.C</td></tr>
+          <tr><td>Variable Type</td><td>Data Layer Variable</td></tr>
+          <tr><td>Data Layer Variable Name</td><td>user_email</td></tr>
+          <tr><td>Data Layer Version</td><td>Version 2</td></tr>
+          <tr><td>Set Default Value</td><td>לא מסומן</td></tr>
+        </tbody>
+      </table>
+
+      <div class="img-card">
+        <div class="img-card-label">📸 <span>צילום מסך</span> — הגדרת User Email - E.C ב-GTM</div>
+        <img src="gtm-images/step2-user-email-variable.jpeg" alt="User Email E.C Variable Configuration" onclick="openLightbox(this.src)">
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step-block">
+    <div class="step-num-col">
+      <div class="step-circle">3</div>
+    </div>
+    <div class="step-content">
+      <div class="step-header">
+        <div class="step-title">צור משתנה: User Provided Data Variable</div>
+        <span class="step-tag tag-gtm">GTM Variables</span>
+      </div>
+      <p class="step-desc">
+        ב-GTM → Variables → New — צור משתנה מסוג <strong>User-Provided Data</strong>.
+        זה המשתנה שמארז את כל נתוני המשתמש ומכין אותם בפורמט שגוגל מצפה לו (כולל ה-HASH).
+      </p>
+
+      <table class="config-table">
+        <thead>
+          <tr>
+            <th>שדה</th>
+            <th>ערך</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>שם המשתנה</td><td>User Provided Data Variable</td></tr>
+          <tr><td>Variable Type</td><td>User-Provided Data</td></tr>
+          <tr><td>Type</td><td>Manual configuration ✔</td></tr>
+          <tr><td>Email</td><td>{{User Email - E.C}}</td></tr>
+          <tr><td>Phone</td><td>Not set</td></tr>
+          <tr><td>Name and Address</td><td>Not set</td></tr>
+        </tbody>
+      </table>
+
+      <div class="img-card">
+        <div class="img-card-label">📸 <span>צילום מסך</span> — User Provided Data Variable עם {{User Email - E.C}}</div>
+        <img src="gtm-images/step3-user-provided-data.jpeg" alt="User Provided Data Variable Configuration" onclick="openLightbox(this.src)">
+      </div>
+
+      <div class="info-box">
+        <strong>למה Manual ולא Automatic?</strong> — Automatic Collection מנסה לתפוס שדות טופס לפי סלקטורים. Manual מאפשר לנו לשלוט בדיוק על מה שנשלח ולהתחבר ישירות ל-DataLayer בלי תלות ב-DOM.
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step-block">
+    <div class="step-num-col">
+      <div class="step-circle">4</div>
+    </div>
+    <div class="step-content">
+      <div class="step-header">
+        <div class="step-title">הוסף ל-Google Ads Conversion Tag</div>
+        <span class="step-tag tag-ads">Google Ads Tag</span>
+      </div>
+      <p class="step-desc">
+        פתח את תג ה-Conversion הקיים (<code>Google Ads | Purchase | Conversion</code>), גלול למטה ל-<strong>Event Parameters</strong>
+        והוסף פרמטר חדש — זה השלב שמחבר את כל ההגדרה לגוגל.
+      </p>
+
+      <table class="config-table">
+        <thead>
+          <tr>
+            <th>שדה</th>
+            <th>ערך</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Event Settings Variable</td><td>None</td></tr>
+          <tr><td>Event Parameter</td><td>user_data</td></tr>
+          <tr><td>Value</td><td>{{User Provided Data Variable}}</td></tr>
+        </tbody>
+      </table>
+
+      <div class="img-card">
+        <div class="img-card-label">📸 <span>צילום מסך</span> — Google Ads Conversion Tag עם פרמטר user_data</div>
+        <img src="gtm-images/step4-conversion-tag.jpeg" alt="Google Ads Conversion Tag with user_data parameter" onclick="openLightbox(this.src)">
+      </div>
+
+      <div class="tip-box">
+        <span class="tip-icon">⚠️</span>
+        <span>שם הפרמטר חייב להיות <code>user_data</code> בדיוק — זהו פרמטר Known ש-Google Ads מזהה אוטומטית כ-Enhanced Conversion data.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="step-block">
+    <div class="step-num-col">
+      <div class="step-circle">5</div>
+    </div>
+    <div class="step-content">
+      <div class="step-header">
+        <div class="step-title">אמת עם EC Assist</div>
+        <span class="step-tag tag-verify">אימות</span>
+      </div>
+      <p class="step-desc">
+        התוסף <strong>EC Assist</strong> לכרום מאפשר לבדוק בדיוק מה נשלח לגוגל.
+        לחץ Inspect → בחר את ה-Conversion → תראה את האימייל המוצפן ואת אישור <strong>"Email Address Observed"</strong>.
+      </p>
+
+      <div class="img-card">
+        <div class="img-card-label">📸 <span>צילום מסך</span> — EC Assist: אישור Email Address Observed</div>
+        <img src="gtm-images/step5-ec-assist.jpeg" alt="EC Assist Inspect - Email Address Observed" onclick="openLightbox(this.src)">
+      </div>
+
+      <div class="success-box">
+        <div class="sb-title">✅ Email Address Observed</div>
+        <div class="sb-body">
+          ההודעה הירוקה אומרת: "The hashed email address you are sending with this conversion is valid for Enhanced Conversions."<br><br>
+          רואים גם:
+          <ul style="margin-top:8px; padding-right:20px; line-height:2">
+            <li>Hash sent to Google: <code style="font-size:11px">1wnzc0UrV7TrdfB0KzQ1xNQaBRSMrY-Bd22UoEj7cK8</code></li>
+            <li>Matching user data from your site: <code>john@doe.com</code></li>
+            <li>EC Mode: <strong>manual</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 6 -->
+  <div class="step-block">
+    <div class="step-num-col">
+      <div class="step-circle">6</div>
+    </div>
+    <div class="step-content">
+      <div class="step-header">
+        <div class="step-title">אמת ב-GTM Debug Mode</div>
+        <span class="step-tag tag-verify">אימות מתקדם</span>
+      </div>
+      <p class="step-desc">
+        שיטה שנייה לאימות: ב-GTM Preview, לחץ על אירוע <code>conversion</code> בתפריט השמאלי ← לחץ על תג ה-<code>AW-XXXXXXX</code> ← עבור ל-<strong>Hit Details → Parameters</strong>.
+        חפש פרמטר <code>em</code> — תראה את ה-Hash של האימייל.
+      </p>
+
+      <div class="img-card">
+        <div class="img-card-label">📸 <span>צילום מסך</span> — GTM Debug: פרמטר em עם ה-Hash בטבלת Parameters</div>
+        <img src="gtm-images/step6-gtm-debug.jpeg" alt="GTM Debug Mode showing em parameter with hash" onclick="openLightbox(this.src)">
+      </div>
+
+      <div class="info-box">
+        <strong>מה לחפש בטבלה:</strong><br>
+        • <code>em</code> = אימייל מוצפן (SHA256) — חייב להיות שם ✅<br>
+        • <code>ph</code> = טלפון מוצפן — רק אם שלחת גם טלפון<br>
+        • <code>ec_mode</code> = <code>m</code> (manual) — אישור שהמצב נכון<br>
+        • <code>Destination</code> = ה-AW שלך (AW-XXXXXXX) מסומן בעיגול
+      </div>
+
+      <div class="tip-box">
+        <span class="tip-icon">💡</span>
+        <span>אם רואים <code>em</code> בטבלה — ה-Enhanced Conversion עובד. גוגל מקבלת את נתוני המשתמש ותתחיל לשפר את מדידת ההמרות תוך 48-72 שעות.</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Summary -->
+<div class="summary-card">
+  <h2>🎯 סיכום — 6 שלבים</h2>
+  <div class="summary-steps">
+    <div class="sum-step">
+      <div class="sum-num">1</div>
+      <div class="sum-text">וודא <code>user_email</code> קיים ב-DataLayer של אירוע purchase</div>
+    </div>
+    <div class="sum-step">
+      <div class="sum-num">2</div>
+      <div class="sum-text">צור Data Layer Variable בשם <code>User Email - E.C</code></div>
+    </div>
+    <div class="sum-step">
+      <div class="sum-num">3</div>
+      <div class="sum-text">צור User-Provided Data Variable עם Email = {{User Email - E.C}}</div>
+    </div>
+    <div class="sum-step">
+      <div class="sum-num">4</div>
+      <div class="sum-text">הוסף <code>user_data</code> כ-Event Parameter בתג ה-Conversion</div>
+    </div>
+    <div class="sum-step">
+      <div class="sum-num">5</div>
+      <div class="sum-text">בדוק ב-EC Assist → Inspect → Email Address Observed ✅</div>
+    </div>
+    <div class="sum-step">
+      <div class="sum-num">6</div>
+      <div class="sum-text">בדוק ב-GTM Debug → Hit Details → פרמטר <code>em</code> מוצפן</div>
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()">✕</button>
+  <img id="lb-img" src="" alt="">
+</div>
+
+<script>
+function openLightbox(src) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+</script>
+
+</body>
+</html>
