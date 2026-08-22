@@ -11,7 +11,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>RPG Digital | סוכנות פרפורמנס לחנויות איקומרס</title>
-    <meta name="description" content="RPG Digital - סוכנות איקומרס שמנהלת פרסום ממומן לפי הרווח בקופה, לא לפי ROAS מדווח. Meta, Google Shopping ו-TikTok, פיד מוצרים וניהול ברמת מוצר לפי שולי רווח.">
+    <meta name="description" content="RPG Digital - סוכנות פרפורמנס שמתמחה בחנויות איקומרס בלבד. Meta, Google Shopping ו-TikTok, פיד מוצרים, קריאטיב UGC ו-ROAS שמחזיק גם בסקייל.">
     <meta name="google-site-verification" content="QCxCIcRIIf6MVhluCW67rGK-EROZYtRT2_G2NVpFKbc" />
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://rpgdigital.co.il/">
@@ -19,14 +19,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://rpgdigital.co.il/">
     <meta property="og:title" content="RPG Digital | סוכנות פרפורמנס לחנויות איקומרס">
-    <meta property="og:description" content="סוכנות איקומרס שמנהלת פרסום ממומן לפי הרווח בקופה, לא לפי ROAS מדווח. Meta, Google Shopping ו-TikTok, פיד מוצרים וניהול ברמת מוצר לפי שולי רווח.">
+    <meta property="og:description" content="סוכנות פרפורמנס שמתמחה בחנויות איקומרס בלבד. Meta, Google Shopping ו-TikTok, פיד מוצרים, קריאטיב UGC ו-ROAS שמחזיק גם בסקייל.">
     <meta property="og:image" content="https://rpgdigital.co.il/logo.png">
     <meta property="og:locale" content="he_IL">
     <meta property="og:site_name" content="RPG Digital">
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="RPG Digital | סוכנות פרפורמנס לחנויות איקומרס">
-    <meta name="twitter:description" content="סוכנות איקומרס שמנהלת פרסום ממומן לפי הרווח בקופה, לא לפי ROAS מדווח. Meta, Google Shopping ו-TikTok, פיד מוצרים וניהול ברמת מוצר לפי שולי רווח.">
+    <meta name="twitter:description" content="סוכנות פרפורמנס שמתמחה בחנויות איקומרס בלבד. Meta, Google Shopping ו-TikTok, פיד מוצרים, קריאטיב UGC ו-ROAS שמחזיק גם בסקייל.">
     <meta name="twitter:image" content="https://rpgdigital.co.il/logo.png">
     <!-- Schema.org -->
     <script type="application/ld+json">
@@ -837,8 +837,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
 
         .social-proof-platforms {
-            /* margin-top: 40px; הופחת ל-0 ב-22.08.26 עם הסרת שורת המספרים */
-            margin-top: 0;
+            margin-top: 40px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -4559,10 +4558,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <a class="nav-logo" href="index.html"><img src="logo.webp" alt="RPG Digital" class="logo"></a>
         <ul class="nav-links">
             <li><a class="nav-link" href="#hero">דף הבית</a></li>
+            <li><a class="nav-link" href="#results">תוצאות</a></li>
             <li><a class="nav-link" href="#testimonials">המלצות</a></li>
             <li><a class="nav-link" href="#solution">השיטה שלנו</a></li>
             <li><a class="nav-link" href="#who">למי מתאים</a></li>
-            <li><a class="nav-link" href="#quiz">אבחון חינם</a></li>
+            <li><a class="nav-link" href="#quiz">שאלון</a></li>
             <li><a class="nav-link" href="#faq">שאלות נפוצות</a></li>
             <li><a class="nav-link" href="case-study.html">קייס סטאדי</a></li>
         </ul>
@@ -4578,10 +4578,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="תפריט ניווט נייד" aria-hidden="true">
         <ul>
             <li><a class="mobile-nav-link" href="#hero">דף הבית</a></li>
+            <li><a class="mobile-nav-link" href="#results">תוצאות</a></li>
             <li><a class="mobile-nav-link" href="#testimonials">המלצות</a></li>
             <li><a class="mobile-nav-link" href="#solution">השיטה שלנו</a></li>
             <li><a class="mobile-nav-link" href="#who">למי מתאים</a></li>
-            <li><a class="mobile-nav-link" href="#quiz">אבחון חינם</a></li>
+            <li><a class="mobile-nav-link" href="#quiz">שאלון</a></li>
             <li><a class="mobile-nav-link" href="#faq">שאלות נפוצות</a></li>
             <li><a class="mobile-nav-link" href="case-study.html">קייס סטאדי</a></li>
             <li><a class="mobile-nav-link mobile-cta" href="#lead-form">בואו נדבר ←</a></li>
@@ -4598,21 +4599,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="hero-text-col">
                 <div class="hero-tag-wrap">
                     <span class="hero-asterisk">✳</span>
-                    <div data-edit="hero.hero-tag" class="hero-tag">סוכנות איקומרס שמנהלת לפי דאטה</div>
+                    <div class="hero-tag">סוכנות פרפורמנס לחנויות איקומרס</div>
                 </div>
                 <div class="hero-hl-box">
                     <h1>
-                        <span data-edit="hero.h1" data-edit-wrap="1">פרסום שמנוהל לפי הרווח בקופה</span><br>
-                        <span data-edit="hero.rotating-word" class="rotating-word">לא לפי ה-ROAS בדשבורד</span>
+                        הכפילו את המכירות של החנות עם<br>
+                        <span class="rotating-word" id="rotatingWord">ROAS שמחזיק בסקייל</span>
                     </h1>
                 </div>
-                <p data-edit="hero.subtitle" class="subtitle">מעניין אותנו דבר אחד , כמה כסף הוצאתם וכמה כסף נכנס</p>
+                <p class="subtitle">
+                    אנחנו מנהלים פרסום ממומן לחנויות אונליין בלבד.
+                    Meta, Google Shopping ו-TikTok, פיד מוצרים תקין, קריאטיב שממיר ומדידה שסופרת כל רכישה — כדי שכל שקל מדיה יחזור כרווח בקופה.
+                </p>
                 <div class="hero-cta-group" style="display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;justify-content:center!important;gap:10px!important;">
                     <a href="#lead-form" class="cta-button" style="white-space:nowrap!important;flex-shrink:0!important;">
-                        <span data-edit="hero.cta-button" data-edit-wrap="1">בואו נדבר</span>
+                        רוצה לשמוע איך?
                         <span>←</span>
                     </a>
-                    <a data-edit="hero.cta-button-outline" href="#solution" class="cta-button-outline" style="white-space:nowrap!important;flex-shrink:0!important;">
+                    <a href="#solution" class="cta-button-outline" style="white-space:nowrap!important;flex-shrink:0!important;">
                         גלו את השיטה שלנו
                     </a>
                 </div>
@@ -4785,8 +4789,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
     .hero-cta-group .cta-button,
     .hero-cta-group .cta-button-outline {
-        padding: 13px 18px !important;
-        font-size: 15px !important;
+        padding: 12px 16px !important;
+        font-size: 13px !important;
         flex-shrink: 0 !important;
         white-space: nowrap !important;
     }
@@ -4940,6 +4944,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- ========== SOCIAL PROOF STRIP ========== -->
     <section class="social-proof reveal" id="results">
         <div class="social-proof-inner">
+            <div class="social-proof-stats">
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">חנויות אונליין שהגדלנו</div>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <div class="stat-number">₪12M+</div>
+                    <div class="stat-label">תקציב מדיה מנוהל</div>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <div class="stat-number">4.8X</div>
+                    <div class="stat-label">ROAS ממוצע ללקוח</div>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">מהלקוחות שלנו הם איקומרס</div>
+                </div>
+            </div>
             <div class="social-proof-platforms">
                     <div class="platform-item">
                         <svg viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
@@ -4970,18 +4995,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <section class="pas-section">
         <div class="pas-container">
             <div class="section-header reveal">
-                <div data-edit="pas-section.section-tag" class="section-tag">הפער שקשה להסביר</div>
-                <h2 data-edit="pas-section.section-title" data-edit-multiline="1" class="section-title">ROAS יפה בדשבורד<br>לא אומר שהחנות מרוויחה</h2>
+                <div class="section-tag">הבעיה שאף אחד לא מדבר עליה</div>
+                <h2 class="section-title">ROAS יפה בדשבורד<br>לא אומר שהחנות מרוויחה</h2>
             </div>
 
             <div class="pas-steps-grid">
                 <div class="pas-step pas-problem reveal">
                     <div class="pas-step-icon"><img src="תמונות לסקשיין/s1.webp" alt="הבעיה" class="pas-step-img" loading="lazy"></div>
-                    <div data-edit="pas-section.pas-step-label" class="pas-step-label">שלב 01</div>
+                    <div class="pas-step-label">שלב 01</div>
                     <div class="pas-step-header">
-                        <h3 data-edit="pas-section.h3">הבעיה</h3>
+                        <h3>הבעיה</h3>
                     </div>
-                    <p data-edit="pas-section.p">
+                    <p>
                         רוב החנויות מנוהלות לפי ה-ROAS שהפלטפורמה מדווחת. אבל Meta סופרת רכישות פעם אחת,
                         Google סופרת אותן שוב, והפיד מעלה מוצרים בלי שולי רווח.
                         התוצאה: מספרים שנראים טוב במסך, וחשבון בנק שלא זז.
@@ -4990,11 +5015,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                 <div class="pas-step pas-agitation reveal">
                     <div class="pas-step-icon"><img src="תמונות לסקשיין/s2.webp" alt="הסיכון" class="pas-step-img" loading="lazy"></div>
-                    <div data-edit="pas-section.pas-step-label-2" class="pas-step-label">שלב 02</div>
+                    <div class="pas-step-label">שלב 02</div>
                     <div class="pas-step-header">
-                        <h3 data-edit="pas-section.h3-2">מה קורה כשממשיכים ככה?</h3>
+                        <h3>מה קורה כשממשיכים ככה?</h3>
                     </div>
-                    <p data-edit="pas-section.p-2">
+                    <p>
                         עלות רכישת לקוח מטפסת, שולי הרווח נשחקים, וכל ניסיון להגדיל תקציב מפיל את ה-ROAS.
                         בינתיים 70% מהעגלות ננטשות, המוצרים הרווחיים לא מקבלים חשיפה,
                         והמתחרים שלכם כבר מזרימים פיד מסודר ל-Shopping ומנצחים אתכם על כל קליק בקטגוריה.
@@ -5003,11 +5028,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                 <div class="pas-step pas-solution reveal">
                     <div class="pas-step-icon"><img src="תמונות לסקשיין/s3.webp" alt="הפתרון" class="pas-step-img" loading="lazy"></div>
-                    <div data-edit="pas-section.pas-step-label-3" class="pas-step-label">שלב 03</div>
+                    <div class="pas-step-label">שלב 03</div>
                     <div class="pas-step-header">
-                        <h3 data-edit="pas-section.h3-3">הפתרון</h3>
+                        <h3>הפתרון</h3>
                     </div>
-                    <p data-edit="pas-section.p-3">
+                    <p>
                         מה אם הייתם יודעים בדיוק איזה מוצר מייצר רווח, באיזה ערוץ, ובאיזו עלות רכישה?
                         ב-RPG Digital אנחנו עובדים רק עם חנויות איקומרס: מתקנים את המדידה והפיד,
                         מנהלים ברמת מוצר, ומודדים כל שקל מדיה מול הרווח בקופה — לא מול ה-ROAS בפלטפורמה.
@@ -5021,9 +5046,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <section class="testimonials-section" id="testimonials">
         <div class="testimonials-container">
             <div class="section-header reveal">
-                <div data-edit="testimonials.section-tag" class="section-tag">לקוחות מספרים</div>
-                <h2 data-edit="testimonials.section-title" class="section-title">התוצאות מדברות בעד עצמן</h2>
-                <p data-edit="testimonials.section-subtitle" class="section-subtitle">גלו איך עזרנו לחנויות אונליין כמו שלכם למכור יותר</p>
+                <div class="section-tag">לקוחות מספרים</div>
+                <h2 class="section-title">התוצאות מדברות בעד עצמן</h2>
+                <p class="section-subtitle">גלו איך עזרנו לחנויות אונליין כמו שלכם למכור יותר</p>
             </div>
 
             <div class="testimonials-slider-wrapper">
@@ -5033,17 +5058,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <div class="testimonial-card reveal">
                     <div class="testimonial-quote-mark">"</div>
                     <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                    <div data-edit="testimonials.testimonial-result-tag" class="testimonial-result-tag">ROAS עלה מ-2.1 ל-5.8 תוך 6 שבועות</div>
-                    <p data-edit="testimonials.testimonial-text" class="testimonial-text">
-                        ניסינו שתי סוכנויות לפני RPG — שתיהן הבטיחו הרבה ומסרו מעט.
+                    <div class="testimonial-result-tag">ROAS עלה מ-2.1 ל-5.8 תוך 6 שבועות</div>
+                    <p class="testimonial-text">
+                        ניסינו שתי סוכנויות לפני RPG  שתיהן הבטיחו הרבה ומסרו מעט.
                         כאן הדבר הראשון שעשו היה לפתוח את הפיד ואת מדידת הרכישות ולתקן אותם מהיסוד.
                         כבר בחודש השני ראינו עלייה חדה בהזמנות, בלי להגדיל את התקציב בשקל.
                     </p>
                     <div class="testimonial-footer">
                         <div class="testimonial-avatar"><img src="תמונות ביקורות/r1.webp" alt="אלון מ." class="avatar-img" loading="lazy"></div>
                         <div class="testimonial-info">
-                            <span data-edit="testimonials.testimonial-name" class="testimonial-name">אלון מ.</span>
-                            <span data-edit="testimonials.testimonial-role" class="testimonial-role">בעלים, חנות אונליין לציוד ספורט</span>
+                            <span class="testimonial-name">אלון מ.</span>
+                            <span class="testimonial-role">בעלים, חנות אונליין לציוד ספורט</span>
                         </div>
                         <span class="testimonial-platform-badge">Meta + Shopping</span>
                     </div>
@@ -5053,17 +5078,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <div class="testimonial-card reveal">
                     <div class="testimonial-quote-mark">"</div>
                     <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                    <div data-edit="testimonials.testimonial-result-tag-2" class="testimonial-result-tag">עלות רכישת לקוח ירדה ב-44%</div>
-                    <p data-edit="testimonials.testimonial-text-2" class="testimonial-text">
-                        הקטגוריה שלנו תחרותית ורוויה, והפיד שלנו היה בלגן — חצי מהמוצרים נדחו ב-Merchant Center.
+                    <div class="testimonial-result-tag">עלות רכישת לקוח ירדה ב-44%</div>
+                    <p class="testimonial-text">
+                        הקטגוריה שלנו תחרותית ורוויה, והפיד שלנו היה בלגן  חצי מהמוצרים נדחו ב-Merchant Center.
                         RPG סידרו את הפיד, בנו מבנה Shopping ו-PMax לפי שולי רווח,
-                        ועכשיו אנחנו מפרסמים את המוצרים שבאמת מרוויחים — לא את אלה שרק נמכרים.
+                        ועכשיו אנחנו מפרסמים את המוצרים שבאמת מרוויחים  לא את אלה שרק נמכרים.
                     </p>
                     <div class="testimonial-footer">
                         <div class="testimonial-avatar"><img src="תמונות ביקורות/r2.webp" alt="מיכל ד." class="avatar-img" loading="lazy"></div>
                         <div class="testimonial-info">
-                            <span data-edit="testimonials.testimonial-name-2" class="testimonial-name">מיכל ד.</span>
-                            <span data-edit="testimonials.testimonial-role-2" class="testimonial-role">מנהלת איקומרס, מותג טיפוח (Shopify)</span>
+                            <span class="testimonial-name">מיכל ד.</span>
+                            <span class="testimonial-role">מנהלת איקומרס, מותג טיפוח (Shopify)</span>
                         </div>
                         <span class="testimonial-platform-badge">Google Shopping</span>
                     </div>
@@ -5073,8 +5098,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <div class="testimonial-card reveal">
                     <div class="testimonial-quote-mark">"</div>
                     <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                    <div data-edit="testimonials.testimonial-result-tag-3" class="testimonial-result-tag">x3.2 מכירות ב-TikTok תוך 60 יום</div>
-                    <p data-edit="testimonials.testimonial-text-3" class="testimonial-text">
+                    <div class="testimonial-result-tag">x3.2 מכירות ב-TikTok תוך 60 יום</div>
+                    <p class="testimonial-text">
                         לא האמנתי ש-TikTok יכול להניע מכירות אמיתיות בחנות שלנו.
                         הם שכנעו אותי לנסות, בנו מערך UGC עם יוצרות שמצלמות את הקולקציה,
                         ותוך חודשיים המחסן לא הספיק לעמוד בקצב ההזמנות. ממליצה בחום.
@@ -5082,8 +5107,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <div class="testimonial-footer">
                         <div class="testimonial-avatar"><img src="תמונות ביקורות/r3.webp" alt="שירה כ." class="avatar-img" loading="lazy"></div>
                         <div class="testimonial-info">
-                            <span data-edit="testimonials.testimonial-name-3" class="testimonial-name">שירה כ.</span>
-                            <span data-edit="testimonials.testimonial-role-3" class="testimonial-role">מייסדת, מותג אופנה D2C</span>
+                            <span class="testimonial-name">שירה כ.</span>
+                            <span class="testimonial-role">מייסדת, מותג אופנה D2C</span>
                         </div>
                         <span class="testimonial-platform-badge">TikTok Ads</span>
                     </div>
@@ -5093,17 +5118,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <div class="testimonial-card reveal">
                     <div class="testimonial-quote-mark">"</div>
                     <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                    <div data-edit="testimonials.testimonial-result-tag-4" class="testimonial-result-tag">הכנסות חודשיות הוכפלו ב-4 חודשים</div>
-                    <p data-edit="testimonials.testimonial-text-4" class="testimonial-text">
-                        מה שהכי הפתיע אותי זה השקיפות. כל שבוע מקבלים דוח עם מספרים אמיתיים —
+                    <div class="testimonial-result-tag">הכנסות חודשיות הוכפלו ב-4 חודשים</div>
+                    <p class="testimonial-text">
+                        מה שהכי הפתיע אותי זה השקיפות. כל שבוע מקבלים דוח עם מספרים אמיתיים
                         לא רק ROAS, אלא רווח אחרי עלות סחורה ומדיה, ברמת מוצר.
                         זו הפעם הראשונה שאני באמת יודע איזה מוצר מממן את החנות ואיזה מוכר בהפסד.
                     </p>
                     <div class="testimonial-footer">
                         <div class="testimonial-avatar"><img src="תמונות ביקורות/r4.webp" alt="דני ל." class="avatar-img" loading="lazy"></div>
                         <div class="testimonial-info">
-                            <span data-edit="testimonials.testimonial-name-4" class="testimonial-name">דני ל.</span>
-                            <span data-edit="testimonials.testimonial-role-4" class="testimonial-role">מנכ"ל, חנות אונליין למוצרי בית</span>
+                            <span class="testimonial-name">דני ל.</span>
+                            <span class="testimonial-role">מנכ"ל, חנות אונליין למוצרי בית</span>
                         </div>
                         <span class="testimonial-platform-badge">Shopping + Meta</span>
                     </div>
@@ -5113,8 +5138,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <div class="testimonial-card reveal">
                     <div class="testimonial-quote-mark">"</div>
                     <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                    <div data-edit="testimonials.testimonial-result-tag-5" class="testimonial-result-tag">תקציב מדיה ירד ב-30%, הזמנות עלו ב-60%</div>
-                    <p data-edit="testimonials.testimonial-text-5" class="testimonial-text">
+                    <div class="testimonial-result-tag">תקציב מדיה ירד ב-30%, הזמנות עלו ב-60%</div>
+                    <p class="testimonial-text">
                         הגעתי ל-RPG אחרי שאיבדתי כסף רב על קמפיינים שלא עבדו.
                         תוך שבועיים הם גילו שאירוע הרכישה נספר פעמיים ושכל הרימרקטינג רץ על קהל שכבר קנה.
                         סידרו את המדידה, בנו מחדש את המבנה, וכבר בחודש הראשון החנות עברה את השיא שלה.
@@ -5122,8 +5147,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <div class="testimonial-footer">
                         <div class="testimonial-avatar"><img src="תמונות ביקורות/r5.webp" alt="רונית א." class="avatar-img" loading="lazy"></div>
                         <div class="testimonial-info">
-                            <span data-edit="testimonials.testimonial-name-5" class="testimonial-name">רונית א.</span>
-                            <span data-edit="testimonials.testimonial-role-5" class="testimonial-role">מנהלת שיווק, מותג תוספי תזונה D2C</span>
+                            <span class="testimonial-name">רונית א.</span>
+                            <span class="testimonial-role">מנהלת שיווק, מותג תוספי תזונה D2C</span>
                         </div>
                         <span class="testimonial-platform-badge">Meta Ads</span>
                     </div>
@@ -5133,17 +5158,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <div class="testimonial-card reveal">
                     <div class="testimonial-quote-mark">"</div>
                     <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                    <div data-edit="testimonials.testimonial-result-tag-6" class="testimonial-result-tag">AOV עלה ב-27% והכפלנו לקוחות חוזרים</div>
-                    <p data-edit="testimonials.testimonial-text-6" class="testimonial-text">
-                        הייתי סקפטי — כבר שמעתי המון הבטחות. אבל הם ביקשו לראות את נתוני החנות
+                    <div class="testimonial-result-tag">AOV עלה ב-27% והכפלנו לקוחות חוזרים</div>
+                    <p class="testimonial-text">
+                        הייתי סקפטי  כבר שמעתי המון הבטחות. אבל הם ביקשו לראות את נתוני החנות
                         לפני שהציעו כלום, ואז הסבירו בדיוק מה יעשו ולמה.
-                        לא רק שהביאו יותר הזמנות — הם העלו את הסל הממוצע ובנו מנוע רכישה חוזרת. השנה הכי טובה שלנו.
+                        לא רק שהביאו יותר הזמנות  הם העלו את הסל הממוצע ובנו מנוע רכישה חוזרת. השנה הכי טובה שלנו.
                     </p>
                     <div class="testimonial-footer">
                         <div class="testimonial-avatar"><img src="תמונות ביקורות/r6.webp" alt="יוסי ב." class="avatar-img" loading="lazy"></div>
                         <div class="testimonial-info">
-                            <span data-edit="testimonials.testimonial-name-6" class="testimonial-name">יוסי ב.</span>
-                            <span data-edit="testimonials.testimonial-role-6" class="testimonial-role">בעלים, חנות רהיטים אונליין</span>
+                            <span class="testimonial-name">יוסי ב.</span>
+                            <span class="testimonial-role">בעלים, חנות רהיטים אונליין</span>
                         </div>
                         <span class="testimonial-platform-badge">Shopping + Retention</span>
                     </div>
@@ -5175,16 +5200,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="solution-container">
 
             <div class="solution-tag-wrap reveal">
-                <div data-edit="solution.section-tag" class="section-tag">השיטה שמשנה את הכללים</div>
+                <div class="section-tag">השיטה שמשנה את הכללים</div>
             </div>
 
             <div class="solution-split">
                 <div class="solution-text reveal">
-                    <h2 data-edit="solution.section-title" data-edit-multiline="1" class="section-title">למה אנחנו מצליחים<br>איפה שאחרים נכשלים?</h2>
+                    <h2 class="section-title">למה אנחנו מצליחים<br>איפה שאחרים נכשלים?</h2>
                     <div class="method-name">
-                        <span data-edit="solution.method-name" data-edit-wrap="1">שיטת</span> <span class="highlight">RPG</span><br><span dir="ltr">Research. Performance. Growth.</span>
+                        שיטת <span class="highlight">RPG</span><br><span dir="ltr">Research. Performance. Growth.</span>
                     </div>
-                    <p data-edit="solution.section-subtitle" class="section-subtitle" style="margin-top: 20px;">
+                    <p class="section-subtitle" style="margin-top: 20px;">
                         פרפורמנס לאיקומרס הוא ניהול פרסום שבו כל החלטה — איזה מוצר לדחוף, לאיזה קהל, באיזו עלות רכישה — מתקבלת לפי הרווח בפועל ולא לפי ROAS מדווח. שלושה עמודים שהופכים חנות אונליין ממשחק ניחושים למכונת מכירות רווחית.
                     </p>
                 </div>
@@ -5200,8 +5225,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         <img src="תמונות לעמודה/col2.webp" alt="Research" class="pillar-img" loading="lazy">
                     </div>
                     <div class="pillar-body">
-                        <h4 data-edit="solution.h4">Research &nbsp; מחקר</h4>
-                        <p data-edit="solution.p">ניתוח הקטלוג, שולי הרווח והמתחרים בקטגוריה. אנחנו לא מתחילים קמפיין לפני שאנחנו יודעים איזה מוצר באמת מרוויח, למי הוא נמכר, ובאיזו עלות רכישה הוא עדיין כדאי.</p>
+                        <h4>Research &nbsp; מחקר</h4>
+                        <p>ניתוח הקטלוג, שולי הרווח והמתחרים בקטגוריה. אנחנו לא מתחילים קמפיין לפני שאנחנו יודעים איזה מוצר באמת מרוויח, למי הוא נמכר, ובאיזו עלות רכישה הוא עדיין כדאי.</p>
                     </div>
                 </div>
 
@@ -5211,8 +5236,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         <img src="תמונות לעמודה/col1.webp" alt="Performance" class="pillar-img" loading="lazy">
                     </div>
                     <div class="pillar-body">
-                        <h4 data-edit="solution.h4-2">Performance &nbsp; ביצועים</h4>
-                        <p data-edit="solution.p-2">מדידת רכישות מלאה (Server-Side ו-CAPI), פיד מוצרים תקין ב-Merchant Center ובקטלוג Meta, ואופטימיזציה יומיומית ברמת מוצר בעזרת AI וכלי BI.</p>
+                        <h4>Performance &nbsp; ביצועים</h4>
+                        <p>מדידת רכישות מלאה (Server-Side ו-CAPI), פיד מוצרים תקין ב-Merchant Center ובקטלוג Meta, ואופטימיזציה יומיומית ברמת מוצר בעזרת AI וכלי BI.</p>
                     </div>
                 </div>
 
@@ -5222,8 +5247,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         <img src="תמונות לעמודה/col3.webp" alt="Growth" class="pillar-img" loading="lazy">
                     </div>
                     <div class="pillar-body">
-                        <h4 data-edit="solution.h4-3">Growth &nbsp; צמיחה</h4>
-                        <p data-edit="solution.p-3">סקיילינג חכם של החנות. מגדילים תקציב מדורג על המוצרים הרווחיים, מרחיבים קהלים וערוצים, ומעלים סל ממוצע ורכישות חוזרות — בלי שה-ROAS קורס בדרך.</p>
+                        <h4>Growth &nbsp; צמיחה</h4>
+                        <p>סקיילינג חכם של החנות. מגדילים תקציב מדורג על המוצרים הרווחיים, מרחיבים קהלים וערוצים, ומעלים סל ממוצע ורכישות חוזרות — בלי שה-ROAS קורס בדרך.</p>
                     </div>
                 </div>
             </div>
@@ -5234,41 +5259,41 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <section class="value-section">
         <div class="value-container">
             <div class="section-header reveal">
-                <div data-edit="value-section.section-tag" class="section-tag">מה מקבלים</div>
-                <h2 data-edit="value-section.section-title" data-edit-multiline="1" class="section-title">לא סתם ניהול קמפיינים <br>מערכת מכירות שלמה לחנות</h2>
-                <p data-edit="value-section.section-subtitle" class="section-subtitle">כל רכיב בשירות שלנו פותר בעיה ספציפית שמעכבת חנויות אונליין מלצמוח</p>
+                <div class="section-tag">מה מקבלים</div>
+                <h2 class="section-title">לא סתם ניהול קמפיינים <br>מערכת מכירות שלמה לחנות</h2>
+                <p class="section-subtitle">כל רכיב בשירות שלנו פותר בעיה ספציפית שמעכבת חנויות אונליין מלצמוח</p>
             </div>
 
             <div class="value-grid reveal">
                 <div class="value-card">
-                    <h4 data-edit="value-section.h4">דשבורד רווחיות בזמן אמת</h4>
+                    <h4>דשבורד רווחיות בזמן אמת</h4>
                     <div class="value-card-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div>
-                    <p data-edit="value-section.value-card-desc" class="value-card-desc">תמונה מלאה על החנות — בכל שנייה. הוצאות מדיה, הזמנות, סל ממוצע ורווח אחרי עלות סחורה — ברמת מוצר וברמת ערוץ. לא צריך לחכות לדוח סוף החודש כדי לדעת מה למכור ומה לעצור.</p>
+                    <p class="value-card-desc">תמונה מלאה על החנות — בכל שנייה. הוצאות מדיה, הזמנות, סל ממוצע ורווח אחרי עלות סחורה — ברמת מוצר וברמת ערוץ. לא צריך לחכות לדוח סוף החודש כדי לדעת מה למכור ומה לעצור.</p>
                 </div>
                 <div class="value-card">
-                    <h4 data-edit="value-section.h4-2">פיד מוצרים ו-Merchant Center</h4>
+                    <h4>פיד מוצרים ו-Merchant Center</h4>
                     <div class="value-card-icon"><svg viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 1 4 4v2a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"/><path d="M16 14H8a4 4 0 0 0-4 4v2h16v-2a4 4 0 0 0-4-4z"/></svg></div>
-                    <p data-edit="value-section.value-card-desc-2" class="value-card-desc">הפיד הוא הדלק של Shopping ו-PMax. אנחנו מנקים דחיות ב-Merchant Center, כותבים כותרות ותיאורים לפי כוונת חיפוש, ומתייגים מוצרים ב-Custom Labels לפי רווחיות ומלאי — כדי שהתקציב יזרום למה שמוכר.</p>
+                    <p class="value-card-desc">הפיד הוא הדלק של Shopping ו-PMax. אנחנו מנקים דחיות ב-Merchant Center, כותבים כותרות ותיאורים לפי כוונת חיפוש, ומתייגים מוצרים ב-Custom Labels לפי רווחיות ומלאי — כדי שהתקציב יזרום למה שמוכר.</p>
                 </div>
                 <div class="value-card">
-                    <h4 data-edit="value-section.h4-3">מדידת רכישות Server-Side</h4>
+                    <h4>מדידת רכישות Server-Side</h4>
                     <div class="value-card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
-                    <p data-edit="value-section.value-card-desc-3" class="value-card-desc">אם אירוע הרכישה לא נספר נכון — האלגוריתם לומד על נתונים שגויים וכל האופטימיזציה מתפספסת. אנחנו מקימים מדידה מלאה: Conversions API, GA4 ו-Server-Side Tagging, עם ערך הזמנה אמיתי ובלי ספירה כפולה.</p>
+                    <p class="value-card-desc">אם אירוע הרכישה לא נספר נכון — האלגוריתם לומד על נתונים שגויים וכל האופטימיזציה מתפספסת. אנחנו מקימים מדידה מלאה: Conversions API, GA4 ו-Server-Side Tagging, עם ערך הזמנה אמיתי ובלי ספירה כפולה.</p>
                 </div>
                 <div class="value-card">
-                    <h4 data-edit="value-section.h4-4">רימרקטינג ועגלות נטושות</h4>
+                    <h4>רימרקטינג ועגלות נטושות</h4>
                     <div class="value-card-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="6" height="10" rx="1"/><rect x="9" y="4" width="6" height="16" rx="1"/><rect x="16" y="9" width="6" height="8" rx="1"/></svg></div>
-                    <p data-edit="value-section.value-card-desc-4" class="value-card-desc">רוב הקונים לא קונים בביקור הראשון, ו-7 מכל 10 עגלות ננטשות. אנחנו בונים רימרקטינג דינמי לפי המוצר שנצפה, מחזירים נוטשי עגלה דרך מודעות ודיוור, ומפרידים בין מי שכבר קנה למי שעדיין לא — כדי לא לשלם פעמיים על אותו לקוח.</p>
+                    <p class="value-card-desc">רוב הקונים לא קונים בביקור הראשון, ו-7 מכל 10 עגלות ננטשות. אנחנו בונים רימרקטינג דינמי לפי המוצר שנצפה, מחזירים נוטשי עגלה דרך מודעות ודיוור, ומפרידים בין מי שכבר קנה למי שעדיין לאכדי לא לשלם פעמיים על אותו לקוח.</p>
                 </div>
                 <div class="value-card">
-                    <h4 data-edit="value-section.h4-5">דוחות ביצועים שבועיים</h4>
+                    <h4>דוחות ביצועים שבועיים</h4>
                     <div class="value-card-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
-                    <p data-edit="value-section.value-card-desc-5" class="value-card-desc">כל שבוע מקבלים דוח ברור וענייני — מה נמכר, באיזה ROAS, באיזו עלות רכישת לקוח ומה עשינו בנוגע לזה. שקיפות מלאה בלי עגה מקצועית, כי אתם צריכים להבין בדיוק לאן הכסף הולך ומה חזר.</p>
+                    <p class="value-card-desc">כל שבוע מקבלים דוח ברור וענייני — מה נמכר, באיזה ROAS, באיזו עלות רכישת לקוח ומה עשינו בנוגע לזה. שקיפות מלאה בלי עגה מקצועית, כי אתם צריכים להבין בדיוק לאן הכסף הולך ומה חזר.</p>
                 </div>
                 <div class="value-card">
-                    <h4 data-edit="value-section.h4-6">העלאת AOV ורכישה חוזרת</h4>
+                    <h4>העלאת AOV ורכישה חוזרת</h4>
                     <div class="value-card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg></div>
-                    <p data-edit="value-section.value-card-desc-6" class="value-card-desc">הדרך הזולה ביותר להגדיל הכנסות היא מהלקוחות שכבר קניתם. אנחנו מעלים את הסל הממוצע עם באנדלים, אפסייל ומדרגות משלוח חינם, ובונים מנוע רכישה חוזרת בדיוור — כך שה-LTV מאפשר לכם לשלם יותר על לקוח ולנצח את המתחרים במכרז.</p>
+                    <p class="value-card-desc">הדרך הזולה ביותר להגדיל הכנסות היא מהלקוחות שכבר קניתם. אנחנו מעלים את הסל הממוצע עם באנדלים, אפסייל ומדרגות משלוח חינם, ובונים מנוע רכישה חוזרת בדיוור — כך שה-LTV מאפשר לכם לשלם יותר על לקוח ולנצח את המתחרים במכרז.</p>
                 </div>
             </div>
         </div>
@@ -5278,7 +5303,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="ugc-pivot reveal">
         <div class="ugc-pivot-line"></div>
         <div class="ugc-pivot-inner">
-<p class="ugc-pivot-text"><span data-edit="main.ugc-pivot-text" data-edit-wrap="1">הדאטה אומר לנו</span> <em data-edit="main.em">איזה מוצר</em> <span data-edit="main.ugc-pivot-text-2" data-edit-wrap="1">לדחוף.</span><br><span data-edit="main.ugc-pivot-text-3" data-edit-wrap="1">הקריאטיב גורם לו</span> <em data-edit="main.em-2">להימכר</em>.</p>
+<p class="ugc-pivot-text">הדאטה אומר לנו <em>איזה מוצר</em> לדחוף.<br>הקריאטיב גורם לו <em>להימכר</em>.</p>
         </div>
         <div class="ugc-pivot-line"></div>
     </div>
@@ -5333,18 +5358,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="ugc-container">
 
             <div class="ugc-header reveal">
-                <div data-edit="ugc-section.section-tag" class="section-tag ugc-tag">יוצרי תוכן &amp; UGC</div>
-                <h2 class="section-title"><span data-edit="ugc-section.section-title" data-edit-wrap="1">אותנטיות של יוצרים.</span> <span data-edit="ugc-section.ugc-highlight" class="ugc-highlight">דיוק של אלגוריתם.</span></h2>
-                <p data-edit="ugc-section.section-subtitle" class="section-subtitle">אנשים קונים ממי שהם מאמינים לו: וידאו UGC שמראה את המוצר שלכם בשימוש אמיתי — ומתרגם צפייה להזמנה.</p>
+                <div class="section-tag ugc-tag">יוצרי תוכן &amp; UGC</div>
+                <h2 class="section-title">אותנטיות של יוצרים. <span class="ugc-highlight">דיוק של אלגוריתם.</span></h2>
+                <p class="section-subtitle">אנשים קונים ממי שהם מאמינים לו: וידאו UGC שמראה את המוצר שלכם בשימוש אמיתי — ומתרגם צפייה להזמנה.</p>
             </div>
 
-            <!-- סרגל הנתונים הוסר בביקורת הקופי 21.08.26: שלושה מספרים ללא מקור,
-                 בעיצוב שגרם לקורא להבין שאלה תוצאות של RPG. -->
-            <div class="ugc-stats-bar reveal" style="display:block!important;text-align:center;">
-                <p data-edit="ugc-section.p" style="color:#1A2238;font-size:17px;line-height:1.8;max-width:720px;margin:0 auto;font-weight:500;">
-                    וידאו של אדם אמיתי שמחזיק את המוצר עובד טוב יותר מתמונת סטודיו.
-                    זה לא טרנד — זה מה שהדאטה מראה בכל קטגוריה שאנחנו מנהלים.
-                </p>
+            <div class="ugc-stats-bar reveal">
+                <div class="ugc-stat">
+                    <div class="ugc-stat-value"><span class="ugc-stat-num" data-target="4">0</span><span class="ugc-stat-unit">X</span></div>
+                    <span class="ugc-stat-label">CTR גבוה יותר ממודעות מסורתיות</span>
+                </div>
+                <div class="ugc-stat-sep"></div>
+                <div class="ugc-stat">
+                    <div class="ugc-stat-value"><span class="ugc-stat-num" data-target="68">0</span><span class="ugc-stat-unit">%</span></div>
+                    <span class="ugc-stat-label">מהקונים סומכים על תוכן יוצרים</span>
+                </div>
+                <div class="ugc-stat-sep"></div>
+                <div class="ugc-stat">
+                    <div class="ugc-stat-value"><span class="ugc-stat-num" data-target="50">0</span><span class="ugc-stat-unit">%</span></div>
+                    <span class="ugc-stat-label">הפחתת עלות רכישת לקוח בממוצע</span>
+                </div>
             </div>
 
             <div class="ugc-main">
@@ -5365,40 +5398,40 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                     </div>
                                     <div class="ugc-feed-meta">
                                         <span class="ugc-username">@maya_lifestyle ✓</span>
-                                        <span data-edit="ugc-section.ugc-sponsored" class="ugc-sponsored">ממומן · חנות</span>
+                                        <span class="ugc-sponsored">ממומן · חנות</span>
                                     </div>
                                 </div>
                                 <div class="ugc-feed-video">
                                     <img src="UGC.webp" alt="יוצרת תוכן" class="ugc-real-img">
                                     <div class="ugc-video-overlay">
-<div data-edit="ugc-section.ugc-video-caption" data-edit-multiline="1" class="ugc-video-caption">"הזמנתי את זה לפני 3 שבועות<br>ואני כבר מזמינה עוד אחד..."</div>
+<div class="ugc-video-caption">"הזמנתי את זה לפני 3 שבועות<br>ואני כבר מזמינה עוד אחד..."</div>
                                         <div class="ugc-view-count">👁 24.8K</div>
                                     </div>
                                 </div>
                                 <div class="ugc-feed-actions">
                                     <span class="ugc-action">❤️ 2.4K</span>
                                     <span class="ugc-action">💬 186</span>
-                                    <span data-edit="ugc-section.ugc-action" class="ugc-action ugc-share">↗ שתף</span>
+                                    <span class="ugc-action ugc-share">↗ שתף</span>
                                 </div>
-                                <div data-edit="ugc-section.ugc-link-btn" class="ugc-link-btn">לרכישה באתר ←</div>
+                                <div class="ugc-link-btn">לרכישה באתר →</div>
                             </div>
                         </div>
                     </div>
                     <div class="ugc-phone-glow"></div>
-                    <div data-edit="ugc-section.ugc-badge" class="ugc-badge ugc-badge-1">🔥 נבדק</div>
-                    <div data-edit="ugc-section.ugc-badge-2" class="ugc-badge ugc-badge-2">✅ אותנטי</div>
-                    <div data-edit="ugc-section.ugc-badge-3" class="ugc-badge ugc-badge-3">📈 ממיר</div>
+                    <div class="ugc-badge ugc-badge-1">🔥 CTR ×4</div>
+                    <div class="ugc-badge ugc-badge-2">✅ אותנטי</div>
+                    <div class="ugc-badge ugc-badge-3">📈 ממיר</div>
                 </div>
 
                 <div class="ugc-steps">
-                    <div data-edit="ugc-section.ugc-steps-title" class="ugc-steps-title">איך זה עובד אצלנו</div>
+                    <div class="ugc-steps-title">איך זה עובד אצלנו</div>
                     <div class="ugc-step reveal" style="transition-delay:0.1s">
                         <div class="ugc-step-icon">
                             <img src="סמלים קריאטיב/10.webp" alt="" class="ugc-step-img">
                         </div>
                         <div class="ugc-step-body">
-                            <h4 data-edit="ugc-section.h4">בריף ממוקד מכירה</h4>
-                            <p data-edit="ugc-section.p-2">לא "עשה משהו יצירתי". בוחרים מוצר לפי רווחיות וכותבים בריף עם הוק, התנגדות ו-CTA שנבדקו מול הדאטה.</p>
+                            <h4>בריף ממוקד מכירה</h4>
+                            <p>לא "עשה משהו יצירתי". בוחרים מוצר לפי רווחיות וכותבים בריף עם הוק, התנגדות ו-CTA שנבדקו מול הדאטה.</p>
                         </div>
                     </div>
                     <div class="ugc-step-connector"></div>
@@ -5407,8 +5440,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             <img src="סמלים קריאטיב/11.webp" alt="" class="ugc-step-img">
                         </div>
                         <div class="ugc-step-body">
-                            <h4 data-edit="ugc-section.h4-2">בחירת יוצר מהרשת שלנו</h4>
-                            <p data-edit="ugc-section.p-3">רשת יוצרים מאומתת — מותאמת לקטגוריית המוצר, לקהל הקונים ולפלטפורמה שלכם.</p>
+                            <h4>בחירת יוצר מהרשת שלנו</h4>
+                            <p>רשת יוצרים מאומתת — מותאמת לקטגוריית המוצר, לקהל הקונים ולפלטפורמה שלכם.</p>
                         </div>
                     </div>
                     <div class="ugc-step-connector"></div>
@@ -5417,8 +5450,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             <img src="סמלים קריאטיב/12.webp" alt="" class="ugc-step-img">
                         </div>
                         <div class="ugc-step-body">
-                            <h4 data-edit="ugc-section.h4-3">הפקה + QC מלא</h4>
-                            <p data-edit="ugc-section.p-4">המוצר נשלח ליוצר, התוכן עובר Quality Control לפני שמגיע אליכם. בלי הפתעות, בלי חזרות אין-סופיות.</p>
+                            <h4>הפקה + QC מלא</h4>
+                            <p>המוצר נשלח ליוצר, התוכן עובר Quality Control לפני שמגיע אליכם. בלי הפתעות, בלי חזרות אין-סופיות.</p>
                         </div>
                     </div>
                     <div class="ugc-step-connector"></div>
@@ -5427,8 +5460,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             <img src="סמלים קריאטיב/13.webp" alt="" class="ugc-step-img">
                         </div>
                         <div class="ugc-step-body">
-                            <h4 data-edit="ugc-section.h4-4">השקה, מדידה ואופטימיזציה</h4>
-                            <p data-edit="ugc-section.p-5">ה-UGC נכנס לקמפיין ונמדד לפי רכישות בפועל, לא לפי צפיות. הדאטה מחליט מה ממשיך לרוץ.</p>
+                            <h4>השקה, מדידה ואופטימיזציה</h4>
+                            <p>ה-UGC נכנס לקמפיין ונמדד לפי רכישות בפועל, לא לפי צפיות. הדאטה מחליט מה ממשיך לרוץ.</p>
                         </div>
                     </div>
                 </div>
@@ -5436,8 +5469,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
 
             <div class="ugc-cta-wrap reveal">
-                <p data-edit="ugc-section.ugc-cta-text" class="ugc-cta-text">רוצים לראות איך UGC יכול למכור את המוצרים שלכם?</p>
-                <a data-edit="ugc-section.btn" href="#lead-form" class="btn ugc-btn">בואו נדבר על קריאטיב ←</a>
+                <p class="ugc-cta-text">רוצים לראות איך UGC יכול למכור את המוצרים שלכם?</p>
+                <a href="#lead-form" class="btn ugc-btn">בואו נדבר על קריאטיב →</a>
             </div>
 
         </div>
@@ -5909,8 +5942,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <canvas id="growthChart"></canvas>
             </div>
             <div class="chart-bottom">
-                <p class="chart-tagline"><span data-edit="chart-section.chart-tagline" data-edit-wrap="1">ככה נראית חנות שמנוהלת לפי רווח ולא לפי ROAS מדווח:</span> <strong data-edit="chart-section.strong">התקציב עולה, עלות הרכישה יורדת, והסל הממוצע גדל.</strong></p>
-                <a data-edit="chart-section.btn-chart" href="#lead-form" class="btn-chart">דברו איתנו ←</a>
+                <p class="chart-tagline">צמיחת מכירות לחנות אונליין – באופן <strong>שיטתי, מדיד ורווחי.</strong></p>
+                <a href="#lead-form" class="btn-chart">דברו איתנו</a>
             </div>
         </div>
     </section>
@@ -6855,36 +6888,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <section class="who-section" id="who">
         <div class="who-container">
             <div class="section-header reveal">
-                <div data-edit="who.section-tag" class="section-tag">בדקו התאמה</div>
-                <h2 data-edit="who.section-title" class="section-title">בשבילכם או לא?</h2>
-                <p data-edit="who.section-subtitle" class="section-subtitle">אנחנו עובדים עם חנויות איקומרס בלבד — ולא מתביישים להגיד את זה</p>
+                <div class="section-tag">בדקו התאמה</div>
+                <h2 class="section-title">בשבילכם או לא?</h2>
+                <p class="section-subtitle">אנחנו עובדים עם חנויות איקומרס בלבד  ולא מתביישים להגיד את זה</p>
             </div>
 
             <div class="who-card">
                 <div class="who-half who-for reveal-right">
                     <div class="who-half-header">
                         <div class="who-half-icon">✓</div>
-                        <h3 data-edit="who.h3">מתאים בדיוק אם...</h3>
+                        <h3>מתאים בדיוק אם...</h3>
                     </div>
                     <ul class="who-list">
-                        <li><span class="icon">✓</span> <span data-edit="who.li" data-edit-wrap="1">יש לכם חנות אונליין פעילה עם מכירות (Shopify, WooCommerce, Wix או Magento)</span></li>
-                        <li><span class="icon">✓</span> <span data-edit="who.li-2" data-edit-wrap="1">תקציב מדיה של לפחות ₪5,000 בחודש</span></li>
-                        <li><span class="icon">✓</span> <span data-edit="who.li-3" data-edit-wrap="1">אתם מכירים את שולי הרווח שלכם ומוכנים לנהל לפי רווח, לא לפי ROAS מדווח</span></li>
-                        <li><span class="icon">✓</span> <span data-edit="who.li-4" data-edit-wrap="1">אתם רוצים שותף לצמיחת החנות, לא סתם "מנהל קמפיינים"</span></li>
-                        <li><span class="icon">✓</span> <span data-edit="who.li-5" data-edit-wrap="1">יש לכם מלאי ותפעול שיכולים לעמוד בגידול בהזמנות</span></li>
+                        <li><span class="icon">✓</span> יש לכם חנות אונליין פעילה עם מכירות (Shopify, WooCommerce, Wix או Magento)</li>
+                        <li><span class="icon">✓</span> תקציב מדיה של לפחות ₪5,000 בחודש</li>
+                        <li><span class="icon">✓</span> אתם מכירים את שולי הרווח שלכם ומוכנים לנהל לפי רווח, לא לפי ROAS מדווח</li>
+                        <li><span class="icon">✓</span> אתם רוצים שותף לצמיחת החנות, לא סתם "מנהל קמפיינים"</li>
+                        <li><span class="icon">✓</span> יש לכם מלאי ותפעול שיכולים לעמוד בגידול בהזמנות</li>
                     </ul>
                 </div>
                 <div class="who-divider"></div>
                 <div class="who-half who-not reveal-left">
                     <div class="who-half-header">
                         <div class="who-half-icon">✕</div>
-                        <h3 data-edit="who.h3-2">לא מתאים אם...</h3>
+                        <h3>לא מתאים אם...</h3>
                     </div>
                     <ul class="who-list">
-                        <li><span class="icon">✕</span> <span data-edit="who.li-6" data-edit-wrap="1">אתם עסק שירותים, B2B או מרפאה שמחפש לידים — אנחנו לא עושים את זה</span></li>
-                        <li><span class="icon">✕</span> <span data-edit="who.li-7" data-edit-wrap="1">החנות עוד לא עלתה לאוויר או שאין בה מכירות בכלל</span></li>
-                        <li><span class="icon">✕</span> <span data-edit="who.li-8" data-edit-wrap="1">מחפשים את "הזול ביותר" — אנחנו לא זולים, ואנחנו לא מתנצלים על זה</span></li>
-                        <li><span class="icon">✕</span> <span data-edit="who.li-9" data-edit-wrap="1">מצפים שפרסום ממומן יפצה על מוצר, מחיר או אתר שלא ממירים</span></li>
+                        <li><span class="icon">✕</span> אתם עסק שירותים, B2B או מרפאה שמחפש לידים — אנחנו לא עושים את זה</li>
+                        <li><span class="icon">✕</span> החנות עוד לא עלתה לאוויר או שאין בה מכירות בכלל</li>
+                        <li><span class="icon">✕</span> מחפשים את "הזול ביותר" — אנחנו לא הכי זולים, אנחנו הכי אפקטיביים</li>
+                        <li><span class="icon">✕</span> מצפים שפרסום ממומן יפצה על מוצר, מחיר או אתר שלא ממירים</li>
                     </ul>
                 </div>
             </div>
@@ -6895,9 +6928,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <section class="quiz-section reveal" id="quiz">
         <div class="quiz-container">
             <div class="section-header reveal">
-                <div data-edit="quiz.section-tag" class="section-tag">אבחון חינמי לחנויות איקומרס</div>
-                <h2 class="section-title"><span data-edit="quiz.section-title" data-edit-wrap="1">בדקו את החנות שלכם</span><br><span data-edit="quiz.span" style="color: var(--teal);">ב-2 דקות</span></h2>
-                <p data-edit="quiz.p" style="color: var(--gray-light); margin-top: 12px;">6 שאלות. תמונה מלאה על מה שמעכב את המכירות.</p>
+                <div class="section-tag">אבחון חינמי לחנויות איקומרס</div>
+                <h2 class="section-title">בדקו את החנות שלכם<br><span style="color: var(--teal);">ב-2 דקות</span></h2>
+                <p style="color: var(--gray-light); margin-top: 12px;">6 שאלות. תמונה מלאה על מה שמעכב את המכירות.</p>
             </div>
 
             <div class="quiz-wrapper">
@@ -6910,57 +6943,57 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                 <div id="quizQuestions">
                     <div class="quiz-question active" data-q="0">
-                        <h3 data-edit="quiz.h3">מה הכי מתאר את החנות שלכם?</h3>
+                        <h3>מה הכי מתאר את החנות שלכם?</h3>
                         <div class="quiz-options">
-                            <button data-edit="quiz.quiz-option" class="quiz-option" data-score="0">מותג D2C שמוכר מוצרים משלו</button>
-                            <button data-edit="quiz.quiz-option-2" class="quiz-option" data-score="0">חנות שמוכרת מוצרים של מותגים אחרים</button>
-                            <button data-edit="quiz.quiz-option-3" class="quiz-option" data-score="0">חנות אונליין וגם חנות פיזית</button>
-                            <button data-edit="quiz.quiz-option-4" class="quiz-option" data-score="0">עוד לא מוכרים אונליין / החנות בהקמה</button>
+                            <button class="quiz-option" data-score="0">מותג D2C שמוכר מוצרים משלו</button>
+                            <button class="quiz-option" data-score="0">חנות שמוכרת מוצרים של מותגים אחרים</button>
+                            <button class="quiz-option" data-score="0">חנות אונליין וגם חנות פיזית</button>
+                            <button class="quiz-option" data-score="0">עוד לא מוכרים אונליין / החנות בהקמה</button>
                         </div>
                     </div>
                     <div class="quiz-question" data-q="1">
-                        <h3 data-edit="quiz.h3-2">מה ה-ROAS הנוכחי של החנות?</h3>
+                        <h3>מה ה-ROAS הנוכחי של החנות?</h3>
                         <div class="quiz-options">
-                            <button data-edit="quiz.quiz-option-5" class="quiz-option" data-score="5">מתחת ל-2 — הפרסום לא מכסה את העלויות</button>
-                            <button data-edit="quiz.quiz-option-6" class="quiz-option" data-score="0">לא יודעים — אין מדידה אמינה</button>
-                            <button data-edit="quiz.quiz-option-7" class="quiz-option" data-score="12">בין 2 ל-3.5 — מכסה עלויות אבל לא גדל</button>
-                            <button data-edit="quiz.quiz-option-8" class="quiz-option" data-score="20">מעל 3.5 — רווחי, רוצים לצמוח</button>
+                            <button class="quiz-option" data-score="5">מתחת ל-2 — הפרסום לא מכסה את העלויות</button>
+                            <button class="quiz-option" data-score="0">לא יודעים — אין מדידה אמינה</button>
+                            <button class="quiz-option" data-score="12">בין 2 ל-3.5 — מכסה עלויות אבל לא גדל</button>
+                            <button class="quiz-option" data-score="20">מעל 3.5 — רווחי, רוצים לצמוח</button>
                         </div>
                     </div>
                     <div class="quiz-question" data-q="2">
-                        <h3 data-edit="quiz.h3-3">עד כמה מדידת הרכישות שלכם מדויקת?</h3>
+                        <h3>עד כמה מדידת הרכישות שלכם מדויקת?</h3>
                         <div class="quiz-options">
-                            <button data-edit="quiz.quiz-option-9" class="quiz-option" data-score="25">מדויקת — CAPI, GA4 והחנות מסונכרנים</button>
-                            <button data-edit="quiz.quiz-option-10" class="quiz-option" data-score="12">בערך — פיקסל בלבד, לא בטוחים במספרים</button>
-                            <button data-edit="quiz.quiz-option-11" class="quiz-option" data-score="5">יש פערים גדולים בין הפלטפורמה לדוח המכירות</button>
-                            <button data-edit="quiz.quiz-option-12" class="quiz-option" data-score="0">בכלל לא — אין מעקב רכישות</button>
+                            <button class="quiz-option" data-score="25">מדויקת — CAPI, GA4 והחנות מסונכרנים</button>
+                            <button class="quiz-option" data-score="12">בערך — פיקסל בלבד, לא בטוחים במספרים</button>
+                            <button class="quiz-option" data-score="5">יש פערים גדולים בין הפלטפורמה לדוח המכירות</button>
+                            <button class="quiz-option" data-score="0">בכלל לא — אין מעקב רכישות</button>
                         </div>
                     </div>
                     <div class="quiz-question" data-q="3">
-                        <h3 data-edit="quiz.h3-4">מה מצב פיד המוצרים שלכם ב-Merchant Center?</h3>
+                        <h3>מה מצב פיד המוצרים שלכם ב-Merchant Center?</h3>
                         <div class="quiz-options">
-                            <button data-edit="quiz.quiz-option-13" class="quiz-option" data-score="15">מאופטם — כותרות, תמונות ו-Custom Labels</button>
-                            <button data-edit="quiz.quiz-option-14" class="quiz-option" data-score="10">קיים אבל בסיסי — מה שהחנות מייצאת אוטומטית</button>
-                            <button data-edit="quiz.quiz-option-15" class="quiz-option" data-score="3">יש דחיות ושגיאות שלא טופלו</button>
-                            <button data-edit="quiz.quiz-option-16" class="quiz-option" data-score="0">אין פיד / לא מפרסמים ב-Shopping</button>
+                            <button class="quiz-option" data-score="15">מאופטם — כותרות, תמונות ו-Custom Labels</button>
+                            <button class="quiz-option" data-score="10">קיים אבל בסיסי — מה שהחנות מייצאת אוטומטית</button>
+                            <button class="quiz-option" data-score="3">יש דחיות ושגיאות שלא טופלו</button>
+                            <button class="quiz-option" data-score="0">אין פיד / לא מפרסמים ב-Shopping</button>
                         </div>
                     </div>
                     <div class="quiz-question" data-q="4">
-                        <h3 data-edit="quiz.h3-5">כל כמה זמן אתם מחליפים קריאטיב?</h3>
+                        <h3>כל כמה זמן אתם מחליפים קריאטיב?</h3>
                         <div class="quiz-options">
-                            <button data-edit="quiz.quiz-option-17" class="quiz-option" data-score="20">שבוע-שבועיים — מחליפים בקצב גבוה</button>
-                            <button data-edit="quiz.quiz-option-18" class="quiz-option" data-score="12">חודש בערך</button>
-                            <button data-edit="quiz.quiz-option-19" class="quiz-option" data-score="4">כמה חודשים — אותו קריאטיב לאורך זמן</button>
-                            <button data-edit="quiz.quiz-option-20" class="quiz-option" data-score="0">לא מחליפים / לא עוקבים אחרי זה</button>
+                            <button class="quiz-option" data-score="20">שבוע-שבועיים — מחליפים בקצב גבוה</button>
+                            <button class="quiz-option" data-score="12">חודש בערך</button>
+                            <button class="quiz-option" data-score="4">כמה חודשים — אותו קריאטיב לאורך זמן</button>
+                            <button class="quiz-option" data-score="0">לא מחליפים / לא עוקבים אחרי זה</button>
                         </div>
                     </div>
                     <div class="quiz-question" data-q="5">
-                        <h3 data-edit="quiz.h3-6">כשמנסים להגדיל תקציב — מה קורה למכירות?</h3>
+                        <h3>כשמנסים להגדיל תקציב — מה קורה למכירות?</h3>
                         <div class="quiz-options">
-                            <button data-edit="quiz.quiz-option-21" class="quiz-option" data-score="8">ה-ROAS נפל מיד</button>
-                            <button data-edit="quiz.quiz-option-22" class="quiz-option" data-score="0">מפחדים לגעת בתקציב</button>
-                            <button data-edit="quiz.quiz-option-23" class="quiz-option" data-score="12">עבד, אבל לאט ועם תנודות</button>
-                            <button data-edit="quiz.quiz-option-24" class="quiz-option" data-score="20">כן, עובד מצוין — הגדלנו בהצלחה</button>
+                            <button class="quiz-option" data-score="8">ה-ROAS נפל מיד</button>
+                            <button class="quiz-option" data-score="0">מפחדים לגעת בתקציב</button>
+                            <button class="quiz-option" data-score="12">עבד, אבל לאט ועם תנודות</button>
+                            <button class="quiz-option" data-score="20">כן, עובד מצוין — הגדלנו בהצלחה</button>
                         </div>
                     </div>
                 </div>
@@ -6984,13 +7017,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     </div>
 
                     <div class="quiz-recommendations" id="quizRecommendations">
-                        <h4 data-edit="quiz.h4">ההמלצות שלנו עבורכם</h4>
+                        <h4>ההמלצות שלנו עבורכם</h4>
                         <div id="recItem1" class="quiz-rec-item"></div>
                         <div id="recItem2" class="quiz-rec-item"></div>
                     </div>
 
                     <div class="quiz-score-locked" id="scoreLockedMsg">
-                        <p data-edit="quiz.p-2">🔒 השאירו פרטים לגלות את ציון החנות וההמלצות שלכם</p>
+                        <p>🔒 השאירו פרטים לגלות את ציון החנות וההמלצות שלכם</p>
                     </div>
 
                     <form class="quiz-lead-form" id="quizLeadForm" onsubmit="handleQuizSubmit(event)" aria-label="טופס קבלת אבחון">
@@ -7004,10 +7037,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         </div>
                         <label class="consent-label">
                             <input type="checkbox" class="consent-checkbox" id="quizConsent" required>
-                            <span class="consent-text"><span data-edit="quiz.consent-text" data-edit-wrap="1">אני מאשר/ת את</span> <a data-edit="quiz.consent-link" href="privacy.html" target="_blank" class="consent-link">מדיניות הפרטיות</a></span>
+                            <span class="consent-text">אני מאשר/ת את <a href="privacy.html" target="_blank" class="consent-link">מדיניות הפרטיות</a></span>
                         </label>
-                        <button data-edit="quiz.cta-button" type="submit" class="cta-button" style="width:100%; justify-content:center;">
-                            קבלו אבחון חינם ←
+                        <button type="submit" class="cta-button" style="width:100%; justify-content:center;">
+                            קבל אבחון חינם ←
                         </button>
                     </form>
                 </div>
@@ -7122,9 +7155,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <section class="urgency-section">
         <div class="urgency-ticket reveal">
             <div class="ticket-header">
-                <div data-edit="urgency-section.ticket-label-top" class="ticket-label-top">בלעדיות קטגוריה</div>
-                <span class="ticket-big-number">1</span>
-                <span data-edit="urgency-section.ticket-big-label" class="ticket-big-label">חנות אחת בכל קטגוריה</span>
+                <div class="ticket-label-top">🔥 זמינות מוגבלת</div>
+                <span class="ticket-big-number">3</span>
+                <span class="ticket-big-label">מקומות אחרונים לחנויות חדשות</span>
             </div>
             <div class="ticket-tear">
                 <div class="ticket-notch"></div>
@@ -7132,16 +7165,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <div class="ticket-notch"></div>
             </div>
             <div class="ticket-body">
-                <h2><span data-edit="urgency-section.h2" data-edit-wrap="1">למה דווקא</span> <span data-edit="urgency-section.span" style="color:#FF5500;">עכשיו?</span></h2>
-                <p data-edit="urgency-section.p">
-                    אנחנו לא לוקחים שתי חנויות מאותה קטגוריה — כדי לא להתחרות בעצמנו
-                    על אותם קונים. כשקטגוריה נתפסת, היא סגורה כל עוד הלקוח איתנו.
+                <h2>למה דווקא <span style="color:#FF5500;">עכשיו?</span></h2>
+                <p>
+                    אנחנו עובדים עם מספר מוגבל של חנויות בו-זמנית, ולא לוקחים שתי חנויות
+                    מאותה קטגוריה — כדי לא להתחרות בעצמנו על אותם קונים. ברגע שהמקומות מתמלאים, הרשימה נסגרת.
                 </p>
-                <p data-edit="urgency-section.p-2" style="font-size:15px!important; color:#777!important;">
-                    אם הקטגוריה שלכם עדיין פנויה, כדאי לדבר לפני שמישהו אחר תופס אותה.
+                <p style="font-size:15px!important; color:#777!important;">
+                    כל יום שעובר עם פיד לא תקין ומדידה חלקית הוא יום שהמתחרים שלכם
+                    קונים את הקליקים שלכם. אל תדחו את ההחלטה הזאת.
                 </p>
                 <a href="#lead-form" class="cta-button" style="margin-top:8px;">
-                    <span data-edit="urgency-section.cta-button" data-edit-wrap="1">בדקו אם הקטגוריה פנויה</span>
+                    שריינו מקום עכשיו
                     <span>←</span>
                 </a>
             </div>
@@ -7152,20 +7186,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <section class="newsletter-section">
         <div class="newsletter-inner">
             <div class="newsletter-visual">
-                <h2><span data-edit="newsletter-section.h2" data-edit-wrap="1">עוד לא בשלים ל</span><span data-edit="newsletter-section.span" style="color: var(--teal);">שיחה?</span></h2>
-                <p data-edit="newsletter-section.p">קחו את הבנצ'מרקים למייל. טיפים מעשיים, עדכוני פלטפורמות ותובנות על פרסום לחנויות אונליין — פעם בשבוע.</p>
+                <h2>הצטרפו ל<span style="color: var(--teal);">ניוזלטר</span> שלנו</h2>
+                <p>טיפים מעשיים, עדכוני פלטפורמות ותובנות על פרסום לחנויות אונליין — ישירות למייל, פעם בשבוע.</p>
                 <div class="newsletter-perks">
                     <div class="newsletter-perk">
                         <div class="newsletter-perk-dot"></div>
-                        <span data-edit="newsletter-section.newsletter-perk" data-edit-wrap="1">בנצ'מרקים אמיתיים של ROAS ועלות רכישה לפי קטגוריה</span>
+                        בנצ'מרקים אמיתיים של ROAS ועלות רכישה לפי קטגוריה
                     </div>
                     <div class="newsletter-perk">
                         <div class="newsletter-perk-dot"></div>
-                        <span data-edit="newsletter-section.newsletter-perk-2" data-edit-wrap="1">טקטיקות פיד, קריאטיב וסקייל שעובדות עכשיו — לא תיאוריה</span>
+                        טקטיקות פיד, קריאטיב וסקייל שעובדות עכשיו — לא תיאוריה
                     </div>
                     <div class="newsletter-perk">
                         <div class="newsletter-perk-dot"></div>
-                        <span data-edit="newsletter-section.newsletter-perk-3" data-edit-wrap="1">ללא ספאם. ביטול בכל עת</span>
+                        ללא ספאם. ביטול בכל עת
                     </div>
                 </div>
             </div>
@@ -7184,9 +7218,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 </select>
                 <label class="consent-label">
                     <input type="checkbox" id="nl-consent" class="consent-checkbox" required>
-                    <span data-edit="newsletter-section.consent-text" class="consent-text">אני מאשר לקבל דיוור אלקטרוני.</span>
+                    <span class="consent-text">אני מאשר לקבל דיוור אלקטרוני.</span>
                 </label>
-                <button data-edit="newsletter-section.cta-button" type="submit" id="nl-btn" class="cta-button newsletter-submit">הצטרפו</button>
+                <button type="submit" id="nl-btn" class="cta-button newsletter-submit">הצטרפו</button>
             </form>
             <div class="nl-3d-obj" aria-hidden="true">
                 <img src="סמל ניוזלטר/RPG LOGO (4).webp" alt="" class="nl-symbol-img">
@@ -7198,81 +7232,81 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <section class="faq-section" id="faq">
         <div class="faq-container">
             <div class="faq-header-col reveal">
-                <div data-edit="faq.section-tag" class="section-tag">שאלות נפוצות</div>
-                <h2 data-edit="faq.section-title" data-edit-multiline="1" class="section-title" style="text-align:right; margin-top: 16px;">בטח יש לכם שאלות —<br>הנה התשובות</h2>
+                <div class="section-tag">שאלות נפוצות</div>
+                <h2 class="section-title" style="text-align:right; margin-top: 16px;">בטח יש לכם שאלות —<br>הנה התשובות</h2>
             </div>
 
             <div class="faq-items-col">
             <div class="faq-item reveal">
                 <div class="faq-question">
-                    <span data-edit="faq.span">אתם עובדים רק עם חנויות איקומרס?</span>
+                    <span>אתם עובדים רק עם חנויות איקומרס?</span>
                     <span class="faq-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p data-edit="faq.p">כן. RPG Digital מתמחה בחנויות איקומרס ומותגי D2C בלבד. זה כל מה שאנחנו עושים, וזו הסיבה שאנחנו מהירים יותר: אנחנו כבר מכירים את צווארי הבקבוק של חנות אונליין — פיד מוצרים, מדידת רכישות, עגלות נטושות, סל ממוצע ורווחיות אמיתית אחרי עלות סחורה. אנחנו לא מנהלים קמפיינים לעסקי שירותים או B2B.</p>
+                    <p>כן. RPG Digital מתמחה בחנויות איקומרס ומותגי D2C בלבד. זה כל מה שאנחנו עושים, וזו הסיבה שאנחנו מהירים יותר: אנחנו כבר מכירים את צווארי הבקבוק של חנות אונליין  פיד מוצרים, מדידת רכישות, עגלות נטושות, סל ממוצע ורווחיות אמיתית אחרי עלות סחורה. אנחנו לא מנהלים קמפיינים לעסקי שירותים או B2B.</p>
                 </div>
             </div>
             <div class="faq-item reveal">
                 <div class="faq-question">
-                    <span data-edit="faq.span-2">כמה עולה השירות?</span>
+                    <span>כמה עולה השירות?</span>
                     <span class="faq-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p data-edit="faq.p-2">המחיר נקבע לפי מחזור החנות, תקציב המדיה החודשי ומספר הערוצים. אנחנו מתאימים חבילה ייעודית לכל חנות. בשיחת האסטרטגיה נעבור על הנתונים שלכם וניתן הצעה שקופה — בלי הפתעות.</p>
+                    <p>המחיר נקבע לפי מחזור החנות, תקציב המדיה החודשי ומספר הערוצים. אנחנו מתאימים חבילה ייעודית לכל חנות. בשיחת האסטרטגיה נעבור על הנתונים שלכם וניתן הצעה שקופה  בלי הפתעות.</p>
                 </div>
             </div>
             <div class="faq-item reveal">
                 <div class="faq-question">
-                    <span data-edit="faq.span-3">תוך כמה זמן רואים עלייה במכירות?</span>
+                    <span>תוך כמה זמן רואים עלייה במכירות?</span>
                     <span class="faq-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p data-edit="faq.p-3">בשבועיים הראשונים אנחנו בדרך כלל מתקנים את מה שדולף — מדידת רכישות שבורה, פיד מוצרים לא תקין וקהלי רימרקטינג חסרים — וזה כבר מייצר שיפור. עלייה משמעותית ויציבה ב-ROAS ובמכירות נראית תוך 60-90 יום. אנחנו לא מבטיחים "תוצאות בן לילה", אבל כן מבטיחים תהליך מדיד עם שקיפות מלאה.</p>
+                    <p>בשבועיים הראשונים אנחנו בדרך כלל מתקנים את מה שדולף  מדידת רכישות שבורה, פיד מוצרים לא תקין וקהלי רימרקטינג חסרים  וזה כבר מייצר שיפור. עלייה משמעותית ויציבה ב-ROAS ובמכירות נראית תוך 60-90 יום. אנחנו לא מבטיחים "תוצאות בן לילה", אבל כן מבטיחים תהליך מדיד עם שקיפות מלאה.</p>
                 </div>
             </div>
             <div class="faq-item reveal">
                 <div class="faq-question">
-                    <span data-edit="faq.span-4">עם אילו פלטפורמות חנות אתם עובדים?</span>
+                    <span>עם אילו פלטפורמות חנות אתם עובדים?</span>
                     <span class="faq-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p data-edit="faq.p-4">Shopify, WooCommerce, Wix eCommerce, Magento וגם חנויות בפיתוח עצמי. אנחנו מחברים מדידת רכישות מלאה (Server-Side ו-Conversions API), מזרימים פיד מוצרים תקין ל-Google Merchant Center ולקטלוג של Meta, ומחברים את הדאטה למערכת הדיוור שלכם.</p>
+                    <p>Shopify, WooCommerce, Wix eCommerce, Magento וגם חנויות בפיתוח עצמי. אנחנו מחברים מדידת רכישות מלאה (Server-Side ו-Conversions API), מזרימים פיד מוצרים תקין ל-Google Merchant Center ולקטלוג של Meta, ומחברים את הדאטה למערכת הדיוור שלכם.</p>
                 </div>
             </div>
             <div class="faq-item reveal">
                 <div class="faq-question">
-                    <span data-edit="faq.span-5">אני כבר עובד עם מפרסם. למה לעבור אליכם?</span>
+                    <span>אני כבר עובד עם מפרסם. למה לעבור אליכם?</span>
                     <span class="faq-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p data-edit="faq.p-5">אם אתם מרוצים מהתוצאות — אל תעברו. אבל אם ה-ROAS תקוע, אם אי אפשר להגדיל תקציב בלי שהמכירות נופלות, או שאתם לא באמת יודעים כמה רווח נשאר אחרי עלות המדיה ועלות הסחורה — שיחה איתנו תיתן לכם פרספקטיבה חדשה. בחינם.</p>
+                    <p>אם אתם מרוצים מהתוצאות  אל תעברו. אבל אם ה-ROAS תקוע, אם אי אפשר להגדיל תקציב בלי שהמכירות נופלות, או שאתם לא באמת יודעים כמה רווח נשאר אחרי עלות המדיה ועלות הסחורה  שיחה איתנו תיתן לכם פרספקטיבה חדשה. בחינם.</p>
                 </div>
             </div>
             <div class="faq-item reveal">
                 <div class="faq-question">
-                    <span data-edit="faq.span-6">מה ההבדל ביניכם לכל סוכנות פרסום אחרת?</span>
+                    <span>מה ההבדל ביניכם לכל סוכנות פרסום אחרת?</span>
                     <span class="faq-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p data-edit="faq.p-6">שני דברים: התמחות ודאטה. אנחנו עובדים רק עם איקומרס, ולכן לא לומדים את הקטגוריה על החשבון שלכם. ואנחנו מנהלים לפי מספרים — ROAS ברמת מוצר, עלות רכישת לקוח מול שולי הרווח, ודשבורד שמראה בזמן אמת מה נמכר ובאיזו רווחיות. רוב הסוכנויות מסתכלות על ROAS בפלטפורמה. אנחנו מסתכלים על הרווח בקופה.</p>
+                    <p>שני דברים: התמחות ודאטה. אנחנו עובדים רק עם איקומרס, ולכן לא לומדים את הקטגוריה על החשבון שלכם. ואנחנו מנהלים לפי מספרים  ROAS ברמת מוצר, עלות רכישת לקוח מול שולי הרווח, ודשבורד שמראה בזמן אמת מה נמכר ובאיזו רווחיות. רוב הסוכנויות מסתכלות על ROAS בפלטפורמה. אנחנו מסתכלים על הרווח בקופה.</p>
                 </div>
             </div>
             <div class="faq-item reveal">
                 <div class="faq-question">
-                    <span data-edit="faq.span-7">מה קורה אם אני רוצה להפסיק?</span>
+                    <span>מה קורה אם אני רוצה להפסיק?</span>
                     <span class="faq-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p data-edit="faq.p-7">אין התחייבות ואין חוזים מכבילים. אנחנו מאמינים שלקוח שנשאר — נשאר בגלל תוצאות, לא בגלל חוזה. תודיעו חודש מראש וזהו. חשבונות המודעות, הפיד והדאטה נשארים בבעלותכם המלאה.</p>
+                    <p>אין התחייבות ואין חוזים מכבילים. אנחנו מאמינים שלקוח שנשאר  נשאר בגלל תוצאות, לא בגלל חוזה. תודיעו חודש מראש וזהו. חשבונות המודעות, הפיד והדאטה נשארים בבעלותכם המלאה.</p>
                 </div>
             </div>
             <div class="faq-item reveal">
                 <div class="faq-question">
-                    <span data-edit="faq.span-8">האם אתם עובדים גם עם חנויות קטנות?</span>
+                    <span>האם אתם עובדים גם עם חנויות קטנות?</span>
                     <span class="faq-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p data-edit="faq.p-8">כן, בתנאי שתקציב המדיה החודשי הוא לפחות ₪5,000 ושיש בחנות מכירות קיימות. מתחת לזה אין מספיק אירועי רכישה כדי שהאלגוריתמים ילמדו והשיטה שלנו תעבוד במלואה.</p>
+                    <p>כן, בתנאי שתקציב המדיה החודשי הוא לפחות ₪5,000 ושיש בחנות מכירות קיימות. מתחת לזה אין מספיק אירועי רכישה כדי שהאלגוריתמים ילמדו והשיטה שלנו תעבוד במלואה.</p>
                 </div>
             </div>
             </div><!-- end faq-items-col -->
@@ -7283,50 +7317,50 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <section class="lead-section" id="lead-form">
         <div class="lead-container">
             <div class="lead-text-col reveal">
-                <div data-edit="lead-form.section-tag" class="section-tag" style="margin-bottom: 20px;">צרו קשר</div>
-                <h2><span data-edit="lead-form.h2" data-edit-wrap="1">מוכנים להפסיק לנחש</span><br><span data-edit="lead-form.h2-2" data-edit-wrap="1">ולהתחיל</span> <span data-edit="lead-form.span" style="color: var(--teal);">למכור?</span></h2>
-                <p data-edit="lead-form.lead-desc" class="lead-desc">השאירו פרטים ונחזור אליכם תוך יום עסקים אחד. נסתכל על החנות לפני שנדבר.</p>
+                <div class="section-tag" style="margin-bottom: 20px;">צרו קשר</div>
+                <h2>מוכנים להפסיק לנחש<br>ולהתחיל <span style="color: var(--teal);">למכור?</span></h2>
+                <p class="lead-desc">השאירו פרטים ונחזור אליכם תוך 24 שעות עם תוכנית פעולה מותאמת לחנות שלכם</p>
             </div>
 
             <div class="lead-form-card reveal">
                 <form class="lead-form" id="leadForm" onsubmit="handleSubmit(event)">
                     <div class="form-row">
                         <div class="form-field">
-                            <label data-edit="lead-form.form-label" class="form-label" for="name">שם מלא *</label>
+                            <label class="form-label" for="name">שם מלא *</label>
                             <input type="text" id="name" class="form-input" placeholder="ישראל ישראלי" required>
                         </div>
                         <div class="form-field">
-                            <label data-edit="lead-form.form-label-2" class="form-label" for="business">שם החנות / כתובת האתר *</label>
+                            <label class="form-label" for="business">שם החנות / כתובת האתר *</label>
                             <input type="text" id="business" class="form-input" placeholder="שם המותג או כתובת החנות" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-field">
-                            <label data-edit="lead-form.form-label-3" class="form-label" for="phone">טלפון *</label>
+                            <label class="form-label" for="phone">טלפון *</label>
                             <input type="tel" id="phone" class="form-input" placeholder="050-0000000" required>
                         </div>
                         <div class="form-field">
-                            <label data-edit="lead-form.form-label-4" class="form-label" for="email">אימייל</label>
+                            <label class="form-label" for="email">אימייל</label>
                             <input type="email" id="email" class="form-input" placeholder="name@company.com">
                         </div>
                     </div>
                     <div class="form-field">
-                        <label data-edit="lead-form.form-label-5" class="form-label" for="budget">תקציב מדיה חודשי (לא חובה)</label>
-                        <input type="text" id="budget" class="form-input" placeholder="עוזר לנו להכין הצעה מדויקת">
+                        <label class="form-label" for="budget">תקציב מדיה חודשי</label>
+                        <input type="text" id="budget" class="form-input" placeholder="לא חובהעוזר לנו להכין הצעה מדויקת">
                     </div>
                     <div class="form-field">
-                        <label data-edit="lead-form.form-label-6" class="form-label" for="message">מה האתגר המרכזי שלכם עכשיו? (לא חובה)</label>
-                        <textarea id="message" class="form-input" placeholder="שורה אחת מספיקה"></textarea>
+                        <label class="form-label" for="message">ספרו לנו על החנות</label>
+                        <textarea id="message" class="form-input" placeholder="על איזו פלטפורמה החנות? מה המחזור החודשי? מה ה-ROAS היום ומה האתגר המרכזי שלכם?"></textarea>
                     </div>
                     <div class="lead-form-divider"></div>
                     <label class="consent-label">
                         <input type="checkbox" id="consent" class="consent-checkbox" required>
                         <span class="consent-text">
-                            <span data-edit="lead-form.consent-text" data-edit-wrap="1">אני מאשר/ת את</span> <a data-edit="lead-form.consent-link" href="privacy.html" target="_blank" class="consent-link">מדיניות הפרטיות</a> <span data-edit="lead-form.consent-text-2" data-edit-wrap="1">של האתר וכי מאשר/ת לקבל תוכן מקצועי, עדכונים והצעות פרסומיות.</span>
+                            אני מאשר/ת את <a href="privacy.html" target="_blank" class="consent-link">מדיניות הפרטיות</a> של האתר וכי מאשר/ת לקבל תוכן מקצועי, עדכונים והצעות פרסומיות.
                         </span>
                     </label>
                     <button type="submit" class="cta-button form-submit">
-                        <span data-edit="lead-form.cta-button" data-edit-wrap="1">שלחו — ונחזור אליכם</span>
+                        שלחו ונתחיל לעבוד
                         <span>←</span>
                     </button>
                 </form>
@@ -7571,6 +7605,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         // ===== Active nav link on scroll =====
         const navSections = [
             { id: 'hero', link: document.querySelector('.nav-link[href="#hero"]') },
+            { id: 'results', link: document.querySelector('.nav-link[href="#results"]') },
             { id: 'testimonials', link: document.querySelector('.nav-link[href="#testimonials"]') },
             { id: 'solution', link: document.querySelector('.nav-link[href="#solution"]') },
             { id: 'who', link: document.querySelector('.nav-link[href="#who"]') },
@@ -8394,29 +8429,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             #cookie-banner .cookie-actions { width: 100%; }
             .cookie-btn { flex: 1; text-align: center; }
         }
-    
-    /* social-proof-platforms-wrap-fix — 22.08.26
-       חמשת הלוגואים דורשים 988px; בטווח 769-1040 אין מספיק רוחב והחמישי
-       נשבר לשורה נפרדת כיתום. מתחת ל-768px כבר קיים גריד ייעודי.
-       כאן אותה פריסת 3+2, בגדלים של דסקטופ. */
-    @media (min-width: 769px) and (max-width: 1040px) {
-        .social-proof-platforms {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 12px;
-        }
-        .social-proof-platforms .platform-item {
-            grid-column: span 2;
-            justify-content: center;
-        }
-        .social-proof-platforms .platform-item:nth-child(4) {
-            grid-column: 2 / span 2;
-        }
-        .social-proof-platforms .platform-item:nth-child(5) {
-            grid-column: 4 / span 2;
-        }
-    }
-</style>
+    </style>
 
     <!-- Banner HTML -->
     <div id="cookie-banner" role="dialog" aria-label="הסכמה לקוקיז" aria-live="polite">
@@ -8559,8 +8572,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </script>
     <script src="datalayer.js" defer></script>
     <script>
-        /* כותרת ה-Hero הוקפאה על הבטחה אחת (ביקורת קופי 21.08.26).
-           הרוטציה בין ארבע גרסאות מנעה מהקורא לקחת איתו מסר אחד. */
+        (function () {
+            const el = document.getElementById('rotatingWord');
+            if (!el) return;
+            const words = ['ROAS שמחזיק בסקייל', 'פיד מוצרים מנצח', 'קריאטיב UGC שממיר', 'מדידת רכישות מדויקת'];
+            let current = 0;
+
+            setInterval(function () {
+                el.classList.add('fade');
+                setTimeout(function () {
+                    current = (current + 1) % words.length;
+                    el.textContent = words[current];
+                    el.classList.remove('fade');
+                }, 350);
+            }, 2500);
+        })();
     </script>
     <script>
         (function () {
@@ -8771,16 +8797,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 btn.disabled = false;
             });
         }
-    </script>
-
-    <!-- ===== rpg-editor-loader — העורך המובנה, נטען אך ורק בכתובת עם ?edit ===== -->
-    <script>
-    (function () {
-        if (!/[?&]edit(=|&|$)/.test(location.search)) return;
-        var s = document.createElement('script');
-        s.src = '/editor.js?v=1';
-        document.body.appendChild(s);
-    })();
     </script>
 </body>
 </html>
