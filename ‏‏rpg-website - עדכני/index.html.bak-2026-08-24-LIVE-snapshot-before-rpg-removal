@@ -134,6 +134,35 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       ]
     }
     </script>
+    <!-- HowTo Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": "שיטת RPGאיך הופכים חנות איקומרס למכונת מכירות",
+      "description": "שלושה שלבים שהופכים את הפרסום של חנות אונליין ממשחק ניחושים למנוע מכירות רווחישיטת Research, Performance, Growth.",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "name": "Researchמחקר",
+          "text": "מחקר קטגוריה, מתחרים וקהלי קונים. מנתחים אילו מוצרים בקטלוג באמת מייצרים רווח, מה שולי הרווח שלהם, ומה המתחרים מציעים ובאיזה מחירלפני שמוציאים שקל אחד על מדיה."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "name": "Performanceביצועים",
+          "text": "מדידת רכישות מלאה (Server-Side ו-CAPI), פיד מוצרים תקין ב-Merchant Center ובקטלוג של Meta, ואופטימיזציה יומיומית ברמת מוצר. כל שקל מדיה נמדד מול הרווח בקופה, לא רק מול ה-ROAS בפלטפורמה."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "name": "Growthצמיחה",
+          "text": "סקיילינג חכם של החנות. מגדילים תקציב מדורג על המוצרים הרווחיים, מרחיבים קהלים ופלטפורמות, ומעלים AOV ורכישות חוזרות — בלי שה-ROAS קורס בדרך."
+        }
+      ]
+    }
+    </script>
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -5141,8 +5170,66 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
     </section>
 
+    <!-- ========== THE SOLUTION (The New Way) ========== -->
+    <section class="solution-section" id="solution">
+        <div class="solution-container">
+
+            <div class="solution-tag-wrap reveal">
+                <div data-edit="solution.section-tag" class="section-tag">השיטה שמשנה את הכללים</div>
+            </div>
+
+            <div class="solution-split">
+                <div class="solution-text reveal">
+                    <h2 data-edit="solution.section-title" data-edit-multiline="1" class="section-title">למה אנחנו מצליחים<br>איפה שאחרים נכשלים?</h2>
+                    <div class="method-name">
+                        <span data-edit="solution.method-name" data-edit-wrap="1">שיטת</span> <span class="highlight">RPG</span><br><span dir="ltr">Research. Performance. Growth.</span>
+                    </div>
+                    <p data-edit="solution.section-subtitle" class="section-subtitle" style="margin-top: 20px;">פרפורמנס לאיקומרס הוא ניהול פרסום שבו כל החלטה: איזה מוצר לדחוף, לאיזה קהל, ובאיזו עלות רכישה מתקבלת לפי הרווח בפועל. אלו שלושת האלמנטים שעליהם RPG נבנתה שהופכים חנות אונליין ממשחק ניחושים למכונת מכירות רווחית.</p>
+                </div>
+                <div class="solution-puzzle reveal" style="transition-delay: 0.15s;">
+                    <img src="תמונות לעמודה/bdde277f-1719-477b-b4f8-939b3db63ecc.webp" alt="שיטת RPG Digital — Strategy, Data, Creative, Execution, Optimization, CRM & Insights" class="puzzle-img" loading="lazy">
+                </div>
+            </div>
+
+            <div class="method-pillars">
+                <!-- PILLAR 1: Research -->
+                <div class="pillar reveal">
+                    <div class="pillar-visual">
+                        <img src="תמונות לעמודה/col2.webp" alt="Research" class="pillar-img" loading="lazy">
+                    </div>
+                    <div class="pillar-body">
+                        <h4 data-edit="solution.h4">Research &nbsp; מחקר</h4>
+                        <p data-edit="solution.p">ניתוח הקטלוג, שולי רווח והמתחרים. אנחנו לא מתחילים קמפיין לפני שאנחנו יודעים איזה מוצר באמת מרוויח.</p>
+                    </div>
+                </div>
+
+                <!-- PILLAR 2: Performance -->
+                <div class="pillar reveal" style="transition-delay: 0.15s;">
+                    <div class="pillar-visual">
+                        <img src="תמונות לעמודה/col1.webp" alt="Performance" class="pillar-img" loading="lazy">
+                    </div>
+                    <div class="pillar-body">
+                        <h4 data-edit="solution.h4-2">Performance &nbsp; ביצועים</h4>
+                        <p data-edit="solution.p-2">מדידת רכישות מלאה פיד מוצרים תקין ואופטימיזציה יומיומית ברמת מוצר בעזרת AI וכלי BI.</p>
+                    </div>
+                </div>
+
+                <!-- PILLAR 3: Growth -->
+                <div class="pillar reveal" style="transition-delay: 0.3s;">
+                    <div class="pillar-visual">
+                        <img src="תמונות לעמודה/col3.webp" alt="Growth" class="pillar-img" loading="lazy">
+                    </div>
+                    <div class="pillar-body">
+                        <h4 data-edit="solution.h4-3">Growth &nbsp; צמיחה</h4>
+                        <p data-edit="solution.p-3">סקיילינג חכם. מגדילים תקציב המוצרים הרווחיים, מרחיבים קהלים וערוצים, ומעלים סל ממוצע ורכישות</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- ========== VALUE STACK ========== -->
-    <section class="value-section" id="solution">
+    <section class="value-section">
         <div class="value-container">
             <div class="section-header reveal">
                 <div data-edit="value-section.section-tag" class="section-tag">מה מקבלים</div>
@@ -5150,7 +5237,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <p data-edit="value-section.section-subtitle" class="section-subtitle">כל רכיב בשירות שלנו פותר בעיה ספציפית שמעכבת חנויות אונליין מלצמוח</p>
             </div>
 
-            <div class="value-layout">
             <div class="value-grid reveal">
                 <div class="value-card">
                     <h4 data-edit="value-section.h4">דשבורד רווחיות בזמן אמת</h4>
@@ -5173,13 +5259,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <p data-edit="value-section.value-card-desc-4" class="value-card-desc">רוב הקונים לא קונים בביקור הראשון, ו-7 מכל 10 עגלות ננטשות. אנחנו בונים רימרקטינג דינמי לפי המוצר שנצפה, מחזירים נוטשי עגלה דרך מודעות ודיוור, ומפרידים בין מי שכבר קנה למי שעדיין לא — כדי לא לשלם פעמיים על אותו לקוח.</p>
                 </div>
                 <div class="value-card">
+                    <h4 data-edit="value-section.h4-5">דוחות ביצועים שבועיים</h4>
+                    <div class="value-card-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+                    <p data-edit="value-section.value-card-desc-5" class="value-card-desc">כל שבוע מקבלים דוח ברור וענייני — מה נמכר, באיזה ROAS, באיזו עלות רכישת לקוח ומה עשינו בנוגע לזה. שקיפות מלאה בלי עגה מקצועית, כי אתם צריכים להבין בדיוק לאן הכסף הולך ומה חזר.</p>
+                </div>
+                <div class="value-card">
                     <h4 data-edit="value-section.h4-6">העלאת AOV ורכישה חוזרת</h4>
                     <div class="value-card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg></div>
                     <p data-edit="value-section.value-card-desc-6" class="value-card-desc">הדרך הזולה ביותר להגדיל הכנסות היא מהלקוחות שכבר קניתם. אנחנו מעלים את הסל הממוצע עם באנדלים, אפסייל ומדרגות משלוח חינם, ובונים מנוע רכישה חוזרת בדיוור — כך שה-LTV מאפשר לכם לשלם יותר על לקוח ולנצח את המתחרים במכרז.</p>
-                </div>
-            </div>
-                <div class="value-puzzle reveal" style="transition-delay: 0.15s;">
-                    <img src="תמונות לעמודה/bdde277f-1719-477b-b4f8-939b3db63ecc.webp" alt="שיטת RPG Digital — Strategy, Data, Creative, Execution, Optimization, CRM &amp; Insights" class="puzzle-img" loading="lazy">
                 </div>
             </div>
         </div>
@@ -6173,33 +6260,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         .value-card:nth-child(6)::before { color: rgba(124,58,237,0.15) !important; }
     }
 
-    /* ===== VALUE GRID — single column, puzzle image beside it ===== */
-    .value-layout {
-        display: flex;
-        align-items: center;
-        gap: 48px;
-        margin-top: 48px;
-    }
-    /* wider container: the puzzle grows into new space, not out of the cards */
-    .value-section .value-container {
-        max-width: 1360px;
-    }
-    .value-layout .value-grid {
-        flex: 1 1 0;
-        min-width: 420px;
-        margin-top: 0 !important;
-    }
-    .value-puzzle {
-        flex: 0 1 47%;
-        max-width: 680px;
-    }
-    .value-puzzle .puzzle-img {
-        width: 100% !important;
-        max-width: 100% !important;
-    }
+    /* ===== VALUE GRID2 columns on desktop ===== */
     .value-grid {
         display: grid !important;
-        grid-template-columns: 1fr !important;
+        grid-template-columns: 1fr 1fr !important;
         flex-direction: unset !important;
         gap: 0 !important;
         border-top: none !important;
@@ -6209,50 +6273,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         border-top: 1px solid rgba(0,0,0,0.07) !important;
         border-bottom: none !important;
     }
-
-    /* laptop: slightly smaller puzzle so the card text keeps its measure */
-    @media (min-width: 1181px) and (max-width: 1365px) {
-        .value-puzzle {
-            flex: 0 1 44%;
-        }
+    /* Left column items get a right border as separator */
+    .value-grid .value-card:nth-child(odd) {
+        border-left: 1px solid rgba(0,0,0,0.07) !important;
     }
-
-    /* tablet / small laptop: give the cards room back */
-    @media (min-width: 769px) and (max-width: 1180px) {
-        .value-layout {
-            gap: 32px;
-        }
-        .value-puzzle {
-            flex: 0 1 38%;
-        }
-        .value-layout .value-card {
-            grid-template-columns: 100px 1fr;
-        }
-        .value-layout .value-card::before {
-            font-size: 88px;
-        }
+    .value-grid .value-card:nth-child(even) {
+        border-right: 1px solid rgba(0,0,0,0.07) !important;
     }
 
     @media (max-width: 768px) {
-        /* the desktop min-width would overflow a narrow screen */
-        .value-layout .value-grid {
-            min-width: 0 !important;
-        }
-        .value-layout {
-            flex-direction: column;
-            gap: 24px;
-            margin-top: 32px;
-        }
-        .value-puzzle {
-            flex: none;
-            width: 100%;
-            order: -1;
-            text-align: center;
-        }
-        .value-puzzle .puzzle-img {
-            width: 92% !important;
-            max-width: 430px !important;
-        }
         .value-grid {
             grid-template-columns: 1fr !important;
         }
