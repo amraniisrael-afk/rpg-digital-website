@@ -458,6 +458,105 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             .footer-logo { height: 44px !important; }
         }
     </style>
+
+<style>
+/* ========================================================
+   תיקון סרגל עליון דביק
+   body{overflow-x:hidden} הפך את body לאזור גלילה בפני עצמו,
+   ולכן position:sticky של .top-bar לא נתפס והסרגל נעלם בגלילה.
+   html{overflow-x:hidden} נשאר ומונע גלילה אופקית.
+   ======================================================== */
+body { overflow-x: visible; }
+
+/* ========================================================
+   MOBILE MENU — תפריט המבורגר לעמודים הפנימיים
+   מיושר להתנהגות ולעיצוב של index.html
+   ======================================================== */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+}
+.hamburger span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: #111111;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+.hamburger:focus-visible { outline: 2px solid #FF5500; outline-offset: 3px; border-radius: 4px; }
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 999;
+    background: rgba(250, 246, 240, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding-top: 70px;
+    transform: translateY(-100%);
+    transition: transform 0.35s ease;
+    border-bottom: 1px solid rgba(255, 85, 0, 0.2);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+}
+.mobile-menu.open { transform: translateY(0); }
+.mobile-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 16px 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.mobile-nav-link {
+    display: block;
+    padding: 14px 16px;
+    color: #111111;
+    text-decoration: none;
+    font-size: 17px;
+    font-weight: 500;
+    border-radius: 10px;
+    transition: color 0.2s ease, background 0.2s ease;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+.mobile-nav-link:hover,
+.mobile-nav-link.active { color: #FF5500; background: rgba(255, 85, 0, 0.06); }
+.mobile-nav-link.mobile-cta {
+    margin-top: 12px;
+    background: #FF5500;
+    color: #ffffff;
+    font-weight: 700;
+    text-align: center;
+    border-bottom: none;
+    border-radius: 100px;
+}
+.mobile-nav-link.mobile-cta:hover { background: #E04A00; color: #ffffff; }
+
+@media (max-width: 768px) {
+    /* סדר במובייל: המבורגר (ימין) | CTA (מרכז) | לוגו (שמאל) — כמו index.html */
+    .top-bar { padding: 0 16px !important; height: 60px; z-index: 1001; }
+    .top-bar .logo { height: 40px; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; order: 1; }
+    .btn-cta-nav { order: 2; padding: 8px 16px !important; font-size: 13px !important; }
+    .top-bar > a:first-child { order: 3; }
+    .mobile-menu { display: block; }
+}
+</style>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
@@ -477,7 +576,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <li><a href="case-study.html" class="nav-link">קייס סטאדי</a></li>
         </ul>
         <a href="contact.html" class="btn-cta-nav">קבע פגישת אסטרטגיה ←</a>
+            <button class="hamburger" id="hamburger" aria-label="פתח תפריט" aria-expanded="false" aria-controls="mobileMenu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </nav>
+    <!-- ========== MOBILE MENU ========== -->
+    <div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="תפריט ניווט נייד" aria-hidden="true">
+        <ul>
+            <li><a class="mobile-nav-link" href="index.html">דף הבית</a></li>
+            <li><a class="mobile-nav-link" href="index.html#testimonials">המלצות</a></li>
+            <li><a class="mobile-nav-link" href="index.html#solution">השיטה שלנו</a></li>
+            <li><a class="mobile-nav-link" href="index.html#who">למי מתאים</a></li>
+            <li><a class="mobile-nav-link" href="index.html#quiz">אבחון חינם</a></li>
+            <li><a class="mobile-nav-link" href="index.html#faq">שאלות נפוצות</a></li>
+            <li><a class="mobile-nav-link" href="case-study.html">קייס סטאדי</a></li>
+            <li><a class="mobile-nav-link mobile-cta" href="contact.html">קבע פגישת אסטרטגיה ←</a></li>
+        </ul>
+    </div>
+
 
     <div class="page-hero">
         <h1>צרו <span>קשר</span></h1>
@@ -760,6 +878,39 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <script src="a11y-widget.js"></script>
     <script src="datalayer.js"></script>
 
+
+<script>
+/* ===== תפריט המבורגר במובייל ===== */
+(function () {
+    var hamburger = document.getElementById('hamburger');
+    var mobileMenu = document.getElementById('mobileMenu');
+    if (!hamburger || !mobileMenu) return;
+
+    function setState(isOpen) {
+        hamburger.classList.toggle('open', isOpen);
+        mobileMenu.classList.toggle('open', isOpen);
+        hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        hamburger.setAttribute('aria-label', isOpen ? 'סגור תפריט' : 'פתח תפריט');
+        mobileMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+        document.documentElement.style.overflow = isOpen ? 'hidden' : '';
+    }
+
+    hamburger.addEventListener('click', function () {
+        setState(!hamburger.classList.contains('open'));
+    });
+
+    mobileMenu.querySelectorAll('.mobile-nav-link').forEach(function (link) {
+        link.addEventListener('click', function () { setState(false); });
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+            setState(false);
+            hamburger.focus();
+        }
+    });
+})();
+</script>
 </body>
 </html>
 

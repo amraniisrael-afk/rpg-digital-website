@@ -248,6 +248,10 @@
         @media (max-width: 768px) {
             .whatsapp-float { width: 48px; height: 48px; right: 16px; bottom: 20px; }
             .whatsapp-float svg { width: 26px; height: 26px; }
+            /* במובייל הכפתור יורד לתחתית — אחרת הוא יושב על התוכן ועל תפריט ההמבורגר */
+            .a11y-float { width: 44px; height: 44px; top: auto; bottom: 80px; right: 16px; left: auto; }
+            .a11y-float svg { width: 24px; height: 24px; }
+            .a11y-panel { top: auto; bottom: 76px; right: 16px; max-height: 70vh; transform-origin: bottom right; }
         }
     `;
     document.head.appendChild(style);
