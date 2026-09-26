@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-Disallow:
-
-Sitemap: https://rpgdigital.co.il/sitemap.xml
