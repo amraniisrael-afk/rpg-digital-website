@@ -1,0 +1,37 @@
+<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="robots" content="noindex, nofollow"><link rel="stylesheet" href="base.css">
+<style>
+.ad { background: linear-gradient(170deg, #0F2338 0%, #1A2B3C 55%, #24405C 100%); color: #fff; }
+.sky { position: absolute; inset: 0; background: radial-gradient(circle at 78% 22%, rgba(255,170,90,.55) 0, rgba(255,120,40,.12) 22%, transparent 42%); }
+.city { position: absolute; left: 0; right: 0; bottom: 330px; height: 300px; display: flex; align-items: flex-end; gap: 14px; padding: 0 40px; opacity: .95; }
+.b { background: linear-gradient(180deg, #2E4E6E, #1B3149); border-radius: 8px 8px 0 0; position: relative; flex: 1; }
+.b::after { content: ''; position: absolute; inset: 24px 16px 0; background-image: radial-gradient(rgba(255,200,120,.75) 3px, transparent 4px); background-size: 34px 42px; }
+.b.hero { background: linear-gradient(180deg, #FF7A2E, #FF5500); flex: 1.3; }
+.b.hero::after { background-image: radial-gradient(rgba(255,255,255,.9) 3px, transparent 4px); }
+.sea { position: absolute; left: 0; right: 0; bottom: 0; height: 330px; background: linear-gradient(180deg, #16324F, #0B1B2C); }
+.sea::before { content: ''; position: absolute; inset: 30px 0 auto; height: 160px; background: repeating-linear-gradient(180deg, rgba(255,170,90,.18) 0 4px, transparent 4px 26px); }
+.content { position: relative; z-index: 2; display: flex; flex-direction: column; height: 100%; }
+.tag { align-self: flex-start; background: #FF5500; color: #fff; font-size: 30px; font-weight: 800; padding: 12px 26px; border-radius: 12px; transform: rotate(-2deg); }
+h1 { font-size: 112px; font-weight: 900; line-height: 1.02; margin-top: 34px; }
+h1 span { color: #FFB27A; }
+.sub { font-size: 40px; font-weight: 500; margin-top: 22px; color: #D9E4EF; line-height: 1.35; }
+.card { margin-top: auto; background: #fff; color: #1A2B3C; border-radius: 28px; padding: 38px 40px; box-shadow: 0 30px 70px rgba(0,0,0,.35); }
+.card .q { font-size: 34px; font-weight: 800; }
+.chips { display: flex; gap: 14px; margin: 22px 0 28px; flex-wrap: wrap; }
+.chip { border: 3px solid #E3E8EE; border-radius: 999px; padding: 10px 26px; font-size: 30px; font-weight: 700; color: #435568; }
+.chip.on { border-color: #FF5500; color: #FF5500; background: #FFF3EB; }
+.cta { width: 100%; background: #FF5500; color: #fff; }
+</style></head><body>
+<div class="ad"><div class="sky"></div>
+<div class="city"><div class="b" style="height:52%"></div><div class="b" style="height:70%"></div><div class="b hero" style="height:100%"></div><div class="b" style="height:62%"></div><div class="b" style="height:44%"></div></div>
+<div class="sea"></div>
+<div class="content">
+  <div class="tag">פרויקט חדש · קו ראשון לים</div>
+  <h1>4 חדרים<br><span>מול הים.</span></h1>
+  <div class="sub">מחיר השקה למשפחות הראשונות.<br>מספר הדירות מוגבל.</div>
+  <div class="card">
+    <div class="q">מה התקציב שלכם?</div>
+    <div class="chips"><span class="chip">עד 2.5 מ׳</span><span class="chip on"><bdi dir="ltr">2.5–3.5</bdi> מ׳</span><span class="chip">מעל 3.5 מ׳</span></div>
+    <div class="cta">תאמו סיור במשרד המכירות ←</div>
+  </div>
+</div></div>
+</body></html>
