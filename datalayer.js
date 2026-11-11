@@ -17,7 +17,8 @@ document.addEventListener('DOMContentLoaded', function () {
         '.btn-cta-nav',
         '.btn-primary',
         '.cta-btn',
-        '.submit-btn'
+        '.submit-btn',
+        '.track-card'
     ].join(', ');
 
     document.querySelectorAll(ctaSelectors).forEach(function (btn) {
@@ -110,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }, { threshold: 0.3 });
 
     // Sections by ID
-    ['hero', 'results', 'testimonials', 'solution', 'faq', 'lead-form'].forEach(function (id) {
+    ['hero', 'results', 'tracks', 'testimonials', 'solution', 'dashboard', 'domains', 'quiz', 'faq', 'lead-form'].forEach(function (id) {
         var el = document.getElementById(id);
         if (el) sectionObserver.observe(el);
     });

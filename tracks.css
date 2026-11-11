@@ -1,0 +1,228 @@
+/* ============================================================
+   RPG Digital — רכיבים לשני המסלולים (איקומרס / לידים)
+   נטען בדף הבית, ecommerce.html ו-leads.html.
+   צבעים ורדיוסים לפי השפה הקיימת: קרם #FAF6F0, חול #F0EBE2,
+   כתום #FF5500, כחול כהה #1A2B3C.
+   ============================================================ */
+
+#tracks, #domains, #dashboard { scroll-margin-top: 130px; }
+
+/* ---------- בחירת מסלול (דף הבית) ---------- */
+.track-section {
+    background: #F0EBE2;
+    padding: 100px 20px;
+}
+.track-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.track-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    margin-top: 48px;
+}
+.track-card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 24px;
+    padding: 36px 32px 32px;
+    text-decoration: none;
+    color: #111;
+    text-align: right;
+    box-shadow: 0 18px 50px rgba(0,0,0,0.06);
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.track-card:hover,
+.track-card:focus-visible {
+    transform: translateY(-4px);
+    border-color: rgba(255,85,0,0.45);
+    box-shadow: 0 24px 60px rgba(255,85,0,0.12);
+}
+.track-card-label {
+    align-self: flex-start;
+    background: #1A2B3C;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 6px;
+    transform: rotate(-1.5deg);
+}
+.track-card--leads .track-card-label { background: #FF5500; }
+.track-card h3 {
+    font-size: clamp(24px, 2.6vw, 32px);
+    font-weight: 800;
+    line-height: 1.25;
+    color: #111;
+    margin: 4px 0 0;
+}
+.track-card p {
+    font-size: 16px;
+    line-height: 1.75;
+    color: #555;
+    margin: 0;
+}
+.track-card-tags {
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid rgba(0,0,0,0.07);
+    font-size: 13px;
+    color: #8a8078;
+}
+.track-card-cta {
+    color: #FF5500;
+    font-weight: 700;
+    font-size: 16px;
+}
+@media (max-width: 768px) {
+    .track-section { padding: 70px 16px; }
+    .track-grid { grid-template-columns: 1fr; gap: 18px; margin-top: 32px; }
+    .track-card { padding: 28px 22px 24px; }
+}
+
+/* ---------- תגית מסלול בכרטיסי המלצות ---------- */
+.testimonial-track-tag {
+    display: inline-block;
+    align-self: flex-start;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    background: #1A2B3C;
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+.testimonial-track-tag.is-leads { background: #FF5500; }
+.testimonials-privacy-note {
+    text-align: center;
+    font-size: 13px;
+    color: #8a8078;
+    margin: 18px auto 0;
+}
+
+/* ---------- קישור בין מסלולים ("לא מתאים אם...") ---------- */
+.who-track-link {
+    color: #FF5500;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.who-track-link:hover { text-decoration: underline; }
+
+/* ---------- הירו בדף הלידים: משפך במקום קרוסלת מוצרים ---------- */
+.hero .hero-media-col.lf-visual {
+    height: auto !important;
+    min-height: 0 !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 32px 60px !important;
+    overflow: visible !important;
+}
+.hero .hero-media-col.lf-visual::before,
+.hero .hero-media-col.lf-visual::after { display: none !important; }
+.lead-funnel {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    transform: rotate(-1deg);
+}
+.lf-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 24px;
+    border-radius: 14px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+}
+.lf-row-1 { width: 100%; }
+.lf-row-2 { width: 88%; }
+.lf-row-3 { width: 76%; }
+.lf-row-4 {
+    width: 64%;
+    background: #FF5500;
+    border-color: #FF5500;
+    box-shadow: 0 16px 40px rgba(255,85,0,0.3);
+}
+.lf-label { font-weight: 800; font-size: 17px; color: #111; }
+.lf-note { font-size: 13px; color: #8a8078; }
+.lf-row-4 .lf-label, .lf-row-4 .lf-note { color: #fff; }
+@media (max-width: 768px) {
+    .hero .hero-media-col.lf-visual { padding: 4px 20px 48px !important; }
+    .lf-row { padding: 14px 16px; }
+    .lf-row-2 { width: 94%; }
+    .lf-row-3 { width: 88%; }
+    .lf-row-4 { width: 82%; }
+    .lf-label { font-size: 15px; }
+    .lf-note { font-size: 12px; }
+}
+
+/* ---------- פס תחומים עם 6 פריטים (דף הלידים) ---------- */
+@media (max-width: 1040px) {
+    .social-proof-platforms.sp-six .platform-item:nth-child(n) { grid-column: span 2 !important; }
+}
+@media (min-width: 1041px) {
+    .social-proof-platforms.sp-six { flex-wrap: wrap; justify-content: center; }
+}
+
+/* ---------- תחומי התמחות (דף הלידים) ---------- */
+.domains-section {
+    background: #F0EBE2;
+    padding: 100px 20px;
+}
+.domains-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.domains-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+}
+.domain-card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 24px;
+    padding: 32px 28px 28px;
+    text-align: right;
+    box-shadow: 0 18px 50px rgba(0,0,0,0.06);
+}
+.domain-card h3 {
+    font-size: 24px;
+    font-weight: 800;
+    color: #111;
+    margin: 0;
+}
+.domain-card p {
+    font-size: 15.5px;
+    line-height: 1.75;
+    color: #555;
+    margin: 0;
+}
+.domain-metric {
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid rgba(0,0,0,0.07);
+    font-size: 14px;
+    font-weight: 700;
+    color: #111;
+}
+.domain-metric span { color: #FF5500; }
+@media (max-width: 900px) {
+    .domains-section { padding: 70px 16px; }
+    .domains-grid { grid-template-columns: 1fr; gap: 18px; margin-top: 32px; }
+}
