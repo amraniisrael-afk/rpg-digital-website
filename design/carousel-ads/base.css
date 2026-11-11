@@ -1,0 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&display=block');
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1000px; height: 1250px; overflow: hidden; }
+body { font-family: 'Heebo', sans-serif; direction: rtl; -webkit-font-smoothing: antialiased; }
+.ad { position: relative; width: 1000px; height: 1250px; overflow: hidden; padding: 80px 72px; display: flex; flex-direction: column; }
+.brand { font-size: 26px; font-weight: 800; letter-spacing: .04em; }
+.cta { display: inline-flex; align-items: center; justify-content: center; gap: 14px; height: 108px; border-radius: 22px; font-size: 44px; font-weight: 800; }

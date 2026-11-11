@@ -1,0 +1,35 @@
+<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><link rel="stylesheet" href="base.css">
+<style>
+.ad { background: #12201B; color: #F3EFE6; }
+.lines { position: absolute; inset: 0; background: repeating-linear-gradient(135deg, rgba(255,255,255,.025) 0 2px, transparent 2px 40px); }
+.seal { position: absolute; left: -120px; top: 120px; width: 520px; height: 520px; border-radius: 50%; border: 3px solid rgba(201,169,106,.25); }
+.seal::after { content: ''; position: absolute; inset: 40px; border-radius: 50%; border: 2px solid rgba(201,169,106,.18); }
+.content { position: relative; z-index: 2; display: flex; flex-direction: column; height: 100%; }
+.brand { color: #C9A96A; }
+h1 { font-size: 100px; font-weight: 900; line-height: 1.04; margin-top: 34px; }
+h1 span { color: #C9A96A; }
+.sub { font-size: 38px; margin-top: 20px; color: #B9C4BE; font-weight: 500; line-height: 1.35; }
+.check { margin-top: 48px; background: #F3EFE6; color: #12201B; border-radius: 28px; padding: 40px 42px; box-shadow: 0 30px 70px rgba(0,0,0,.4); }
+.check h3 { font-size: 34px; font-weight: 900; margin-bottom: 20px; }
+.row { display: flex; align-items: center; gap: 20px; font-size: 32px; font-weight: 700; padding: 18px 0; border-top: 2px solid #E2DBCB; }
+.row:first-of-type { border-top: 0; }
+.box { flex: 0 0 52px; height: 52px; border-radius: 12px; background: #12201B; color: #C9A96A; display: flex; align-items: center; justify-content: center; font-size: 34px; font-weight: 900; }
+.box.off { background: transparent; border: 3px solid #B9B09A; }
+.cta { margin-top: auto; width: 100%; background: #C9A96A; color: #12201B; }
+.note { text-align: center; font-size: 24px; color: #8FA197; margin-top: 18px; }
+</style></head><body>
+<div class="ad"><div class="lines"></div><div class="seal"></div>
+<div class="content">
+  <div class="brand">משרד עורכי דין · דיני עבודה</div>
+  <h1>פוטרתם?<br><span>בדקו מה מגיע לכם.</span></h1>
+  <div class="sub">3 שאלות קצרות, ותדעו אם יש לכם תיק<br>לפני שאתם משלמים על ייעוץ.</div>
+  <div class="check">
+    <h3>בדיקת זכאות</h3>
+    <div class="row"><span class="box">✓</span>עבדתי במקום יותר משנה</div>
+    <div class="row"><span class="box">✓</span>לא קיבלתי שימוע לפני הפיטורים</div>
+    <div class="row"><span class="box off"></span>קיבלתי את כל הפיצויים בזמן</div>
+  </div>
+  <div class="cta">לבדיקה ב-2 דקות ←</div>
+  <div class="note">דיסקרטי לחלוטין · ללא התחייבות</div>
+</div></div>
+</body></html>

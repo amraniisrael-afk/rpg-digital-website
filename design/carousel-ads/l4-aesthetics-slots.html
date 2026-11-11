@@ -1,0 +1,36 @@
+<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><link rel="stylesheet" href="base.css">
+<style>
+.ad { background: linear-gradient(160deg, #FFFFFF 0%, #F4F1FB 55%, #E9E3F7 100%); color: #2A2340; }
+.blob { position: absolute; right: -180px; bottom: -160px; width: 720px; height: 720px; border-radius: 50%; background: radial-gradient(circle, rgba(167,139,250,.35), rgba(167,139,250,0) 70%); }
+.content { position: relative; z-index: 2; display: flex; flex-direction: column; height: 100%; }
+.pill { align-self: flex-start; background: #2A2340; color: #fff; font-size: 30px; font-weight: 800; padding: 12px 28px; border-radius: 999px; }
+.pill b { color: #C4B5FD; }
+h1 { font-size: 108px; font-weight: 900; line-height: 1.02; margin-top: 34px; }
+h1 span { color: #7C3AED; }
+.sub { font-size: 38px; margin-top: 18px; color: #5B547A; font-weight: 500; }
+.cal { margin-top: 46px; background: #fff; border-radius: 28px; padding: 36px 38px; box-shadow: 0 30px 70px rgba(80,50,160,.18); }
+.cal h3 { display: flex; justify-content: space-between; font-size: 32px; font-weight: 900; margin-bottom: 24px; }
+.cal h3 small { font-size: 26px; font-weight: 700; color: #7C3AED; }
+.days { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 22px; }
+.d { text-align: center; border-radius: 16px; padding: 14px 0; background: #F4F1FB; font-size: 24px; font-weight: 700; color: #6B6489; }
+.d b { display: block; font-size: 38px; font-weight: 900; color: #2A2340; }
+.d.on { background: #7C3AED; color: #E9E3F7; }
+.d.on b { color: #fff; }
+.slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.s { text-align: center; border: 3px solid #E4DDF6; border-radius: 14px; padding: 14px 0; font-size: 30px; font-weight: 800; color: #2A2340; }
+.s.x { color: #C8C2DA; text-decoration: line-through; border-style: dashed; }
+.cta { margin-top: auto; width: 100%; background: #7C3AED; color: #fff; }
+</style></head><body>
+<div class="ad"><div class="blob"></div>
+<div class="content">
+  <div class="pill">נשארו <b>3 תורים</b> השבוע</div>
+  <h1>טיפול פנים<br><span>לפני החגים.</span></h1>
+  <div class="sub">בוחרים שעה, ומקבלים תזכורת יום לפני.</div>
+  <div class="cal">
+    <h3>בחרו מועד <small>נובמבר</small></h3>
+    <div class="days"><span class="d">א׳<b>16</b></span><span class="d">ב׳<b>17</b></span><span class="d on">ג׳<b>18</b></span><span class="d">ד׳<b>19</b></span><span class="d">ה׳<b>20</b></span></div>
+    <div class="slots"><span class="s x">10:00</span><span class="s">12:30</span><span class="s x">14:00</span><span class="s">16:30</span><span class="s x">18:00</span><span class="s">19:30</span></div>
+  </div>
+  <div class="cta">שריינו תור ←</div>
+</div></div>
+</body></html>
