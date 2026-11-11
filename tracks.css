@@ -178,7 +178,10 @@
     .social-proof-platforms.sp-six .platform-item:nth-child(n) { grid-column: span 2 !important; }
 }
 @media (min-width: 1041px) {
-    .social-proof-platforms.sp-six { flex-wrap: wrap; justify-content: center; }
+    /* דסקטופ: כל הלוגואים בשורה אחת */
+    .social-proof-inner:has(.sp-six) { max-width: 1240px; }
+    .social-proof-platforms.sp-six { flex-wrap: nowrap; justify-content: center; gap: 12px; }
+    .social-proof-platforms.sp-six .platform-item { flex: 0 1 auto; white-space: nowrap; padding: 12px 18px; }
 }
 
 /* ---------- תחומי התמחות (דף הלידים) ---------- */
@@ -264,4 +267,18 @@
 /* פס עם 7 פריטים (דף הלידים): הפריט השביעי ממורכז בשורה האחרונה במובייל */
 @media (max-width: 1040px) {
     .social-proof-platforms.sp-seven .platform-item:nth-child(7) { grid-column: 3 / span 2 !important; }
+}
+
+@media (min-width: 1041px) and (max-width: 1280px) {
+    .social-proof-platforms.sp-six { gap: 8px; }
+    .social-proof-platforms.sp-six .platform-item { padding: 10px 12px; gap: 8px; }
+    .social-proof-platforms.sp-six .platform-name { font-size: 15px; }
+    .social-proof-platforms.sp-six .platform-item svg { width: 22px; height: 22px; }
+}
+@media (min-width: 1041px) and (max-width: 1180px) {
+    .social-proof-inner:has(.sp-six) { padding-left: 12px; padding-right: 12px; }
+    .social-proof-platforms.sp-six { gap: 4px; }
+    .social-proof-platforms.sp-six .platform-item { padding: 8px 7px; gap: 5px; }
+    .social-proof-platforms.sp-six .platform-name { font-size: 14px; }
+    .social-proof-platforms.sp-six .platform-item svg { width: 20px; height: 20px; }
 }
