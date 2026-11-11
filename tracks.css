@@ -235,6 +235,8 @@
 
 /* ---------- Hero: two-track points ---------- */
 .hero .hero-points {
+    align-self: stretch;
+    width: 100%;
     list-style: none;
     display: flex;
     flex-wrap: wrap;
