@@ -259,7 +259,7 @@
     // ===== Inject HTML =====
     // Determine accessibility.html path (one level up for blog sub-pages)
     const depth = window.location.pathname.split('/').filter(Boolean).length;
-    const accessibilityHref = depth >= 2 ? '../accessibility.html' : 'accessibility.html';
+    const accessibilityHref = '/accessibility';
 
     document.body.insertAdjacentHTML('beforeend', `
         <!-- ACCESSIBILITY WIDGET -->
