@@ -131,6 +131,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@300;400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>
     <link rel="preload" as="image" href="תמונות קרוסלה/c1.webp" fetchpriority="high">
+    <!-- תוכן עם אנימציית הופעה מוסתר רק כש-JS פעיל, כדי שלא יישאר עמוד ריק אם הסקריפט לא נטען -->
+    <script>document.documentElement.classList.add('js');</script>
     <style>
         /* ========== RESET & BASE ========== */
         *, *::before, *::after {
@@ -4061,10 +4063,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         .mobile-nav-link.mobile-cta:hover { background: #E04A00; color: #fff; }
 
         /* 3. BUTTONS */
-        .cta-button { background: #FF5500; color: #fff; }
-        .cta-button:hover { background: #E04A00; color: #fff; box-shadow: 0 8px 24px rgba(255,85,0,0.3); }
-        .cta-button-outline { color: #FF5500; border-color: #FF5500; }
-        .cta-button-outline:hover { background: #FF5500; color: #fff; }
+        /* --accent-strong (#C74200): כתום כהה שעומד ב-4.5:1 לטקסט קטן ולכפתורים (סקירת UI 14.11.26) */
+        :root { --accent-strong: #C74200; --accent-strong-hover: #A83800; --accent-text-on-tint: #B83D00; --text-small-muted: #555555; }
+        .cta-button { background: var(--accent-strong); color: #fff; }
+        .cta-button:hover { background: var(--accent-strong-hover); color: #fff; box-shadow: 0 8px 24px rgba(199,66,0,0.3); }
+        .cta-button-outline { color: var(--accent-strong); border-color: var(--accent-strong); }
+        .cta-button-outline:hover { background: var(--accent-strong); color: #fff; }
 
         /* 4. SECTION HEADERS on light bg */
         .section-title { color: #111111; }
@@ -4517,6 +4521,64 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       }
     }
     </script>
+    <style>
+    /* ===== תיקוני סקירת UI (14.11.26) =====
+       --accent-strong: גוון כתום כהה לטקסט קטן ולרקע כפתורים, עומד ביחס ניגודיות 4.5:1
+       על לבן, קרם ואפרסק. ה-#FF5500 נשאר לכותרות גדולות ולאלמנטים דקורטיביים.
+       הטוקנים מוגדרים ב-<head> (סעיף 3. BUTTONS); כאן רק עקיפות של חוקים מאוחרים יותר. */
+
+    /* 1. ניגודיות: כפתורים וטקסט קטן בכתום */
+    html body .cta-button,
+    html body .mobile-nav-link.mobile-cta,
+    html body .cookie-btn-accept{ background: var(--accent-strong) !important; color: #fff !important; }
+    html body .cta-button:hover,
+    html body .mobile-nav-link.mobile-cta:hover,
+    html body .cookie-btn-accept:hover{ background: var(--accent-strong-hover) !important; color: #fff !important; }
+    html body .cta-button-outline{ color: var(--accent-strong) !important; border-color: var(--accent-strong) !important; }
+    html body .cta-button-outline:hover{ background: var(--accent-strong) !important; color: #fff !important; }
+    html body .nav-link.active,
+    html body .nav-link:hover,
+    html body .track-card-cta,
+    html body .consent-link{ color: var(--accent-strong) !important; }
+    /* תגיות קטנות על רקע אפרסק שקוף: גוון כהה עוד יותר כדי לעבור 4.5:1 */
+    html body .section-tag,
+    html body .ugc-section .section-tag,
+    html body .testimonial-platform-badge{ color: var(--accent-text-on-tint) !important; }
+    html body .track-card-tags,
+    html body .testimonial-role{ color: var(--text-small-muted) !important; }
+    html body .skip-link{ background: var(--accent-strong); color: #fff; }
+
+    /* 2. אנימציית הופעה: בלי JS התוכן גלוי */
+    html:not(.js) .reveal,
+    html:not(.js) .reveal-right,
+    html:not(.js) .reveal-left { opacity: 1; transform: none; }
+
+    /* 3. דקורציה: מספרי הרקע הענקיים יוצאים (המספור כבר מופיע בכותרת), כוכבים בצבע המותג */
+    html body .value-card::before{ display: none !important; }
+    html body .testimonial-stars{
+        width: 96px;
+        height: 16px;
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FF5500' d='M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7-6.3-3.9-6.3 3.9 1.7-7L2 9.5l7.1-.6z'/%3E%3C/svg%3E") repeat-x;
+        background-size: 19.2px 16px;
+    }
+
+    /* 4. קרוסלת ההמלצות: בלי שכבת הדהייה שכיסתה את הכרטיס השמאלי בכל רוחב מסך */
+    html body .testimonials-slider-wrapper::after{ display: none; }
+
+    /* 5. אזורי לחיצה: 44px לאייקונים ולתפריט; קישורי הפוטר 36px (מעל סף WCAG 2.2 של 24px, בלי לנפח את הפוטר) */
+    html body .footer-socials a{ width: 44px !important; height: 44px !important; }
+    html body .hamburger{ width: 44px; height: 44px; padding: 8px; }
+    html body .footer-col ul li{ margin-bottom: 0; }
+    html body .footer-col ul li a{ display: inline-flex; align-items: center; min-height: 36px; }
+
+    /* 6. טלפון: כפתור הנגישות עובר לפינה השמאלית, הוואטסאפ נשאר לבד מימין,
+          ולפוטר נוסף ריווח כדי שהכפתורים לא יסתירו את השורה האחרונה */
+    @media (max-width: 768px) {
+        html body .a11y-float{ right: auto !important; left: 16px !important; bottom: 20px !important; top: auto !important; }
+        html body .a11y-panel{ right: 10px; left: 10px; transform-origin: bottom left; }
+        html body .footer{ padding-bottom: 96px !important; }
+    }
+    </style>
 </head>
 <body>
 
@@ -4574,7 +4636,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <!-- TEXTright side (RTL start) -->
             <div class="hero-text-col">
                 <div class="hero-tag-wrap">
-                    <span class="hero-asterisk">✳</span>
                     <div data-edit="hero.hero-tag" class="hero-tag">סוכנות פרפורמנס שמייצרת כסף, לא חשיפות.</div>
                 </div>
                 <div class="hero-hl-box">
@@ -5177,7 +5238,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <div class="testimonial-card reveal">
                     <div class="testimonial-quote-mark">"</div>
                     <div class="testimonial-track-tag">מסלול איקומרס</div>
-                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <div class="testimonial-stars" role="img" aria-label="דירוג 5 מתוך 5"></div>
                     <div data-edit="testimonials.testimonial-result-tag" class="testimonial-result-tag">ROAS עלה מ-2.1 ל-5.8 תוך 6 שבועות</div>
                     <p data-edit="testimonials.testimonial-text" class="testimonial-text">
                         ניסינו שתי סוכנויות לפני RPG — שתיהן הבטיחו הרבה ומסרו מעט.
@@ -5197,7 +5258,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <div class="testimonial-card reveal">
                     <div class="testimonial-quote-mark">"</div>
                     <div class="testimonial-track-tag is-leads">מסלול לידים · נדל"ן</div>
-                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <div class="testimonial-stars" role="img" aria-label="דירוג 5 מתוך 5"></div>
                     <div data-edit="testimonials.leads-result-re" class="testimonial-result-tag">ירידה של 40% בעלות לפגישה בתוך 6 שבועות</div>
                     <p data-edit="testimonials.leads-text-re" class="testimonial-text">ישראל הבין מהר את הפרויקט ואת הקהל שאנחנו צריכים להגיע אליו. התחלנו לקבל פניות מדויקות יותר, וצוות המכירות הצליח לקבוע יותר פגישות מתוך הפניות שהגיעו.</p>
                     <div class="testimonial-footer">
@@ -5214,7 +5275,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <div class="testimonial-card reveal">
                     <div class="testimonial-quote-mark">"</div>
                     <div class="testimonial-track-tag">מסלול איקומרס</div>
-                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <div class="testimonial-stars" role="img" aria-label="דירוג 5 מתוך 5"></div>
                     <div data-edit="testimonials.testimonial-result-tag-2" class="testimonial-result-tag">עלות רכישת לקוח ירדה ב-44%</div>
                     <p data-edit="testimonials.testimonial-text-2" class="testimonial-text">
                         הקטגוריה שלנו תחרותית ורוויה, והפיד שלנו היה בלגן — חצי מהמוצרים נדחו ב-Merchant Center.
@@ -5234,7 +5295,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <div class="testimonial-card reveal">
                     <div class="testimonial-quote-mark">"</div>
                     <div class="testimonial-track-tag is-leads">מסלול לידים · אסתטיקה</div>
-                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <div class="testimonial-stars" role="img" aria-label="דירוג 5 מתוך 5"></div>
                     <div data-edit="testimonials.leads-result-aes" class="testimonial-result-tag">עלייה מ־12 ל־32 תורים בחודש</div>
                     <p data-edit="testimonials.leads-text-aes" class="testimonial-text">הרגשתי שיש מישהו שבאמת מבין את העסק שלי. ישראל עקב איתנו אחרי הפניות והתורים, הסביר מה עובד ועזר לנו למקד את הפרסום בטיפולים שרצינו לקדם.</p>
                     <div class="testimonial-footer">
@@ -5251,7 +5312,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <div class="testimonial-card reveal">
                     <div class="testimonial-quote-mark">"</div>
                     <div class="testimonial-track-tag">מסלול איקומרס</div>
-                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <div class="testimonial-stars" role="img" aria-label="דירוג 5 מתוך 5"></div>
                     <div data-edit="testimonials.testimonial-result-tag-3" class="testimonial-result-tag">x3.2 מכירות ב-TikTok תוך 60 יום</div>
                     <p data-edit="testimonials.testimonial-text-3" class="testimonial-text">
                         לא האמנתי ש-TikTok יכול להניע מכירות אמיתיות בחנות שלנו.
@@ -5271,7 +5332,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <div class="testimonial-card reveal">
                     <div class="testimonial-quote-mark">"</div>
                     <div class="testimonial-track-tag is-leads">מסלול לידים · עורכי דין</div>
-                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <div class="testimonial-stars" role="img" aria-label="דירוג 5 מתוך 5"></div>
                     <div data-edit="testimonials.leads-result-law" class="testimonial-result-tag">ירידה בעלות הפרסום לתיק חתום מ־1,800 ₪ ל־650 ₪</div>
                     <p data-edit="testimonials.leads-text-law" class="testimonial-text">הפניות שקיבלנו הפכו לרלוונטיות יותר לתחומי העיסוק של המשרד. המעקב אחרי התיקים שנחתמו נתן לנו תמונה ברורה של התמורה לתקציב, והעבודה עם ישראל הייתה מסודרת ושקופה.</p>
                     <div class="testimonial-footer">
@@ -6844,12 +6905,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                     <form class="quiz-lead-form" id="quizLeadForm" onsubmit="handleQuizSubmit(event)" aria-label="טופס קבלת אבחון">
                         <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-                            <div><label class="sr-only" for="quizName">שם מלא</label><input type="text" class="form-input" id="quizName" placeholder="שם מלא *" required aria-required="true"></div>
-                            <div><label class="sr-only" for="quizBusiness">שם העסק</label><input type="text" class="form-input" id="quizBusiness" placeholder="שם העסק / החנות *" data-placeholder-ecommerce="שם החנות / המותג *" data-placeholder-leads="שם העסק *" required aria-required="true"></div>
+                            <div><label class="sr-only" for="quizName">שם מלא</label><input type="text" class="form-input" id="quizName" placeholder="שם מלא *" required aria-required="true" autocomplete="name"></div>
+                            <div><label class="sr-only" for="quizBusiness">שם העסק</label><input type="text" class="form-input" id="quizBusiness" placeholder="שם העסק / החנות *" data-placeholder-ecommerce="שם החנות / המותג *" data-placeholder-leads="שם העסק *" required aria-required="true" autocomplete="organization"></div>
                         </div>
                         <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-                            <div><label class="sr-only" for="quizPhone">טלפון</label><input type="tel" class="form-input" id="quizPhone" placeholder="טלפון *" required aria-required="true" dir="ltr"></div>
-                            <div><label class="sr-only" for="quizEmail">אימייל</label><input type="email" class="form-input" id="quizEmail" placeholder="אימייל" dir="ltr"></div>
+                            <div><label class="sr-only" for="quizPhone">טלפון</label><input type="tel" class="form-input" id="quizPhone" placeholder="טלפון *" required aria-required="true" dir="ltr" autocomplete="tel"></div>
+                            <div><label class="sr-only" for="quizEmail">אימייל</label><input type="email" class="form-input" id="quizEmail" placeholder="אימייל" dir="ltr" autocomplete="email"></div>
                         </div>
                         <label class="consent-label">
                             <input type="checkbox" class="consent-checkbox" id="quizConsent" required>
@@ -6864,52 +6925,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
     </section>
 
-    <!-- ========== NEWSLETTER ========== -->
-    <section class="newsletter-section">
-        <div class="newsletter-inner">
-            <div class="newsletter-visual">
-                <h2><span data-edit="newsletter-section.h2" data-edit-wrap="1">עוד לא בשלים ל</span><span data-edit="newsletter-section.span" style="color: var(--teal);">שיחה?</span></h2>
-                <p data-edit="newsletter-section.p">קחו את התובנות למייל. טיפים מעשיים, עדכוני פלטפורמות ומה עובד עכשיו בפרסום לחנויות אונליין ולעסקים שחיים מלידים. פעם בשבוע.</p>
-                <div class="newsletter-perks">
-                    <div class="newsletter-perk">
-                        <div class="newsletter-perk-dot"></div>
-                        <span data-edit="newsletter-section.newsletter-perk" data-edit-wrap="1">בנצ'מרקים אמיתיים: ROAS ורווחיות לחנויות, עלות לעסקה ללידים</span>
-                    </div>
-                    <div class="newsletter-perk">
-                        <div class="newsletter-perk-dot"></div>
-                        <span data-edit="newsletter-section.newsletter-perk-2" data-edit-wrap="1">טקטיקות קריאטיב, מדידה וסקייל שעובדות עכשיו. לא תיאוריה</span>
-                    </div>
-                    <div class="newsletter-perk">
-                        <div class="newsletter-perk-dot"></div>
-                        <span data-edit="newsletter-section.newsletter-perk-3" data-edit-wrap="1">ללא ספאם. ביטול בכל עת</span>
-                    </div>
-                </div>
-            </div>
-            <form class="newsletter-form-wrap" onsubmit="handleNewsletterSubmit(); return false;" aria-label="טופס הרשמה לניוזלטר">
-                <div class="newsletter-row">
-                    <div><label class="sr-only" for="nl-email">כתובת אימייל</label><input type="email" id="nl-email" class="form-input" placeholder="כתובת המייל שלי" required aria-required="true" dir="ltr"></div>
-                    <div><label class="sr-only" for="nl-name">שם פרטי</label><input type="text" id="nl-name" class="form-input" placeholder="שם פרטי" required aria-required="true"></div>
-                </div>
-                <label class="sr-only" for="nl-type">סוג משתמש</label>
-                <select id="nl-type" class="newsletter-select">
-                    <option value="" disabled selected>האם אתם?</option>
-                    <option value="business">בעלי חנות אונליין</option>
-                    <option value="marketer">מנהלי איקומרס / שיווק</option>
-                    <option value="leads_business">בעלי עסק שחי מלידים</option>
-                    <option value="agency">סוכנות או פרילנסר</option>
-                    <option value="other">אחר</option>
-                </select>
-                <label class="consent-label">
-                    <input type="checkbox" id="nl-consent" class="consent-checkbox" required>
-                    <span data-edit="newsletter-section.consent-text" class="consent-text">אני מאשר לקבל דיוור אלקטרוני.</span>
-                </label>
-                <button data-edit="newsletter-section.cta-button" type="submit" id="nl-btn" class="cta-button newsletter-submit">הצטרפו</button>
-            </form>
-            <div class="nl-3d-obj" aria-hidden="true">
-                <img src="סמל ניוזלטר/RPG LOGO (4).webp" alt="" class="nl-symbol-img">
-            </div>
-        </div>
-    </section>
 
     <!-- ========== FAQ ========== -->
     <section class="faq-section" id="faq">
@@ -6983,21 +6998,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <div class="form-row">
                         <div class="form-field">
                             <label data-edit="lead-form.form-label" class="form-label" for="name">שם מלא *</label>
-                            <input type="text" id="name" class="form-input" placeholder="ישראל ישראלי" required>
+                            <input type="text" id="name" class="form-input" placeholder="ישראל ישראלי" required autocomplete="name">
                         </div>
                         <div class="form-field">
                             <label data-edit="lead-form.form-label-2" class="form-label" for="business">שם העסק / כתובת האתר *</label>
-                            <input type="text" id="business" class="form-input" placeholder="שם העסק או כתובת האתר" required>
+                            <input type="text" id="business" class="form-input" placeholder="שם העסק או כתובת האתר" required autocomplete="organization">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-field">
                             <label data-edit="lead-form.form-label-3" class="form-label" for="phone">טלפון *</label>
-                            <input type="tel" id="phone" class="form-input" placeholder="050-0000000" required>
+                            <input type="tel" id="phone" class="form-input" placeholder="050-0000000" required autocomplete="tel">
                         </div>
                         <div class="form-field">
                             <label data-edit="lead-form.form-label-4" class="form-label" for="email">אימייל</label>
-                            <input type="email" id="email" class="form-input" placeholder="name@company.com">
+                            <input type="email" id="email" class="form-input" placeholder="name@company.com" autocomplete="email">
                         </div>
                     </div>
                     <div class="form-field">
@@ -7010,7 +7025,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     </div>
                     <div class="form-field">
                         <label data-edit="lead-form.form-label-5" class="form-label" for="budget" id="budgetLabel">תקציב מדיה חודשי</label>
-                        <input type="text" id="budget" class="form-input" placeholder="עוזר לנו להכין הצעה מדויקת">
+                        <select id="budget" class="form-input">
+                            <option value="" selected>בחרו טווח (עוזר לנו להכין הצעה מדויקת)</option>
+                            <option value="עד 3,000₪">עד 3,000₪</option>
+                            <option value="3,000–10,000₪">3,000–10,000₪</option>
+                            <option value="10,000–30,000₪">10,000–30,000₪</option>
+                            <option value="30,000₪ ומעלה">30,000₪ ומעלה</option>
+                            <option value="עוד לא יודע/ת">עוד לא יודע/ת</option>
+                        </select>
                     </div>
                     <div class="form-field">
                         <label data-edit="lead-form.form-label-6" class="form-label" for="message">מה האתגר המרכזי שלכם עכשיו? (לא חובה)</label>
@@ -7020,7 +7042,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <label class="consent-label">
                         <input type="checkbox" id="consent" class="consent-checkbox" required>
                         <span class="consent-text">
-                            <span data-edit="lead-form.consent-text" data-edit-wrap="1">אני מאשר/ת את</span> <a data-edit="lead-form.consent-link" href="/privacy" target="_blank" class="consent-link">מדיניות הפרטיות</a> <span data-edit="lead-form.consent-text-2" data-edit-wrap="1">של האתר וכי מאשר/ת לקבל תוכן מקצועי, עדכונים והצעות פרסומיות.</span>
+                            <span data-edit="lead-form.consent-text" data-edit-wrap="1">אני מאשר/ת את</span> <a data-edit="lead-form.consent-link" href="/privacy" target="_blank" class="consent-link">מדיניות הפרטיות</a> <span data-edit="lead-form.consent-text-2" data-edit-wrap="1">של האתר. *</span>
+                        </span>
+                    </label>
+                    <label class="consent-label">
+                        <input type="checkbox" id="marketingConsent" class="consent-checkbox">
+                        <span class="consent-text">
+                            <span data-edit="lead-form.marketing-consent-text" data-edit-wrap="1">אשמח לקבל תוכן מקצועי, עדכונים והצעות במייל (לא חובה).</span>
                         </span>
                     </label>
                     <button type="submit" class="cta-button form-submit">
@@ -7085,9 +7113,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <p>רוצים לקבל מאיתנו טיפים ועדכונים שוטפים על פרסום ממומן לחנויות אונליין ולעסקים שחיים מלידים? הירשמו עכשיו!</p>
                 <div class="footer-newsletter-row">
                     <label class="sr-only" for="footer-nl-email">כתובת אימייל</label>
-                    <input type="email" id="footer-nl-email" placeholder="כתובת המייל שלי" dir="ltr">
+                    <input type="email" id="footer-nl-email" placeholder="כתובת המייל שלי" dir="ltr" autocomplete="email">
                     <label class="sr-only" for="footer-nl-name">שם פרטי</label>
-                    <input type="text" id="footer-nl-name" placeholder="שם פרטי">
+                    <input type="text" id="footer-nl-name" placeholder="שם פרטי" autocomplete="given-name">
                 </div>
                 <label class="sr-only" for="footer-nl-type">סוג משתמש</label>
                 <select id="footer-nl-type">
@@ -7239,6 +7267,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         reveals.forEach(el => revealObserver.observe(el));
 
+        // גיבוי: עמוד שנטען בטאב ברקע לא מריץ את האנימציה — מציגים בו את כל התוכן
+        setTimeout(() => {
+            if (!document.hidden) return;
+            reveals.forEach(el => el.classList.add('active'));
+        }, 3000);
+
 
         // ===== Sticky Top Bar Scroll Effect =====
         const topBar = document.getElementById('topBar');
@@ -7382,6 +7416,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 track: document.getElementById('track') ? document.getElementById('track').value : '',
                 industry: document.getElementById('industry') ? document.getElementById('industry').value : '',
                 consent: document.getElementById('consent').checked ? 'אישר' : 'לא אישר',
+                marketingConsent: document.getElementById('marketingConsent').checked ? 'אישר' : 'לא אישר',
                 consentTimestamp: new Date().toLocaleString('he-IL')
             };
 
@@ -8132,7 +8167,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- Banner HTML -->
     <div id="cookie-banner" role="dialog" aria-label="הסכמה לקוקיז" aria-live="polite">
         <div class="cookie-text">
-            <strong>🍪 אנו משתמשים בעוגיות</strong><br>
+            <strong>אנו משתמשים בעוגיות</strong><br>
             האתר משתמש בקוקיז לשיפור הביצועים, ניתוח תנועה ופרסום ממוקד.
             ניתן לנהל את ההעדפות בכל עת. <a href="/privacy">מדיניות פרטיות</a>
         </div>
