@@ -7267,6 +7267,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 consent: document.getElementById('consent').checked ? 'אישר' : 'לא אישר',
                 consentTimestamp: new Date().toLocaleString('he-IL')
             };
+            Object.assign(data, window.rpgAttribution ? window.rpgAttribution() : {});
 
             // DataLayer: form submitted
             window.dataLayer = window.dataLayer || [];
@@ -8151,6 +8152,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         // TODO: הוסף כאן את קוד Google Analytics / Meta Pixel / Google Ads לפי prefs.analytics ו-prefs.marketing
     }
     </script>
+    <script src="attribution.js"></script>
     <script src="datalayer.js" defer></script>
     <script>
         /* כותרת ה-Hero הוקפאה על הבטחה אחת (ביקורת קופי 21.08.26).

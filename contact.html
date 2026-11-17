@@ -866,6 +866,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 consent: 'אישר',
                 consentTimestamp: new Date().toLocaleString('he-IL')
             };
+            Object.assign(data, window.rpgAttribution ? window.rpgAttribution() : {});
 
             // DataLayer: form submitted
             window.dataLayer = window.dataLayer || [];
@@ -899,6 +900,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         }
     </script>
     <script src="a11y-widget.js"></script>
+    <script src="attribution.js"></script>
     <script src="datalayer.js"></script>
 
 

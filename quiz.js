@@ -221,6 +221,7 @@
             consent: 'אישר',
             consentTimestamp: new Date().toLocaleString('he-IL')
         };
+        Object.assign(data, window.rpgAttribution ? window.rpgAttribution() : {});
 
         window.dataLayer = window.dataLayer || [];
         dataLayer.push({ event: 'form_submit', form_id: 'quizForm', track: state.track, business_name: business, page_path: window.location.pathname });
