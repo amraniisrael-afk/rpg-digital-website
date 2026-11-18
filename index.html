@@ -1248,9 +1248,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         .value-card:hover { background: rgba(var(--card-rgb), 0.04); }
         .value-card:hover::before { color: rgba(var(--card-rgb), 0.55); }
         .value-card:hover::after { transform: scaleY(1); background: var(--card-accent); }
-        .value-card:hover h4 { color: var(--card-accent); }
+        .value-card:hover h3 { color: var(--card-accent); }
 
-        .value-card h4 {
+        .value-card h3 {
             font-size: clamp(18px, 2vw, 22px);
             font-weight: 700;
             margin: 0;
@@ -3098,7 +3098,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             .value-card::before {
                 font-size: 65px;
             }
-            .value-card h4 {
+            .value-card h3 {
                 font-size: 17px !important;
             }
             .value-card p {
@@ -3575,7 +3575,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             .value-card::before {
                 font-size: 95px;
             }
-            .value-card h4 { font-size: 18px !important; }
+            .value-card h3 { font-size: 18px !important; }
             .value-card p { font-size: 14px; }
 
             .who-card {
@@ -4003,7 +4003,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             *, *::before, *::after {
                 animation-duration: 0.01ms !important;
                 animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
+                /* מעברי שקיפות וצבע נשארים כדי שהמשתמש יראה שמשהו השתנה; תזוזות מבוטלות בבלוק תיקוני הביקורת (18.11.26) */
             }
             .reveal, .reveal-right, .reveal-left {
                 opacity: 1;
@@ -4211,7 +4211,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         .value-grid { border-top-color: rgba(0,0,0,0.08) !important; }
         .value-card { border-bottom-color: rgba(0,0,0,0.07) !important; }
         .value-card::before { color: rgba(0,0,0,0.05) !important; }
-        .value-card h4 { color: #111111 !important; }
+        .value-card h3 { color: #111111 !important; }
         .value-card-desc { color: #555555 !important; }
         .value-card:hover { background: rgba(255,85,0,0.03) !important; }
         .value-card:hover::after { background: #FF5500 !important; }
@@ -4577,6 +4577,148 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         html body .a11y-float{ right: auto !important; left: 16px !important; bottom: 20px !important; top: auto !important; }
         html body .a11y-panel{ right: 10px; left: 10px; transform-origin: bottom left; }
         html body .footer{ padding-bottom: 96px !important; }
+    }
+    </style>
+    <style>
+    /* ===== תיקוני ביקורת אתר (18.11.26): impeccable + design-taste + emil-design-eng =====
+       בלוק אחרון ב-<head>, כדי לגבור על השכבות הקודמות בלי לגעת בהן. */
+
+    /* 1. היררכיית כותרות: ה-H1 גדול מכל H2 בכל רוחב */
+    html body .hero-hl-box h1{ font-size: clamp(34px, 3.8vw, 58px) !important; line-height: 1.2 !important; }
+    html body .section-title{ font-size: clamp(28px, 3vw, 44px) !important; }
+    @media (max-width: 768px) {
+        html body .hero-hl-box h1{ font-size: clamp(28px, 7.6vw, 36px) !important; }
+        html body .section-title{ font-size: 24px !important; }
+    }
+
+    /* 2. ניגודיות: כתום בוהק רק לרקעים ולכותרות גדולות, כתום כהה לטקסט קטן */
+    html body .hero-points li strong{ color: var(--accent-strong) !important; }
+    html body .track-card-label{ background: var(--accent-strong) !important; color: #fff !important; }
+    html body .testimonial-result-tag{ color: var(--accent-text-on-tint) !important; }
+    html body .who-for .who-half-header h3{ color: var(--accent-strong) !important; }
+    html body .section-title span{ color: #E04A00 !important; -webkit-text-fill-color: #E04A00 !important; }
+    html body .pas-step-label{ color: #444 !important; opacity: 1 !important; }
+    html body .form-input::placeholder,
+    html body input::placeholder,
+    html body textarea::placeholder,
+    html body .footer-newsletter-row input::placeholder{ color: #6b6b6b !important; opacity: 1; }
+    html body .lead-text-col h2 span{ color: #E04A00 !important; -webkit-text-fill-color: #E04A00 !important; }
+    html body .dash-sticker{ background: var(--accent-strong) !important; }
+    html body .footer-newsletter-check,
+    html body .footer-newsletter-check label,
+    html body .footer-newsletter p,
+    html body .testimonials-privacy-note,
+    html body .t-slide-counter,
+    html body .quiz-progress-text{ color: #595959 !important; }
+
+    /* 3. אווטאר עם אות (בלי תמונה): עיגול כהה עם אות לבנה, במקום לבן על לבן */
+    html body .testimonial-avatar.avatar-initial{
+        background: #0F2035 !important;
+        color: #fff !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        font-weight: 700;
+    }
+
+    /* 4. אזורי לחיצה: נקודות הסליידר 24px (הנקודה הנראית נשארת קטנה), תיבות סימון 24px, כפתורי טופס 52px */
+    html body .t-dot{
+        width: 24px !important; height: 24px !important;
+        background: none !important; border-radius: 0 !important;
+        position: relative; padding: 0; border: 0;
+    }
+    html body .t-dot::before{
+        content: ""; position: absolute; inset: 8px; border-radius: 50%;
+        background: rgba(199, 66, 0, 0.3);
+        transition: background-color 200ms ease;
+    }
+    html body .t-dot.active{ width: 42px !important; }
+    html body .t-dot.active::before{ border-radius: 4px; background: var(--accent-strong); }
+    html body .testimonials-dots-container{ gap: 0 !important; }
+    html body .consent-checkbox,
+    html body #footer-nl-consent{ width: 24px !important; height: 24px !important; flex-shrink: 0; }
+    html body .form-submit,
+    html body .footer-newsletter-btn{ min-height: 52px; }
+    html body .cookie-btn{ min-height: 44px; }
+
+    /* 5. לחיצה מורגשת: כל כפתור מתכווץ מעט בלחיצה (emil-design-eng) */
+    :root{ --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1); }
+    html body .cta-button,
+    html body .cta-button-outline,
+    html body .cookie-btn,
+    html body .footer-newsletter-btn,
+    html body .quiz-option,
+    html body .t-btn{ transition-property: transform, background-color, color, border-color, box-shadow; transition-duration: 160ms; transition-timing-function: var(--ease-out-strong); }
+    html body .cta-button:active,
+    html body .cta-button-outline:active,
+    html body .cookie-btn:active,
+    html body .footer-newsletter-btn:active,
+    html body .quiz-option:active{ transform: scale(0.97) !important; }
+
+    /* 6. הופעה בגלילה: קצר ועדין יותר (0.8 שניות ו-40px → 0.45 שניות ו-14px) */
+    html body .reveal,
+    html body .reveal-right,
+    html body .reveal-left{ transition: opacity 450ms var(--ease-out-strong), transform 450ms var(--ease-out-strong) !important; }
+    html body .reveal:not(.active){ transform: translateY(14px); }
+    html body .reveal-right:not(.active){ transform: translateX(-14px); }
+    html body .reveal-left:not(.active){ transform: translateX(14px); }
+
+    /* 7. מסכי מגע: בלי הרמות וסיבובים בריחוף, שנתקעים אחרי נגיעה */
+    @media (hover: none) {
+        html body .pas-step:hover,
+        html body .testimonial-card:hover,
+        html body .value-card:hover,
+        html body .pillar:hover,
+        html body .faq-item:hover,
+        html body .track-card:hover,
+        html body .cta-button:hover,
+        html body .cta-button-outline:hover{ transform: none !important; }
+        html body .dash-tilt:hover{ transform: rotate(-2.2deg) !important; }
+    }
+
+    /* 8. תנועה מצומצמת: בלי תזוזות, עם מעברי שקיפות */
+    @media (prefers-reduced-motion: reduce) {
+        html body .reveal, html body .reveal-right, html body .reveal-left,
+        html body .reveal:not(.active), html body .reveal-right:not(.active), html body .reveal-left:not(.active){ transform: none !important; }
+        html body .pas-step:hover,
+        html body .testimonial-card:hover,
+        html body .value-card:hover,
+        html body .track-card:hover,
+        html body .cta-button:hover,
+        html body .cta-button:active,
+        html body .cta-button-outline:active{ transform: none !important; }
+    }
+
+    /* 9. פחות סממני תבנית: בלי פס עליון על כרטיסים מעוגלים, בלי פס עליון בשאלון,
+          והתגית מעל הכותרות עוברת מגלולה לטקסט קטן */
+    html body .pas-step{ border-top-width: 1px !important; }
+    html body .quiz-wrapper::before{ display: none !important; }
+    html body .section-tag{
+        background: none !important;
+        border: 0 !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+        font-size: 15px !important;
+        letter-spacing: 0.04em !important;
+        margin-bottom: 12px !important;
+    }
+    html body .pas-step h3,
+    html body .value-card h3{ text-wrap: balance; }
+    html body p{ text-wrap: pretty; }
+
+    /* 10. טלפון: באנר עוגיות נמוך יותר, ומרווחי סקשנים קטנים יותר כדי לקצר את העמוד */
+    @media (max-width: 600px) {
+        html body #cookie-banner{ padding: 12px 16px 14px !important; gap: 10px !important; }
+        html body #cookie-banner .cookie-text{ font-size: 13px !important; line-height: 1.5 !important; min-width: 0 !important; }
+        html body #cookie-banner .cookie-text strong,
+        html body #cookie-banner .cookie-title{ display: inline; margin: 0; }
+        html body #cookie-banner .cookie-actions{ display: flex; gap: 8px; }
+        html body #cookie-banner .cookie-btn{ padding: 8px 10px !important; font-size: 14px !important; }
+    }
+    @media (max-width: 768px) {
+        html body main > section:not(.hero){ padding-top: 56px !important; padding-bottom: 56px !important; }
+        html body .section-header{ margin-bottom: 32px !important; }
     }
     </style>
 </head>
@@ -5088,27 +5230,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="value-layout">
             <div class="value-grid reveal">
                 <div class="value-card">
-                    <h4 data-edit="value-section.h4">01 | דשבורד רווחיות בזמן אמת</h4>
+                    <h3 data-edit="value-section.h4">01 | דשבורד רווחיות בזמן אמת</h3>
                     <div class="value-card-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div>
                     <p data-edit="value-section.value-card-desc" class="value-card-desc">תמונת מצב מדויקת של העסק – בכל שניה. אנחנו מציגים לכם הוצאות מדיה מול הכנסות אמיתיות בקופה (רווח נקי ממוצרים או עסקאות שנסגרו מלידים). לא צריך לחכות לדוח סוף החודש כדי לדעת מה עובד ומה לעצור.</p>
                 </div>
                 <div class="value-card">
-                    <h4 data-edit="value-section.h4-2">02 | ארכיטקטורת קמפיינים ממוקדת סגירה</h4>
+                    <h3 data-edit="value-section.h4-2">02 | ארכיטקטורת קמפיינים ממוקדת סגירה</h3>
                     <div class="value-card-icon"><svg viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 1 4 4v2a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"/><path d="M16 14H8a4 4 0 0 0-4 4v2h16v-2a4 4 0 0 0-4-4z"/></svg></div>
                     <p data-edit="value-section.value-card-desc-2" class="value-card-desc">אנחנו לא משאירים שום דבר למקרה. באיקומרס – אנחנו בונים פיד מוצרים חכם שדוחף את האלגוריתם למכור את מה שרווחי לכם. בלידים – אנחנו בונים משפכי המרה מדויקים שמסננים מתעניינים ומשאירים רק לקוחות עם כוונת רכישה גבוהה.</p>
                 </div>
                 <div class="value-card">
-                    <h4 data-edit="value-section.h4-3">03 | הטמעת תשתית מדידה מברזל</h4>
+                    <h3 data-edit="value-section.h4-3">03 | הטמעת תשתית מדידה מברזל</h3>
                     <div class="value-card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
                     <p data-edit="value-section.value-card-desc-3" class="value-card-desc">אם המרה לא נספרת נכון – האלגוריתם לומד על נתונים שגויים. אנחנו מקימים תשתית מדידה מתקדמת (Server-Side, Conversions API) כדי להבטיח מעקב אחרי ערך אמיתי (סל קניות או ליד איכותי), בלי ספירה כפולה ובלי לפספס נתונים.</p>
                 </div>
                 <div class="value-card">
-                    <h4 data-edit="value-section.h4-4">04 | פיצוח מסרים וקריאייטיב</h4>
+                    <h3 data-edit="value-section.h4-4">04 | פיצוח מסרים וקריאייטיב</h3>
                     <div class="value-card-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="6" height="10" rx="1"/><rect x="9" y="4" width="6" height="16" rx="1"/><rect x="16" y="9" width="6" height="8" rx="1"/></svg></div>
                     <p data-edit="value-section.value-card-desc-4" class="value-card-desc">אנחנו לא מסתפקים בלדעת איזו מודעה קיבלה יותר קליקים. אנחנו מנתחים אילו מסרים, Hooks ופורמטים מביאים כסף (רכישות או פגישות מניבות) – ומשתמשים במסקנות האלו כדי לבנות את הקריאייטיב המנצח הבא.</p>
                 </div>
                 <div class="value-card">
-                    <h4 data-edit="value-section.h4-6">05 | AI שמחבר בין דאטה לביצועים</h4>
+                    <h3 data-edit="value-section.h4-6">05 | AI שמחבר בין דאטה לביצועים</h3>
                     <div class="value-card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg></div>
                     <p data-edit="value-section.value-card-desc-6" class="value-card-desc">אנחנו משלבים כלי AI בניתוח נתונים ואוטומציות כדי לזהות דפוסים מהר יותר מהמתחרים. המטרה? להפוך הרים של דאטה להחלטות אופטימיזציה מהירות שמגדילות לכם את שורת הרווח.</p>
                 </div>
@@ -6251,7 +6393,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     @media (prefers-reduced-motion: reduce) {
         .dash-tilt, .dash-frame { transition: none; }
-        .dash-tilt:hover { transform: rotate(-2.2deg); }
+        .dash-tilt, .dash-tilt:hover { transform: none; }
     }
 
     .value-grid {
@@ -6367,7 +6509,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             margin-bottom: 4px !important;
             color: rgba(0,0,0,0.10) !important;
         }
-        .value-card h4 {
+        .value-card h3 {
             grid-column: unset !important;
             grid-row: unset !important;
             width: 100% !important;
